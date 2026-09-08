@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Trọng số model — tải bằng scripts/download_assets.py
+models/*.pt
+models/*.onnx
+models/*.engine
+!models/.gitkeep
+
+# Dữ liệu — quá lớn cho git; xem README để biết cách lấy
+data/raw/**
+data/processed/**
+data/samples/*.mp4
+data/samples/*.pkl
+data/outputs/*.mp4
+data/outputs/*.db
+data/outputs/*.db-wal
+data/outputs/*.db-shm
+!data/**/.gitkeep
+!data/**/README.md
+
+# Giữ lại kết quả đánh giá dạng JSON — đây là minh chứng số liệu trong báo cáo
+!data/outputs/evaluation.json
+!data/outputs/evaluation_real.json
+!data/samples/synthetic_summary.json
+
+# Hệ điều hành / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
