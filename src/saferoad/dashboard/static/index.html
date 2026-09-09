@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeRoad AI — Dashboard giám sát an toàn giao thông</title>
+<style>
+/* ------------------------------------------------------------------ *
+ * Không dùng CDN, không font ngoài: dashboard phải mở được cả khi máy
+ * không có mạng — điều kiện thường gặp khi demo trực tiếp tại hội trường.
+ * ------------------------------------------------------------------ */
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel-2:#1c2230; --line:#2a3140;
+  --text:#e6edf3; --muted:#8b98a9; --dim:#5c6a7d;
+  --accent:#f97316; --accent-2:#fb923c;
+  --high:#ef4444; --medium:#f59e0b; --low:#22c55e; --info:#3b82f6;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  font-size:13px;line-height:1.5}
+h1,h2,h3{margin:0;font-weight:600}
+a{color:var(--accent-2);text-decoration:none}
+
+/* Bố cục chính */
+.app{display:grid;grid-template-columns:196px 1fr;min-height:100vh}
+.sidebar{background:var(--panel);border-right:1px solid var(--line);padding:16px 0;
+  display:flex;flex-direction:column}
+.brand{padding:0 16px 16px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.brand .logo{font-size:17px;font-weight:700;letter-spacing:.4px;color:var(--accent)}
+.brand .sub{font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+.nav{list-style:none;margin:0;padding:0}
+.nav li{padding:9px 16px;cursor:pointer;color:var(--muted);display:flex;gap:9px;
+  align-items:center;border-left:3px solid transparent;font-size:12.5px}
+.nav li:hover{background:var(--panel-2);color:var(--text)}
+.nav li.active{background:var(--panel-2);color:var(--text);border-left-color:var(--accent)}
+.nav .ic{width:15px;text-align:center;opacity:.85}
+.sidebar-foot{margin-top:auto;padding:12px 16px;font-size:10.5px;color:var(--dim);
+  border-top:1px solid var(--line)}
+
+.main{padding:16px 20px 28px;overflow-x:hidden}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.topbar h1{font-size:17px}
+.topbar .site{color:var(--muted);font-size:11.5px;margin-top:3px}
+.clock{text-align:right;font-size:11.5px;color:var(--muted)}
+.clock .t{font-size:15px;color:var(--text);font-variant-numeric:tabular-nums}
+
+/* Thẻ KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;
+  margin-bottom:14px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 14px;position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+.kpi.k2::after{background:var(--high)} .kpi.k3::after{background:var(--medium)}
+.kpi.k4::after{background:var(--info)}
+.kpi .lbl{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.kpi .val{font-size:26px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.kpi .sub{font-size:10.5px;color:var(--dim);margin-top:2px}
+
+/* Panel */
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:1.35fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:1100px){.g2,.g3{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 14px;margin-bottom:12px}
+.panel h3{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);
+  margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.panel h3 .hint{text-transform:none;letter-spacing:0;font-weight:400;font-size:10.5px;
+  color:var(--dim)}
+
+/* Bảng */
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:var(--muted);font-weight:500;padding:6px 8px;
+  border-bottom:1px solid var(--line);font-size:10.5px;text-transform:uppercase;
+  letter-spacing:.4px;white-space:nowrap}
+td{padding:6px 8px;border-bottom:1px solid rgba(42,49,64,.55);vertical-align:middle}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--panel-2)}
+tbody tr.sel{background:#1e2636}
+.num{font-variant-numeric:tabular-nums;text-align:right}
+.scroll{max-height:330px;overflow-y:auto}
+.scroll::-webkit-scrollbar{width:8px}
+.scroll::-webkit-scrollbar-thumb{background:#2c3444;border-radius:4px}
+
+/* Nhãn mức rủi ro */
+.badge{display:inline-block;padding:1.5px 7px;border-radius:9px;font-size:10.5px;
+  font-weight:600;white-space:nowrap}
+.b-high{background:rgba(239,68,68,.16);color:#fca5a5;border:1px solid rgba(239,68,68,.4)}
+.b-medium{background:rgba(245,158,11,.16);color:#fcd34d;border:1px solid rgba(245,158,11,.4)}
+.b-low{background:rgba(34,197,94,.14);color:#86efac;border:1px solid rgba(34,197,94,.35)}
+.chip{display:inline-block;padding:1.5px 7px;border-radius:5px;background:var(--panel-2);
+  border:1px solid var(--line);font-size:10.5px;color:var(--muted)}
+
+/* Video + risk map */
+.video-wrap{position:relative;background:#000;border-radius:8px;overflow:hidden;
+  aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
+.video-wrap video{width:100%;height:100%;object-fit:contain;display:block}
+.video-empty{color:var(--dim);font-size:12px;text-align:center;padding:20px}
+canvas{display:block;width:100%;border-radius:8px;background:#0a0e14}
+
+/* Thanh lọc */
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.filters button{background:var(--panel-2);border:1px solid var(--line);color:var(--muted);
+  padding:4px 11px;border-radius:14px;cursor:pointer;font-size:11.5px;font-family:inherit}
+.filters button:hover{color:var(--text);border-color:#3a4557}
+.filters button.on{background:var(--accent);border-color:var(--accent);color:#1a1005;
+  font-weight:600}
+
+/* Chi tiết sự kiện */
+.detail{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:11px 13px}
+.detail .row{display:flex;justify-content:space-between;padding:3px 0;font-size:12px}
+.detail .row span:first-child{color:var(--muted)}
+.reasons{list-style:none;padding:0;margin:8px 0 0}
+.reasons li{padding:6px 9px;background:rgba(249,115,22,.07);
+  border-left:2px solid var(--accent);border-radius:0 5px 5px 0;margin-bottom:5px;
+  font-size:11.5px;line-height:1.45}
+.empty{color:var(--dim);text-align:center;padding:26px 10px;font-size:12px}
+
+/* Chú giải */
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:10.5px;color:var(--muted);
+  margin-top:8px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;
+  vertical-align:middle}
+
+.view{display:none}
+.view.on{display:block}
+.metrics-note{font-size:11px;color:var(--dim);margin-top:9px;line-height:1.5}
+progress{width:100%;height:5px;border:none;background:var(--panel-2);border-radius:3px}
+progress::-webkit-progress-bar{background:var(--panel-2);border-radius:3px}
+progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">SAFEROAD AI</div>
+      <div class="sub">Phát hiện near-miss &amp;<br>bản đồ rủi ro giao thông</div>
+    </div>
+    <ul class="nav">
+      <li class="active" data-view="overview"><span class="ic">▦</span> Tổng quan</li>
+      <li data-view="camera"><span class="ic">▶</span> Camera</li>
+      <li data-view="events"><span class="ic">⚠</span> Near-miss</li>
+      <li data-view="riskmap"><span class="ic">◉</span> Risk Map</li>
+      <li data-view="analysis"><span class="ic">◫</span> Phân tích</li>
+      <li data-view="behavior"><span class="ic">◈</span> Hành vi</li>
+      <li data-view="eval"><span class="ic">✓</span> Đánh giá</li>
+    </ul>
+    <div class="sidebar-foot">
+      <div>SafeRoad AI v1.0</div>
+      <div id="foot-status">Đang tải…</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1 id="view-title">Tổng quan</h1>
+        <div class="site" id="site-name">—</div>
+      </div>
+      <div class="clock">
+        <div class="t" id="clock">--:--:--</div>
+        <div id="proc-info">—</div>
+      </div>
+    </div>
+
+    <!-- ===================== TỔNG QUAN ===================== -->
+    <section class="view on" id="view-overview">
+      <div class="kpis">
+        <div class="kpi"><div class="lbl">Tổng near-miss</div>
+          <div class="val" id="kpi-total">—</div>
+          <div class="sub" id="kpi-total-sub">trong toàn bộ phiên</div></div>
+        <div class="kpi k2"><div class="lbl">Near-miss nghiêm trọng</div>
+          <div class="val" id="kpi-severe">—</div>
+          <div class="sub">TTC &lt; 1.5s</div></div>
+        <div class="kpi k3"><div class="lbl">Risk Score trung bình</div>
+          <div class="val" id="kpi-risk">—</div>
+          <div class="sub" id="kpi-risk-sub">thang 0–100</div></div>
+        <div class="kpi k4"><div class="lbl">Điểm nóng rủi ro</div>
+          <div class="val" id="kpi-hotspots">—</div>
+          <div class="sub">vị trí cần ưu tiên xử lý</div></div>
+      </div>
+
+      <div class="grid g2">
+        <div class="panel">
+          <h3>Near-miss theo thời gian <span class="hint">cột đỏ = nghiêm trọng</span></h3>
+          <canvas id="c-timeline" height="200"></canvas>
+        </div>
+        <div class="panel">
+          <h3>Phân loại xung đột</h3>
+          <canvas id="c-types" height="200"></canvas>
+          <div class="legend" id="legend-types"></div>
+        </div>
+      </div>
+
+      <div class="grid g2">
+        <div class="panel">
+          <h3>Near-miss gần nhất</h3>
+          <div class="scroll"><table>
+            <thead><tr><th>Thời điểm</th><th>Đối tượng</th><th>Loại xung đột</th>
+              <th class="num">TTC</th><th class="num">PET</th><th class="num">Risk</th></tr></thead>
+            <tbody id="tb-recent"></tbody>
+          </table></div>
+        </div>
+        <div class="panel">
+          <h3>Top điểm rủi ro</h3>
+          <div class="scroll"><table>
+            <thead><tr><th>#</th><th>Vị trí (m)</th><th class="num">Số sự kiện</th>
+              <th class="num">Điểm</th></tr></thead>
+            <tbody id="tb-hotspots"></tbody>
+          </table></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CAMERA ===================== -->
+    <section class="view" id="view-camera">
+      <div class="panel">
+        <h3>Live camera — overlay tracking &amp; cảnh báo
+          <span class="hint">khung màu theo mức rủi ro, nhãn TTC hiện khi có xung đột</span></h3>
+        <div class="video-wrap" id="video-wrap">
+          <div class="video-empty">Chưa có video overlay.<br>
+            Chạy <code>saferoad run</code> để sinh <code>overlay.mp4</code>.</div>
+        </div>
+        <div class="legend">
+          <span><i style="background:var(--high)"></i>Rủi ro cao</span>
+          <span><i style="background:var(--medium)"></i>Trung bình</span>
+          <span><i style="background:var(--low)"></i>Thấp</span>
+          <span><i style="background:#60c8ff"></i>Đang theo dõi</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== NEAR-MISS ===================== -->
+    <section class="view" id="view-events">
+      <div class="filters" id="filters"></div>
+      <div class="grid g2">
+        <div class="panel">
+          <h3>Danh sách near-miss <span class="hint" id="ev-count"></span></h3>
+          <div class="scroll" style="max-height:520px"><table>
+            <thead><tr><th>ID</th><th>Thời điểm</th><th>Đối tượng</th><th>Loại</th>
+              <th class="num">TTC</th><th class="num">PET</th><th class="num">Risk</th>
+              <th>Mức</th></tr></thead>
+            <tbody id="tb-events"></tbody>
+          </table></div>
+        </div>
+        <div class="panel">
+          <h3>Chi tiết &amp; giải thích <span class="hint">Explainable Risk</span></h3>
+          <div id="event-detail"><div class="empty">Chọn một sự kiện để xem chi tiết</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== RISK MAP ===================== -->
+    <section class="view" id="view-riskmap">
+      <div class="grid g2">
+        <div class="panel">
+          <h3>Bản đồ rủi ro không–thời gian
+            <span class="hint">toạ độ mặt đất (m), gốc tại tâm giao lộ</span></h3>
+          <canvas id="c-riskmap" height="440"></canvas>
+          <div class="legend">
+            <span><i style="background:#1e3a8a"></i>Thấp</span>
+            <span><i style="background:#0891b2"></i></span>
+            <span><i style="background:#facc15"></i>Trung bình</span>
+            <span><i style="background:#f97316"></i></span>
+            <span><i style="background:#dc2626"></i>Cao</span>
+            <span>· ✕ = điểm nóng</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Điểm nóng ưu tiên xử lý</h3>
+          <div class="scroll" style="max-height:440px"><table>
+            <thead><tr><th>#</th><th>X (m)</th><th>Y (m)</th>
+              <th class="num">Sự kiện</th><th class="num">Điểm</th></tr></thead>
+            <tbody id="tb-hotspots2"></tbody>
+          </table></div>
+          <div class="metrics-note">Điểm nóng được tách bằng non-maximum suppression
+            nên 5 vị trí là 5 khu vực khác nhau, không phải 5 ô cạnh nhau của cùng
+            một cụm.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PHÂN TÍCH ===================== -->
+    <section class="view" id="view-analysis">
+      <div class="grid g2">
+        <div class="panel">
+          <h3>Phân bố TTC <span class="hint">càng nhỏ càng nguy hiểm</span></h3>
+          <canvas id="c-ttc" height="210"></canvas>
+        </div>
+        <div class="panel">
+          <h3>Phân bố Risk Score</h3>
+          <canvas id="c-risk" height="210"></canvas>
+        </div>
+      </div>
+      <div class="grid g2">
+        <div class="panel">
+          <h3>Xung đột theo cặp loại phương tiện</h3>
+          <div class="scroll"><table>
+            <thead><tr><th>Cặp đối tượng</th><th class="num">Số vụ</th>
+              <th class="num">TTC TB</th><th class="num">Risk TB</th></tr></thead>
+            <tbody id="tb-pairs"></tbody>
+          </table></div>
+        </div>
+        <div class="panel">
+          <h3>Hiệu năng xử lý</h3>
+          <div id="perf"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== HÀNH VI ===================== -->
+    <section class="view" id="view-behavior">
+      <div class="panel">
+        <h3>Hành vi lái xe nguy hiểm
+          <span class="hint">rule-based (vật lý rõ ràng) + ML classifier</span></h3>
+        <div class="scroll" style="max-height:520px"><table>
+          <thead><tr><th>Track ID</th><th>Hành vi</th><th class="num">Độ tin cậy</th>
+            <th>Nguồn phát hiện</th></tr></thead>
+          <tbody id="tb-behavior"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- ===================== ĐÁNH GIÁ ===================== -->
+    <section class="view" id="view-eval">
+      <div class="panel">
+        <h3>Kết quả đánh giá trên tập có ground truth</h3>
+        <div id="eval-body"><div class="empty">Chưa có kết quả.
+          Chạy <code>saferoad evaluate</code>.</div></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* ==================================================================== *
+ * Toàn bộ logic trong một file, không phụ thuộc thư viện ngoài.
+ * Biểu đồ vẽ tay bằng Canvas 2D — nhẹ và chạy offline.
+ * ==================================================================== */
+const S = { data:null, events:[], filtered:[], filter:{kind:'', minRisk:0}, selected:null };
+
+const VI_TYPE = {crossing:'Cắt ngang', turning:'Chuyển hướng', rear_end:'Tạt đầu/đâm đuôi',
+  head_on:'Đối đầu', lane_change:'Chuyển làn', pedestrian:'Người đi bộ'};
+const VI_CLASS = {pedestrian:'Người đi bộ', bicycle:'Xe đạp', motorcycle:'Xe máy',
+  car:'Ô tô', truck:'Xe tải/Bus'};
+const VI_LEVEL = {high:'Cao', medium:'Trung bình', low:'Thấp', none:'An toàn'};
+const TYPE_COLOR = {crossing:'#f97316', turning:'#3b82f6', rear_end:'#22c55e',
+  head_on:'#ef4444', lane_change:'#a855f7', pedestrian:'#eab308'};
+
+const $ = id => document.getElementById(id);
+const fmt = (v, d=2) => (v===null||v===undefined) ? '—' : Number(v).toFixed(d);
+const mmss = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+
+/* ---------------------------- Điều hướng ---------------------------- */
+document.querySelectorAll('.nav li').forEach(li=>{
+  li.onclick = () => {
+    document.querySelectorAll('.nav li').forEach(x=>x.classList.remove('active'));
+    li.classList.add('active');
+    const v = li.dataset.view;
+    document.querySelectorAll('.view').forEach(s=>s.classList.remove('on'));
+    $('view-'+v).classList.add('on');
+    $('view-title').textContent = li.textContent.trim();
+    if (v==='riskmap') drawRiskMap();
+    if (v==='analysis'){ drawTTC(); drawRiskHist(); }
+    if (v==='overview'){ drawTimeline(); drawTypes(); }
+  };
+});
+
+setInterval(()=>{ $('clock').textContent = new Date().toLocaleTimeString('vi-VN'); }, 1000);
+
+/* ------------------------------ Nạp dữ liệu ------------------------- */
+async function load(){
+  try{
+    const [sum, ev, rm, tl, bh] = await Promise.all([
+      fetch('/api/summary').then(r=>r.json()),
+      fetch('/api/events?limit=2000').then(r=>r.json()),
+      fetch('/api/riskmap').then(r=>r.json()),
+      fetch('/api/timeline').then(r=>r.json()),
+      fetch('/api/behaviors').then(r=>r.json()),
+    ]);
+    S.data = {sum, riskmap:rm, timeline:tl.timeline||[], behaviors:bh.behaviors||[]};
+    S.events = ev.events||[];
+    S.filtered = S.events;
+    render();
+    if (sum.has_video) mountVideo();
+    loadEval();
+  }catch(e){
+    $('foot-status').textContent = 'Lỗi tải dữ liệu';
+    console.error(e);
+  }
+}
+
+function mountVideo(){
+  $('video-wrap').innerHTML =
+    '<video controls preload="metadata" src="/api/video"></video>';
+}
+
+/* ------------------------------ Render ------------------------------ */
+function render(){
+  const s = S.data.sum.summary || {};
+  $('site-name').textContent = S.data.sum.site || '';
+  $('kpi-total').textContent = s.total_events ?? 0;
+  $('kpi-total-sub').textContent = `trong ${fmt(s.duration_s,0)}s video`;
+  $('kpi-severe').textContent = s.severe_events ?? 0;
+  $('kpi-risk').textContent = fmt(s.avg_risk_score,1);
+  const hs = (S.data.riskmap.hotspots)||[];
+  $('kpi-hotspots').textContent = hs.length;
+  $('proc-info').textContent =
+    `${fmt(s.processing_fps,1)} FPS · ${fmt(s.total_latency_ms,1)} ms/frame`;
+  $('foot-status').textContent = `${s.n_tracks ?? 0} đối tượng đã theo dõi`;
+
+  drawTimeline(); drawTypes();
+  fillRecent(); fillHotspots(); buildFilters(); fillEvents();
+  fillBehavior(); fillPairs(); fillPerf();
+}
+
+function fillRecent(){
+  $('tb-recent').innerHTML = S.events.slice(0,14).map(e=>`
+    <tr onclick="selectEvent('${e.event_id}',true)">
+      <td>${mmss(e.t)}</td>
+      <td>${VI_CLASS[e.cls_a]||e.cls_a} ↔ ${VI_CLASS[e.cls_b]||e.cls_b}</td>
+      <td><span class="chip">${VI_TYPE[e.conflict_type]||e.conflict_type}</span></td>
+      <td class="num">${fmt(e.ttc)}s</td>
+      <td class="num">${e.pet===null?'—':fmt(e.pet)+'s'}</td>
+      <td class="num"><span class="badge b-${e.risk_level}">${fmt(e.risk_score,0)}</span></td>
+    </tr>`).join('') || '<tr><td colspan="6" class="empty">Chưa có sự kiện</td></tr>';
+}
+
+function fillHotspots(){
+  const hs = S.data.riskmap.hotspots||[];
+  const rows = hs.map(h=>`<tr><td>${h.rank}</td>
+    <td>(${fmt(h.x,1)}, ${fmt(h.y,1)})</td>
+    <td class="num">${h.event_count}</td>
+    <td class="num"><span class="badge b-${h.score>=70?'high':h.score>=40?'medium':'low'}">${fmt(h.score,0)}</span></td></tr>`).join('');
+  $('tb-hotspots').innerHTML = rows || '<tr><td colspan="4" class="empty">Chưa có điểm nóng</td></tr>';
+  $('tb-hotspots2').innerHTML = hs.map(h=>`<tr><td>${h.rank}</td>
+    <td class="num">${fmt(h.x,1)}</td><td class="num">${fmt(h.y,1)}</td>
+    <td class="num">${h.event_count}</td>
+    <td class="num"><span class="badge b-${h.score>=70?'high':h.score>=40?'medium':'low'}">${fmt(h.score,0)}</span></td></tr>`).join('')
+    || '<tr><td colspan="5" class="empty">Chưa có điểm nóng</td></tr>';
+}
+
+function buildFilters(){
+  const kinds = [...new Set(S.events.map(e=>e.conflict_type))];
+  const btns = [`<button class="on" data-k="" data-r="0">Tất cả (${S.events.length})</button>`,
+    `<button data-k="" data-r="70">Rủi ro cao</button>`];
+  kinds.forEach(k=>{
+    const n = S.events.filter(e=>e.conflict_type===k).length;
+    btns.push(`<button data-k="${k}" data-r="0">${VI_TYPE[k]||k} (${n})</button>`);
+  });
+  $('filters').innerHTML = btns.join('');
+  $('filters').querySelectorAll('button').forEach(b=>{
+    b.onclick = ()=>{
+      $('filters').querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      S.filter = {kind:b.dataset.k, minRisk:+b.dataset.r};
+      fillEvents();
+    };
+  });
+}
+
+function fillEvents(){
+  S.filtered = S.events.filter(e =>
+    (!S.filter.kind || e.conflict_type===S.filter.kind) &&
+    (e.risk_score >= S.filter.minRisk));
+  $('ev-count').textContent = `${S.filtered.length} sự kiện`;
+  $('tb-events').innerHTML = S.filtered.map(e=>`
+    <tr id="row-${e.event_id}" onclick="selectEvent('${e.event_id}')">
+      <td>${e.event_id}</td><td>${mmss(e.t)}</td>
+      <td>${VI_CLASS[e.cls_a]||e.cls_a} ↔ ${VI_CLASS[e.cls_b]||e.cls_b}</td>
+      <td><span class="chip">${VI_TYPE[e.conflict_type]||e.conflict_type}</span></td>
+      <td class="num">${fmt(e.ttc)}s</td>
+      <td class="num">${e.pet===null?'—':fmt(e.pet)+'s'}</td>
+      <td class="num">${fmt(e.risk_score,0)}</td>
+      <td><span class="badge b-${e.risk_level}">${VI_LEVEL[e.risk_level]||e.risk_level}</span></td>
+    </tr>`).join('') || '<tr><td colspan="8" class="empty">Không có sự kiện khớp bộ lọc</td></tr>';
+}
+
+window.selectEvent = (id, jump)=>{
+  const e = S.events.find(x=>x.event_id===id);
+  if (!e) return;
+  S.selected = id;
+  document.querySelectorAll('#tb-events tr').forEach(r=>r.classList.remove('sel'));
+  const row = $('row-'+id); if (row) row.classList.add('sel');
+  if (jump) document.querySelector('.nav li[data-view="events"]').click();
+
+  const terms = e.severity_terms||{};
+  const contrib = ['ttc','pet','rel_speed','type','time']
+    .map(k=>({k, v:Math.max(0, terms[k]||0)}));
+  const total = contrib.reduce((a,b)=>a+b.v,0) || 1;
+  const LBL = {ttc:'TTC', pet:'PET', rel_speed:'Tốc độ tiếp cận',
+    type:'Loại xung đột', time:'Khung giờ'};
+
+  $('event-detail').innerHTML = `
+    <div class="detail">
+      <div class="row"><span>Mã sự kiện</span><b>${e.event_id}</b></div>
+      <div class="row"><span>Thời điểm</span><b>${mmss(e.t)} (frame ${e.frame_idx})</b></div>
+      <div class="row"><span>Đối tượng</span><b>#${e.track_a} ${VI_CLASS[e.cls_a]||''} ↔ #${e.track_b} ${VI_CLASS[e.cls_b]||''}</b></div>
+      <div class="row"><span>Loại xung đột</span><b>${VI_TYPE[e.conflict_type]||e.conflict_type}</b></div>
+      <div class="row"><span>TTC / PET</span><b>${fmt(e.ttc)}s / ${e.pet===null?'—':fmt(e.pet)+'s'}</b></div>
+      <div class="row"><span>Góc tiếp cận</span><b>${fmt(e.approach_angle,0)}°</b></div>
+      <div class="row"><span>Tốc độ tiếp cận</span><b>${fmt(e.rel_speed,1)} m/s (~${fmt(e.rel_speed*3.6,0)} km/h)</b></div>
+      <div class="row"><span>Khoảng cách gần nhất</span><b>${fmt(e.gap,1)} m</b></div>
+      <div class="row"><span>Vị trí mặt đất</span><b>(${fmt(e.location[0],1)}, ${fmt(e.location[1],1)}) m</b></div>
+      <div class="row"><span>Risk Score</span><b><span class="badge b-${e.risk_level}">${fmt(e.risk_score,1)} — ${VI_LEVEL[e.risk_level]}</span></b></div>
+    </div>
+    <h3 style="margin-top:12px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px">
+      Vì sao hệ thống cảnh báo</h3>
+    <ul class="reasons">${(e.reasons||[]).map(r=>`<li>${r}</li>`).join('') ||
+      '<li>Không có giải thích</li>'}</ul>
+    <h3 style="margin-top:12px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px">
+      Đóng góp của từng thành phần</h3>
+    ${contrib.filter(c=>c.v>0).map(c=>`
+      <div style="margin-bottom:7px">
+        <div style="display:flex;justify-content:space-between;font-size:11.5px">
+          <span>${LBL[c.k]}</span><span>${(100*c.v/total).toFixed(0)}%</span></div>
+        <progress value="${c.v}" max="${total}"></progress>
+      </div>`).join('')}
+  `;
+};
+
+function fillBehavior(){
+  const b = S.data.behaviors||[];
+  $('tb-behavior').innerHTML = b.map(x=>`<tr>
+    <td>#${x.track_id}</td>
+    <td><span class="badge ${x.risky?'b-high':'b-low'}">${x.label_vi}</span></td>
+    <td class="num">${fmt(x.confidence*100,0)}%</td>
+    <td><span class="chip">${x.source==='rule'?'Luật vật lý':'ML classifier'}</span></td>
+  </tr>`).join('') || '<tr><td colspan="4" class="empty">Không phát hiện hành vi nguy hiểm</td></tr>';
+}
+
+function fillPairs(){
+  const m = {};
+  S.events.forEach(e=>{
+    const key = [VI_CLASS[e.cls_a]||e.cls_a, VI_CLASS[e.cls_b]||e.cls_b].sort().join(' ↔ ');
+    (m[key] = m[key] || []).push(e);
+  });
+  const rows = Object.entries(m).sort((a,b)=>b[1].length-a[1].length).map(([k,v])=>{
+    const ttcs = v.filter(e=>e.ttc!==null).map(e=>e.ttc);
+    const avgT = ttcs.length ? ttcs.reduce((a,b)=>a+b,0)/ttcs.length : null;
+    const avgR = v.reduce((a,b)=>a+b.risk_score,0)/v.length;
+    return `<tr><td>${k}</td><td class="num">${v.length}</td>
+      <td class="num">${avgT===null?'—':fmt(avgT)+'s'}</td>
+      <td class="num">${fmt(avgR,0)}</td></tr>`;
+  }).join('');
+  $('tb-pairs').innerHTML = rows || '<tr><td colspan="4" class="empty">—</td></tr>';
+}
+
+function fillPerf(){
+  const s = S.data.sum.summary||{};
+  const lat = s.latency_ms||{};
+  const NAME = {detection:'Detection (YOLO)', tracking:'Tracking (ByteTrack)',
+    trajectory:'Quỹ đạo + homography', conflict:'Phát hiện xung đột',
+    overlay:'Vẽ overlay', privacy:'Ẩn danh'};
+  const tot = Object.values(lat).reduce((a,b)=>a+b,0)||1;
+  $('perf').innerHTML = `
+    <div class="detail">
+      <div class="row"><span>Tốc độ xử lý</span><b>${fmt(s.processing_fps,1)} FPS</b></div>
+      <div class="row"><span>Độ trễ end-to-end</span><b>${fmt(s.total_latency_ms,1)} ms/frame</b></div>
+      <div class="row"><span>Số frame</span><b>${s.n_frames||0}</b></div>
+      <div class="row"><span>Đối tượng đã theo dõi</span><b>${s.n_tracks||0}</b></div>
+      <div class="row"><span>Sai số homography</span><b>${
+        s.homography_error_m===null||s.homography_error_m===undefined?'—':fmt(s.homography_error_m,3)+' m'}</b></div>
+    </div>
+    <div style="margin-top:11px">${Object.entries(lat).map(([k,v])=>`
+      <div style="margin-bottom:7px">
+        <div style="display:flex;justify-content:space-between;font-size:11.5px">
+          <span>${NAME[k]||k}</span><span>${fmt(v,2)} ms</span></div>
+        <progress value="${v}" max="${tot}"></progress>
+      </div>`).join('')}</div>`;
+}
+
+/* ------------------------- Biểu đồ Canvas --------------------------- */
+function prep(id, h){
+  const c = $(id); if(!c) return null;
+  const dpr = window.devicePixelRatio||1;
+  const w = c.clientWidth||600;
+  c.width = w*dpr; c.height = (h||c.height)*dpr;
+  c.style.height = (h||c.height)+'px';
+  const g = c.getContext('2d');
+  g.setTransform(dpr,0,0,dpr,0,0);
+  g.clearRect(0,0,w,h);
+  return {g, w, h};
+}
+
+function axes(g,w,h,pad,maxY,nY=4){
+  g.strokeStyle='#2a3140'; g.fillStyle='#8b98a9'; g.font='10px system-ui'; g.lineWidth=1;
+  for(let i=0;i<=nY;i++){
+    const y = h-pad.b-(h-pad.t-pad.b)*i/nY;
+    g.beginPath(); g.moveTo(pad.l,y); g.lineTo(w-pad.r,y); g.stroke();
+    g.fillText(Math.round(maxY*i/nY), 4, y+3);
+  }
+}
+
+function drawTimeline(){
+  const p = prep('c-timeline',200); if(!p) return;
+  const {g,w,h} = p, d = S.data.timeline||[];
+  if(!d.length){ g.fillStyle='#5c6a7d'; g.fillText('Chưa có dữ liệu',w/2-40,h/2); return; }
+  const pad={l:28,r:8,t:10,b:22};
+  const maxY = Math.max(1,...d.map(x=>x.count));
+  axes(g,w,h,pad,maxY);
+  const bw = (w-pad.l-pad.r)/d.length;
+  d.forEach((x,i)=>{
+    const bh = (h-pad.t-pad.b)*x.count/maxY;
+    const bhs = (h-pad.t-pad.b)*x.severe/maxY;
+    g.fillStyle='#f97316';
+    g.fillRect(pad.l+i*bw+1, h-pad.b-bh, Math.max(1,bw-2), bh);
+    g.fillStyle='#ef4444';
+    g.fillRect(pad.l+i*bw+1, h-pad.b-bhs, Math.max(1,bw-2), bhs);
+  });
+  g.fillStyle='#8b98a9';
+  [0, Math.floor(d.length/2), d.length-1].forEach(i=>{
+    if(d[i]) g.fillText(mmss(d[i].t), pad.l+i*bw-8, h-7);
+  });
+}
+
+function drawTypes(){
+  const p = prep('c-types',200); if(!p) return;
+  const {g,w,h} = p;
+  const by = (S.data.sum.summary||{}).by_type||{};
+  const items = Object.entries(by).sort((a,b)=>b[1]-a[1]);
+  if(!items.length){ g.fillStyle='#5c6a7d'; g.fillText('Chưa có dữ liệu',w/2-40,h/2); return; }
+  const total = items.reduce((a,b)=>a+b[1],0);
+  const cx=w*0.34, cy=h/2, R=Math.min(h/2-12, 78), r=R*0.55;
+  let a0=-Math.PI/2;
+  items.forEach(([k,v])=>{
+    const a1 = a0 + 2*Math.PI*v/total;
+    g.beginPath(); g.moveTo(cx,cy); g.arc(cx,cy,R,a0,a1); g.closePath();
+    g.fillStyle = TYPE_COLOR[k]||'#64748b'; g.fill();
+    a0 = a1;
+  });
+  g.beginPath(); g.arc(cx,cy,r,0,2*Math.PI); g.fillStyle='#161b22'; g.fill();
+  g.fillStyle='#e6edf3'; g.font='600 17px system-ui'; g.textAlign='center';
+  g.fillText(total, cx, cy+2);
+  g.font='10px system-ui'; g.fillStyle='#8b98a9'; g.fillText('sự kiện', cx, cy+15);
+  g.textAlign='left';
+  $('legend-types').innerHTML = items.map(([k,v])=>
+    `<span><i style="background:${TYPE_COLOR[k]||'#64748b'}"></i>${VI_TYPE[k]||k} ${v} (${(100*v/total).toFixed(0)}%)</span>`).join('');
+}
+
+function histogram(id, values, bins, maxX, color, unit){
+  const p = prep(id,210); if(!p) return;
+  const {g,w,h} = p;
+  if(!values.length){ g.fillStyle='#5c6a7d'; g.fillText('Chưa có dữ liệu',w/2-40,h/2); return; }
+  const pad={l:28,r:8,t:10,b:22};
+  const counts = new Array(bins).fill(0);
+  values.forEach(v=>{ const i=Math.min(bins-1, Math.floor(v/maxX*bins)); if(i>=0) counts[i]++; });
+  const maxY = Math.max(1,...counts);
+  axes(g,w,h,pad,maxY);
+  const bw=(w-pad.l-pad.r)/bins;
+  counts.forEach((c,i)=>{
+    const bh=(h-pad.t-pad.b)*c/maxY;
+    g.fillStyle=color; g.fillRect(pad.l+i*bw+1, h-pad.b-bh, Math.max(1,bw-2), bh);
+  });
+  g.fillStyle='#8b98a9'; g.font='10px system-ui';
+  for(let i=0;i<=4;i++){
+    const x=pad.l+(w-pad.l-pad.r)*i/4;
+    g.fillText((maxX*i/4).toFixed(1)+unit, x-8, h-7);
+  }
+}
+const drawTTC = ()=>histogram('c-ttc',
+  S.events.filter(e=>e.ttc!==null).map(e=>e.ttc), 24, 3.0, '#f97316', 's');
+const drawRiskHist = ()=>histogram('c-risk',
+  S.events.map(e=>e.risk_score), 20, 100, '#3b82f6', '');
+
+function drawRiskMap(){
+  const p = prep('c-riskmap',440); if(!p) return;
+  const {g,w,h} = p, rm = S.data.riskmap;
+  if(!rm || !rm.bounds || !(rm.cells||[]).length){
+    g.fillStyle='#5c6a7d'; g.fillText('Chưa có dữ liệu risk map',w/2-70,h/2); return;
+  }
+  const b = rm.bounds;
+  const sx = w/(b.x_max-b.x_min), sy = h/(b.y_max-b.y_min);
+  // Trục Y lật lại: "xa camera" nằm phía trên như bản đồ thật.
+  const X = x => (x-b.x_min)*sx, Y = y => h-(y-b.y_min)*sy;
+
+  g.fillStyle='#0a0e14'; g.fillRect(0,0,w,h);
+  const cw = rm.grid_size*sx+1, ch = rm.grid_size*sy+1;
+  rm.cells.forEach(c=>{
+    g.fillStyle = heat(c.v); g.globalAlpha = 0.30+0.70*c.v;
+    g.fillRect(X(c.x)-cw/2, Y(c.y)-ch/2, cw, ch);
+  });
+  g.globalAlpha = 1;
+
+  // Lưới toạ độ 10 m.
+  g.strokeStyle='rgba(139,152,169,.16)'; g.lineWidth=1; g.font='10px system-ui';
+  g.fillStyle='#5c6a7d';
+  for(let x=Math.ceil(b.x_min/10)*10; x<=b.x_max; x+=10){
+    g.beginPath(); g.moveTo(X(x),0); g.lineTo(X(x),h); g.stroke();
+    g.fillText(x+'m', X(x)+3, h-5);
+  }
+  for(let y=Math.ceil(b.y_min/10)*10; y<=b.y_max; y+=10){
+    g.beginPath(); g.moveTo(0,Y(y)); g.lineTo(w,Y(y)); g.stroke();
+    g.fillText(y+'m', 4, Y(y)-3);
+  }
+  // Điểm nóng.
+  (rm.hotspots||[]).forEach(hp=>{
+    const x=X(hp.x), y=Y(hp.y);
+    g.strokeStyle='#fff'; g.lineWidth=2;
+    g.beginPath(); g.moveTo(x-6,y-6); g.lineTo(x+6,y+6);
+    g.moveTo(x+6,y-6); g.lineTo(x-6,y+6); g.stroke();
+    g.fillStyle='#fff'; g.font='600 11px system-ui';
+    g.fillText('#'+hp.rank, x+9, y-6);
+  });
+}
+function heat(v){
+  const stops=[[0,'#1e3a8a'],[.3,'#0891b2'],[.55,'#facc15'],[.78,'#f97316'],[1,'#dc2626']];
+  for(let i=1;i<stops.length;i++){
+    if(v<=stops[i][0]) return stops[i][1];
+  }
+  return '#dc2626';
+}
+
+/* ------------------------------ Đánh giá ---------------------------- */
+async function loadEval(){
+  try{
+    const d = await fetch('/api/evaluation').then(r=>r.json());
+    if(!d.available) return;
+    const f = d.final||{}, tr = d.tracking||{}, st = d.setup||{};
+    $('eval-body').innerHTML = `
+      <div class="kpis" style="margin-bottom:12px">
+        <div class="kpi"><div class="lbl">Precision</div><div class="val">${fmt(f.precision,3)}</div>
+          <div class="sub">TP=${f.tp} · FP=${f.fp}</div></div>
+        <div class="kpi k2"><div class="lbl">Recall</div><div class="val">${fmt(f.recall,3)}</div>
+          <div class="sub">FN=${f.fn}</div></div>
+        <div class="kpi k3"><div class="lbl">TTC MAE</div><div class="val">${fmt(f.ttc_mae,3)}s</div>
+          <div class="sub">trên ${f.n_matched_ttc} sự kiện khớp</div></div>
+        <div class="kpi k4"><div class="lbl">Tracking IDF1</div><div class="val">${fmt(tr.idf1,3)}</div>
+          <div class="sub">${tr.id_switches} ID switch</div></div>
+      </div>
+      <h3>Bảng ablation — đóng góp của từng khối</h3>
+      <table><thead><tr><th>Cấu hình</th><th class="num">Precision</th><th class="num">Recall</th>
+        <th class="num">F1</th><th class="num">TTC MAE</th><th class="num">Sự kiện</th></tr></thead>
+        <tbody>${(d.ablation||[]).map(r=>`<tr><td>${r.label}</td>
+          <td class="num">${fmt(r.precision,3)}</td><td class="num">${fmt(r.recall,3)}</td>
+          <td class="num">${fmt(r.f1,3)}</td><td class="num">${r.ttc_mae===null?'—':fmt(r.ttc_mae,3)+'s'}</td>
+          <td class="num">${r.n_events}</td></tr>`).join('')}</tbody></table>
+      <h3 style="margin-top:16px">Độ bền trước nhiễu detector</h3>
+      <table><thead><tr><th class="num">Nhiễu bbox (px)</th><th class="num">Precision</th>
+        <th class="num">Recall</th><th class="num">F1</th><th class="num">TTC MAE</th>
+        <th class="num">IDF1</th></tr></thead>
+        <tbody>${(d.noise_sweep||[]).map(r=>`<tr><td class="num">${fmt(r.noise_px,1)}</td>
+          <td class="num">${fmt(r.precision,3)}</td><td class="num">${fmt(r.recall,3)}</td>
+          <td class="num">${fmt(r.f1,3)}</td><td class="num">${r.ttc_mae===null?'—':fmt(r.ttc_mae,3)+'s'}</td>
+          <td class="num">${fmt(r.idf1,3)}</td></tr>`).join('')}</tbody></table>
+      <h3 style="margin-top:16px">Recall theo mức nghiêm trọng</h3>
+      <table><thead><tr><th>Dải TTC</th><th class="num">Số nhãn chuẩn</th>
+        <th class="num">Phát hiện được</th><th class="num">Recall</th></tr></thead>
+        <tbody>${(d.severity_breakdown||[]).filter(r=>r.n_gt>0).map(r=>`<tr><td>${r.band}</td>
+          <td class="num">${r.n_gt}</td><td class="num">${r.detected??'—'}</td>
+          <td class="num">${r.recall===null?'—':fmt(r.recall,3)}</td></tr>`).join('')}</tbody></table>
+      <div class="metrics-note">
+        Nhãn chuẩn sinh từ trình mô phỏng có ground truth giải tích
+        (${st.n_ground_truth} near-miss trên ${st.n_vehicles} phương tiện,
+        ${fmt(st.duration_s,0)}s, seed ${st.seed}). Detector mô phỏng nhiễu
+        ${fmt(st.noise_px,1)} px và tỉ lệ bỏ sót ${fmt(st.miss_rate*100,0)}%.
+      </div>`;
+  }catch(e){ console.warn('Chưa có kết quả đánh giá', e); }
+}
+
+window.addEventListener('resize', ()=>{
+  drawTimeline(); drawTypes();
+  if($('view-riskmap').classList.contains('on')) drawRiskMap();
+  if($('view-analysis').classList.contains('on')){ drawTTC(); drawRiskHist(); }
+});
+load();
+</script>
+</body>
+</html>
