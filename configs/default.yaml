@@ -1,0 +1,85 @@
+site:
+  name: Ngã tư Hàng Xanh, Q. Bình Thạnh, TP.HCM
+  short_name: Hàng Xanh
+  camera_height_m: 12.0
+  approaches:
+  - Hướng 1
+  - Hướng 2
+  - Hướng 3
+  - Hướng 4
+  lanes: 3
+video:
+  source: data/samples/synthetic_intersection.mp4
+  start_frame: 0
+  max_frames: 0
+  stride: 1
+  resize_width: 0
+  fps_override: 0.0
+  write_overlay: true
+  overlay_path: data/outputs/overlay.mp4
+detection:
+  weights: models/yolo11n.pt
+  imgsz: 640
+  conf: 0.25
+  iou: 0.45
+  device: cpu
+  half: false
+  max_det: 300
+  min_box_area: 150.0
+  backend: yolo
+tracking:
+  track_high_thresh: 0.5
+  track_low_thresh: 0.1
+  new_track_thresh: 0.55
+  match_thresh: 0.8
+  track_buffer: 30
+  min_hits: 3
+  velocity_alpha: 0.35
+  min_states_for_velocity: 3
+homography:
+  image_points: []
+  world_points: []
+  fallback_scale: 0.05
+  smooth_window: 5
+conflict:
+  ttc_threshold: 3.0
+  pet_threshold: 1.5
+  max_pair_distance: 30.0
+  min_rel_speed: 3.0
+  proximity_gate: 3.0
+  min_abs_speed: 0.8
+  dedup_window: 3.0
+  horizon: 6.0
+  angle_rear_end: 30.0
+  angle_crossing_min: 60.0
+  angle_crossing_max: 120.0
+  angle_head_on: 150.0
+risk:
+  w_ttc: 0.52
+  w_pet: 0.32
+  w_rel_speed: 0.072
+  w_type: 0.38
+  w_time: 0.14
+  bias: -2.69
+  grid_size: 2.0
+  kernel_radius: 6.0
+  decay_tau: 900.0
+  top_k_hotspots: 5
+behavior:
+  enabled: true
+  model_path: models/behavior_clf.joblib
+  harsh_brake: -3.5
+  harsh_accel: 3.0
+  sharp_turn_rate: 45.0
+  window: 15
+privacy:
+  enabled: false
+  blur_faces: true
+  blur_plates: true
+  blur_kernel: 31
+  face_ratio: 0.28
+  plate_band:
+  - 0.55
+  - 0.95
+db_path: data/outputs/saferoad.db
+output_dir: data/outputs
