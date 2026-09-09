@@ -1,0 +1,9 @@
+{
+  "video": "data/samples/synthetic_intersection.mp4",
+  "ground_truth_bundle": "data/samples/synthetic_groundtruth.pkl",
+  "n_vehicles": 160,
+  "n_ground_truth_conflicts": 69,
+  "n_severe": 42,
+  "duration_s": 180.0,
+  "fps": 30
+}

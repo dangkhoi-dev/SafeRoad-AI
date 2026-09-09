@@ -1,0 +1,382 @@
+{
+  "ablation": [
+    {
+      "key": "det_track",
+      "label": "1. Detection + Tracking",
+      "description": "TTC tính trên pixel, không homography, không làm mượt, không PET/proximity",
+      "n_events": 242,
+      "processing_fps": 215.38,
+      "latency_ms": {
+        "detection": 0.15,
+        "tracking": 1.43,
+        "trajectory": 1.27,
+        "conflict": 1.06
+      },
+      "tp": 0,
+      "fp": 36,
+      "fn": 69,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "ttc_mae": null,
+      "ttc_rmse": null,
+      "pet_mae": null,
+      "time_mae": null,
+      "type_accuracy": null,
+      "n_matched_ttc": 0,
+      "tracking": {
+        "idf1": 0.0881,
+        "mota": 0.0,
+        "id_switches": 280,
+        "n_gt_tracks": 158,
+        "n_pred_tracks": 159,
+        "mostly_tracked": 4,
+        "fragmentation": 3.276
+      }
+    },
+    {
+      "key": "homography",
+      "label": "2. + Homography",
+      "description": "Quy đổi toạ độ ảnh sang mặt đất (mét)",
+      "n_events": 1004,
+      "processing_fps": 180.6,
+      "latency_ms": {
+        "detection": 0.13,
+        "tracking": 1.46,
+        "trajectory": 0.51,
+        "conflict": 2.73
+      },
+      "tp": 53,
+      "fp": 807,
+      "fn": 16,
+      "precision": 0.0616,
+      "recall": 0.7681,
+      "f1": 0.1141,
+      "ttc_mae": 0.3521,
+      "ttc_rmse": 0.5921,
+      "pet_mae": 2.4886,
+      "time_mae": 0.4821,
+      "type_accuracy": 0.283,
+      "n_matched_ttc": 38,
+      "tracking": {
+        "idf1": 0.9819,
+        "mota": 0.9527,
+        "id_switches": 1179,
+        "n_gt_tracks": 158,
+        "n_pred_tracks": 159,
+        "mostly_tracked": 157,
+        "fragmentation": 8.462
+      }
+    },
+    {
+      "key": "smoothing",
+      "label": "3. + Trajectory smoothing",
+      "description": "Làm mượt quỹ đạo + ước lượng vận tốc bằng hồi quy tuyến tính",
+      "n_events": 468,
+      "processing_fps": 209.92,
+      "latency_ms": {
+        "detection": 0.1,
+        "tracking": 1.33,
+        "trajectory": 1.19,
+        "conflict": 1.5
+      },
+      "tp": 42,
+      "fp": 340,
+      "fn": 27,
+      "precision": 0.1099,
+      "recall": 0.6087,
+      "f1": 0.1863,
+      "ttc_mae": 0.2966,
+      "ttc_rmse": 0.497,
+      "pet_mae": 3.7276,
+      "time_mae": 0.3797,
+      "type_accuracy": 0.5238,
+      "n_matched_ttc": 39,
+      "tracking": {
+        "idf1": 0.9831,
+        "mota": 0.9654,
+        "id_switches": 134,
+        "n_gt_tracks": 158,
+        "n_pred_tracks": 159,
+        "mostly_tracked": 158,
+        "fragmentation": 1.848
+      }
+    },
+    {
+      "key": "pet",
+      "label": "4. + PET",
+      "description": "Thêm tiêu chí Post-Encroachment Time bên cạnh TTC",
+      "n_events": 625,
+      "processing_fps": 203.9,
+      "latency_ms": {
+        "detection": 0.11,
+        "tracking": 1.37,
+        "trajectory": 1.2,
+        "conflict": 1.56
+      },
+      "tp": 50,
+      "fp": 486,
+      "fn": 19,
+      "precision": 0.0933,
+      "recall": 0.7246,
+      "f1": 0.1653,
+      "ttc_mae": 0.2815,
+      "ttc_rmse": 0.4867,
+      "pet_mae": 2.6399,
+      "time_mae": 0.4219,
+      "type_accuracy": 0.58,
+      "n_matched_ttc": 39,
+      "tracking": {
+        "idf1": 0.9831,
+        "mota": 0.9654,
+        "id_switches": 134,
+        "n_gt_tracks": 158,
+        "n_pred_tracks": 159,
+        "mostly_tracked": 158,
+        "fragmentation": 1.848
+      }
+    },
+    {
+      "key": "proximity",
+      "label": "5. + Proximity gate",
+      "description": "Yêu cầu hai xe thực sự đến gần nhau, không chỉ dựa vào ngoại suy TTC",
+      "n_events": 100,
+      "processing_fps": 217.58,
+      "latency_ms": {
+        "detection": 0.11,
+        "tracking": 1.35,
+        "trajectory": 1.19,
+        "conflict": 1.28
+      },
+      "tp": 44,
+      "fp": 42,
+      "fn": 25,
+      "precision": 0.5116,
+      "recall": 0.6377,
+      "f1": 0.5677,
+      "ttc_mae": 0.2903,
+      "ttc_rmse": 0.4852,
+      "pet_mae": 1.6672,
+      "time_mae": 0.4196,
+      "type_accuracy": 0.5,
+      "n_matched_ttc": 34,
+      "tracking": {
+        "idf1": 0.9831,
+        "mota": 0.9654,
+        "id_switches": 134,
+        "n_gt_tracks": 158,
+        "n_pred_tracks": 159,
+        "mostly_tracked": 158,
+        "fragmentation": 1.848
+      }
+    },
+    {
+      "key": "full",
+      "label": "6. Full (+ Risk scoring)",
+      "description": "Bản đầy đủ: thêm Risk Score, phân loại xung đột và Explainable Risk",
+      "n_events": 100,
+      "processing_fps": 219.53,
+      "latency_ms": {
+        "detection": 0.11,
+        "tracking": 1.34,
+        "trajectory": 1.2,
+        "conflict": 1.25
+      },
+      "tp": 44,
+      "fp": 42,
+      "fn": 25,
+      "precision": 0.5116,
+      "recall": 0.6377,
+      "f1": 0.5677,
+      "ttc_mae": 0.2903,
+      "ttc_rmse": 0.4852,
+      "pet_mae": 1.6672,
+      "time_mae": 0.4196,
+      "type_accuracy": 0.5,
+      "n_matched_ttc": 34,
+      "tracking": {
+        "idf1": 0.9831,
+        "mota": 0.9654,
+        "id_switches": 134,
+        "n_gt_tracks": 158,
+        "n_pred_tracks": 159,
+        "mostly_tracked": 158,
+        "fragmentation": 1.848
+      }
+    }
+  ],
+  "noise_sweep": [
+    {
+      "noise_px": 0.0,
+      "tp": 47,
+      "fp": 23,
+      "fn": 22,
+      "precision": 0.6714,
+      "recall": 0.6812,
+      "f1": 0.6763,
+      "ttc_mae": 0.309,
+      "ttc_rmse": 0.5141,
+      "pet_mae": 1.7426,
+      "time_mae": 0.401,
+      "type_accuracy": 0.4681,
+      "n_matched_ttc": 38,
+      "idf1": 0.9831,
+      "n_events": 82
+    },
+    {
+      "noise_px": 1.0,
+      "tp": 46,
+      "fp": 35,
+      "fn": 23,
+      "precision": 0.5679,
+      "recall": 0.6667,
+      "f1": 0.6133,
+      "ttc_mae": 0.3151,
+      "ttc_rmse": 0.4801,
+      "pet_mae": 1.6771,
+      "time_mae": 0.4177,
+      "type_accuracy": 0.5217,
+      "n_matched_ttc": 36,
+      "idf1": 0.9832,
+      "n_events": 94
+    },
+    {
+      "noise_px": 2.0,
+      "tp": 45,
+      "fp": 47,
+      "fn": 24,
+      "precision": 0.4891,
+      "recall": 0.6522,
+      "f1": 0.559,
+      "ttc_mae": 0.284,
+      "ttc_rmse": 0.4427,
+      "pet_mae": 1.6633,
+      "time_mae": 0.4455,
+      "type_accuracy": 0.5556,
+      "n_matched_ttc": 35,
+      "idf1": 0.983,
+      "n_events": 106
+    },
+    {
+      "noise_px": 4.0,
+      "tp": 48,
+      "fp": 80,
+      "fn": 21,
+      "precision": 0.375,
+      "recall": 0.6957,
+      "f1": 0.4873,
+      "ttc_mae": 0.2945,
+      "ttc_rmse": 0.5039,
+      "pet_mae": 1.4641,
+      "time_mae": 0.4153,
+      "type_accuracy": 0.5625,
+      "n_matched_ttc": 35,
+      "idf1": 0.9825,
+      "n_events": 154
+    },
+    {
+      "noise_px": 6.0,
+      "tp": 44,
+      "fp": 216,
+      "fn": 25,
+      "precision": 0.1692,
+      "recall": 0.6377,
+      "f1": 0.2675,
+      "ttc_mae": 0.2812,
+      "ttc_rmse": 0.5013,
+      "pet_mae": 1.5175,
+      "time_mae": 0.3804,
+      "type_accuracy": 0.5455,
+      "n_matched_ttc": 32,
+      "idf1": 0.9794,
+      "n_events": 312
+    }
+  ],
+  "severity_breakdown": [
+    {
+      "band": "Rất nghiêm trọng (TTC<1.0s)",
+      "n_gt": 34,
+      "detected": 28,
+      "recall": 0.8235,
+      "ttc_mae": 0.2046
+    },
+    {
+      "band": "Nghiêm trọng (1.0-1.5s)",
+      "n_gt": 8,
+      "detected": 5,
+      "recall": 0.625,
+      "ttc_mae": 0.7042
+    },
+    {
+      "band": "Trung bình (1.5-2.5s)",
+      "n_gt": 3,
+      "detected": 1,
+      "recall": 0.3333,
+      "ttc_mae": 0.619
+    },
+    {
+      "band": "Nhẹ (2.5-3.0s)",
+      "n_gt": 2,
+      "detected": 0,
+      "recall": 0.0,
+      "ttc_mae": null
+    }
+  ],
+  "final": {
+    "tp": 44,
+    "fp": 42,
+    "fn": 25,
+    "precision": 0.5116,
+    "recall": 0.6377,
+    "f1": 0.5677,
+    "ttc_mae": 0.2903,
+    "ttc_rmse": 0.4852,
+    "pet_mae": 1.6672,
+    "time_mae": 0.4196,
+    "type_accuracy": 0.5,
+    "n_matched_ttc": 34
+  },
+  "tracking": {
+    "idf1": 0.9831,
+    "mota": 0.9654,
+    "id_switches": 134,
+    "n_gt_tracks": 158,
+    "n_pred_tracks": 159,
+    "mostly_tracked": 158,
+    "fragmentation": 1.848
+  },
+  "runtime": {
+    "n_frames": 5400,
+    "duration_s": 180.0,
+    "fps_source": 30.0,
+    "processing_fps": 215.51,
+    "total_events": 100,
+    "severe_events": 89,
+    "avg_risk_score": 54.0,
+    "n_tracks": 159,
+    "by_type": {
+      "rear_end": 9,
+      "lane_change": 16,
+      "crossing": 27,
+      "turning": 19,
+      "head_on": 13,
+      "pedestrian": 16
+    },
+    "latency_ms": {
+      "detection": 0.1,
+      "tracking": 1.37,
+      "trajectory": 1.2,
+      "conflict": 1.29
+    },
+    "total_latency_ms": 3.97,
+    "homography_error_m": 4.76837158203125e-07
+  },
+  "setup": {
+    "n_ground_truth": 69,
+    "n_vehicles": 160,
+    "noise_px": 1.5,
+    "miss_rate": 0.03,
+    "duration_s": 180.0,
+    "seed": 42
+  }
+}

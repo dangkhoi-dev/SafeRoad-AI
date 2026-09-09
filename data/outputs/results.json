@@ -1,0 +1,6798 @@
+{
+  "summary": {
+    "n_frames": 5400,
+    "duration_s": 180.0,
+    "fps_source": 30.0,
+    "processing_fps": 44.49,
+    "total_events": 92,
+    "severe_events": 83,
+    "avg_risk_score": 55.1,
+    "n_tracks": 159,
+    "by_type": {
+      "crossing": 29,
+      "lane_change": 18,
+      "turning": 9,
+      "pedestrian": 17,
+      "rear_end": 10,
+      "head_on": 9
+    },
+    "latency_ms": {
+      "detection": 0.11,
+      "tracking": 1.45,
+      "trajectory": 1.25,
+      "conflict": 1.32,
+      "overlay": 15.77
+    },
+    "total_latency_ms": 19.91,
+    "homography_error_m": 4.76837158203125e-07
+  },
+  "site": "Giao lộ mô phỏng (benchmark có ground truth)",
+  "events": [
+    {
+      "event_id": "CF00001",
+      "frame_idx": 236,
+      "t": 7.867,
+      "track_a": 1,
+      "track_b": 6,
+      "cls_a": "car",
+      "cls_b": "motorcycle",
+      "ttc": 1.248,
+      "pet": 0.0,
+      "conflict_type": "crossing",
+      "risk_score": 44.9,
+      "risk_level": "medium",
+      "location": [
+        13.156541079977714,
+        36.194430363140384
+      ],
+      "location_px": [
+        991.1633004585124,
+        395.00319379734526
+      ],
+      "approach_angle": 71.3,
+      "rel_speed": 3.12,
+      "gap": 2.93,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 1.25s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Cắt ngang giữa Ô tô và Xe máy (góc tiếp cận 71°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.417,
+        "pet": 1.6,
+        "rel_speed": 0.225,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.206
+      }
+    },
+    {
+      "event_id": "CF00002",
+      "frame_idx": 379,
+      "t": 12.633,
+      "track_a": 9,
+      "track_b": 11,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 1.034,
+      "pet": 0.0,
+      "conflict_type": "lane_change",
+      "risk_score": 45.6,
+      "risk_level": "medium",
+      "location": [
+        19.338493636352986,
+        34.93300710679885
+      ],
+      "location_px": [
+        1170.8037553092558,
+        399.8483543299992
+      ],
+      "approach_angle": 31.4,
+      "rel_speed": 3.51,
+      "gap": 2.63,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 1.03s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Chuyển làn giữa Xe máy và Xe máy (góc tiếp cận 31°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.503,
+        "pet": 1.6,
+        "rel_speed": 0.253,
+        "type": 0.157,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.178
+      }
+    },
+    {
+      "event_id": "CF00003",
+      "frame_idx": 398,
+      "t": 13.267,
+      "track_a": 3,
+      "track_b": 10,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": null,
+      "conflict_type": "lane_change",
+      "risk_score": 66.1,
+      "risk_level": "medium",
+      "location": [
+        -6.865474599447022,
+        24.221947156413417
+      ],
+      "location_px": [
+        395.62467820458954,
+        566.6494668201265
+      ],
+      "approach_angle": 53.2,
+      "rel_speed": 8.33,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 8.3 m/s (~30 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Chuyển làn giữa Xe máy và Xe máy (góc tiếp cận 53°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.0,
+        "rel_speed": 0.6,
+        "type": 0.157,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.667
+      }
+    },
+    {
+      "event_id": "CF00004",
+      "frame_idx": 600,
+      "t": 20.0,
+      "track_a": 1,
+      "track_b": 20,
+      "cls_a": "car",
+      "cls_b": "motorcycle",
+      "ttc": 0.219,
+      "pet": 1.554,
+      "conflict_type": "crossing",
+      "risk_score": 58.8,
+      "risk_level": "medium",
+      "location": [
+        10.7467057786862,
+        34.063915582514866
+      ],
+      "location_px": [
+        940.5731783098802,
+        415.4532998098539
+      ],
+      "approach_angle": 92.0,
+      "rel_speed": 3.12,
+      "gap": 0.53,
+      "reasons": [
+        "TTC chỉ còn 0.22s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.5 m",
+        "Kiểu xung đột: Cắt ngang giữa Ô tô và Xe máy (góc tiếp cận 92°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.374,
+        "pet": 0.206,
+        "rel_speed": 0.225,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.357
+      }
+    },
+    {
+      "event_id": "CF00005",
+      "frame_idx": 589,
+      "t": 19.633,
+      "track_a": 12,
+      "track_b": 20,
+      "cls_a": "car",
+      "cls_b": "motorcycle",
+      "ttc": 0.502,
+      "pet": 0.0,
+      "conflict_type": "turning",
+      "risk_score": 70.9,
+      "risk_level": "high",
+      "location": [
+        11.685084411386153,
+        32.74432766438162
+      ],
+      "location_px": [
+        920.3548867374589,
+        464.9704485696942
+      ],
+      "approach_angle": 146.7,
+      "rel_speed": 10.37,
+      "gap": 2.75,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.50s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 10.4 m/s (~37 km/h)",
+        "Kiểu xung đột: Chuyển hướng giữa Ô tô và Xe máy (góc tiếp cận 147°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.036,
+        "pet": 1.6,
+        "rel_speed": 0.747,
+        "type": 0.199,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.892
+      }
+    },
+    {
+      "event_id": "CF00006",
+      "frame_idx": 667,
+      "t": 22.233,
+      "track_a": 8,
+      "track_b": 27,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 0.0,
+      "pet": null,
+      "conflict_type": "turning",
+      "risk_score": 57.0,
+      "risk_level": "medium",
+      "location": [
+        -18.816824540401292,
+        25.22809907932035
+      ],
+      "location_px": [
+        -7.615721430013362,
+        556.3595336738864
+      ],
+      "approach_angle": 63.0,
+      "rel_speed": 3.16,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Chuyển hướng giữa Ô tô và Ô tô (góc tiếp cận 63°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.0,
+        "rel_speed": 0.228,
+        "type": 0.146,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.284
+      }
+    },
+    {
+      "event_id": "CF00007",
+      "frame_idx": 720,
+      "t": 24.0,
+      "track_a": 3,
+      "track_b": 24,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": null,
+      "conflict_type": "lane_change",
+      "risk_score": 68.7,
+      "risk_level": "medium",
+      "location": [
+        -6.872190037757251,
+        24.4698383686764
+      ],
+      "location_px": [
+        396.4451972172937,
+        562.2754178829719
+      ],
+      "approach_angle": 51.5,
+      "rel_speed": 10.01,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 10.0 m/s (~36 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Chuyển làn giữa Xe máy và Xe máy (góc tiếp cận 52°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.0,
+        "rel_speed": 0.721,
+        "type": 0.157,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.787
+      }
+    },
+    {
+      "event_id": "CF00008",
+      "frame_idx": 1037,
+      "t": 34.567,
+      "track_a": 9,
+      "track_b": 34,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.534,
+      "pet": 0.115,
+      "conflict_type": "crossing",
+      "risk_score": 61.0,
+      "risk_level": "medium",
+      "location": [
+        17.227506175161437,
+        36.755382090731565
+      ],
+      "location_px": [
+        1136.1195372287193,
+        389.2256104305322
+      ],
+      "approach_angle": 109.0,
+      "rel_speed": 4.46,
+      "gap": 1.55,
+      "reasons": [
+        "PET 0.12s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.53s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.6 m",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 109°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.974,
+        "pet": 1.6,
+        "rel_speed": 0.321,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.447
+      }
+    },
+    {
+      "event_id": "CF00009",
+      "frame_idx": 1053,
+      "t": 35.1,
+      "track_a": 6,
+      "track_b": 34,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 1.108,
+      "pet": 0.0,
+      "conflict_type": "lane_change",
+      "risk_score": 44.4,
+      "risk_level": "medium",
+      "location": [
+        16.238180376759903,
+        36.54632111225922
+      ],
+      "location_px": [
+        1070.9582872170186,
+        381.55635223173846
+      ],
+      "approach_angle": 120.3,
+      "rel_speed": 3.34,
+      "gap": 2.74,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 1.11s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Chuyển làn giữa Xe máy và Xe máy (góc tiếp cận 120°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.469,
+        "pet": 1.6,
+        "rel_speed": 0.24,
+        "type": 0.157,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.223
+      }
+    },
+    {
+      "event_id": "CF00010",
+      "frame_idx": 1124,
+      "t": 37.467,
+      "track_a": 3,
+      "track_b": 36,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.918,
+      "pet": 0.0,
+      "conflict_type": "crossing",
+      "risk_score": 54.6,
+      "risk_level": "medium",
+      "location": [
+        4.721803573899532,
+        23.378867398762196
+      ],
+      "location_px": [
+        747.4792244100568,
+        625.7275217188992
+      ],
+      "approach_angle": 93.2,
+      "rel_speed": 6.48,
+      "gap": 1.74,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.92s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.7 m",
+        "Tốc độ tiếp cận cao 6.5 m/s (~23 km/h)",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 93°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.566,
+        "pet": 1.6,
+        "rel_speed": 0.467,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.185
+      }
+    },
+    {
+      "event_id": "CF00011",
+      "frame_idx": 1170,
+      "t": 39.0,
+      "track_a": 5,
+      "track_b": 33,
+      "cls_a": "motorcycle",
+      "cls_b": "car",
+      "ttc": 0.291,
+      "pet": 0.0,
+      "conflict_type": "crossing",
+      "risk_score": 83.3,
+      "risk_level": "high",
+      "location": [
+        2.713979137117639,
+        25.20798071848161
+      ],
+      "location_px": [
+        685.6160785185357,
+        604.4746023018464
+      ],
+      "approach_angle": 89.7,
+      "rel_speed": 9.25,
+      "gap": 2.07,
+      "reasons": [
+        "TTC chỉ còn 0.29s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 9.2 m/s (~33 km/h)",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Ô tô (góc tiếp cận 90°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.787,
+        "pet": 1.6,
+        "rel_speed": 0.666,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 1.605
+      }
+    },
+    {
+      "event_id": "CF00012",
+      "frame_idx": 1153,
+      "t": 38.433,
+      "track_a": 1,
+      "track_b": 37,
+      "cls_a": "car",
+      "cls_b": "pedestrian",
+      "ttc": null,
+      "pet": 0.617,
+      "conflict_type": "pedestrian",
+      "risk_score": 20.9,
+      "risk_level": "low",
+      "location": [
+        -12.183890296983824,
+        35.04078556082436
+      ],
+      "location_px": [
+        458.9190968560707,
+        376.8829026265121
+      ],
+      "approach_angle": 86.8,
+      "rel_speed": 6.43,
+      "gap": 1.81,
+      "reasons": [
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "PET 0.62s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.8 m",
+        "Tốc độ tiếp cận cao 6.4 m/s (~23 km/h)",
+        "Kiểu xung đột: Người đi bộ giữa Ô tô và Người đi bộ (góc tiếp cận 87°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.0,
+        "pet": 0.519,
+        "rel_speed": 0.463,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.328
+      }
+    },
+    {
+      "event_id": "CF00013",
+      "frame_idx": 1208,
+      "t": 40.267,
+      "track_a": 27,
+      "track_b": 33,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 0.31,
+      "pet": 0.0,
+      "conflict_type": "lane_change",
+      "risk_score": 73.8,
+      "risk_level": "high",
+      "location": [
+        0.3268258185925752,
+        22.68261466071718
+      ],
+      "location_px": [
+        656.9517472318922,
+        632.4373802767522
+      ],
+      "approach_angle": 146.8,
+      "rel_speed": 4.63,
+      "gap": 1.33,
+      "reasons": [
+        "TTC chỉ còn 0.31s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.3 m",
+        "Kiểu xung đột: Chuyển làn giữa Ô tô và Ô tô (góc tiếp cận 147°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.677,
+        "pet": 1.6,
+        "rel_speed": 0.333,
+        "type": 0.115,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 1.036
+      }
+    },
+    {
+      "event_id": "CF00014",
+      "frame_idx": 1186,
+      "t": 39.533,
+      "track_a": 6,
+      "track_b": 37,
+      "cls_a": "motorcycle",
+      "cls_b": "pedestrian",
+      "ttc": 2.191,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 48.1,
+      "risk_level": "medium",
+      "location": [
+        -12.291079893411455,
+        35.82125697743602
+      ],
+      "location_px": [
+        501.28046108113625,
+        372.8135891022211
+      ],
+      "approach_angle": 78.5,
+      "rel_speed": 5.52,
+      "gap": 2.0,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Tốc độ tiếp cận cao 5.5 m/s (~20 km/h)",
+        "Kiểu xung đột: Người đi bộ giữa Xe máy và Người đi bộ (góc tiếp cận 78°)",
+        "TTC chỉ còn 2.19s — thời gian tới va chạm đáng chú ý (ngưỡng cảnh báo 3.0s)"
+      ],
+      "severity_terms": {
+        "ttc": 0.237,
+        "pet": 1.6,
+        "rel_speed": 0.397,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.075
+      }
+    },
+    {
+      "event_id": "CF00015",
+      "frame_idx": 1224,
+      "t": 40.8,
+      "track_a": 8,
+      "track_b": 27,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 0.0,
+      "pet": 0.0,
+      "conflict_type": "crossing",
+      "risk_score": 90.1,
+      "risk_level": "high",
+      "location": [
+        -2.7935902958911694,
+        23.018423852314605
+      ],
+      "location_px": [
+        541.0174787528698,
+        613.5124730116539
+      ],
+      "approach_angle": 79.5,
+      "rel_speed": 7.17,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 7.2 m/s (~26 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Cắt ngang giữa Ô tô và Ô tô (góc tiếp cận 80°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.516,
+        "type": 0.178,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.204
+      }
+    },
+    {
+      "event_id": "CF00016",
+      "frame_idx": 1224,
+      "t": 40.8,
+      "track_a": 8,
+      "track_b": 33,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 0.797,
+      "pet": 0.188,
+      "conflict_type": "crossing",
+      "risk_score": 53.8,
+      "risk_level": "medium",
+      "location": [
+        -0.8612015212679205,
+        22.55476200825108
+      ],
+      "location_px": [
+        616.6511234482074,
+        622.881028600287
+      ],
+      "approach_angle": 88.0,
+      "rel_speed": 5.73,
+      "gap": 2.79,
+      "reasons": [
+        "PET 0.19s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.80s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 5.7 m/s (~21 km/h)",
+        "Kiểu xung đột: Cắt ngang giữa Ô tô và Ô tô (góc tiếp cận 88°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.652,
+        "pet": 1.6,
+        "rel_speed": 0.413,
+        "type": 0.178,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.153
+      }
+    },
+    {
+      "event_id": "CF00017",
+      "frame_idx": 1242,
+      "t": 41.4,
+      "track_a": 7,
+      "track_b": 37,
+      "cls_a": "motorcycle",
+      "cls_b": "pedestrian",
+      "ttc": 0.054,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 91.7,
+      "risk_level": "high",
+      "location": [
+        -11.925532618874126,
+        34.91952440186394
+      ],
+      "location_px": [
+        309.4098232400785,
+        397.9151699571643
+      ],
+      "approach_angle": 81.6,
+      "rel_speed": 7.12,
+      "gap": 0.07,
+      "reasons": [
+        "TTC chỉ còn 0.05s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Tốc độ tiếp cận cao 7.1 m/s (~26 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.1 m",
+        "Kiểu xung đột: Người đi bộ giữa Xe máy và Người đi bộ (góc tiếp cận 82°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.513,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.403
+      }
+    },
+    {
+      "event_id": "CF00018",
+      "frame_idx": 1258,
+      "t": 41.933,
+      "track_a": 30,
+      "track_b": 34,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": 5.101,
+      "conflict_type": "crossing",
+      "risk_score": 66.2,
+      "risk_level": "medium",
+      "location": [
+        -5.699867838394954,
+        37.20757984039708
+      ],
+      "location_px": [
+        488.6492066772063,
+        373.30877412423666
+      ],
+      "approach_angle": 103.7,
+      "rel_speed": 6.35,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Tốc độ tiếp cận cao 6.3 m/s (~23 km/h)",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 104°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.063,
+        "rel_speed": 0.457,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.672
+      }
+    },
+    {
+      "event_id": "CF00019",
+      "frame_idx": 1262,
+      "t": 42.067,
+      "track_a": 9,
+      "track_b": 31,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": null,
+      "pet": 0.171,
+      "conflict_type": "turning",
+      "risk_score": 41.8,
+      "risk_level": "medium",
+      "location": [
+        -7.069608913903199,
+        34.779782910850386
+      ],
+      "location_px": [
+        445.21175502770325,
+        427.82711552619276
+      ],
+      "approach_angle": 83.6,
+      "rel_speed": 7.76,
+      "gap": 2.36,
+      "reasons": [
+        "PET 0.17s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 7.8 m/s (~28 km/h)",
+        "Kiểu xung đột: Chuyển hướng giữa Xe máy và Xe máy (góc tiếp cận 84°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.0,
+        "pet": 1.6,
+        "rel_speed": 0.559,
+        "type": 0.199,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.332
+      }
+    },
+    {
+      "event_id": "CF00020",
+      "frame_idx": 1272,
+      "t": 42.4,
+      "track_a": 31,
+      "track_b": 37,
+      "cls_a": "motorcycle",
+      "cls_b": "pedestrian",
+      "ttc": 0.553,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 66.2,
+      "risk_level": "medium",
+      "location": [
+        -11.781141358774867,
+        33.387043040398744
+      ],
+      "location_px": [
+        352.9404424578667,
+        426.9871548273919
+      ],
+      "approach_angle": 122.0,
+      "rel_speed": 6.14,
+      "gap": 0.5,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.55s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Khoảng cách giữa hai phương tiện chỉ 0.5 m",
+        "Tốc độ tiếp cận cao 6.1 m/s (~22 km/h)",
+        "Kiểu xung đột: Người đi bộ giữa Xe máy và Người đi bộ (góc tiếp cận 122°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.94,
+        "pet": 1.6,
+        "rel_speed": 0.442,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.672
+      }
+    },
+    {
+      "event_id": "CF00021",
+      "frame_idx": 1276,
+      "t": 42.533,
+      "track_a": 35,
+      "track_b": 48,
+      "cls_a": "car",
+      "cls_b": "motorcycle",
+      "ttc": 0.808,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 17.6,
+      "risk_level": "low",
+      "location": [
+        -11.353255206168782,
+        28.619437984803362
+      ],
+      "location_px": [
+        281.71829042250914,
+        491.2563028507397
+      ],
+      "approach_angle": 11.0,
+      "rel_speed": 5.17,
+      "gap": 1.6,
+      "reasons": [
+        "TTC chỉ còn 0.81s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.6 m",
+        "Tốc độ tiếp cận cao 5.2 m/s (~19 km/h)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Ô tô và Xe máy (góc tiếp cận 11°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.644,
+        "pet": 0.0,
+        "rel_speed": 0.372,
+        "type": 0.128,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.546
+      }
+    },
+    {
+      "event_id": "CF00022",
+      "frame_idx": 1333,
+      "t": 44.433,
+      "track_a": 32,
+      "track_b": 44,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.026,
+      "pet": 0.0,
+      "conflict_type": "crossing",
+      "risk_score": 91.3,
+      "risk_level": "high",
+      "location": [
+        -1.0959609460729394,
+        23.52740931430766
+      ],
+      "location_px": [
+        601.2561500314418,
+        578.3921411330537
+      ],
+      "approach_angle": 114.8,
+      "rel_speed": 8.37,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.03s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 8.4 m/s (~30 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 115°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.603,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.355
+      }
+    },
+    {
+      "event_id": "CF00023",
+      "frame_idx": 1348,
+      "t": 44.933,
+      "track_a": 36,
+      "track_b": 44,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.533,
+      "pet": 0.0,
+      "conflict_type": "crossing",
+      "risk_score": 62.5,
+      "risk_level": "medium",
+      "location": [
+        5.203601173034988,
+        23.676601180819674
+      ],
+      "location_px": [
+        752.8161168262585,
+        586.4975439649552
+      ],
+      "approach_angle": 75.5,
+      "rel_speed": 5.34,
+      "gap": 1.33,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.53s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.3 m",
+        "Tốc độ tiếp cận cao 5.3 m/s (~19 km/h)",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 76°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.976,
+        "pet": 1.6,
+        "rel_speed": 0.384,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.512
+      }
+    },
+    {
+      "event_id": "CF00024",
+      "frame_idx": 1356,
+      "t": 45.2,
+      "track_a": 42,
+      "track_b": 50,
+      "cls_a": "car",
+      "cls_b": "pedestrian",
+      "ttc": 0.0,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 89.3,
+      "risk_level": "high",
+      "location": [
+        12.877191001582034,
+        35.11787391649514
+      ],
+      "location_px": [
+        991.8311488464997,
+        399.95561469517406
+      ],
+      "approach_angle": 120.2,
+      "rel_speed": 3.29,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Người đi bộ giữa Ô tô và Người đi bộ (góc tiếp cận 120°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.237,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.127
+      }
+    },
+    {
+      "event_id": "CF00025",
+      "frame_idx": 1379,
+      "t": 45.967,
+      "track_a": 46,
+      "track_b": 47,
+      "cls_a": "bicycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": 0.0,
+      "conflict_type": "lane_change",
+      "risk_score": 91.4,
+      "risk_level": "high",
+      "location": [
+        -0.044608457403834345,
+        25.32729445744617
+      ],
+      "location_px": [
+        638.7945720540624,
+        541.3801444242424
+      ],
+      "approach_angle": 127.6,
+      "rel_speed": 9.36,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 9.4 m/s (~34 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Chuyển làn giữa Xe đạp và Xe máy (góc tiếp cận 128°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.674,
+        "type": 0.178,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.362
+      }
+    },
+    {
+      "event_id": "CF00026",
+      "frame_idx": 1385,
+      "t": 46.167,
+      "track_a": 37,
+      "track_b": 53,
+      "cls_a": "car",
+      "cls_b": "pedestrian",
+      "ttc": 1.286,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 52.0,
+      "risk_level": "medium",
+      "location": [
+        -11.719899136047086,
+        25.65602719415175
+      ],
+      "location_px": [
+        113.76199105241986,
+        523.1266724034332
+      ],
+      "approach_angle": 96.2,
+      "rel_speed": 5.34,
+      "gap": 1.43,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Khoảng cách giữa hai phương tiện chỉ 1.4 m",
+        "TTC chỉ còn 1.29s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 5.3 m/s (~19 km/h)",
+        "Kiểu xung đột: Người đi bộ giữa Ô tô và Người đi bộ (góc tiếp cận 96°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.404,
+        "pet": 1.6,
+        "rel_speed": 0.384,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.079
+      }
+    },
+    {
+      "event_id": "CF00027",
+      "frame_idx": 1476,
+      "t": 49.2,
+      "track_a": 36,
+      "track_b": 53,
+      "cls_a": "car",
+      "cls_b": "motorcycle",
+      "ttc": 0.212,
+      "pet": null,
+      "conflict_type": "crossing",
+      "risk_score": 62.8,
+      "risk_level": "medium",
+      "location": [
+        3.238726025921729,
+        22.992776358337625
+      ],
+      "location_px": [
+        764.5493305927158,
+        589.5925531334342
+      ],
+      "approach_angle": 88.5,
+      "rel_speed": 7.19,
+      "gap": 0.44,
+      "reasons": [
+        "TTC chỉ còn 0.21s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 7.2 m/s (~26 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.4 m",
+        "Kiểu xung đột: Cắt ngang giữa Ô tô và Xe máy (góc tiếp cận 88°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.453,
+        "pet": 0.0,
+        "rel_speed": 0.518,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.523
+      }
+    },
+    {
+      "event_id": "CF00028",
+      "frame_idx": 1478,
+      "t": 49.267,
+      "track_a": 42,
+      "track_b": 54,
+      "cls_a": "motorcycle",
+      "cls_b": "pedestrian",
+      "ttc": 0.0,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 89.5,
+      "risk_level": "high",
+      "location": [
+        11.706229983118307,
+        32.78282125250397
+      ],
+      "location_px": [
+        984.3260798165861,
+        420.0733483120405
+      ],
+      "approach_angle": 84.7,
+      "rel_speed": 3.47,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Người đi bộ giữa Xe máy và Người đi bộ (góc tiếp cận 85°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.25,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.14
+      }
+    },
+    {
+      "event_id": "CF00029",
+      "frame_idx": 1739,
+      "t": 57.967,
+      "track_a": 51,
+      "track_b": 58,
+      "cls_a": "bicycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.931,
+      "pet": null,
+      "conflict_type": "lane_change",
+      "risk_score": 15.3,
+      "risk_level": "low",
+      "location": [
+        -3.1011077524043276,
+        47.22853529985663
+      ],
+      "location_px": [
+        572.8819949591073,
+        288.5218741550028
+      ],
+      "approach_angle": 129.6,
+      "rel_speed": 3.33,
+      "gap": 2.54,
+      "reasons": [
+        "TTC chỉ còn 0.93s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Chuyển làn giữa Xe đạp và Xe máy (góc tiếp cận 130°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.559,
+        "pet": 0.0,
+        "rel_speed": 0.24,
+        "type": 0.178,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.714
+      }
+    },
+    {
+      "event_id": "CF00030",
+      "frame_idx": 1765,
+      "t": 58.833,
+      "track_a": 51,
+      "track_b": 59,
+      "cls_a": "motorcycle",
+      "cls_b": "bicycle",
+      "ttc": 0.527,
+      "pet": 1.963,
+      "conflict_type": "head_on",
+      "risk_score": 27.9,
+      "risk_level": "low",
+      "location": [
+        -1.995969901229893,
+        47.28582037048719
+      ],
+      "location_px": [
+        596.4791648244513,
+        289.25134906277196
+      ],
+      "approach_angle": 174.7,
+      "rel_speed": 3.92,
+      "gap": 1.63,
+      "reasons": [
+        "TTC chỉ còn 0.53s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.6 m",
+        "Kiểu xung đột: Đối đầu giữa Xe máy và Xe đạp (góc tiếp cận 175°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.987,
+        "pet": 0.163,
+        "rel_speed": 0.282,
+        "type": 0.307,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.951
+      }
+    },
+    {
+      "event_id": "CF00031",
+      "frame_idx": 1807,
+      "t": 60.233,
+      "track_a": 30,
+      "track_b": 60,
+      "cls_a": "motorcycle",
+      "cls_b": "car",
+      "ttc": 0.0,
+      "pet": 2.206,
+      "conflict_type": "crossing",
+      "risk_score": 72.6,
+      "risk_level": "high",
+      "location": [
+        -5.227935409780734,
+        37.115235551002684
+      ],
+      "location_px": [
+        500.5297603370731,
+        377.82083179694763
+      ],
+      "approach_angle": 88.4,
+      "rel_speed": 9.39,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 9.4 m/s (~34 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Ô tô (góc tiếp cận 88°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.145,
+        "rel_speed": 0.676,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.973
+      }
+    },
+    {
+      "event_id": "CF00032",
+      "frame_idx": 1871,
+      "t": 62.367,
+      "track_a": 56,
+      "track_b": 62,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.215,
+      "pet": 0.0,
+      "conflict_type": "head_on",
+      "risk_score": 86.1,
+      "risk_level": "high",
+      "location": [
+        -6.288436266618843,
+        44.786581653342566
+      ],
+      "location_px": [
+        496.66389894901425,
+        308.12333549376854
+      ],
+      "approach_angle": 169.4,
+      "rel_speed": 3.12,
+      "gap": 0.32,
+      "reasons": [
+        "TTC chỉ còn 0.21s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.3 m",
+        "Kiểu xung đột: Đối đầu giữa Xe máy và Xe máy (góc tiếp cận 169°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.419,
+        "pet": 1.6,
+        "rel_speed": 0.225,
+        "type": 0.271,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 1.824
+      }
+    },
+    {
+      "event_id": "CF00033",
+      "frame_idx": 1952,
+      "t": 65.067,
+      "track_a": 58,
+      "track_b": 65,
+      "cls_a": "car",
+      "cls_b": "motorcycle",
+      "ttc": 0.333,
+      "pet": null,
+      "conflict_type": "head_on",
+      "risk_score": 35.0,
+      "risk_level": "low",
+      "location": [
+        -4.089132875160155,
+        49.92027162680896
+      ],
+      "location_px": [
+        554.7160975981303,
+        273.0661722289483
+      ],
+      "approach_angle": 178.6,
+      "rel_speed": 3.3,
+      "gap": 1.03,
+      "reasons": [
+        "TTC chỉ còn 0.33s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.0 m",
+        "Kiểu xung đột: Đối đầu giữa Ô tô và Xe máy (góc tiếp cận 179°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.562,
+        "pet": 0.0,
+        "rel_speed": 0.238,
+        "type": 0.271,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.62
+      }
+    },
+    {
+      "event_id": "CF00034",
+      "frame_idx": 2103,
+      "t": 70.1,
+      "track_a": 66,
+      "track_b": 70,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.438,
+      "pet": 1.89,
+      "conflict_type": "crossing",
+      "risk_score": 30.7,
+      "risk_level": "low",
+      "location": [
+        -11.196875369329788,
+        28.078958167938588
+      ],
+      "location_px": [
+        280.774026946756,
+        492.85966502295634
+      ],
+      "approach_angle": 92.8,
+      "rel_speed": 3.85,
+      "gap": 0.96,
+      "reasons": [
+        "TTC chỉ còn 0.44s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.0 m",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 93°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.187,
+        "pet": 0.169,
+        "rel_speed": 0.277,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.814
+      }
+    },
+    {
+      "event_id": "CF00035",
+      "frame_idx": 2187,
+      "t": 72.9,
+      "track_a": 33,
+      "track_b": 43,
+      "cls_a": "car",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": 0.403,
+      "conflict_type": "lane_change",
+      "risk_score": 83.3,
+      "risk_level": "high",
+      "location": [
+        -2.145800238156702,
+        27.960320073771566
+      ],
+      "location_px": [
+        570.156910265976,
+        513.1185108975426
+      ],
+      "approach_angle": 143.2,
+      "rel_speed": 10.4,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.40s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 10.4 m/s (~37 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Chuyển làn giữa Ô tô và Xe máy (góc tiếp cận 143°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.794,
+        "rel_speed": 0.749,
+        "type": 0.157,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 1.61
+      }
+    },
+    {
+      "event_id": "CF00036",
+      "frame_idx": 2200,
+      "t": 73.333,
+      "track_a": 33,
+      "track_b": 49,
+      "cls_a": "car",
+      "cls_b": "motorcycle",
+      "ttc": 0.885,
+      "pet": 0.0,
+      "conflict_type": "lane_change",
+      "risk_score": 55.6,
+      "risk_level": "medium",
+      "location": [
+        -2.7529880718815996,
+        28.443078087899377
+      ],
+      "location_px": [
+        562.2032983539834,
+        461.2308389743805
+      ],
+      "approach_angle": 137.2,
+      "rel_speed": 7.95,
+      "gap": 2.45,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.89s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 8.0 m/s (~29 km/h)",
+        "Kiểu xung đột: Chuyển làn giữa Ô tô và Xe máy (góc tiếp cận 137°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.588,
+        "pet": 1.6,
+        "rel_speed": 0.572,
+        "type": 0.157,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.227
+      }
+    },
+    {
+      "event_id": "CF00037",
+      "frame_idx": 2242,
+      "t": 74.733,
+      "track_a": 33,
+      "track_b": 52,
+      "cls_a": "car",
+      "cls_b": "bicycle",
+      "ttc": 0.0,
+      "pet": 0.0,
+      "conflict_type": "crossing",
+      "risk_score": 90.8,
+      "risk_level": "high",
+      "location": [
+        -7.5258185495474565,
+        31.977609125923006
+      ],
+      "location_px": [
+        417.12711968503856,
+        445.74742932042784
+      ],
+      "approach_angle": 104.5,
+      "rel_speed": 7.07,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 7.1 m/s (~25 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Cắt ngang giữa Ô tô và Xe đạp (góc tiếp cận 104°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.509,
+        "type": 0.275,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.294
+      }
+    },
+    {
+      "event_id": "CF00038",
+      "frame_idx": 2243,
+      "t": 74.767,
+      "track_a": 65,
+      "track_b": 74,
+      "cls_a": "motorcycle",
+      "cls_b": "car",
+      "ttc": 0.632,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 17.9,
+      "risk_level": "low",
+      "location": [
+        -4.98598109709423,
+        53.9833497942962
+      ],
+      "location_px": [
+        542.2260943971148,
+        249.32611151209707
+      ],
+      "approach_angle": 8.4,
+      "rel_speed": 3.0,
+      "gap": 1.85,
+      "reasons": [
+        "TTC chỉ còn 0.63s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.9 m",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Xe máy và Ô tô (góc tiếp cận 8°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.823,
+        "pet": 0.0,
+        "rel_speed": 0.216,
+        "type": 0.128,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.523
+      }
+    },
+    {
+      "event_id": "CF00039",
+      "frame_idx": 2240,
+      "t": 74.667,
+      "track_a": 69,
+      "track_b": 73,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 1.07,
+      "pet": 0.0,
+      "conflict_type": "rear_end",
+      "risk_score": 46.1,
+      "risk_level": "medium",
+      "location": [
+        15.66942046046424,
+        32.73435755432338
+      ],
+      "location_px": [
+        1090.1499512791297,
+        426.6462292508867
+      ],
+      "approach_angle": 10.3,
+      "rel_speed": 4.42,
+      "gap": 2.98,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 1.07s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Xe máy và Xe máy (góc tiếp cận 10°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.486,
+        "pet": 1.6,
+        "rel_speed": 0.318,
+        "type": 0.128,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.158
+      }
+    },
+    {
+      "event_id": "CF00040",
+      "frame_idx": 2291,
+      "t": 76.367,
+      "track_a": 58,
+      "track_b": 63,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.568,
+      "pet": null,
+      "conflict_type": "head_on",
+      "risk_score": 23.2,
+      "risk_level": "low",
+      "location": [
+        -2.258782089439673,
+        41.78461248174561
+      ],
+      "location_px": [
+        586.1634592465329,
+        334.07095309918213
+      ],
+      "approach_angle": 177.3,
+      "rel_speed": 4.23,
+      "gap": 1.51,
+      "reasons": [
+        "TTC chỉ còn 0.57s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.5 m",
+        "Kiểu xung đột: Đối đầu giữa Xe máy và Xe máy (góc tiếp cận 177°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.915,
+        "pet": 0.0,
+        "rel_speed": 0.305,
+        "type": 0.271,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.199
+      }
+    },
+    {
+      "event_id": "CF00041",
+      "frame_idx": 2345,
+      "t": 78.167,
+      "track_a": 70,
+      "track_b": 79,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 1.022,
+      "pet": 0.0,
+      "conflict_type": "rear_end",
+      "risk_score": 46.6,
+      "risk_level": "medium",
+      "location": [
+        -12.634602076524157,
+        27.489695202137128
+      ],
+      "location_px": [
+        229.1453718525424,
+        502.7180837543791
+      ],
+      "approach_angle": 3.7,
+      "rel_speed": 4.4,
+      "gap": 2.98,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 1.02s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Xe máy và Xe máy (góc tiếp cận 4°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.509,
+        "pet": 1.6,
+        "rel_speed": 0.317,
+        "type": 0.128,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.136
+      }
+    },
+    {
+      "event_id": "CF00042",
+      "frame_idx": 2494,
+      "t": 83.133,
+      "track_a": 73,
+      "track_b": 84,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 1.106,
+      "pet": 0.0,
+      "conflict_type": "crossing",
+      "risk_score": 47.6,
+      "risk_level": "medium",
+      "location": [
+        15.485319389530536,
+        33.63948917324113
+      ],
+      "location_px": [
+        1155.6069268675797,
+        421.0050247937724
+      ],
+      "approach_angle": 103.6,
+      "rel_speed": 3.91,
+      "gap": 2.78,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 1.11s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 104°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.47,
+        "pet": 1.6,
+        "rel_speed": 0.282,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.096
+      }
+    },
+    {
+      "event_id": "CF00043",
+      "frame_idx": 2607,
+      "t": 86.9,
+      "track_a": 84,
+      "track_b": 88,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.177,
+      "pet": 4.371,
+      "conflict_type": "crossing",
+      "risk_score": 68.4,
+      "risk_level": "medium",
+      "location": [
+        18.667308362435215,
+        34.467197549184064
+      ],
+      "location_px": [
+        1179.8542033086662,
+        412.5376978852594
+      ],
+      "approach_angle": 118.0,
+      "rel_speed": 7.61,
+      "gap": 0.12,
+      "reasons": [
+        "TTC chỉ còn 0.18s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 7.6 m/s (~27 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.1 m",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 118°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.073,
+        "rel_speed": 0.548,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.773
+      }
+    },
+    {
+      "event_id": "CF00044",
+      "frame_idx": 2621,
+      "t": 87.367,
+      "track_a": 74,
+      "track_b": 87,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.934,
+      "pet": 0.0,
+      "conflict_type": "rear_end",
+      "risk_score": 45.9,
+      "risk_level": "medium",
+      "location": [
+        -2.8113627352789194,
+        47.64669050399302
+      ],
+      "location_px": [
+        578.7741317184309,
+        285.96731235676805
+      ],
+      "approach_angle": 12.6,
+      "rel_speed": 3.33,
+      "gap": 2.47,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.93s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Xe máy và Xe máy (góc tiếp cận 13°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.557,
+        "pet": 1.6,
+        "rel_speed": 0.24,
+        "type": 0.128,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.165
+      }
+    },
+    {
+      "event_id": "CF00045",
+      "frame_idx": 2594,
+      "t": 86.467,
+      "track_a": 80,
+      "track_b": 81,
+      "cls_a": "car",
+      "cls_b": "pedestrian",
+      "ttc": 0.0,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 91.2,
+      "risk_level": "high",
+      "location": [
+        -10.840953832209433,
+        32.192913569118424
+      ],
+      "location_px": [
+        322.67448126485067,
+        439.4939502318339
+      ],
+      "approach_angle": 129.8,
+      "rel_speed": 6.19,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Tốc độ tiếp cận cao 6.2 m/s (~22 km/h)",
+        "Kiểu xung đột: Người đi bộ giữa Ô tô và Người đi bộ (góc tiếp cận 130°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.446,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.336
+      }
+    },
+    {
+      "event_id": "CF00046",
+      "frame_idx": 2654,
+      "t": 88.467,
+      "track_a": 68,
+      "track_b": 88,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.473,
+      "pet": 3.419,
+      "conflict_type": "crossing",
+      "risk_score": 27.2,
+      "risk_level": "low",
+      "location": [
+        10.73655410445279,
+        33.78383454082285
+      ],
+      "location_px": [
+        940.8836113464604,
+        413.21142818478427
+      ],
+      "approach_angle": 78.2,
+      "rel_speed": 3.75,
+      "gap": 0.67,
+      "reasons": [
+        "TTC chỉ còn 0.47s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.7 m",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 78°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.099,
+        "pet": 0.094,
+        "rel_speed": 0.27,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.985
+      }
+    },
+    {
+      "event_id": "CF00047",
+      "frame_idx": 2631,
+      "t": 87.7,
+      "track_a": 78,
+      "track_b": 88,
+      "cls_a": "pedestrian",
+      "cls_b": "motorcycle",
+      "ttc": null,
+      "pet": 0.376,
+      "conflict_type": "pedestrian",
+      "risk_score": 26.1,
+      "risk_level": "low",
+      "location": [
+        12.126825654826572,
+        34.65913108824969
+      ],
+      "location_px": [
+        1029.4609879292236,
+        414.2436147355098
+      ],
+      "approach_angle": 86.9,
+      "rel_speed": 5.81,
+      "gap": 0.46,
+      "reasons": [
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "PET 0.38s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.5 m",
+        "Tốc độ tiếp cận cao 5.8 m/s (~21 km/h)",
+        "Kiểu xung đột: Người đi bộ giữa Người đi bộ và Xe máy (góc tiếp cận 87°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.0,
+        "pet": 0.851,
+        "rel_speed": 0.418,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.041
+      }
+    },
+    {
+      "event_id": "CF00048",
+      "frame_idx": 2681,
+      "t": 89.367,
+      "track_a": 78,
+      "track_b": 90,
+      "cls_a": "pedestrian",
+      "cls_b": "motorcycle",
+      "ttc": 0.963,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 55.6,
+      "risk_level": "medium",
+      "location": [
+        12.126211187825756,
+        35.02105260983351
+      ],
+      "location_px": [
+        1062.769273807316,
+        401.63447086570426
+      ],
+      "approach_angle": 84.6,
+      "rel_speed": 5.51,
+      "gap": 1.71,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "TTC chỉ còn 0.96s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.7 m",
+        "Tốc độ tiếp cận cao 5.5 m/s (~20 km/h)",
+        "Kiểu xung đột: Người đi bộ giữa Người đi bộ và Xe máy (góc tiếp cận 85°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.54,
+        "pet": 1.6,
+        "rel_speed": 0.397,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.227
+      }
+    },
+    {
+      "event_id": "CF00049",
+      "frame_idx": 2703,
+      "t": 90.1,
+      "track_a": 69,
+      "track_b": 90,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.402,
+      "pet": 1.07,
+      "conflict_type": "crossing",
+      "risk_score": 37.0,
+      "risk_level": "low",
+      "location": [
+        13.081728899262895,
+        34.59957982307001
+      ],
+      "location_px": [
+        1026.8467224017472,
+        414.39477847997307
+      ],
+      "approach_angle": 114.8,
+      "rel_speed": 4.47,
+      "gap": 1.15,
+      "reasons": [
+        "TTC chỉ còn 0.40s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.1 m",
+        "PET 1.07s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 115°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.294,
+        "pet": 0.299,
+        "rel_speed": 0.322,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.533
+      }
+    },
+    {
+      "event_id": "CF00050",
+      "frame_idx": 2777,
+      "t": 92.567,
+      "track_a": 83,
+      "track_b": 93,
+      "cls_a": "bicycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.969,
+      "pet": 0.0,
+      "conflict_type": "head_on",
+      "risk_score": 49.4,
+      "risk_level": "medium",
+      "location": [
+        -14.915532407677567,
+        28.51691887486498
+      ],
+      "location_px": [
+        166.84606091479017,
+        485.1237219991964
+      ],
+      "approach_angle": 167.1,
+      "rel_speed": 3.11,
+      "gap": 2.84,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.97s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Đối đầu giữa Xe đạp và Xe máy (góc tiếp cận 167°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.537,
+        "pet": 1.6,
+        "rel_speed": 0.224,
+        "type": 0.307,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.023
+      }
+    },
+    {
+      "event_id": "CF00051",
+      "frame_idx": 3224,
+      "t": 107.467,
+      "track_a": 67,
+      "track_b": 101,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.327,
+      "pet": 0.988,
+      "conflict_type": "crossing",
+      "risk_score": 48.3,
+      "risk_level": "medium",
+      "location": [
+        1.0436695133393685,
+        23.387049674820958
+      ],
+      "location_px": [
+        684.605635215175,
+        619.3845552939578
+      ],
+      "approach_angle": 102.7,
+      "rel_speed": 5.57,
+      "gap": 0.88,
+      "reasons": [
+        "TTC chỉ còn 0.33s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.9 m",
+        "Tốc độ tiếp cận cao 5.6 m/s (~20 km/h)",
+        "PET 0.99s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Kiểu xung đột: Cắt ngang giữa Xe tải/Bus và Xe máy (góc tiếp cận 103°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.59,
+        "pet": 0.324,
+        "rel_speed": 0.401,
+        "type": 0.307,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.068
+      }
+    },
+    {
+      "event_id": "CF00052",
+      "frame_idx": 3252,
+      "t": 108.4,
+      "track_a": 69,
+      "track_b": 79,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.7,
+      "pet": 0.0,
+      "conflict_type": "lane_change",
+      "risk_score": 64.3,
+      "risk_level": "medium",
+      "location": [
+        0.8085418777264151,
+        27.09468420725955
+      ],
+      "location_px": [
+        619.2339827579291,
+        495.55877771052155
+      ],
+      "approach_angle": 144.3,
+      "rel_speed": 10.82,
+      "gap": 1.57,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 10.8 m/s (~39 km/h)",
+        "TTC chỉ còn 0.70s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.6 m",
+        "Kiểu xung đột: Chuyển làn giữa Xe máy và Xe máy (góc tiếp cận 144°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.743,
+        "pet": 1.6,
+        "rel_speed": 0.779,
+        "type": 0.157,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.589
+      }
+    },
+    {
+      "event_id": "CF00053",
+      "frame_idx": 3263,
+      "t": 108.767,
+      "track_a": 103,
+      "track_b": 106,
+      "cls_a": "motorcycle",
+      "cls_b": "car",
+      "ttc": 0.45,
+      "pet": null,
+      "conflict_type": "lane_change",
+      "risk_score": 25.9,
+      "risk_level": "low",
+      "location": [
+        5.410705245294249,
+        19.16785981500375
+      ],
+      "location_px": [
+        860.6491563587385,
+        696.388356796983
+      ],
+      "approach_angle": 31.0,
+      "rel_speed": 4.5,
+      "gap": 0.64,
+      "reasons": [
+        "TTC chỉ còn 0.45s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.6 m",
+        "Kiểu xung đột: Chuyển làn giữa Xe máy và Ô tô (góc tiếp cận 31°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.156,
+        "pet": 0.0,
+        "rel_speed": 0.324,
+        "type": 0.157,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.054
+      }
+    },
+    {
+      "event_id": "CF00054",
+      "frame_idx": 3275,
+      "t": 109.167,
+      "track_a": 101,
+      "track_b": 106,
+      "cls_a": "motorcycle",
+      "cls_b": "truck",
+      "ttc": 0.0,
+      "pet": null,
+      "conflict_type": "head_on",
+      "risk_score": 63.1,
+      "risk_level": "medium",
+      "location": [
+        3.662261681146725,
+        19.848673090557146
+      ],
+      "location_px": [
+        789.5112740785714,
+        703.5056461455724
+      ],
+      "approach_angle": 176.0,
+      "rel_speed": 3.93,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Đối đầu giữa Xe máy và Xe tải/Bus (góc tiếp cận 176°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.0,
+        "rel_speed": 0.283,
+        "type": 0.343,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.536
+      }
+    },
+    {
+      "event_id": "CF00055",
+      "frame_idx": 3299,
+      "t": 109.967,
+      "track_a": 103,
+      "track_b": 107,
+      "cls_a": "motorcycle",
+      "cls_b": "car",
+      "ttc": 0.822,
+      "pet": null,
+      "conflict_type": "head_on",
+      "risk_score": 18.9,
+      "risk_level": "low",
+      "location": [
+        5.381168056540989,
+        18.15864817269818
+      ],
+      "location_px": [
+        866.6871858994132,
+        726.5909509918602
+      ],
+      "approach_angle": 173.0,
+      "rel_speed": 4.55,
+      "gap": 2.1,
+      "reasons": [
+        "TTC chỉ còn 0.82s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Đối đầu giữa Xe máy và Ô tô (góc tiếp cận 173°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.633,
+        "pet": 0.0,
+        "rel_speed": 0.328,
+        "type": 0.271,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.459
+      }
+    },
+    {
+      "event_id": "CF00056",
+      "frame_idx": 3314,
+      "t": 110.467,
+      "track_a": 83,
+      "track_b": 101,
+      "cls_a": "truck",
+      "cls_b": "bicycle",
+      "ttc": 1.419,
+      "pet": 0.0,
+      "conflict_type": "lane_change",
+      "risk_score": 42.4,
+      "risk_level": "medium",
+      "location": [
+        2.7339672860729425,
+        20.931442406342175
+      ],
+      "location_px": [
+        649.4782916194392,
+        617.0818005996938
+      ],
+      "approach_angle": 52.8,
+      "rel_speed": 3.02,
+      "gap": 2.76,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 1.42s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Chuyển làn giữa Xe tải/Bus và Xe đạp (góc tiếp cận 53°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.366,
+        "pet": 1.6,
+        "rel_speed": 0.217,
+        "type": 0.199,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.308
+      }
+    },
+    {
+      "event_id": "CF00057",
+      "frame_idx": 3330,
+      "t": 111.0,
+      "track_a": 92,
+      "track_b": 93,
+      "cls_a": "bicycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": 0.249,
+      "conflict_type": "rear_end",
+      "risk_score": 83.2,
+      "risk_level": "high",
+      "location": [
+        -4.647363522751362,
+        27.357924197263657
+      ],
+      "location_px": [
+        490.2737274256192,
+        504.24155085309104
+      ],
+      "approach_angle": 28.1,
+      "rel_speed": 3.56,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.25s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Xe đạp và Xe máy (góc tiếp cận 28°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.285,
+        "rel_speed": 0.256,
+        "type": 0.145,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 1.597
+      }
+    },
+    {
+      "event_id": "CF00058",
+      "frame_idx": 3336,
+      "t": 111.2,
+      "track_a": 93,
+      "track_b": 101,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.781,
+      "pet": 0.0,
+      "conflict_type": "lane_change",
+      "risk_score": 55.7,
+      "risk_level": "medium",
+      "location": [
+        2.8738790011000357,
+        22.216739205545505
+      ],
+      "location_px": [
+        647.131228792414,
+        614.3843749651547
+      ],
+      "approach_angle": 122.6,
+      "rel_speed": 6.34,
+      "gap": 2.56,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.78s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 6.3 m/s (~23 km/h)",
+        "Kiểu xung đột: Chuyển làn giữa Xe tải/Bus và Xe máy (góc tiếp cận 123°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.666,
+        "pet": 1.6,
+        "rel_speed": 0.456,
+        "type": 0.199,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.231
+      }
+    },
+    {
+      "event_id": "CF00059",
+      "frame_idx": 3360,
+      "t": 112.0,
+      "track_a": 92,
+      "track_b": 95,
+      "cls_a": "bicycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": null,
+      "conflict_type": "turning",
+      "risk_score": 60.9,
+      "risk_level": "medium",
+      "location": [
+        -4.523129630310243,
+        27.664065598172385
+      ],
+      "location_px": [
+        495.3197976390162,
+        497.94791571860094
+      ],
+      "approach_angle": 6.6,
+      "rel_speed": 4.25,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Chuyển hướng giữa Xe đạp và Xe máy (góc tiếp cận 7°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.0,
+        "rel_speed": 0.306,
+        "type": 0.226,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.442
+      }
+    },
+    {
+      "event_id": "CF00060",
+      "frame_idx": 3421,
+      "t": 114.033,
+      "track_a": 58,
+      "track_b": 105,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.724,
+      "pet": 1.033,
+      "conflict_type": "turning",
+      "risk_score": 26.7,
+      "risk_level": "low",
+      "location": [
+        -2.000531683587582,
+        40.38362074369687
+      ],
+      "location_px": [
+        643.4936129161304,
+        377.30929544485645
+      ],
+      "approach_angle": 25.3,
+      "rel_speed": 6.28,
+      "gap": 2.89,
+      "reasons": [
+        "TTC chỉ còn 0.72s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 6.3 m/s (~23 km/h)",
+        "PET 1.03s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Kiểu xung đột: Chuyển hướng giữa Xe máy và Xe máy (góc tiếp cận 25°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.718,
+        "pet": 0.31,
+        "rel_speed": 0.452,
+        "type": 0.199,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.01
+      }
+    },
+    {
+      "event_id": "CF00061",
+      "frame_idx": 3422,
+      "t": 114.067,
+      "track_a": 59,
+      "track_b": 105,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.606,
+      "pet": 0.355,
+      "conflict_type": "turning",
+      "risk_score": 43.6,
+      "risk_level": "medium",
+      "location": [
+        -1.071441976639055,
+        39.65165219025283
+      ],
+      "location_px": [
+        653.9482324899326,
+        376.76640922316165
+      ],
+      "approach_angle": 44.3,
+      "rel_speed": 6.6,
+      "gap": 2.23,
+      "reasons": [
+        "PET 0.35s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.61s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 6.6 m/s (~24 km/h)",
+        "Kiểu xung đột: Chuyển hướng giữa Xe máy và Xe máy (góc tiếp cận 44°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.858,
+        "pet": 0.901,
+        "rel_speed": 0.475,
+        "type": 0.199,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.256
+      }
+    },
+    {
+      "event_id": "CF00062",
+      "frame_idx": 3466,
+      "t": 115.533,
+      "track_a": 108,
+      "track_b": 112,
+      "cls_a": "motorcycle",
+      "cls_b": "truck",
+      "ttc": 0.806,
+      "pet": 0.885,
+      "conflict_type": "rear_end",
+      "risk_score": 24.6,
+      "risk_level": "low",
+      "location": [
+        -4.143670232996305,
+        25.683434616803794
+      ],
+      "location_px": [
+        174.72401509673685,
+        520.3628523591177
+      ],
+      "approach_angle": 21.2,
+      "rel_speed": 5.6,
+      "gap": 0.38,
+      "reasons": [
+        "TTC chỉ còn 0.81s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.4 m",
+        "Tốc độ tiếp cận cao 5.6 m/s (~20 km/h)",
+        "PET 0.89s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Xe máy và Xe tải/Bus (góc tiếp cận 21°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.645,
+        "pet": 0.362,
+        "rel_speed": 0.403,
+        "type": 0.162,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.118
+      }
+    },
+    {
+      "event_id": "CF00063",
+      "frame_idx": 3463,
+      "t": 115.433,
+      "track_a": 101,
+      "track_b": 109,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": 0.164,
+      "conflict_type": "crossing",
+      "risk_score": 93.4,
+      "risk_level": "high",
+      "location": [
+        2.2597657643525193,
+        22.354989858138083
+      ],
+      "location_px": [
+        730.5693302819811,
+        634.0162557562855
+      ],
+      "approach_angle": 92.1,
+      "rel_speed": 11.63,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.16s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 11.6 m/s (~42 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Cắt ngang giữa Xe tải/Bus và Xe máy (góc tiếp cận 92°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.837,
+        "type": 0.307,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.654
+      }
+    },
+    {
+      "event_id": "CF00064",
+      "frame_idx": 3470,
+      "t": 115.667,
+      "track_a": 103,
+      "track_b": 109,
+      "cls_a": "car",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": 2.838,
+      "conflict_type": "head_on",
+      "risk_score": 75.5,
+      "risk_level": "high",
+      "location": [
+        5.40516572443539,
+        23.193058509082626
+      ],
+      "location_px": [
+        845.4054491848461,
+        589.619631536565
+      ],
+      "approach_angle": 153.6,
+      "rel_speed": 11.55,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 11.6 m/s (~42 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Đối đầu giữa Ô tô và Xe máy (góc tiếp cận 154°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.113,
+        "rel_speed": 0.832,
+        "type": 0.271,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 1.125
+      }
+    },
+    {
+      "event_id": "CF00065",
+      "frame_idx": 3477,
+      "t": 115.9,
+      "track_a": 95,
+      "track_b": 101,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 1.55,
+      "pet": null,
+      "conflict_type": "lane_change",
+      "risk_score": 13.4,
+      "risk_level": "low",
+      "location": [
+        0.4268085380839276,
+        23.030498760496805
+      ],
+      "location_px": [
+        661.3048282191633,
+        632.3513857112376
+      ],
+      "approach_angle": 141.3,
+      "rel_speed": 4.06,
+      "gap": 2.71,
+      "reasons": [
+        "TTC chỉ còn 1.55s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Chuyển làn giữa Xe tải/Bus và Xe máy (góc tiếp cận 141°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.335,
+        "pet": 0.0,
+        "rel_speed": 0.292,
+        "type": 0.199,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.864
+      }
+    },
+    {
+      "event_id": "CF00066",
+      "frame_idx": 3516,
+      "t": 117.2,
+      "track_a": 101,
+      "track_b": 112,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.132,
+      "pet": 1.268,
+      "conflict_type": "turning",
+      "risk_score": 75.9,
+      "risk_level": "high",
+      "location": [
+        2.9621967779787717,
+        25.578306289765006
+      ],
+      "location_px": [
+        709.1269618963968,
+        616.9163138861975
+      ],
+      "approach_angle": 88.7,
+      "rel_speed": 10.18,
+      "gap": 0.39,
+      "reasons": [
+        "TTC chỉ còn 0.13s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 10.2 m/s (~37 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.4 m",
+        "Kiểu xung đột: Chuyển hướng giữa Xe tải/Bus và Xe máy (góc tiếp cận 89°)",
+        "PET 1.27s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.252,
+        "rel_speed": 0.733,
+        "type": 0.253,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 1.148
+      }
+    },
+    {
+      "event_id": "CF00067",
+      "frame_idx": 3543,
+      "t": 118.1,
+      "track_a": 108,
+      "track_b": 113,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": 0.0,
+      "conflict_type": "rear_end",
+      "risk_score": 88.1,
+      "risk_level": "high",
+      "location": [
+        -5.118097918306471,
+        26.6782165729431
+      ],
+      "location_px": [
+        470.58078940926464,
+        536.926293194022
+      ],
+      "approach_angle": 5.0,
+      "rel_speed": 4.55,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Xe tải/Bus và Xe máy (góc tiếp cận 5°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.328,
+        "type": 0.162,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.0
+      }
+    },
+    {
+      "event_id": "CF00068",
+      "frame_idx": 3635,
+      "t": 121.167,
+      "track_a": 101,
+      "track_b": 108,
+      "cls_a": "truck",
+      "cls_b": "truck",
+      "ttc": 0.7,
+      "pet": null,
+      "conflict_type": "lane_change",
+      "risk_score": 17.8,
+      "risk_level": "low",
+      "location": [
+        0.6319039623940346,
+        21.653345476318393
+      ],
+      "location_px": [
+        668.6154872552349,
+        680.5527262939056
+      ],
+      "approach_angle": 143.7,
+      "rel_speed": 3.08,
+      "gap": 1.12,
+      "reasons": [
+        "TTC chỉ còn 0.70s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.1 m",
+        "Kiểu xung đột: Chuyển làn giữa Xe tải/Bus và Xe tải/Bus (góc tiếp cận 144°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.743,
+        "pet": 0.0,
+        "rel_speed": 0.222,
+        "type": 0.199,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.527
+      }
+    },
+    {
+      "event_id": "CF00069",
+      "frame_idx": 3647,
+      "t": 121.567,
+      "track_a": 101,
+      "track_b": 111,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.737,
+      "pet": 0.475,
+      "conflict_type": "crossing",
+      "risk_score": 36.0,
+      "risk_level": "low",
+      "location": [
+        3.0766544454068114,
+        26.74186147231537
+      ],
+      "location_px": [
+        653.8545955932526,
+        605.4587473446695
+      ],
+      "approach_angle": 90.0,
+      "rel_speed": 5.93,
+      "gap": 2.92,
+      "reasons": [
+        "TTC chỉ còn 0.74s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.47s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 5.9 m/s (~21 km/h)",
+        "Kiểu xung đột: Cắt ngang giữa Xe tải/Bus và Xe máy (góc tiếp cận 90°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.706,
+        "pet": 0.674,
+        "rel_speed": 0.427,
+        "type": 0.307,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.577
+      }
+    },
+    {
+      "event_id": "CF00070",
+      "frame_idx": 3649,
+      "t": 121.633,
+      "track_a": 101,
+      "track_b": 113,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.265,
+      "pet": 0.401,
+      "conflict_type": "crossing",
+      "risk_score": 67.7,
+      "risk_level": "medium",
+      "location": [
+        3.0395091727234105,
+        25.713573632107252
+      ],
+      "location_px": [
+        703.7575796620966,
+        616.1850413332256
+      ],
+      "approach_angle": 87.0,
+      "rel_speed": 5.05,
+      "gap": 0.54,
+      "reasons": [
+        "TTC chỉ còn 0.27s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.40s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.5 m",
+        "Tốc độ tiếp cận cao 5.0 m/s (~18 km/h)",
+        "Kiểu xung đột: Cắt ngang giữa Xe tải/Bus và Xe máy (góc tiếp cận 87°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.962,
+        "pet": 0.798,
+        "rel_speed": 0.364,
+        "type": 0.307,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.741
+      }
+    },
+    {
+      "event_id": "CF00071",
+      "frame_idx": 3947,
+      "t": 131.567,
+      "track_a": 101,
+      "track_b": 119,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.394,
+      "pet": 0.0,
+      "conflict_type": "turning",
+      "risk_score": 71.2,
+      "risk_level": "high",
+      "location": [
+        0.5708976577693411,
+        22.04420684976356
+      ],
+      "location_px": [
+        666.4087337111014,
+        643.2640873547618
+      ],
+      "approach_angle": 81.3,
+      "rel_speed": 5.87,
+      "gap": 2.0,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.39s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 5.9 m/s (~21 km/h)",
+        "Kiểu xung đột: Chuyển hướng giữa Xe tải/Bus và Xe máy (góc tiếp cận 81°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.32,
+        "pet": 1.6,
+        "rel_speed": 0.423,
+        "type": 0.253,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.905
+      }
+    },
+    {
+      "event_id": "CF00072",
+      "frame_idx": 4124,
+      "t": 137.467,
+      "track_a": 123,
+      "track_b": 124,
+      "cls_a": "pedestrian",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 92.6,
+      "risk_level": "high",
+      "location": [
+        -12.344829621376155,
+        36.7159237648699
+      ],
+      "location_px": [
+        310.22280747910514,
+        377.24722103462716
+      ],
+      "approach_angle": 89.1,
+      "rel_speed": 8.78,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Tốc độ tiếp cận cao 8.8 m/s (~32 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Người đi bộ giữa Người đi bộ và Xe máy (góc tiếp cận 89°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.632,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.522
+      }
+    },
+    {
+      "event_id": "CF00073",
+      "frame_idx": 4207,
+      "t": 140.233,
+      "track_a": 101,
+      "track_b": 107,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.036,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 60.6,
+      "risk_level": "medium",
+      "location": [
+        3.611137727344426,
+        18.52735174331621
+      ],
+      "location_px": [
+        791.0662036246787,
+        747.0171569948267
+      ],
+      "approach_angle": 13.2,
+      "rel_speed": 4.99,
+      "gap": 0.05,
+      "reasons": [
+        "TTC chỉ còn 0.04s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.1 m",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Xe tải/Bus và Xe máy (góc tiếp cận 13°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.0,
+        "rel_speed": 0.359,
+        "type": 0.162,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.432
+      }
+    },
+    {
+      "event_id": "CF00074",
+      "frame_idx": 4210,
+      "t": 140.333,
+      "track_a": 101,
+      "track_b": 106,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": null,
+      "conflict_type": "lane_change",
+      "risk_score": 62.9,
+      "risk_level": "medium",
+      "location": [
+        3.6447547864778826,
+        20.029528985659333
+      ],
+      "location_px": [
+        784.0035963634068,
+        707.6669850712431
+      ],
+      "approach_angle": 42.3,
+      "rel_speed": 5.8,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Tốc độ tiếp cận cao 5.8 m/s (~21 km/h)",
+        "Kiểu xung đột: Chuyển làn giữa Xe tải/Bus và Xe máy (góc tiếp cận 42°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.0,
+        "rel_speed": 0.418,
+        "type": 0.199,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.526
+      }
+    },
+    {
+      "event_id": "CF00075",
+      "frame_idx": 4297,
+      "t": 143.233,
+      "track_a": 103,
+      "track_b": 126,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 1.18,
+      "pet": 0.0,
+      "conflict_type": "crossing",
+      "risk_score": 51.8,
+      "risk_level": "medium",
+      "location": [
+        6.437246638858577,
+        36.614135482884116
+      ],
+      "location_px": [
+        937.0767173968915,
+        422.0360445410779
+      ],
+      "approach_angle": 91.0,
+      "rel_speed": 7.55,
+      "gap": 2.66,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 7.5 m/s (~27 km/h)",
+        "TTC chỉ còn 1.18s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Cắt ngang giữa Ô tô và Ô tô (góc tiếp cận 91°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.441,
+        "pet": 1.6,
+        "rel_speed": 0.544,
+        "type": 0.178,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.072
+      }
+    },
+    {
+      "event_id": "CF00076",
+      "frame_idx": 4506,
+      "t": 150.2,
+      "track_a": 125,
+      "track_b": 137,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.434,
+      "pet": 0.145,
+      "conflict_type": "turning",
+      "risk_score": 71.6,
+      "risk_level": "high",
+      "location": [
+        7.687550630722923,
+        30.36623666642198
+      ],
+      "location_px": [
+        874.5688768098044,
+        461.4444607965411
+      ],
+      "approach_angle": 70.3,
+      "rel_speed": 8.59,
+      "gap": 2.32,
+      "reasons": [
+        "PET 0.14s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.43s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 8.6 m/s (~31 km/h)",
+        "Kiểu xung đột: Chuyển hướng giữa Xe máy và Xe máy (góc tiếp cận 70°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.198,
+        "pet": 1.6,
+        "rel_speed": 0.618,
+        "type": 0.199,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.926
+      }
+    },
+    {
+      "event_id": "CF00077",
+      "frame_idx": 4541,
+      "t": 151.367,
+      "track_a": 136,
+      "track_b": 140,
+      "cls_a": "motorcycle",
+      "cls_b": "pedestrian",
+      "ttc": 1.601,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 46.3,
+      "risk_level": "medium",
+      "location": [
+        2.261608708976561,
+        19.078974233753705
+      ],
+      "location_px": [
+        808.0809444397148,
+        746.102050220579
+      ],
+      "approach_angle": 87.5,
+      "rel_speed": 3.31,
+      "gap": 0.87,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Khoảng cách giữa hai phương tiện chỉ 0.9 m",
+        "Kiểu xung đột: Người đi bộ giữa Xe máy và Người đi bộ (góc tiếp cận 88°)",
+        "TTC chỉ còn 1.60s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)"
+      ],
+      "severity_terms": {
+        "ttc": 0.325,
+        "pet": 1.6,
+        "rel_speed": 0.238,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.147
+      }
+    },
+    {
+      "event_id": "CF00078",
+      "frame_idx": 4660,
+      "t": 155.333,
+      "track_a": 138,
+      "track_b": 144,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.409,
+      "pet": 2.022,
+      "conflict_type": "crossing",
+      "risk_score": 31.1,
+      "risk_level": "low",
+      "location": [
+        -13.467451281251353,
+        28.282061943423656
+      ],
+      "location_px": [
+        210.17045771564455,
+        489.5962745971028
+      ],
+      "approach_angle": 101.5,
+      "rel_speed": 3.07,
+      "gap": 0.61,
+      "reasons": [
+        "TTC chỉ còn 0.41s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.6 m",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 102°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.271,
+        "pet": 0.158,
+        "rel_speed": 0.221,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.797
+      }
+    },
+    {
+      "event_id": "CF00079",
+      "frame_idx": 4653,
+      "t": 155.1,
+      "track_a": 133,
+      "track_b": 144,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 1.027,
+      "pet": 0.0,
+      "conflict_type": "head_on",
+      "risk_score": 48.9,
+      "risk_level": "medium",
+      "location": [
+        -12.401854502437875,
+        28.01570746816317
+      ],
+      "location_px": [
+        241.6287056112043,
+        494.11192851859204
+      ],
+      "approach_angle": 155.2,
+      "rel_speed": 3.73,
+      "gap": 2.69,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 1.03s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Đối đầu giữa Xe máy và Xe máy (góc tiếp cận 155°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.506,
+        "pet": 1.6,
+        "rel_speed": 0.269,
+        "type": 0.271,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.044
+      }
+    },
+    {
+      "event_id": "CF00080",
+      "frame_idx": 4761,
+      "t": 158.7,
+      "track_a": 146,
+      "track_b": 150,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 57.3,
+      "risk_level": "medium",
+      "location": [
+        -18.03717360977334,
+        27.093412341431755
+      ],
+      "location_px": [
+        48.00913884942335,
+        525.5631006091519
+      ],
+      "approach_angle": 4.4,
+      "rel_speed": 3.07,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Xe tải/Bus và Xe máy (góc tiếp cận 4°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.0,
+        "rel_speed": 0.221,
+        "type": 0.162,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.293
+      }
+    },
+    {
+      "event_id": "CF00081",
+      "frame_idx": 4787,
+      "t": 159.567,
+      "track_a": 148,
+      "track_b": 153,
+      "cls_a": "pedestrian",
+      "cls_b": "motorcycle",
+      "ttc": 1.291,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 48.6,
+      "risk_level": "medium",
+      "location": [
+        6.208646155815926,
+        19.021166807600817
+      ],
+      "location_px": [
+        968.6916201852466,
+        730.9938849356804
+      ],
+      "approach_angle": 93.6,
+      "rel_speed": 3.47,
+      "gap": 1.28,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Khoảng cách giữa hai phương tiện chỉ 1.3 m",
+        "TTC chỉ còn 1.29s — thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Người đi bộ giữa Người đi bộ và Xe máy (góc tiếp cận 94°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.403,
+        "pet": 1.6,
+        "rel_speed": 0.25,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.057
+      }
+    },
+    {
+      "event_id": "CF00082",
+      "frame_idx": 4813,
+      "t": 160.433,
+      "track_a": 146,
+      "track_b": 154,
+      "cls_a": "truck",
+      "cls_b": "motorcycle",
+      "ttc": 0.685,
+      "pet": 0.643,
+      "conflict_type": "crossing",
+      "risk_score": 29.8,
+      "risk_level": "low",
+      "location": [
+        -18.80504867530261,
+        27.429820084793924
+      ],
+      "location_px": [
+        26.074600350448225,
+        527.6103608480905
+      ],
+      "approach_angle": 103.8,
+      "rel_speed": 3.72,
+      "gap": 0.38,
+      "reasons": [
+        "TTC chỉ còn 0.69s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.4 m",
+        "PET 0.64s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Kiểu xung đột: Cắt ngang giữa Xe tải/Bus và Xe máy (góc tiếp cận 104°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.759,
+        "pet": 0.498,
+        "rel_speed": 0.268,
+        "type": 0.307,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -0.859
+      }
+    },
+    {
+      "event_id": "CF00083",
+      "frame_idx": 4887,
+      "t": 162.9,
+      "track_a": 148,
+      "track_b": 155,
+      "cls_a": "bicycle",
+      "cls_b": "pedestrian",
+      "ttc": null,
+      "pet": 0.472,
+      "conflict_type": "pedestrian",
+      "risk_score": 19.8,
+      "risk_level": "low",
+      "location": [
+        3.133336097839605,
+        19.229185604403437
+      ],
+      "location_px": [
+        772.8853349778959,
+        739.4060420746714
+      ],
+      "approach_angle": 93.4,
+      "rel_speed": 3.26,
+      "gap": 1.75,
+      "reasons": [
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "PET 0.47s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.8 m",
+        "Kiểu xung đột: Người đi bộ giữa Xe đạp và Người đi bộ (góc tiếp cận 93°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.0,
+        "pet": 0.678,
+        "rel_speed": 0.235,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.397
+      }
+    },
+    {
+      "event_id": "CF00084",
+      "frame_idx": 5295,
+      "t": 176.5,
+      "track_a": 161,
+      "track_b": 163,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.854,
+      "pet": null,
+      "conflict_type": "crossing",
+      "risk_score": 17.8,
+      "risk_level": "low",
+      "location": [
+        4.56280687111146,
+        18.21228078811837
+      ],
+      "location_px": [
+        835.880548479156,
+        713.1778534883408
+      ],
+      "approach_angle": 70.9,
+      "rel_speed": 4.32,
+      "gap": 2.3,
+      "reasons": [
+        "TTC chỉ còn 0.85s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Xe máy (góc tiếp cận 71°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.609,
+        "pet": 0.0,
+        "rel_speed": 0.311,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.528
+      }
+    },
+    {
+      "event_id": "CF00085",
+      "frame_idx": 5288,
+      "t": 176.267,
+      "track_a": 162,
+      "track_b": 163,
+      "cls_a": "motorcycle",
+      "cls_b": "pedestrian",
+      "ttc": null,
+      "pet": 0.459,
+      "conflict_type": "pedestrian",
+      "risk_score": 20.8,
+      "risk_level": "low",
+      "location": [
+        5.086667184559126,
+        18.50732226150034
+      ],
+      "location_px": [
+        916.7039460722044,
+        746.4311983462233
+      ],
+      "approach_angle": 102.4,
+      "rel_speed": 3.82,
+      "gap": 1.96,
+      "reasons": [
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "PET 0.46s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Khoảng cách giữa hai phương tiện chỉ 2.0 m",
+        "Kiểu xung đột: Người đi bộ giữa Xe máy và Người đi bộ (góc tiếp cận 102°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.0,
+        "pet": 0.697,
+        "rel_speed": 0.275,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.338
+      }
+    },
+    {
+      "event_id": "CF00086",
+      "frame_idx": 5312,
+      "t": 177.067,
+      "track_a": 126,
+      "track_b": 159,
+      "cls_a": "car",
+      "cls_b": "bicycle",
+      "ttc": 0.382,
+      "pet": 0.0,
+      "conflict_type": "crossing",
+      "risk_score": 68.6,
+      "risk_level": "medium",
+      "location": [
+        2.7436680041444945,
+        35.695118912661506
+      ],
+      "location_px": [
+        748.9281755313116,
+        403.7133796341973
+      ],
+      "approach_angle": 109.5,
+      "rel_speed": 3.29,
+      "gap": 1.25,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.38s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.2 m",
+        "Kiểu xung đột: Cắt ngang giữa Ô tô và Xe đạp (góc tiếp cận 110°)"
+      ],
+      "severity_terms": {
+        "ttc": 1.361,
+        "pet": 1.6,
+        "rel_speed": 0.237,
+        "type": 0.275,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.783
+      }
+    },
+    {
+      "event_id": "CF00087",
+      "frame_idx": 5333,
+      "t": 177.767,
+      "track_a": 125,
+      "track_b": 128,
+      "cls_a": "motorcycle",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": 0.23,
+      "conflict_type": "lane_change",
+      "risk_score": 90.9,
+      "risk_level": "high",
+      "location": [
+        1.3609321208007534,
+        26.02288842569825
+      ],
+      "location_px": [
+        687.2383836972749,
+        529.3403618239065
+      ],
+      "approach_angle": 131.7,
+      "rel_speed": 11.72,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.23s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Tốc độ tiếp cận cao 11.7 m/s (~42 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Chuyển làn giữa Xe máy và Xe máy (góc tiếp cận 132°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.391,
+        "rel_speed": 0.844,
+        "type": 0.157,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.302
+      }
+    },
+    {
+      "event_id": "CF00088",
+      "frame_idx": 5340,
+      "t": 178.0,
+      "track_a": 126,
+      "track_b": 133,
+      "cls_a": "motorcycle",
+      "cls_b": "car",
+      "ttc": 0.599,
+      "pet": 0.0,
+      "conflict_type": "crossing",
+      "risk_score": 61.5,
+      "risk_level": "medium",
+      "location": [
+        2.8862400953620844,
+        38.306581360323314
+      ],
+      "location_px": [
+        694.1850414888133,
+        398.5311427474526
+      ],
+      "approach_angle": 109.0,
+      "rel_speed": 6.25,
+      "gap": 2.15,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.60s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 6.2 m/s (~22 km/h)",
+        "Kiểu xung đột: Cắt ngang giữa Xe máy và Ô tô (góc tiếp cận 109°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.868,
+        "pet": 1.6,
+        "rel_speed": 0.45,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.47
+      }
+    },
+    {
+      "event_id": "CF00089",
+      "frame_idx": 5327,
+      "t": 177.567,
+      "track_a": 133,
+      "track_b": 159,
+      "cls_a": "motorcycle",
+      "cls_b": "bicycle",
+      "ttc": 0.913,
+      "pet": 0.0,
+      "conflict_type": "lane_change",
+      "risk_score": 50.4,
+      "risk_level": "medium",
+      "location": [
+        2.875589104557351,
+        36.615492255595605
+      ],
+      "location_px": [
+        647.070236649123,
+        422.43318261569505
+      ],
+      "approach_angle": 46.3,
+      "rel_speed": 5.0,
+      "gap": 1.7,
+      "reasons": [
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "TTC chỉ còn 0.91s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.7 m",
+        "Kiểu xung đột: Chuyển làn giữa Xe máy và Xe đạp (góc tiếp cận 46°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.57,
+        "pet": 1.6,
+        "rel_speed": 0.36,
+        "type": 0.178,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.017
+      }
+    },
+    {
+      "event_id": "CF00090",
+      "frame_idx": 5362,
+      "t": 178.733,
+      "track_a": 128,
+      "track_b": 164,
+      "cls_a": "pedestrian",
+      "cls_b": "motorcycle",
+      "ttc": null,
+      "pet": 1.339,
+      "conflict_type": "pedestrian",
+      "risk_score": 18.4,
+      "risk_level": "low",
+      "location": [
+        11.971599188600699,
+        25.651600880555193
+      ],
+      "location_px": [
+        1015.0283284922111,
+        558.8750953918438
+      ],
+      "approach_angle": 89.0,
+      "rel_speed": 8.07,
+      "gap": 2.02,
+      "reasons": [
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Tốc độ tiếp cận cao 8.1 m/s (~29 km/h)",
+        "Kiểu xung đột: Người đi bộ giữa Người đi bộ và Xe máy (góc tiếp cận 89°)",
+        "PET 1.34s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)"
+      ],
+      "severity_terms": {
+        "ttc": 0.0,
+        "pet": 0.239,
+        "rel_speed": 0.581,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.49
+      }
+    },
+    {
+      "event_id": "CF00091",
+      "frame_idx": 5365,
+      "t": 178.833,
+      "track_a": 141,
+      "track_b": 164,
+      "cls_a": "pedestrian",
+      "cls_b": "motorcycle",
+      "ttc": 0.24,
+      "pet": 0.0,
+      "conflict_type": "pedestrian",
+      "risk_score": 88.4,
+      "risk_level": "high",
+      "location": [
+        11.963803374289155,
+        23.817572415790202
+      ],
+      "location_px": [
+        1053.842725453492,
+        574.7149705677164
+      ],
+      "approach_angle": 89.0,
+      "rel_speed": 7.96,
+      "gap": 0.15,
+      "reasons": [
+        "TTC chỉ còn 0.24s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.00s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+        "Tốc độ tiếp cận cao 8.0 m/s (~29 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.1 m",
+        "Kiểu xung đột: Người đi bộ giữa Người đi bộ và Xe máy (góc tiếp cận 89°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.167,
+        "pet": 1.6,
+        "rel_speed": 0.573,
+        "type": 0.38,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 2.03
+      }
+    },
+    {
+      "event_id": "CF00092",
+      "frame_idx": 5385,
+      "t": 179.5,
+      "track_a": 126,
+      "track_b": 134,
+      "cls_a": "car",
+      "cls_b": "motorcycle",
+      "ttc": 0.0,
+      "pet": 0.108,
+      "conflict_type": "crossing",
+      "risk_score": 87.8,
+      "risk_level": "high",
+      "location": [
+        1.4272465132579488,
+        36.680500424972244
+      ],
+      "location_px": [
+        709.2496198266783,
+        390.1562375093841
+      ],
+      "approach_angle": 79.4,
+      "rel_speed": 3.09,
+      "gap": 0.0,
+      "reasons": [
+        "TTC chỉ còn 0.00s — thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "PET 0.11s — hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.0 m",
+        "Kiểu xung đột: Cắt ngang giữa Ô tô và Xe máy (góc tiếp cận 79°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 1.6,
+        "rel_speed": 0.222,
+        "type": 0.242,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 1.975
+      }
+    }
+  ],
+  "behaviors": [
+    {
+      "track_id": 1,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.901,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 2,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 3,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.92,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 4,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 5,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.932,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 6,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 7,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 8,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 9,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 10,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 11,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 12,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 13,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 15,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 17,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 18,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 19,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 20,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 21,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 22,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 23,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 24,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 25,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 26,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 27,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.892,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 28,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 29,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 30,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 31,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 32,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 33,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 34,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 35,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 36,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 37,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 38,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 39,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 0.908,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 40,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 41,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 42,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 44,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.868,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 43,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 46,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.944,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 47,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 48,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 49,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 50,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 51,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 52,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 53,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 54,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 56,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 57,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 58,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 59,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 60,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 61,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 62,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 63,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 64,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 65,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 66,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 67,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 68,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.974,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 69,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 70,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 71,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 72,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 73,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 74,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 76,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 77,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 78,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 79,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.875,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 80,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 81,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 82,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 83,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 84,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 85,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 86,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 87,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 88,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 0.966,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 89,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 90,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 91,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 92,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 93,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 94,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 95,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 96,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 97,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 98,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 100,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 101,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 102,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 103,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 104,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 105,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 106,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 107,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 108,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 109,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 110,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 111,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 112,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 113,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 114,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 115,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 116,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 117,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.917,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 118,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 119,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 120,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 121,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 122,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 123,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 124,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 125,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 126,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 127,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 128,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 129,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 130,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 131,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 132,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 133,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 134,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 136,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 135,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 137,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 138,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.928,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 139,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 140,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 141,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.898,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 142,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 143,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 144,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "ml",
+      "risky": true
+    },
+    {
+      "track_id": 145,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 146,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 147,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 148,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 150,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.904,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 151,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 0.86,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 152,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 153,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 154,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 155,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 156,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 157,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 158,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 159,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 160,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.987,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 162,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 164,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.965,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 165,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 167,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    }
+  ],
+  "risk_map": {
+    "bounds": {
+      "x_min": -38.70408630371094,
+      "y_min": 12.974538803100586,
+      "x_max": 38.649864196777344,
+      "y_max": 62.221832275390625
+    },
+    "grid_size": 2.0,
+    "nx": 39,
+    "ny": 25,
+    "cells": [
+      {
+        "x": 2.3,
+        "y": 23.97,
+        "v": 1.0
+      },
+      {
+        "x": 0.3,
+        "y": 23.97,
+        "v": 0.9771
+      },
+      {
+        "x": 2.3,
+        "y": 21.97,
+        "v": 0.9284
+      },
+      {
+        "x": 0.3,
+        "y": 25.97,
+        "v": 0.9124
+      },
+      {
+        "x": 2.3,
+        "y": 25.97,
+        "v": 0.8825
+      },
+      {
+        "x": 0.3,
+        "y": 21.97,
+        "v": 0.8507
+      },
+      {
+        "x": -1.7,
+        "y": 25.97,
+        "v": 0.8053
+      },
+      {
+        "x": 4.3,
+        "y": 23.97,
+        "v": 0.8028
+      },
+      {
+        "x": -1.7,
+        "y": 23.97,
+        "v": 0.8005
+      },
+      {
+        "x": 4.3,
+        "y": 21.97,
+        "v": 0.7933
+      },
+      {
+        "x": 2.3,
+        "y": 19.97,
+        "v": 0.7174
+      },
+      {
+        "x": 4.3,
+        "y": 25.97,
+        "v": 0.673
+      },
+      {
+        "x": 0.3,
+        "y": 27.97,
+        "v": 0.6671
+      },
+      {
+        "x": 4.3,
+        "y": 19.97,
+        "v": 0.667
+      },
+      {
+        "x": -3.7,
+        "y": 25.97,
+        "v": 0.6473
+      },
+      {
+        "x": -1.7,
+        "y": 21.97,
+        "v": 0.6423
+      },
+      {
+        "x": -1.7,
+        "y": 27.97,
+        "v": 0.641
+      },
+      {
+        "x": 2.3,
+        "y": 27.97,
+        "v": 0.6056
+      },
+      {
+        "x": 0.3,
+        "y": 19.97,
+        "v": 0.5985
+      },
+      {
+        "x": -3.7,
+        "y": 23.97,
+        "v": 0.5951
+      },
+      {
+        "x": -3.7,
+        "y": 27.97,
+        "v": 0.5542
+      },
+      {
+        "x": 6.3,
+        "y": 21.97,
+        "v": 0.5325
+      },
+      {
+        "x": 6.3,
+        "y": 23.97,
+        "v": 0.5146
+      },
+      {
+        "x": -5.7,
+        "y": 25.97,
+        "v": 0.4899
+      },
+      {
+        "x": 6.3,
+        "y": 19.97,
+        "v": 0.475
+      },
+      {
+        "x": 12.3,
+        "y": 33.97,
+        "v": 0.4723
+      },
+      {
+        "x": 4.3,
+        "y": 17.97,
+        "v": 0.4501
+      },
+      {
+        "x": 14.3,
+        "y": 33.97,
+        "v": 0.4491
+      },
+      {
+        "x": -5.7,
+        "y": 27.97,
+        "v": 0.4459
+      },
+      {
+        "x": 4.3,
+        "y": 27.97,
+        "v": 0.4438
+      },
+      {
+        "x": 2.3,
+        "y": 17.97,
+        "v": 0.4414
+      },
+      {
+        "x": -3.7,
+        "y": 21.97,
+        "v": 0.4323
+      },
+      {
+        "x": -5.7,
+        "y": 23.97,
+        "v": 0.4268
+      },
+      {
+        "x": 6.3,
+        "y": 25.97,
+        "v": 0.4206
+      },
+      {
+        "x": -11.7,
+        "y": 33.97,
+        "v": 0.4176
+      },
+      {
+        "x": 12.3,
+        "y": 35.97,
+        "v": 0.4142
+      },
+      {
+        "x": -11.7,
+        "y": 31.97,
+        "v": 0.4058
+      },
+      {
+        "x": 12.3,
+        "y": 31.97,
+        "v": 0.4029
+      },
+      {
+        "x": -1.7,
+        "y": 19.97,
+        "v": 0.4023
+      },
+      {
+        "x": -9.7,
+        "y": 33.97,
+        "v": 0.4013
+      },
+      {
+        "x": 14.3,
+        "y": 35.97,
+        "v": 0.4005
+      },
+      {
+        "x": -1.7,
+        "y": 29.97,
+        "v": 0.3965
+      },
+      {
+        "x": 10.3,
+        "y": 33.97,
+        "v": 0.396
+      },
+      {
+        "x": -9.7,
+        "y": 31.97,
+        "v": 0.3906
+      },
+      {
+        "x": 0.3,
+        "y": 29.97,
+        "v": 0.3849
+      },
+      {
+        "x": -7.7,
+        "y": 25.97,
+        "v": 0.3738
+      },
+      {
+        "x": -11.7,
+        "y": 29.97,
+        "v": 0.3718
+      },
+      {
+        "x": 14.3,
+        "y": 31.97,
+        "v": 0.371
+      },
+      {
+        "x": -3.7,
+        "y": 29.97,
+        "v": 0.3703
+      },
+      {
+        "x": 16.3,
+        "y": 33.97,
+        "v": 0.3676
+      },
+      {
+        "x": -7.7,
+        "y": 27.97,
+        "v": 0.365
+      },
+      {
+        "x": -9.7,
+        "y": 29.97,
+        "v": 0.3617
+      },
+      {
+        "x": 10.3,
+        "y": 31.97,
+        "v": 0.3509
+      },
+      {
+        "x": -11.7,
+        "y": 35.97,
+        "v": 0.3497
+      },
+      {
+        "x": -9.7,
+        "y": 35.97,
+        "v": 0.3422
+      },
+      {
+        "x": -9.7,
+        "y": 27.97,
+        "v": 0.3415
+      },
+      {
+        "x": 6.3,
+        "y": 17.97,
+        "v": 0.3407
+      },
+      {
+        "x": -5.7,
+        "y": 29.97,
+        "v": 0.3403
+      },
+      {
+        "x": 2.3,
+        "y": 29.97,
+        "v": 0.3402
+      },
+      {
+        "x": 10.3,
+        "y": 35.97,
+        "v": 0.3402
+      },
+      {
+        "x": -11.7,
+        "y": 27.97,
+        "v": 0.3339
+      },
+      {
+        "x": -7.7,
+        "y": 29.97,
+        "v": 0.3324
+      },
+      {
+        "x": 16.3,
+        "y": 35.97,
+        "v": 0.3306
+      },
+      {
+        "x": 0.3,
+        "y": 17.97,
+        "v": 0.3302
+      },
+      {
+        "x": -13.7,
+        "y": 31.97,
+        "v": 0.3232
+      },
+      {
+        "x": -13.7,
+        "y": 29.97,
+        "v": 0.3222
+      },
+      {
+        "x": -7.7,
+        "y": 31.97,
+        "v": 0.317
+      },
+      {
+        "x": -13.7,
+        "y": 33.97,
+        "v": 0.3156
+      },
+      {
+        "x": -7.7,
+        "y": 23.97,
+        "v": 0.3134
+      },
+      {
+        "x": -7.7,
+        "y": 33.97,
+        "v": 0.3112
+      },
+      {
+        "x": -9.7,
+        "y": 25.97,
+        "v": 0.3091
+      },
+      {
+        "x": 2.3,
+        "y": 35.97,
+        "v": 0.3085
+      },
+      {
+        "x": -13.7,
+        "y": 27.97,
+        "v": 0.3042
+      },
+      {
+        "x": 16.3,
+        "y": 31.97,
+        "v": 0.294
+      },
+      {
+        "x": 6.3,
+        "y": 27.97,
+        "v": 0.292
+      },
+      {
+        "x": 8.3,
+        "y": 21.97,
+        "v": 0.2892
+      },
+      {
+        "x": -5.7,
+        "y": 21.97,
+        "v": 0.286
+      },
+      {
+        "x": 2.3,
+        "y": 37.97,
+        "v": 0.2856
+      },
+      {
+        "x": 8.3,
+        "y": 33.97,
+        "v": 0.2854
+      },
+      {
+        "x": 8.3,
+        "y": 23.97,
+        "v": 0.2813
+      },
+      {
+        "x": -7.7,
+        "y": 35.97,
+        "v": 0.2794
+      },
+      {
+        "x": 4.3,
+        "y": 35.97,
+        "v": 0.2774
+      },
+      {
+        "x": 12.3,
+        "y": 29.97,
+        "v": 0.2758
+      },
+      {
+        "x": -11.7,
+        "y": 25.97,
+        "v": 0.2709
+      },
+      {
+        "x": 0.3,
+        "y": 37.97,
+        "v": 0.2699
+      },
+      {
+        "x": 18.3,
+        "y": 33.97,
+        "v": 0.2668
+      },
+      {
+        "x": 0.3,
+        "y": 35.97,
+        "v": 0.2645
+      },
+      {
+        "x": 12.3,
+        "y": 37.97,
+        "v": 0.2618
+      },
+      {
+        "x": 8.3,
+        "y": 19.97,
+        "v": 0.259
+      },
+      {
+        "x": 10.3,
+        "y": 29.97,
+        "v": 0.2586
+      },
+      {
+        "x": 8.3,
+        "y": 31.97,
+        "v": 0.2575
+      },
+      {
+        "x": 4.3,
+        "y": 29.97,
+        "v": 0.2574
+      },
+      {
+        "x": 8.3,
+        "y": 35.97,
+        "v": 0.2563
+      },
+      {
+        "x": -13.7,
+        "y": 35.97,
+        "v": 0.2561
+      },
+      {
+        "x": 14.3,
+        "y": 37.97,
+        "v": 0.2557
+      },
+      {
+        "x": -5.7,
+        "y": 31.97,
+        "v": 0.2528
+      },
+      {
+        "x": -15.7,
+        "y": 27.97,
+        "v": 0.2471
+      },
+      {
+        "x": 2.3,
+        "y": 33.97,
+        "v": 0.2433
+      },
+      {
+        "x": 4.3,
+        "y": 37.97,
+        "v": 0.2405
+      },
+      {
+        "x": 8.3,
+        "y": 25.97,
+        "v": 0.2401
+      },
+      {
+        "x": 14.3,
+        "y": 29.97,
+        "v": 0.2391
+      },
+      {
+        "x": -13.7,
+        "y": 25.97,
+        "v": 0.2385
+      },
+      {
+        "x": 6.3,
+        "y": 35.97,
+        "v": 0.2372
+      },
+      {
+        "x": 18.3,
+        "y": 35.97,
+        "v": 0.237
+      },
+      {
+        "x": -9.7,
+        "y": 37.97,
+        "v": 0.2368
+      },
+      {
+        "x": -9.7,
+        "y": 23.97,
+        "v": 0.2345
+      },
+      {
+        "x": -3.7,
+        "y": 19.97,
+        "v": 0.2332
+      },
+      {
+        "x": 4.3,
+        "y": 15.97,
+        "v": 0.2332
+      },
+      {
+        "x": -15.7,
+        "y": 29.97,
+        "v": 0.2322
+      },
+      {
+        "x": -7.7,
+        "y": 37.97,
+        "v": 0.2285
+      },
+      {
+        "x": -11.7,
+        "y": 37.97,
+        "v": 0.227
+      },
+      {
+        "x": 6.3,
+        "y": 33.97,
+        "v": 0.2267
+      },
+      {
+        "x": 4.3,
+        "y": 33.97,
+        "v": 0.2259
+      },
+      {
+        "x": -1.7,
+        "y": 37.97,
+        "v": 0.225
+      },
+      {
+        "x": 0.3,
+        "y": 31.97,
+        "v": 0.2221
+      },
+      {
+        "x": 8.3,
+        "y": 29.97,
+        "v": 0.2207
+      },
+      {
+        "x": 2.3,
+        "y": 31.97,
+        "v": 0.2184
+      },
+      {
+        "x": -5.7,
+        "y": 33.97,
+        "v": 0.2177
+      },
+      {
+        "x": -1.7,
+        "y": 31.97,
+        "v": 0.2173
+      },
+      {
+        "x": -3.7,
+        "y": 31.97,
+        "v": 0.216
+      },
+      {
+        "x": -5.7,
+        "y": 37.97,
+        "v": 0.2144
+      },
+      {
+        "x": 6.3,
+        "y": 29.97,
+        "v": 0.214
+      },
+      {
+        "x": 2.3,
+        "y": 15.97,
+        "v": 0.2116
+      },
+      {
+        "x": 10.3,
+        "y": 37.97,
+        "v": 0.2115
+      },
+      {
+        "x": 0.3,
+        "y": 33.97,
+        "v": 0.211
+      },
+      {
+        "x": 18.3,
+        "y": 31.97,
+        "v": 0.2106
+      },
+      {
+        "x": -5.7,
+        "y": 35.97,
+        "v": 0.2103
+      },
+      {
+        "x": 16.3,
+        "y": 37.97,
+        "v": 0.21
+      },
+      {
+        "x": -3.7,
+        "y": 37.97,
+        "v": 0.2073
+      },
+      {
+        "x": 0.3,
+        "y": 39.97,
+        "v": 0.2056
+      },
+      {
+        "x": 8.3,
+        "y": 27.97,
+        "v": 0.2048
+      },
+      {
+        "x": -1.7,
+        "y": 39.97,
+        "v": 0.2025
+      },
+      {
+        "x": -7.7,
+        "y": 21.97,
+        "v": 0.2007
+      },
+      {
+        "x": -17.7,
+        "y": 27.97,
+        "v": 0.2004
+      },
+      {
+        "x": -3.7,
+        "y": 39.97,
+        "v": 0.2001
+      },
+      {
+        "x": -15.7,
+        "y": 25.97,
+        "v": 0.199
+      },
+      {
+        "x": 6.3,
+        "y": 31.97,
+        "v": 0.1969
+      },
+      {
+        "x": -1.7,
+        "y": 17.97,
+        "v": 0.195
+      },
+      {
+        "x": -1.7,
+        "y": 35.97,
+        "v": 0.1947
+      },
+      {
+        "x": -15.7,
+        "y": 31.97,
+        "v": 0.1944
+      },
+      {
+        "x": 8.3,
+        "y": 17.97,
+        "v": 0.1881
+      },
+      {
+        "x": 2.3,
+        "y": 39.97,
+        "v": 0.1876
+      },
+      {
+        "x": 4.3,
+        "y": 31.97,
+        "v": 0.1876
+      },
+      {
+        "x": -5.7,
+        "y": 39.97,
+        "v": 0.1872
+      },
+      {
+        "x": 6.3,
+        "y": 15.97,
+        "v": 0.1834
+      },
+      {
+        "x": 6.3,
+        "y": 37.97,
+        "v": 0.1801
+      },
+      {
+        "x": 10.3,
+        "y": 27.97,
+        "v": 0.178
+      },
+      {
+        "x": -11.7,
+        "y": 23.97,
+        "v": 0.1767
+      },
+      {
+        "x": 16.3,
+        "y": 29.97,
+        "v": 0.176
+      },
+      {
+        "x": -3.7,
+        "y": 41.97,
+        "v": 0.1745
+      },
+      {
+        "x": -17.7,
+        "y": 25.97,
+        "v": 0.173
+      },
+      {
+        "x": -3.7,
+        "y": 35.97,
+        "v": 0.1715
+      },
+      {
+        "x": 12.3,
+        "y": 27.97,
+        "v": 0.1706
+      },
+      {
+        "x": 8.3,
+        "y": 37.97,
+        "v": 0.1686
+      },
+      {
+        "x": -1.7,
+        "y": 33.97,
+        "v": 0.1677
+      },
+      {
+        "x": -15.7,
+        "y": 33.97,
+        "v": 0.1658
+      },
+      {
+        "x": 10.3,
+        "y": 23.97,
+        "v": 0.164
+      },
+      {
+        "x": -17.7,
+        "y": 29.97,
+        "v": 0.164
+      },
+      {
+        "x": -13.7,
+        "y": 37.97,
+        "v": 0.1614
+      },
+      {
+        "x": -7.7,
+        "y": 39.97,
+        "v": 0.1603
+      },
+      {
+        "x": -5.7,
+        "y": 41.97,
+        "v": 0.1598
+      },
+      {
+        "x": -3.7,
+        "y": 33.97,
+        "v": 0.1597
+      },
+      {
+        "x": 10.3,
+        "y": 25.97,
+        "v": 0.1597
+      },
+      {
+        "x": -1.7,
+        "y": 41.97,
+        "v": 0.1591
+      },
+      {
+        "x": 20.3,
+        "y": 33.97,
+        "v": 0.1576
+      },
+      {
+        "x": -3.7,
+        "y": 43.97,
+        "v": 0.1536
+      },
+      {
+        "x": 10.3,
+        "y": 21.97,
+        "v": 0.1507
+      },
+      {
+        "x": 18.3,
+        "y": 37.97,
+        "v": 0.1464
+      },
+      {
+        "x": 4.3,
+        "y": 39.97,
+        "v": 0.145
+      },
+      {
+        "x": -5.7,
+        "y": 43.97,
+        "v": 0.1441
+      },
+      {
+        "x": -19.7,
+        "y": 27.97,
+        "v": 0.1437
+      },
+      {
+        "x": -3.7,
+        "y": 45.97,
+        "v": 0.1433
+      },
+      {
+        "x": 0.3,
+        "y": 15.97,
+        "v": 0.1403
+      },
+      {
+        "x": -13.7,
+        "y": 23.97,
+        "v": 0.1393
+      },
+      {
+        "x": -9.7,
+        "y": 21.97,
+        "v": 0.1392
+      },
+      {
+        "x": 12.3,
+        "y": 25.97,
+        "v": 0.1391
+      },
+      {
+        "x": -3.7,
+        "y": 47.97,
+        "v": 0.1362
+      },
+      {
+        "x": 20.3,
+        "y": 35.97,
+        "v": 0.1361
+      },
+      {
+        "x": -5.7,
+        "y": 19.97,
+        "v": 0.1343
+      },
+      {
+        "x": 14.3,
+        "y": 27.97,
+        "v": 0.1342
+      },
+      {
+        "x": -19.7,
+        "y": 25.97,
+        "v": 0.1333
+      },
+      {
+        "x": 0.3,
+        "y": 41.97,
+        "v": 0.1306
+      },
+      {
+        "x": -5.7,
+        "y": 45.97,
+        "v": 0.1289
+      },
+      {
+        "x": 12.3,
+        "y": 23.97,
+        "v": 0.1286
+      },
+      {
+        "x": -9.7,
+        "y": 39.97,
+        "v": 0.1273
+      },
+      {
+        "x": -15.7,
+        "y": 35.97,
+        "v": 0.1269
+      },
+      {
+        "x": -1.7,
+        "y": 43.97,
+        "v": 0.1236
+      },
+      {
+        "x": 20.3,
+        "y": 31.97,
+        "v": 0.1236
+      },
+      {
+        "x": 18.3,
+        "y": 29.97,
+        "v": 0.1189
+      },
+      {
+        "x": 10.3,
+        "y": 19.97,
+        "v": 0.1174
+      },
+      {
+        "x": -7.7,
+        "y": 41.97,
+        "v": 0.1168
+      },
+      {
+        "x": -5.7,
+        "y": 47.97,
+        "v": 0.1151
+      },
+      {
+        "x": -1.7,
+        "y": 45.97,
+        "v": 0.114
+      },
+      {
+        "x": 12.3,
+        "y": 39.97,
+        "v": 0.1116
+      },
+      {
+        "x": -15.7,
+        "y": 23.97,
+        "v": 0.1113
+      },
+      {
+        "x": -1.7,
+        "y": 47.97,
+        "v": 0.1113
+      },
+      {
+        "x": -3.7,
+        "y": 49.97,
+        "v": 0.1106
+      },
+      {
+        "x": 14.3,
+        "y": 39.97,
+        "v": 0.1094
+      },
+      {
+        "x": -17.7,
+        "y": 31.97,
+        "v": 0.1064
+      },
+      {
+        "x": -11.7,
+        "y": 39.97,
+        "v": 0.1046
+      },
+      {
+        "x": -19.7,
+        "y": 29.97,
+        "v": 0.1033
+      },
+      {
+        "x": -17.7,
+        "y": 23.97,
+        "v": 0.1016
+      },
+      {
+        "x": 8.3,
+        "y": 15.97,
+        "v": 0.101
+      },
+      {
+        "x": 12.3,
+        "y": 21.97,
+        "v": 0.1008
+      },
+      {
+        "x": 14.3,
+        "y": 25.97,
+        "v": 0.1007
+      },
+      {
+        "x": -7.7,
+        "y": 43.97,
+        "v": 0.0978
+      },
+      {
+        "x": 6.3,
+        "y": 39.97,
+        "v": 0.0957
+      },
+      {
+        "x": -3.7,
+        "y": 17.97,
+        "v": 0.0942
+      },
+      {
+        "x": 2.3,
+        "y": 41.97,
+        "v": 0.0941
+      },
+      {
+        "x": -1.7,
+        "y": 49.97,
+        "v": 0.0919
+      },
+      {
+        "x": -11.7,
+        "y": 21.97,
+        "v": 0.0903
+      },
+      {
+        "x": -5.7,
+        "y": 49.97,
+        "v": 0.0902
+      },
+      {
+        "x": 10.3,
+        "y": 39.97,
+        "v": 0.09
+      },
+      {
+        "x": 14.3,
+        "y": 23.97,
+        "v": 0.0893
+      },
+      {
+        "x": 16.3,
+        "y": 39.97,
+        "v": 0.0892
+      },
+      {
+        "x": -21.7,
+        "y": 27.97,
+        "v": 0.0886
+      },
+      {
+        "x": -7.7,
+        "y": 19.97,
+        "v": 0.0868
+      },
+      {
+        "x": 4.3,
+        "y": 13.97,
+        "v": 0.0857
+      },
+      {
+        "x": -21.7,
+        "y": 25.97,
+        "v": 0.0856
+      },
+      {
+        "x": 16.3,
+        "y": 27.97,
+        "v": 0.0853
+      },
+      {
+        "x": -19.7,
+        "y": 23.97,
+        "v": 0.0831
+      },
+      {
+        "x": -7.7,
+        "y": 45.97,
+        "v": 0.0817
+      },
+      {
+        "x": -15.7,
+        "y": 37.97,
+        "v": 0.081
+      },
+      {
+        "x": 22.3,
+        "y": 33.97,
+        "v": 0.0806
+      },
+      {
+        "x": 20.3,
+        "y": 37.97,
+        "v": 0.0798
+      },
+      {
+        "x": 8.3,
+        "y": 39.97,
+        "v": 0.0783
+      },
+      {
+        "x": 0.3,
+        "y": 43.97,
+        "v": 0.0776
+      },
+      {
+        "x": 10.3,
+        "y": 17.97,
+        "v": 0.0766
+      },
+      {
+        "x": 6.3,
+        "y": 13.97,
+        "v": 0.0716
+      },
+      {
+        "x": 2.3,
+        "y": 13.97,
+        "v": 0.0698
+      },
+      {
+        "x": -3.7,
+        "y": 51.97,
+        "v": 0.0697
+      },
+      {
+        "x": -1.7,
+        "y": 15.97,
+        "v": 0.0687
+      },
+      {
+        "x": -13.7,
+        "y": 39.97,
+        "v": 0.068
+      },
+      {
+        "x": 22.3,
+        "y": 35.97,
+        "v": 0.0678
+      },
+      {
+        "x": -7.7,
+        "y": 47.97,
+        "v": 0.0671
+      },
+      {
+        "x": -17.7,
+        "y": 33.97,
+        "v": 0.067
+      },
+      {
+        "x": 14.3,
+        "y": 21.97,
+        "v": 0.0668
+      },
+      {
+        "x": -9.7,
+        "y": 41.97,
+        "v": 0.0663
+      },
+      {
+        "x": 20.3,
+        "y": 29.97,
+        "v": 0.0656
+      },
+      {
+        "x": 0.3,
+        "y": 45.97,
+        "v": 0.065
+      },
+      {
+        "x": 22.3,
+        "y": 31.97,
+        "v": 0.0637
+      },
+      {
+        "x": 0.3,
+        "y": 47.97,
+        "v": 0.0628
+      },
+      {
+        "x": 4.3,
+        "y": 41.97,
+        "v": 0.0621
+      },
+      {
+        "x": -21.7,
+        "y": 29.97,
+        "v": 0.0615
+      },
+      {
+        "x": 18.3,
+        "y": 39.97,
+        "v": 0.0605
+      },
+      {
+        "x": -13.7,
+        "y": 21.97,
+        "v": 0.0602
+      },
+      {
+        "x": -5.7,
+        "y": 51.97,
+        "v": 0.0583
+      },
+      {
+        "x": 12.3,
+        "y": 19.97,
+        "v": 0.0578
+      },
+      {
+        "x": -1.7,
+        "y": 51.97,
+        "v": 0.0565
+      },
+      {
+        "x": -21.7,
+        "y": 23.97,
+        "v": 0.0557
+      },
+      {
+        "x": -9.7,
+        "y": 19.97,
+        "v": 0.0546
+      },
+      {
+        "x": 16.3,
+        "y": 25.97,
+        "v": 0.0531
+      },
+      {
+        "x": 0.3,
+        "y": 49.97,
+        "v": 0.0518
+      },
+      {
+        "x": -7.7,
+        "y": 49.97,
+        "v": 0.0498
+      },
+      {
+        "x": -19.7,
+        "y": 31.97,
+        "v": 0.0492
+      },
+      {
+        "x": 18.3,
+        "y": 27.97,
+        "v": 0.0492
+      },
+      {
+        "x": 16.3,
+        "y": 23.97,
+        "v": 0.0451
+      },
+      {
+        "x": -5.7,
+        "y": 17.97,
+        "v": 0.0447
+      },
+      {
+        "x": -9.7,
+        "y": 43.97,
+        "v": 0.0441
+      },
+      {
+        "x": -15.7,
+        "y": 21.97,
+        "v": 0.0426
+      },
+      {
+        "x": -17.7,
+        "y": 35.97,
+        "v": 0.0418
+      },
+      {
+        "x": 8.3,
+        "y": 13.97,
+        "v": 0.0408
+      },
+      {
+        "x": -17.7,
+        "y": 21.97,
+        "v": 0.0404
+      },
+      {
+        "x": 0.3,
+        "y": 13.97,
+        "v": 0.0388
+      },
+      {
+        "x": 22.3,
+        "y": 37.97,
+        "v": 0.0381
+      },
+      {
+        "x": -3.7,
+        "y": 53.97,
+        "v": 0.0378
+      },
+      {
+        "x": -23.7,
+        "y": 25.97,
+        "v": 0.0377
+      },
+      {
+        "x": -23.7,
+        "y": 27.97,
+        "v": 0.0376
+      },
+      {
+        "x": 10.3,
+        "y": 15.97,
+        "v": 0.0372
+      },
+      {
+        "x": -11.7,
+        "y": 41.97,
+        "v": 0.0371
+      },
+      {
+        "x": 2.3,
+        "y": 43.97,
+        "v": 0.0361
+      },
+      {
+        "x": -5.7,
+        "y": 53.97,
+        "v": 0.0356
+      },
+      {
+        "x": -19.7,
+        "y": 21.97,
+        "v": 0.0349
+      },
+      {
+        "x": -9.7,
+        "y": 45.97,
+        "v": 0.0347
+      },
+      {
+        "x": -15.7,
+        "y": 39.97,
+        "v": 0.0346
+      },
+      {
+        "x": 16.3,
+        "y": 21.97,
+        "v": 0.0343
+      },
+      {
+        "x": 6.3,
+        "y": 41.97,
+        "v": 0.0337
+      },
+      {
+        "x": 22.3,
+        "y": 29.97,
+        "v": 0.0334
+      },
+      {
+        "x": 14.3,
+        "y": 19.97,
+        "v": 0.0331
+      },
+      {
+        "x": -7.7,
+        "y": 51.97,
+        "v": 0.033
+      },
+      {
+        "x": 20.3,
+        "y": 39.97,
+        "v": 0.0313
+      },
+      {
+        "x": 0.3,
+        "y": 51.97,
+        "v": 0.0311
+      },
+      {
+        "x": 12.3,
+        "y": 41.97,
+        "v": 0.03
+      },
+      {
+        "x": 14.3,
+        "y": 41.97,
+        "v": 0.0293
+      },
+      {
+        "x": -21.7,
+        "y": 31.97,
+        "v": 0.0285
+      },
+      {
+        "x": -11.7,
+        "y": 19.97,
+        "v": 0.0284
+      },
+      {
+        "x": -1.7,
+        "y": 53.97,
+        "v": 0.0276
+      },
+      {
+        "x": -17.7,
+        "y": 37.97,
+        "v": 0.0267
+      },
+      {
+        "x": -9.7,
+        "y": 47.97,
+        "v": 0.026
+      },
+      {
+        "x": 24.3,
+        "y": 33.97,
+        "v": 0.0255
+      },
+      {
+        "x": -23.7,
+        "y": 23.97,
+        "v": 0.0254
+      },
+      {
+        "x": -23.7,
+        "y": 29.97,
+        "v": 0.0253
+      },
+      {
+        "x": -7.7,
+        "y": 17.97,
+        "v": 0.0251
+      },
+      {
+        "x": 12.3,
+        "y": 17.97,
+        "v": 0.0249
+      },
+      {
+        "x": -21.7,
+        "y": 21.97,
+        "v": 0.0243
+      },
+      {
+        "x": 2.3,
+        "y": 45.97,
+        "v": 0.0243
+      },
+      {
+        "x": 10.3,
+        "y": 41.97,
+        "v": 0.0237
+      },
+      {
+        "x": 2.3,
+        "y": 47.97,
+        "v": 0.0234
+      },
+      {
+        "x": 8.3,
+        "y": 41.97,
+        "v": 0.0232
+      },
+      {
+        "x": -3.7,
+        "y": 15.97,
+        "v": 0.0229
+      },
+      {
+        "x": -7.7,
+        "y": 53.97,
+        "v": 0.0229
+      },
+      {
+        "x": 16.3,
+        "y": 41.97,
+        "v": 0.0227
+      },
+      {
+        "x": 20.3,
+        "y": 27.97,
+        "v": 0.0225
+      },
+      {
+        "x": 24.3,
+        "y": 31.97,
+        "v": 0.0204
+      },
+      {
+        "x": 24.3,
+        "y": 35.97,
+        "v": 0.0204
+      },
+      {
+        "x": 18.3,
+        "y": 25.97,
+        "v": 0.0203
+      }
+    ],
+    "hotspots": [
+      {
+        "rank": 1,
+        "x": 2.3,
+        "y": 23.97,
+        "score": 100.0,
+        "event_count": 29,
+        "label": ""
+      },
+      {
+        "rank": 2,
+        "x": -5.7,
+        "y": 25.97,
+        "score": 49.0,
+        "event_count": 13,
+        "label": ""
+      },
+      {
+        "rank": 3,
+        "x": 12.3,
+        "y": 33.97,
+        "score": 47.2,
+        "event_count": 14,
+        "label": ""
+      },
+      {
+        "rank": 4,
+        "x": -11.7,
+        "y": 33.97,
+        "score": 41.8,
+        "event_count": 12,
+        "label": ""
+      },
+      {
+        "rank": 5,
+        "x": 2.3,
+        "y": 35.97,
+        "score": 30.8,
+        "event_count": 6,
+        "label": ""
+      }
+    ]
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 3.8,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 7.5,
+      "count": 1,
+      "severe": 1
+    },
+    {
+      "t": 11.2,
+      "count": 2,
+      "severe": 2
+    },
+    {
+      "t": 15.0,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 18.8,
+      "count": 3,
+      "severe": 3
+    },
+    {
+      "t": 22.5,
+      "count": 1,
+      "severe": 1
+    },
+    {
+      "t": 26.2,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 30.0,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 33.8,
+      "count": 3,
+      "severe": 3
+    },
+    {
+      "t": 37.5,
+      "count": 6,
+      "severe": 4
+    },
+    {
+      "t": 41.2,
+      "count": 7,
+      "severe": 6
+    },
+    {
+      "t": 45.0,
+      "count": 3,
+      "severe": 3
+    },
+    {
+      "t": 48.8,
+      "count": 2,
+      "severe": 2
+    },
+    {
+      "t": 52.5,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 56.2,
+      "count": 2,
+      "severe": 2
+    },
+    {
+      "t": 60.0,
+      "count": 2,
+      "severe": 2
+    },
+    {
+      "t": 63.8,
+      "count": 1,
+      "severe": 1
+    },
+    {
+      "t": 67.5,
+      "count": 1,
+      "severe": 1
+    },
+    {
+      "t": 71.2,
+      "count": 5,
+      "severe": 5
+    },
+    {
+      "t": 75.0,
+      "count": 2,
+      "severe": 2
+    },
+    {
+      "t": 78.8,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 82.5,
+      "count": 1,
+      "severe": 1
+    },
+    {
+      "t": 86.2,
+      "count": 6,
+      "severe": 5
+    },
+    {
+      "t": 90.0,
+      "count": 2,
+      "severe": 2
+    },
+    {
+      "t": 93.8,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 97.5,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 101.2,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 105.0,
+      "count": 2,
+      "severe": 2
+    },
+    {
+      "t": 108.8,
+      "count": 7,
+      "severe": 7
+    },
+    {
+      "t": 112.5,
+      "count": 6,
+      "severe": 5
+    },
+    {
+      "t": 116.2,
+      "count": 2,
+      "severe": 2
+    },
+    {
+      "t": 120.0,
+      "count": 3,
+      "severe": 3
+    },
+    {
+      "t": 123.8,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 127.5,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 131.2,
+      "count": 1,
+      "severe": 1
+    },
+    {
+      "t": 135.0,
+      "count": 1,
+      "severe": 1
+    },
+    {
+      "t": 138.8,
+      "count": 2,
+      "severe": 2
+    },
+    {
+      "t": 142.5,
+      "count": 1,
+      "severe": 1
+    },
+    {
+      "t": 146.2,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 150.0,
+      "count": 2,
+      "severe": 1
+    },
+    {
+      "t": 153.8,
+      "count": 2,
+      "severe": 2
+    },
+    {
+      "t": 157.5,
+      "count": 3,
+      "severe": 3
+    },
+    {
+      "t": 161.2,
+      "count": 1,
+      "severe": 0
+    },
+    {
+      "t": 165.0,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 168.8,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 172.5,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 176.2,
+      "count": 9,
+      "severe": 7
+    }
+  ]
+}
