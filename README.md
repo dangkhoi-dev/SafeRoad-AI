@@ -76,7 +76,7 @@ cd SafeRoad-AI
 python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 
-pip install -e .
+pip install -e ".[dev,docs]"      # [dev,docs] = pytest + thư viện sinh báo cáo
 python scripts/download_assets.py  # tải trọng số YOLO11n (~5,6 MB)
 ```
 
@@ -263,7 +263,6 @@ SafeRoad-AI/
 ## Kiểm thử
 
 ```bash
-pip install pytest
 pytest tests/ -q          # 78 test
 ```
 

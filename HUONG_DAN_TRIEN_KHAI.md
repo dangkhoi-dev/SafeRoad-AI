@@ -23,7 +23,8 @@ python -m venv .venv
 .venv\Scripts\activate
 
 REM Cài đặt (mất 3-5 phút vì phải tải PyTorch)
-pip install -e .
+REM Dấu ngoặc kép bắt buộc trên PowerShell, [dev,docs] kéo thêm pytest + thư viện sinh báo cáo
+pip install -e ".[dev,docs]"
 
 REM Tải trọng số YOLO11n (~5.6 MB)
 python scripts\download_assets.py
@@ -299,7 +300,8 @@ chạy — nếu lớn hơn 0,5 m thì cần đo lại điểm mốc.
 
 | Triệu chứng | Nguyên nhân | Cách xử lý |
 |---|---|---|
-| `ModuleNotFoundError: saferoad` | Chưa kích hoạt venv hoặc chưa cài | `.venv\Scripts\activate` rồi `pip install -e .` |
+| `ModuleNotFoundError: saferoad` | Chưa kích hoạt venv hoặc chưa cài | `.venv\Scripts\activate` rồi `pip install -e ".[dev,docs]"` |
+| `pytest ... is not recognized` | Cài thiếu nhóm `dev` | `pip install -e ".[dev,docs]"` |
 | `Không tìm thấy trọng số models/yolo11n.pt` | Chưa tải model | `python scripts\download_assets.py` |
 | `Không mở được video` | Sai đường dẫn | Kiểm tra `video.source` trong file cấu hình |
 | Chạy rất chậm | Đang chạy CPU | Bình thường. Thêm `--max-frames 900` để rút ngắn, hoặc `--device cuda:0` nếu có GPU NVIDIA |
@@ -315,7 +317,7 @@ chạy — nếu lớn hơn 0,5 m thì cần đo lại điểm mốc.
 ```powershell
 cd D:\SV7\SafeRoad-AI
 python -m venv .venv && .venv\Scripts\activate
-pip install -e .
+pip install -e ".[dev,docs]"
 python scripts\download_assets.py
 
 pytest tests\ -q
