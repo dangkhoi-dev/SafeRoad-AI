@@ -147,15 +147,47 @@ class BehaviorClassifier:
             self._load(cfg.model_path)
 
     def _load(self, path: str) -> None:
+        """Nạp model đã lưu; nếu hỏng thì lùi về luật cứng chứ không chết pipeline.
+
+        Nguyên nhân hỏng phổ biến nhất **không phải** file lỗi mà là lệch phiên
+        bản scikit-learn: pickle của ``HistGradientBoostingClassifier`` tham
+        chiếu các module nội bộ (``_loss``, ``_predictor``…) mà scikit-learn đổi
+        tên giữa các minor release. Model train bằng 1.8 nạp trên 1.9 sẽ báo
+        ``No module named '_loss'``. Không có cách vá phía đọc — phải train lại
+        trên chính môi trường đang chạy, nên thông báo phải nói thẳng điều đó.
+        """
         try:
             import joblib
 
             bundle = joblib.load(path)
             self.model = bundle["model"]
             self.scaler = bundle.get("scaler")
+            trained_with = bundle.get("sklearn_version")
             log.info("Đã nạp behavior classifier từ %s", path)
+            if trained_with:
+                import sklearn
+
+                if sklearn.__version__ != trained_with:
+                    log.warning(
+                        "Behavior model train bằng scikit-learn %s, đang chạy %s "
+                        "— nếu kết quả bất thường hãy chạy: saferoad train-behavior",
+                        trained_with, sklearn.__version__,
+                    )
         except Exception as exc:  # pragma: no cover - phụ thuộc môi trường
-            log.warning("Không nạp được behavior model (%s) — chỉ dùng luật cứng", exc)
+            hint = ""
+            if "No module named" in str(exc) or "sklearn" in str(exc).lower():
+                try:
+                    import sklearn
+
+                    hint = (
+                        f" — lệch phiên bản scikit-learn (đang chạy "
+                        f"{sklearn.__version__}); train lại bằng: saferoad train-behavior"
+                    )
+                except Exception:
+                    hint = " — train lại bằng: saferoad train-behavior"
+            log.warning(
+                "Không nạp được behavior model (%s)%s. Tạm dùng luật cứng.", exc, hint
+            )
             self.model = None
 
     # ------------------------------------------------------------------ #

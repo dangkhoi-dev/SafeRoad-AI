@@ -186,8 +186,18 @@ def train_from_simulation(
 
     out = Path(out_path)
     out.parent.mkdir(parents=True, exist_ok=True)
+    import sklearn
+
+    # Ghi kèm phiên bản sklearn: pickle của HistGradientBoosting không tương
+    # thích ngược giữa các minor release, nên bên đọc cần biết để cảnh báo đúng.
     joblib.dump(
-        {"model": model, "scaler": scaler, "features": FEATURE_NAMES}, out
+        {
+            "model": model,
+            "scaler": scaler,
+            "features": FEATURE_NAMES,
+            "sklearn_version": sklearn.__version__,
+        },
+        out,
     )
     print(f"✓ Đã lưu model: {out}")
 

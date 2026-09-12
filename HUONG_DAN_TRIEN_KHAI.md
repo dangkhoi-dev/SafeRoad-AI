@@ -41,7 +41,7 @@ REM 1.1 Chạy bộ kiểm thử — phải thấy "78 passed"
 pytest tests\ -q
 
 REM 1.2 Sinh video mô phỏng + nhãn chuẩn (~2 phút)
-python -m saferoad simulate --duration 180 --seed 42
+python -m saferoad simulate --duration 300 --seed 42
 
 REM 1.3 Chạy pipeline end-to-end (~1 phút)
 python -m saferoad run --config configs\synthetic.yaml ^
@@ -302,6 +302,8 @@ chạy — nếu lớn hơn 0,5 m thì cần đo lại điểm mốc.
 |---|---|---|
 | `ModuleNotFoundError: saferoad` | Chưa kích hoạt venv hoặc chưa cài | `.venv\Scripts\activate` rồi `pip install -e ".[dev,docs]"` |
 | `pytest ... is not recognized` | Cài thiếu nhóm `dev` | `pip install -e ".[dev,docs]"` |
+| `Không nạp được behavior model (No module named '_loss')` | Model train bằng scikit-learn khác phiên bản máy đang chạy | `saferoad train-behavior` (2-3 phút, train lại tại chỗ) |
+| Cột FPS trong bảng ablation thấp bất thường (< 10) | Máy ngủ giữa lúc đo | `powercfg /change standby-timeout-ac 0` rồi chạy lại `saferoad evaluate` |
 | `Không tìm thấy trọng số models/yolo11n.pt` | Chưa tải model | `python scripts\download_assets.py` |
 | `Không mở được video` | Sai đường dẫn | Kiểm tra `video.source` trong file cấu hình |
 | Chạy rất chậm | Đang chạy CPU | Bình thường. Thêm `--max-frames 900` để rút ngắn, hoặc `--device cuda:0` nếu có GPU NVIDIA |
@@ -321,7 +323,7 @@ pip install -e ".[dev,docs]"
 python scripts\download_assets.py
 
 pytest tests\ -q
-python -m saferoad simulate --duration 180 --seed 42
+python -m saferoad simulate --duration 300 --seed 42
 python -m saferoad run --config configs\synthetic.yaml --ground-truth data\samples\synthetic_groundtruth.pkl --replay-detections
 python -m saferoad evaluate
 python -m saferoad serve

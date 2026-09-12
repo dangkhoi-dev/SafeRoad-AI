@@ -6,7 +6,7 @@
 Chuẩn bị trước khi quay — chạy sẵn các lệnh này để có đủ hình ảnh:
 
 ```bash
-python -m saferoad simulate --duration 180 --seed 42
+python -m saferoad simulate --duration 300 --seed 42
 python -m saferoad run --config configs/synthetic.yaml \
     --ground-truth data/samples/synthetic_groundtruth.pkl --replay-detections
 python -m saferoad evaluate --out data/outputs/evaluation.json

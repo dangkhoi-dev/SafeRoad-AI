@@ -90,7 +90,7 @@ Không cần tải dataset — hệ thống **tự sinh dữ liệu kiểm chứ
 
 ```bash
 # 1. Sinh video mô phỏng + nhãn chuẩn (~2 phút)
-python -m saferoad simulate --duration 180 --seed 42
+python -m saferoad simulate --duration 300 --seed 42
 
 # 2. Chạy pipeline end-to-end (~1 phút)
 python -m saferoad run --config configs/synthetic.yaml \
