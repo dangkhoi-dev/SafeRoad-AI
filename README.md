@@ -241,7 +241,7 @@ SafeRoad-AI/
 ├── configs/                  # default · synthetic · hangxanh · mvti
 ├── notebooks/                # fine-tune YOLO trên Colab
 ├── scripts/                  # sắp xếp dữ liệu, xuất YOLO, dựng báo cáo
-├── tests/                    # 78 test
+├── tests/                    # 81 test
 └── docs/                     # báo cáo, protocol, kê khai, kịch bản video
 ```
 
@@ -263,7 +263,7 @@ SafeRoad-AI/
 ## Kiểm thử
 
 ```bash
-pytest tests/ -q          # 78 test
+pytest tests/ -q          # 81 test
 ```
 
 Bộ test kiểm tra những chỗ **dễ sai nhất**, không chỉ chạy cho có:

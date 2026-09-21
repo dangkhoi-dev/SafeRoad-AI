@@ -362,10 +362,12 @@ def severity_breakdown(
     ground_truth: list[GroundTruthConflict],
     id_mapping: dict[int, int],
     bands: tuple[tuple[str, float, float], ...] = (
-        ("Rất nghiêm trọng (TTC<1.0s)", 0.0, 1.0),
-        ("Nghiêm trọng (1.0-1.5s)", 1.0, 1.5),
-        ("Trung bình (1.5-2.5s)", 1.5, 2.5),
-        ("Nhẹ (2.5-3.0s)", 2.5, 3.0),
+        # Nhãn viết bằng dấu phẩy thập phân cho khớp phần còn lại của báo cáo
+        # tiếng Việt — các nhãn này được in nguyên văn vào bảng.
+        ("Rất nghiêm trọng (TTC < 1,0 s)", 0.0, 1.0),
+        ("Nghiêm trọng (1,0–1,5 s)", 1.0, 1.5),
+        ("Trung bình (1,5–2,5 s)", 1.5, 2.5),
+        ("Nhẹ (2,5–3,0 s)", 2.5, 3.0),
     ),
     region: tuple[float, float, float, float] | None = None,
 ) -> list[dict[str, Any]]:

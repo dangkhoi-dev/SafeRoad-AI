@@ -303,7 +303,7 @@ chạy — nếu lớn hơn 0,5 m thì cần đo lại điểm mốc.
 | `ModuleNotFoundError: saferoad` | Chưa kích hoạt venv hoặc chưa cài | `.venv\Scripts\activate` rồi `pip install -e ".[dev,docs]"` |
 | `pytest ... is not recognized` | Cài thiếu nhóm `dev` | `pip install -e ".[dev,docs]"` |
 | `Không nạp được behavior model (No module named '_loss')` | Model train bằng scikit-learn khác phiên bản máy đang chạy | `saferoad train-behavior` (2-3 phút, train lại tại chỗ) |
-| Cột FPS trong bảng ablation thấp bất thường (< 10) | Máy ngủ giữa lúc đo | `powercfg /change standby-timeout-ac 0` rồi chạy lại `saferoad evaluate` |
+| Cột FPS trong bảng ablation thấp bất thường (< 10) | Máy ngủ giữa lúc đo (chỉ ảnh hưởng bản trước v1.0.1) | Cập nhật code mới nhất — FPS nay đo bằng trung vị độ trễ từng frame nên miễn nhiễm với việc máy ngủ |
 | `Không tìm thấy trọng số models/yolo11n.pt` | Chưa tải model | `python scripts\download_assets.py` |
 | `Không mở được video` | Sai đường dẫn | Kiểm tra `video.source` trong file cấu hình |
 | Chạy rất chậm | Đang chạy CPU | Bình thường. Thêm `--max-frames 900` để rút ngắn, hoặc `--device cuda:0` nếu có GPU NVIDIA |

@@ -38,7 +38,16 @@ if (!EV || !RS) {
   process.exit(1);
 }
 const F = EV.final, T = EV.tracking, S = EV.setup, SUM = RS.summary;
-const n = (v, d = 3) => (v === null || v === undefined) ? '—' : Number(v).toFixed(d);
+// Báo cáo viết bằng tiếng Việt nên dùng dấu phẩy thập phân. Trước đây cột "kết
+// quả đo" in bằng toFixed (dấu chấm) trong khi cột "mục tiêu" được viết tay bằng
+// dấu phẩy — hai kiểu số nằm cạnh nhau trong cùng một bảng.
+const n = (v, d = 3) =>
+  (v === null || v === undefined) ? '—' : Number(v).toFixed(d).replace('.', ',');
+
+// Nhãn lấy từ evaluation.json có thể do bản code cũ sinh ra với dấu chấm thập
+// phân. Chuẩn hoá tại chỗ in để báo cáo nhất quán mà không phải chạy lại toàn bộ
+// quá trình đánh giá (mất ~25 phút) chỉ vì một dấu phẩy.
+const viLabel = (s) => String(s ?? '').replace(/(\d)\.(\d)/g, '$1,$2');
 
 // --------------------------------------------------------------------------- //
 // Trợ giúp định dạng
@@ -144,6 +153,11 @@ const img = (rel, w, h) => new Paragraph({
 // --------------------------------------------------------------------------- //
 const abl = EV.ablation || [];
 const noise = EV.noise_sweep || [];
+// Tra cứu một dòng ablation theo khoá, và hai mốc của phép quét nhiễu. Khai báo
+// một lần ở đây vì nhiều mục của báo cáo đều dẫn lại các con số này.
+const rowBy = (k) => (EV.ablation || []).find(r => (r.key || '') === k) || {};
+const clean = noise.find(r => Number(r.noise_px) === 0) || {};
+const worst = noise.length ? noise[noise.length - 1] : {};
 const sev = (EV.severity_breakdown || []).filter(r => r.n_gt > 0);
 const byType = SUM.by_type || {};
 const VI_TYPE = { crossing: 'Cắt ngang', turning: 'Chuyển hướng', rear_end: 'Tạt đầu/đâm đuôi',
@@ -227,7 +241,7 @@ children.push(P('Đề tài sử dụng đồng thời dữ liệu thật và d�
 children.push(T_(['Nguồn', 'Quy mô', 'Vai trò', 'Không dùng để'], [
   ['Multi-view Traffic Intersection (Møgelmose)', '2.441 ảnh · 14.488 bbox · 19 quỹ đạo chuẩn', 'Đo mAP detection, IDF1/MOTA tracking trên ảnh thật', 'Đo Precision/Recall near-miss'],
   ['UCSD Highway Traffic (Chan & Vasconcelos)', '254 clip 320×240', 'Kiểm thử độ bền ở độ phân giải thấp', 'Phân tích xung đột (cao tốc, không có giao cắt)'],
-  ['Trình mô phỏng SafeRoad (tự viết)', `180 s · ${S.n_vehicles} phương tiện · ${S.n_ground_truth} nhãn near-miss`, 'Đo Precision/Recall/TTC-MAE và bảng ablation', 'Đánh giá độ khó thị giác của ảnh thật'],
+  ['Trình mô phỏng SafeRoad (tự viết)', `${S.duration_s} s · ${S.n_vehicles} phương tiện · ${S.n_ground_truth} nhãn near-miss`, 'Đo Precision/Recall/TTC-MAE và bảng ablation', 'Đánh giá độ khó thị giác của ảnh thật'],
 ], [1.1, 1.2, 1.5, 1.2]));
 children.push(Rich([
   { text: 'Vì sao phải tự viết trình mô phỏng. ', bold: true },
@@ -277,7 +291,16 @@ children.push(H2('6.4. Risk Score và Explainable Risk'));
 children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 80, after: 120 },
   children: [new TextRun({ text: 'RS  =  100 · σ( w₁/TTC + w₂/PET + w₃·v_r + w₄·Type + w₅·Time + b )', font: FONT, size: 24, italics: true })] }));
 children.push(P('Dùng nghịch đảo TTC và PET vì mức nguy hiểm không tuyến tính theo thời gian còn lại: chênh lệch giữa 0,5 s và 1,0 s nghiêm trọng hơn rất nhiều so với chênh lệch giữa 4,0 s và 4,5 s. Hàm sigmoid giữ kết quả nằm gọn trong khoảng 0–100.'));
-children.push(P('Từng số hạng được lưu riêng, nhờ đó dashboard giải thích được vì sao một cảnh báo có mức rủi ro cao — đây chính là yêu cầu Explainable Risk. Bộ trọng số được hiệu chỉnh trên tập có nhãn để phân bố điểm trải đều; bộ chưa hiệu chỉnh đẩy trung vị lên 98/100, khi mọi cảnh báo đều "rất nguy hiểm" thì thang điểm không còn phân biệt được gì và người vận hành sẽ bỏ qua tất cả. Sau hiệu chỉnh, phân bố đạt phân vị 10 = 21, trung vị = 56, phân vị 90 = 89.'));
+// Phân vị điểm rủi ro tính trực tiếp từ các sự kiện đã ghi, không gõ tay.
+const pct = (arr, q) => {
+  if (!arr.length) return null;
+  const s = [...arr].sort((a, b) => a - b);
+  const i = (s.length - 1) * q / 100, lo = Math.floor(i), hi = Math.ceil(i);
+  return lo === hi ? s[lo] : s[lo] + (s[hi] - s[lo]) * (i - lo);
+};
+const scores = (RS.events || []).map(e => e.risk_score).filter(v => typeof v === 'number');
+children.push(P('Từng số hạng được lưu riêng, nhờ đó dashboard giải thích được vì sao một cảnh báo có mức rủi ro cao — đây chính là yêu cầu Explainable Risk. Bộ trọng số được hiệu chỉnh trên tập có nhãn để phân bố điểm trải đều; bộ chưa hiệu chỉnh đẩy trung vị lên 98/100, khi mọi cảnh báo đều "rất nguy hiểm" thì thang điểm không còn phân biệt được gì và người vận hành sẽ bỏ qua tất cả. '
+  + `Sau hiệu chỉnh, phân bố trên ${scores.length} cảnh báo đạt phân vị 10 = ${n(pct(scores,10),0)}, trung vị = ${n(pct(scores,50),0)}, phân vị 90 = ${n(pct(scores,90),0)}.`));
 
 children.push(new Paragraph({ children: [new PageBreak()] }));
 
@@ -286,6 +309,11 @@ children.push(H1('7. Kết quả thực nghiệm'));
 children.push(P(`Toàn bộ số liệu dưới đây sinh ra từ mã nguồn trong repo và tái lập được bằng các lệnh ghi trong README. Tập đánh giá: video mô phỏng ${S.duration_s} giây, ${S.n_vehicles} phương tiện, ${S.n_ground_truth} nhãn near-miss chuẩn, seed ${S.seed}. Detector được mô phỏng nhiễu ${n(S.noise_px,1)} px và tỉ lệ bỏ sót ${(S.miss_rate*100).toFixed(0)}%.`));
 
 children.push(H2('7.1. Chỉ số tổng hợp'));
+// Tốc độ lõi phân tích: lấy từ cấu hình đầy đủ trong bảng ablation, nơi khâu ghi
+// overlay đã tắt. Đọc thẳng từ số liệu đo, không hard-code.
+const fullRow = (EV.ablation || []).find(r => /full/i.test(r.key || r.label || '')) || {};
+const coreFps = fullRow.processing_fps || SUM.processing_fps;
+
 children.push(T_(['Chỉ số', 'Kết quả đo được', 'Mục tiêu đề ra', 'Đạt?'], [
   ['Tracking IDF1', n(T.idf1), '≥ 0,70', 'Đạt'],
   ['Tracking MOTA', n(T.mota), '≥ 0,60', 'Đạt'],
@@ -294,14 +322,26 @@ children.push(T_(['Chỉ số', 'Kết quả đo được', 'Mục tiêu đề r
   ['Recall (TTC < 1,0 s)', n(sev[0] ? sev[0].recall : 0), '—', 'Rất tốt'],
   ['Conflict Recall (gộp)', n(F.recall), '≥ 0,80', 'Chưa đạt'],
   ['Conflict Precision', n(F.precision), '≥ 0,75', 'Chưa đạt'],
-  ['Tốc độ xử lý', `${n(SUM.processing_fps,1)} FPS`, '≥ 25 FPS', 'Đạt'],
-  ['Độ trễ end-to-end', `${n(SUM.total_latency_ms,1)} ms/frame`, '≤ 1,5 s', 'Đạt'],
+  ['Tốc độ xử lý (kèm ghi overlay)', `${n(SUM.processing_fps,1)} FPS`, '≥ 25 FPS', 'Đạt'],
+  ['Tốc độ lõi phân tích', `${n(coreFps,0)} FPS`, '≥ 25 FPS', 'Đạt'],
+  ['Độ trễ trung vị', `${n(SUM.frame_latency_median_ms,1)} ms/frame`, '≤ 1,5 s', 'Đạt'],
+  ['Độ trễ p95', `${n(SUM.frame_latency_p95_ms,1)} ms/frame`, '≤ 1,5 s', 'Đạt'],
 ], [1.4, 1.1, 1, 0.8]));
+
+const ovl = SUM.latency_ms.overlay || 0;
+const stagesMs = SUM.total_latency_ms || 0;
+children.push(P('Hai con số tốc độ lệch nhau vì một lý do cần nói rõ: khâu vẽ và ghi video overlay chiếm ' +
+  `${n(ovl,1)} ms trong ${n(stagesMs,1)} ms tổng thời gian các khâu xử lý, tức ${n(ovl / Math.max(stagesMs, 1e-9) * 100, 0)}% — phần lớn thời gian ` +
+  `không dùng để phân tích mà để tạo video minh hoạ. (Trung vị đầu-cuối ${n(SUM.frame_latency_median_ms,1)} ms ở bảng trên lớn hơn tổng này ` +
+  'vì còn tính cả thời gian đọc và giải mã khung hình.) Overlay chỉ cần cho demo và kiểm tra bằng mắt; ' +
+  'khi triển khai thật hệ thống chỉ xuất cảnh báo và số liệu, nên tốc độ thực tế là con số ở dòng thứ hai. ' +
+  'Cả hai đều đo bằng trung vị độ trễ từng frame thay vì chia tổng thời gian chạy cho số frame — ' +
+  'cách sau bị sai lệch hoàn toàn nếu máy đo ngủ, bị throttle nhiệt, hoặc có tiến trình khác giành CPU.'));
 
 children.push(H2('7.2. Recall theo mức nghiêm trọng'));
 children.push(P('Đây là bảng quan trọng nhất về mặt an toàn: bỏ sót một near-miss TTC dưới 1 giây nguy hiểm hơn rất nhiều so với bỏ sót một near-miss TTC 2,8 giây. Vì vậy Recall phải được báo cáo tách theo dải chứ không gộp thành một con số duy nhất.'));
 children.push(T_(['Dải TTC', 'Số nhãn chuẩn', 'Phát hiện được', 'Recall', 'TTC MAE'],
-  sev.map(r => [r.band, r.n_gt, r.detected ?? '—', n(r.recall), r.ttc_mae === null ? '—' : `${n(r.ttc_mae)} s`]),
+  sev.map(r => [viLabel(r.band), r.n_gt, r.detected ?? '—', n(r.recall), r.ttc_mae === null ? '—' : `${n(r.ttc_mae)} s`]),
   [2, 0.9, 0.9, 0.8, 0.8]));
 children.push(Rich([
   { text: 'Hệ thống mạnh đúng ở dải nguy hiểm nhất. ', bold: true },
@@ -314,17 +354,24 @@ children.push(T_(['Cấu hình', 'Precision', 'Recall', 'F1', 'TTC MAE', 'Số s
   abl.map(r => [r.label, n(r.precision), n(r.recall), n(r.f1), r.ttc_mae === null ? '—' : n(r.ttc_mae), r.n_events]),
   [2.2, 0.8, 0.8, 0.7, 0.8, 0.8]));
 children.push(P('Đọc bảng này theo hai chiều:'));
-children.push(Bullet('Homography làm Recall nhảy từ 0 lên trên 0,75 — vì trước đó TTC được tính trên đơn vị pixel, vốn không phải đại lượng vật lý, nên hầu như không sự kiện nào khớp với nhãn chuẩn.'));
+children.push(Bullet(`Homography làm Recall nhảy từ ${n(rowBy('det_track').recall)} lên ${n(rowBy('homography').recall)} — vì trước đó TTC được tính trên đơn vị pixel, vốn không phải đại lượng vật lý, nên hầu như không sự kiện nào khớp với nhãn chuẩn.`));
 children.push(Bullet('Làm mượt quỹ đạo giảm TTC MAE và cắt số sự kiện giả đi một nửa, nhờ khử nhiễu vận tốc.'));
-children.push(Bullet('PET nâng Recall thêm khoảng 12 điểm — bắt được nhóm tình huống "vừa lướt qua" mà TTC bỏ sót.'));
-children.push(Bullet('Cổng khoảng cách là bước có tác dụng lớn nhất: Precision tăng gấp hơn năm lần (0,09 → 0,51) trong khi Recall gần như không đổi. Đây là bằng chứng thực nghiệm cho luận điểm ở mục 6.3.'));
+const dRecallPet = (rowBy('pet').recall ?? 0) - (rowBy('smoothing').recall ?? 0);
+children.push(Bullet(`PET nâng Recall thêm ${n(dRecallPet * 100, 1)} điểm phần trăm — bắt được nhóm tình huống "vừa lướt qua" mà TTC bỏ sót. Mức tăng nhỏ nhưng đúng nhóm: đây là những tình huống mà chỉ số TTC về nguyên tắc không thể phát hiện.`));
+const petRow = rowBy('pet'), proxRow = rowBy('proximity');
+const petP = petRow.precision ?? null;
+const proxP = proxRow.precision ?? null;
+const gain = (petP && proxP) ? (proxP / petP) : null;
+const petR = rowBy('pet').recall, proxR = rowBy('proximity').recall;
+const dR = (petR != null && proxR != null) ? (proxR - petR) * 100 : null;
+children.push(Bullet(`Cổng khoảng cách là bước có tác dụng lớn nhất lên F1: Precision tăng ${gain ? `gấp ${n(gain,1)} lần` : 'mạnh'} (${n(petP)} → ${n(proxP)}), đổi lại Recall giảm ${dR != null ? `${n(Math.abs(dR),1)} điểm phần trăm` : 'đáng kể'} (${n(petR)} → ${n(proxR)}). Đây là một đánh đổi có chủ ý, không phải cải thiện miễn phí: ${n(rowBy('pet').n_events ?? 0, 0)} sự kiện bị lọc xuống còn ${n(rowBy('proximity').n_events ?? 0, 0)}, trong đó có cả một phần near-miss thật. Chúng tôi chọn cấu hình này vì F1 tăng từ ${n(rowBy('pet').f1)} lên ${n(rowBy('proximity').f1)} và vì Recall ở dải nguy cấp — dải quyết định giá trị sử dụng — vẫn giữ được ${n(sev[0] ? sev[0].recall : 0)} (mục 7.2).`));
 
 children.push(H2('7.4. Độ bền trước nhiễu detector'));
 children.push(P('Quét mức nhiễu bounding box để trả lời câu hỏi thực tế: khi thay bằng model yếu hơn, hoặc khi camera rung, trời mưa, hệ thống chịu được tới đâu?'));
 children.push(T_(['Nhiễu bbox (px)', 'Precision', 'Recall', 'F1', 'TTC MAE', 'IDF1'],
   noise.map(r => [n(r.noise_px,1), n(r.precision), n(r.recall), n(r.f1), r.ttc_mae === null ? '—' : n(r.ttc_mae), n(r.idf1)]),
   [1.2, 0.9, 0.9, 0.9, 0.9, 0.9]));
-children.push(P('Tracking gần như không suy giảm cho tới mức nhiễu 6 px (IDF1 vẫn 0,98) nhờ cơ chế nới biên bbox khi ghép. Precision là thành phần nhạy cảm nhất — giảm từ 0,67 xuống 0,17 khi nhiễu tăng từ 0 lên 6 px, cho thấy chất lượng detector là nút thắt chính của toàn hệ thống.'));
+children.push(P(`Tracking gần như không suy giảm cho tới mức nhiễu ${n(worst.noise_px,0)} px (IDF1 vẫn ${n(worst.idf1,2)}) nhờ cơ chế nới biên bbox khi ghép. Precision là thành phần nhạy cảm nhất — giảm từ ${n(clean.precision)} xuống ${n(worst.precision)} khi nhiễu tăng từ 0 lên ${n(worst.noise_px,0)} px, cho thấy chất lượng detector là nút thắt chính của toàn hệ thống.`));
 
 children.push(H2('7.5. Kết quả trên dữ liệu thật'));
 if (REAL && REAL.detection) {
@@ -350,11 +397,12 @@ children.push(new Paragraph({ children: [new PageBreak()] }));
 
 // ---- 8 ---- //
 children.push(H1('8. Đánh giá trung thực so với mục tiêu ban đầu'));
-children.push(P('Hai chỉ số chưa đạt mục tiêu đề ra: Conflict Precision (0,51 so với mục tiêu 0,75) và Conflict Recall gộp (0,64 so với mục tiêu 0,80). Chúng tôi báo cáo nguyên trạng và phân tích nguyên nhân thay vì điều chỉnh ngưỡng cho số liệu đẹp hơn.'));
+children.push(P(`Hai chỉ số chưa đạt mục tiêu đề ra: Conflict Precision (${n(F.precision)} so với mục tiêu 0,75) và Conflict Recall gộp (${n(F.recall)} so với mục tiêu 0,80). Chúng tôi báo cáo nguyên trạng và phân tích nguyên nhân thay vì điều chỉnh ngưỡng cho số liệu đẹp hơn.`));
 children.push(H2('8.1. Nguyên nhân'));
-children.push(Bullet('Trần của thuật toán. Với detector hoàn hảo (nhiễu 0 px), hệ thống đạt F1 = 0,65. Nghĩa là khoảng 0,10 điểm F1 mất do nhiễu detector, phần còn lại là giới hạn của chính phương pháp.'));
+const ceiling = clean.f1, lost = (ceiling && F.f1) ? (ceiling - F.f1) : null;
+children.push(Bullet(`Trần của thuật toán. Với detector hoàn hảo (nhiễu 0 px), hệ thống đạt F1 = ${n(ceiling)}. Nghĩa là khoảng ${n(lost,2)} điểm F1 mất do nhiễu detector, phần còn lại là giới hạn của chính phương pháp.`));
 children.push(Bullet('Ranh giới giữa "dòng xe đông" và "xung đột" vốn mờ. Phần lớn cảnh báo bị tính là sai thực chất là các cặp xe có khoảng cách thật dưới 1 m — tức là chúng đã đến rất gần nhau, chỉ là không thoả toàn bộ tiêu chí của nhãn chuẩn. Đây là hiện tượng đã được ghi nhận trong tài liệu nghiên cứu traffic conflict technique: ngay cả người gán nhãn có kinh nghiệm cũng bất đồng ở dải TTC 2–3 giây.'));
-children.push(Bullet('Độ chính xác phân loại kiểu xung đột chỉ đạt 0,50, do góc tiếp cận được ước lượng từ vận tốc vốn đã có nhiễu.'));
+children.push(Bullet(`Độ chính xác phân loại kiểu xung đột chỉ đạt ${n(F.type_accuracy)}, do góc tiếp cận được ước lượng từ vận tốc vốn đã có nhiễu.`));
 children.push(H2('8.2. Vì sao kết quả vẫn có giá trị sử dụng'));
 children.push(P(`Với mục đích thực tế của hệ thống — xếp hạng mức nguy hiểm giữa các giao lộ và chỉ ra điểm nóng cần ưu tiên — thì chỉ số quan trọng là Recall ở dải nguy cấp, và con số đó đạt ${n(sev[0] ? sev[0].recall : 0)}. Các cảnh báo ở ranh giới có thể được lọc bằng ngưỡng Risk Score khi vận hành thực tế, vì thang điểm đã được hiệu chỉnh để phân biệt tốt.`));
 
@@ -393,7 +441,7 @@ children.push(T_(['Hạng mục', 'Vị trí'], [
   ['Bản kê khai công cụ AI', 'docs/ke_khai_cong_cu.md'],
   ['Prompt Log', 'docs/prompt_log.md'],
   ['Kết quả đánh giá dạng máy đọc', 'data/outputs/evaluation.json'],
-  ['Bộ kiểm thử tự động', 'tests/ — 78 test, chạy bằng pytest'],
+  ['Bộ kiểm thử tự động', 'tests/ — 81 test, chạy bằng pytest'],
   ['Notebook fine-tune', 'notebooks/01_finetune_yolo11n_colab.ipynb'],
 ], [1.3, 2]));
 

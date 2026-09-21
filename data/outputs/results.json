@@ -3,7 +3,10 @@
     "n_frames": 9000,
     "duration_s": 300.0,
     "fps_source": 30.0,
-    "processing_fps": 31.53,
+    "processing_fps": 38.95,
+    "frame_latency_median_ms": 25.68,
+    "frame_latency_p95_ms": 33.99,
+    "wall_seconds": 262.76,
     "total_events": 214,
     "severe_events": 197,
     "avg_risk_score": 60.6,
@@ -17,13 +20,13 @@
       "head_on": 29
     },
     "latency_ms": {
-      "detection": 0.17,
-      "tracking": 2.61,
-      "trajectory": 2.17,
-      "conflict": 2.5,
-      "overlay": 13.23
+      "detection": 0.15,
+      "tracking": 2.4,
+      "trajectory": 2.07,
+      "conflict": 2.29,
+      "overlay": 11.91
     },
-    "total_latency_ms": 20.69,
+    "total_latency_ms": 18.82,
     "homography_error_m": 4.76837158203125e-07
   },
   "site": "Giao lộ mô phỏng (benchmark có ground truth)",

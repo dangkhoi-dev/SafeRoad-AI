@@ -44,6 +44,9 @@ class PipelineResult:
     duration: float = 0.0
     latency: dict[str, float] = field(default_factory=dict)
     processing_fps: float = 0.0
+    frame_latency_median_ms: float = 0.0
+    frame_latency_p95_ms: float = 0.0
+    wall_seconds: float = 0.0
     risk_map: RiskMap | None = None
     session_id: int | None = None
     overlay_path: str | None = None
@@ -68,6 +71,9 @@ class PipelineResult:
             "duration_s": round(self.duration, 2),
             "fps_source": round(self.fps_source, 2),
             "processing_fps": round(self.processing_fps, 2),
+            "frame_latency_median_ms": round(self.frame_latency_median_ms, 2),
+            "frame_latency_p95_ms": round(self.frame_latency_p95_ms, 2),
+            "wall_seconds": round(self.wall_seconds, 2),
             "total_events": len(self.events),
             "severe_events": len(self.severe_events),
             "avg_risk_score": self.avg_risk,
@@ -167,6 +173,14 @@ class Pipeline:
         frame_idx = 0
         processed = 0
         wall_start = time.perf_counter()
+        # Đo độ trễ TỪNG frame thay vì chia tổng thời gian chạy cho số frame.
+        # Wall-clock tổng không phải là thước đo tốc độ xử lý: chỉ cần máy ngủ,
+        # bị throttle nhiệt, hay một tiến trình khác giành CPU trong vài giây là
+        # con số FPS tụt xuống mức vô nghĩa (đã gặp: 0.9 FPS khi máy sleep giữa
+        # lúc đo, trong khi các cấu hình khác của cùng pipeline đạt 70-90).
+        # Trung vị của độ trễ từng frame chịu được những gián đoạn đó — một
+        # khoảng ngủ dài chỉ làm hỏng đúng một mẫu.
+        frame_latencies: list[float] = []
 
         if cfg.video.start_frame:
             cap.set(cv2.CAP_PROP_POS_FRAMES, cfg.video.start_frame)
@@ -184,6 +198,7 @@ class Pipeline:
                     continue
 
                 t = frame_idx / fps
+                frame_t0 = time.perf_counter()
 
                 # 1. Detection
                 t0 = time.perf_counter()
@@ -240,13 +255,15 @@ class Pipeline:
                     lat = sum(v[-1] for v in self._timings.values() if v)
                     store.add_frame_stat(frame_idx, t, len(tracks), len(events), lat)
 
+                frame_latencies.append((time.perf_counter() - frame_t0) * 1000.0)
+
                 frame_idx += 1
                 processed += 1
                 if progress_every and processed % progress_every == 0:
-                    elapsed = time.perf_counter() - wall_start
+                    recent = float(np.median(frame_latencies[-progress_every:]))
                     print(
                         f"  {processed} frames | {len(all_events)} near-miss "
-                        f"| {processed / max(elapsed, 1e-6):.1f} FPS xử lý",
+                        f"| {1000.0 / max(recent, 1e-6):.1f} FPS xử lý",
                         flush=True,
                     )
         finally:
@@ -264,6 +281,8 @@ class Pipeline:
                 store.add_events(tail_events, session_id)
 
         wall = time.perf_counter() - wall_start
+        med_ms = float(np.median(frame_latencies)) if frame_latencies else 0.0
+        p95_ms = float(np.percentile(frame_latencies, 95)) if frame_latencies else 0.0
 
         # --- Hành vi (tính một lần trên toàn bộ track) ------------------- #
         behaviors = behavior.classify_all(list(tracker.all_tracks.values()))
@@ -279,7 +298,10 @@ class Pipeline:
             fps_source=fps,
             duration=processed * max(1, cfg.video.stride) / fps,
             latency={k: float(np.mean(v)) for k, v in self._timings.items() if v},
-            processing_fps=processed / max(wall, 1e-6),
+            processing_fps=1000.0 / max(med_ms, 1e-6),
+            frame_latency_median_ms=med_ms,
+            frame_latency_p95_ms=p95_ms,
+            wall_seconds=wall,
             risk_map=risk_map,
             session_id=session_id,
             overlay_path=cfg.video.overlay_path if cfg.video.write_overlay else None,

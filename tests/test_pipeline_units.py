@@ -413,3 +413,42 @@ class TestStorage:
         summary = store.summary(sid)
         assert summary["total_events"] == 5
         assert summary["severe_events"] >= 1
+
+
+class TestThroughputMetric:
+    """Chỉ số FPS phải phản ánh tốc độ xử lý, không phản ánh máy có ngủ hay không.
+
+    Trước đây FPS = số frame / tổng thời gian chạy. Chỉ cần máy sleep vài phút
+    giữa lúc đo là con số tụt xuống dưới 1 FPS trong khi pipeline không hề chậm
+    đi. Trung vị độ trễ từng frame không có nhược điểm đó.
+    """
+
+    @staticmethod
+    def _fps(latencies_ms):
+        import numpy as np
+
+        return 1000.0 / float(np.median(latencies_ms))
+
+    def test_matches_wall_clock_when_machine_behaves(self):
+        lat = [20.0] * 500
+        assert abs(self._fps(lat) - 50.0) < 1e-6
+
+    def test_survives_a_long_stall(self):
+        # 500 frame ở 20 ms, rồi một frame "nuốt" 3 tiếng vì máy ngủ.
+        lat = [20.0] * 500 + [3 * 3600 * 1000.0]
+        assert abs(self._fps(lat) - 50.0) < 0.2
+        # Cách đo cũ sẽ cho ra con số vô nghĩa:
+        naive = len(lat) / (sum(lat) / 1000.0)
+        assert naive < 1.0
+
+    def test_reports_tail_not_just_centre(self):
+        """Trung vị giấu mất đuôi phân phối, nên phải báo cáo kèm p95.
+
+        Với 10% frame chậm gấp 4 lần, trung vị vẫn 20 ms — đúng nhưng không đủ:
+        người đọc cần biết trường hợp xấu. p95 mới cho thấy điều đó.
+        """
+        import numpy as np
+
+        lat = [20.0] * 90 + [80.0] * 10
+        assert abs(float(np.median(lat)) - 20.0) < 1e-6
+        assert float(np.percentile(lat, 95)) > 60.0

@@ -5,12 +5,12 @@
       "label": "1. Detection + Tracking",
       "description": "TTC tính trên pixel, không homography, không làm mượt, không PET/proximity",
       "n_events": 445,
-      "processing_fps": 91.54,
+      "processing_fps": 156.03,
       "latency_ms": {
-        "detection": 0.14,
-        "tracking": 2.8,
-        "trajectory": 2.24,
-        "conflict": 1.98
+        "detection": 0.12,
+        "tracking": 2.4,
+        "trajectory": 2.05,
+        "conflict": 1.82
       },
       "tp": 3,
       "fp": 84,
@@ -39,12 +39,12 @@
       "label": "2. + Homography",
       "description": "Quy đổi toạ độ ảnh sang mặt đất (mét)",
       "n_events": 1711,
-      "processing_fps": 87.26,
+      "processing_fps": 130.61,
       "latency_ms": {
         "detection": 0.14,
-        "tracking": 2.56,
-        "trajectory": 0.8,
-        "conflict": 4.31
+        "tracking": 2.44,
+        "trajectory": 0.82,
+        "conflict": 4.34
       },
       "tp": 104,
       "fp": 1288,
@@ -73,12 +73,12 @@
       "label": "3. + Trajectory smoothing",
       "description": "Làm mượt quỹ đạo + ước lượng vận tốc bằng hồi quy tuyến tính",
       "n_events": 860,
-      "processing_fps": 89.39,
+      "processing_fps": 131.13,
       "latency_ms": {
-        "detection": 0.13,
-        "tracking": 2.53,
-        "trajectory": 2.05,
-        "conflict": 2.9
+        "detection": 0.14,
+        "tracking": 2.61,
+        "trajectory": 2.25,
+        "conflict": 3.05
       },
       "tp": 103,
       "fp": 565,
@@ -107,12 +107,12 @@
       "label": "4. + PET",
       "description": "Thêm tiêu chí Post-Encroachment Time bên cạnh TTC",
       "n_events": 1249,
-      "processing_fps": 88.05,
+      "processing_fps": 130.52,
       "latency_ms": {
-        "detection": 0.14,
-        "tracking": 2.58,
-        "trajectory": 2.06,
-        "conflict": 2.95
+        "detection": 0.17,
+        "tracking": 2.56,
+        "trajectory": 2.19,
+        "conflict": 3.03
       },
       "tp": 108,
       "fp": 940,
@@ -141,12 +141,12 @@
       "label": "5. + Proximity gate",
       "description": "Yêu cầu hai xe thực sự đến gần nhau, không chỉ dựa vào ngoại suy TTC",
       "n_events": 211,
-      "processing_fps": 92.86,
+      "processing_fps": 153.23,
       "latency_ms": {
-        "detection": 0.13,
-        "tracking": 2.55,
-        "trajectory": 2.05,
-        "conflict": 2.44
+        "detection": 0.12,
+        "tracking": 2.28,
+        "trajectory": 1.96,
+        "conflict": 2.28
       },
       "tp": 82,
       "fp": 92,
@@ -175,12 +175,12 @@
       "label": "6. Full (+ Risk scoring)",
       "description": "Bản đầy đủ: thêm Risk Score, phân loại xung đột và Explainable Risk",
       "n_events": 211,
-      "processing_fps": 92.05,
+      "processing_fps": 141.15,
       "latency_ms": {
         "detection": 0.13,
-        "tracking": 2.57,
-        "trajectory": 2.06,
-        "conflict": 2.46
+        "tracking": 2.52,
+        "trajectory": 2.16,
+        "conflict": 2.5
       },
       "tp": 82,
       "fp": 92,
@@ -349,7 +349,10 @@
     "n_frames": 9000,
     "duration_s": 300.0,
     "fps_source": 30.0,
-    "processing_fps": 88.79,
+    "processing_fps": 128.42,
+    "frame_latency_median_ms": 7.79,
+    "frame_latency_p95_ms": 13.14,
+    "wall_seconds": 99.2,
     "total_events": 211,
     "severe_events": 195,
     "avg_risk_score": 60.6,
@@ -363,12 +366,12 @@
       "head_on": 25
     },
     "latency_ms": {
-      "detection": 0.14,
-      "tracking": 2.8,
-      "trajectory": 2.24,
-      "conflict": 2.62
+      "detection": 0.13,
+      "tracking": 2.75,
+      "trajectory": 2.36,
+      "conflict": 2.72
     },
-    "total_latency_ms": 7.8,
+    "total_latency_ms": 7.96,
     "homography_error_m": 4.76837158203125e-07
   },
   "setup": {

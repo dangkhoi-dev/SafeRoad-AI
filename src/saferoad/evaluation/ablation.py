@@ -249,7 +249,7 @@ def save_report(
 def to_markdown(ablation: list[AblationResult]) -> str:
     """Kết xuất bảng ablation dạng Markdown để dán vào báo cáo."""
     lines = [
-        "| Cấu hình | Precision | Recall | F1 | TTC MAE (s) | Số sự kiện | FPS |",
+        "| Cấu hình | Precision | Recall | F1 | TTC MAE (s) | Số sự kiện | FPS (không ghi overlay) |",
         "|---|---:|---:|---:|---:|---:|---:|",
     ]
     for r in ablation:
