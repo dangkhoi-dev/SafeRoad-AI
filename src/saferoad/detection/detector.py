@@ -32,6 +32,28 @@ class BaseDetector(ABC):
         return type(self).__name__
 
 
+
+def _precision_kwargs(quantize: int | None) -> dict:
+    """Chọn tham số độ chính xác đúng với phiên bản Ultralytics đang cài.
+
+    Ultralytics thay cờ ``half`` bằng ``quantize`` và in một dòng cảnh báo cho
+    MỖI lần gọi ``predict`` nếu còn dùng tên cũ — chạy một video 2.441 frame là
+    2.441 dòng cảnh báo lấp kín toàn bộ log, che mất những thông báo thật sự
+    cần đọc. Đồng thời, truyền ``half=False`` chẳng làm gì ngoài việc kích hoạt
+    cảnh báo đó, nên khi chạy FP32 ta không truyền tham số nào cả.
+    """
+    if not quantize:
+        return {}
+    try:
+        from ultralytics.cfg import DEFAULT_CFG_DICT
+
+        if "quantize" in DEFAULT_CFG_DICT:
+            return {"quantize": int(quantize)}
+    except Exception:  # pragma: no cover - phụ thuộc phiên bản
+        pass
+    return {"half": int(quantize) == 16}
+
+
 class YoloDetector(BaseDetector):
     """Detector dựa trên Ultralytics YOLO (mặc định YOLO11n).
 
@@ -51,6 +73,7 @@ class YoloDetector(BaseDetector):
         self.cfg = cfg
         self.model = YOLO(str(weights))
         self._keep = set(COCO_TO_SAFEROAD)
+        self._precision_kwargs = _precision_kwargs(cfg.quantize)
         log.info("Đã nạp YOLO từ %s (device=%s)", weights, cfg.device)
 
     def detect(self, frame: np.ndarray, frame_idx: int = 0) -> list[Detection]:
@@ -60,7 +83,7 @@ class YoloDetector(BaseDetector):
             conf=self.cfg.conf,
             iou=self.cfg.iou,
             device=self.cfg.device,
-            half=self.cfg.half,
+            **self._precision_kwargs,
             max_det=self.cfg.max_det,
             classes=sorted(self._keep),
             verbose=False,

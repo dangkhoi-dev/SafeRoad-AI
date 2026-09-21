@@ -123,7 +123,7 @@ python scripts/organize_dataset.py --source D:\SV7
 python -m saferoad prepare-real --root data/raw/mvti --view Infrastructure
 
 # Chấm mAP detection + IDF1 tracking trên ảnh thật
-python -m saferoad evaluate-real
+python -m saferoad evaluate-real --config configs/mvti.yaml
 ```
 
 ---

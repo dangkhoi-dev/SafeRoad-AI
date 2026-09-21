@@ -1,0 +1,112 @@
+{
+  "dataset": {
+    "name": "infrastructure-infrastructure-mscoco",
+    "n_frames": 2441,
+    "n_annotated_frames": 2439,
+    "n_tracks": 19,
+    "n_boxes": 14488,
+    "resolution": "1024x640",
+    "classes": {
+      "car": 10,
+      "truck": 7,
+      "bicycle": 2
+    },
+    "track_length_median": 646
+  },
+  "detection": {
+    "mAP50": 0.1041,
+    "mAP50_95": 0.0797,
+    "precision50": 0.4737,
+    "recall50": 0.196,
+    "n_pred": 6001,
+    "n_gt": 14488,
+    "per_class": {
+      "bicycle": {
+        "AP50": 0.0,
+        "AP50_95": 0.0,
+        "n_gt": 1503
+      },
+      "car": {
+        "AP50": 0.2089,
+        "AP50_95": 0.1647,
+        "n_gt": 7675
+      },
+      "pedestrian": {
+        "AP50": NaN,
+        "AP50_95": NaN,
+        "n_gt": 0
+      },
+      "truck": {
+        "AP50": 0.1034,
+        "AP50_95": 0.0745,
+        "n_gt": 5310
+      }
+    }
+  },
+  "tracking": {
+    "idf1": 0.2272,
+    "mota": 0.0997,
+    "id_switches": 42,
+    "n_gt_tracks": 19,
+    "n_pred_tracks": 47,
+    "mostly_tracked": 0,
+    "fragmentation": 3.471
+  },
+  "conflicts": {
+    "total": 1,
+    "severe_ttc_lt_1_5": 1,
+    "by_type": {
+      "crossing": 1
+    },
+    "by_level": {
+      "high": 1
+    },
+    "ttc": {
+      "min": 0.0,
+      "p25": 0.0,
+      "median": 0.0,
+      "p75": 0.0,
+      "max": 0.0
+    },
+    "pet": {
+      "min": 0.0,
+      "p25": 0.0,
+      "median": 0.0,
+      "p75": 0.0,
+      "max": 0.0
+    },
+    "risk_score": {
+      "min": 100.0,
+      "p25": 100.0,
+      "median": 100.0,
+      "p75": 100.0,
+      "max": 100.0
+    }
+  },
+  "runtime": {
+    "n_frames": 2441,
+    "duration_s": 81.37,
+    "fps_source": 30.0,
+    "processing_fps": 11.22,
+    "frame_latency_median_ms": 89.15,
+    "frame_latency_p95_ms": 157.1,
+    "wall_seconds": 258.95,
+    "total_events": 1,
+    "severe_events": 1,
+    "avg_risk_score": 100.0,
+    "n_tracks": 47,
+    "by_type": {
+      "crossing": 1
+    },
+    "latency_ms": {
+      "detection": 86.08,
+      "tracking": 0.48,
+      "trajectory": 0.28,
+      "conflict": 0.12,
+      "overlay": 7.98
+    },
+    "total_latency_ms": 94.95,
+    "homography_error_m": 2.312938447200457e-15
+  },
+  "note": "Dataset thật có nhãn bbox và ID đối tượng nhưng KHÔNG có nhãn xung đột. Vì vậy mục 'conflicts' chỉ là thống kê mô tả; Precision/Recall của near-miss được đo riêng trên tập mô phỏng có ground truth."
+}

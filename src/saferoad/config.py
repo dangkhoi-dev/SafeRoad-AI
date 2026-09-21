@@ -22,7 +22,10 @@ class DetectionConfig:
     conf: float = 0.25
     iou: float = 0.45
     device: str = "cpu"          # "cpu" | "cuda:0" | "mps"
-    half: bool = False
+    #: Độ chính xác số học khi suy luận: None = FP32 (mặc định, an toàn trên
+    #: CPU), 16 = FP16, 8 = INT8. Ultralytics đã bỏ cờ ``half`` để chuyển sang
+    #: ``quantize``; giữ giá trị ở dạng số để không phải đổi lại khi nâng cấp.
+    quantize: int | None = None
     max_det: int = 300
     #: Bỏ qua bbox nhỏ hơn ngưỡng này (pixel²). Đối tượng nhỏ hơn ~150 px² nằm
     #: quá xa camera: sai số vị trí vài pixel đã làm vận tốc ước lượng sai hàng

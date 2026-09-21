@@ -149,7 +149,7 @@ Mất khoảng 2-3 phút.
 ### 3.3 Chấm điểm trên dữ liệu thật
 
 ```powershell
-python -m saferoad evaluate-real
+python -m saferoad evaluate-real --config configs\mvti.yaml
 ```
 
 Bạn sẽ nhận được mAP detection và IDF1 tracking trên **ảnh thật**.
@@ -203,7 +203,7 @@ Notebook đã xử lý sẵn hai điểm quan trọng:
 REM Chép file best.pt tải từ Colab vào models\
 copy %USERPROFILE%\Downloads\best.pt models\saferoad_yolo11n.pt
 
-python -m saferoad evaluate-real ^
+python -m saferoad evaluate-real --config configs\mvti.yaml ^
     --weights models\saferoad_yolo11n.pt ^
     --out data\outputs\evaluation_real_finetuned.json
 ```
@@ -332,7 +332,7 @@ REM ở cửa sổ khác:
 python scripts\organize_dataset.py --source D:\SV7 --dry-run
 python scripts\organize_dataset.py --source D:\SV7
 python -m saferoad prepare-real --root data\raw\mvti --view Infrastructure
-python -m saferoad evaluate-real
+python -m saferoad evaluate-real --config configs\mvti.yaml
 
 scripts\push_to_github.bat
 ```

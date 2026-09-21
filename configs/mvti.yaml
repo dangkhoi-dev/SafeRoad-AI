@@ -23,7 +23,7 @@ detection:
   conf: 0.15
   iou: 0.45
   device: cpu
-  half: false
+  quantize: null            # null = FP32 | 16 = FP16 | 8 = INT8
   max_det: 300
   min_box_area: 120.0
   backend: tiled

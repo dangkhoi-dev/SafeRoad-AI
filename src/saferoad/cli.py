@@ -357,6 +357,10 @@ def cmd_prepare_real(args: argparse.Namespace) -> int:
 
 
 # --------------------------------------------------------------------------- #
+#: Số detection tối đa mỗi ảnh khi chấm mAP — quy ước của bộ chỉ số COCO.
+MAX_DETS_PER_IMAGE = 100
+
+
 def cmd_evaluate_real(args: argparse.Namespace) -> int:
     """Chấm điểm detection + tracking trên dữ liệu thật có nhãn."""
     from .detection.detector import build_detector
@@ -380,11 +384,36 @@ def cmd_evaluate_real(args: argparse.Namespace) -> int:
     if args.max_frames:
         cfg.video.max_frames = args.max_frames
 
+    # mAP phải được tính trên detection ở ngưỡng tin cậy RẤT THẤP. Đây không
+    # phải tiểu tiết: mAP là diện tích dưới đường precision-recall, và chấm nó
+    # trên danh sách đã cắt ở ngưỡng vận hành (0,25) thì đường PR bị cụt ở giữa
+    # chừng — mAP thu được thấp hơn giá trị thật, và thấp theo cách không so
+    # sánh được với bất kỳ con số mAP nào khác trong tài liệu. Chuẩn COCO dùng
+    # 0,001. Ngược lại, pipeline (tracking, xung đột) phải chạy ở đúng ngưỡng
+    # vận hành, nếu không sẽ ngập detection rác.
+    #
+    # Chạy detector MỘT lần ở ngưỡng thấp rồi lọc lại cho pipeline — vừa đúng
+    # cả hai mục đích, vừa không phải chạy YOLO hai lượt trên cùng video.
+    op_conf = cfg.detection.conf
+    map_conf = min(args.map_conf, op_conf)
+    cfg.detection.conf = map_conf
     print(f"Chạy pipeline trên dữ liệu thật: {cfg.video.source}")
+    print(f"  Ngưỡng chấm mAP: {map_conf}  ·  ngưỡng vận hành pipeline: {op_conf}")
+    if cfg.detection.backend != "tiled":
+        # Camera hạ tầng đặt cao khiến phương tiện chỉ chiếm vài chục pixel.
+        # Suy luận một lượt trên khung hình thu nhỏ bỏ sót phần lớn trong số
+        # đó; cắt ô và chạy ở độ phân giải gốc nâng recall lên khoảng gấp đôi.
+        # Chạy nhầm cấu hình mặc định cho ra một con số mAP thấp không phản
+        # ánh hệ thống, nên phải nói rõ ngay từ đầu chứ không để người dùng
+        # phát hiện sau khi đã chờ xong.
+        print(
+            f"  CẢNH BÁO: đang dùng detector '{cfg.detection.backend}' "
+            "(một lượt trên cả khung hình).\n"
+            "           Với camera hạ tầng nên chạy kèm: "
+            "--config configs/mvti.yaml (detector chia ô)."
+        )
     detector = build_detector(cfg.detection)
 
-    # Ghi lại detection theo frame để chấm mAP — bọc detector lại thay vì chạy
-    # YOLO hai lần trên cùng một video.
     captured: dict[int, list] = {}
 
     class _Recording:
@@ -392,9 +421,15 @@ def cmd_evaluate_real(args: argparse.Namespace) -> int:
             self.inner = inner
 
         def detect(self, frame, frame_idx=0):
-            dets = self.inner.detect(frame, frame_idx)
-            captured[frame_idx] = list(dets)
-            return dets
+            raw = self.inner.detect(frame, frame_idx)
+            # Chuẩn COCO chấm mAP với tối đa 100 detection mỗi ảnh. Giới hạn
+            # này cũng cần cho bộ nhớ: ở ngưỡng 0,001 với detector chia ô, một
+            # frame có thể trả về hàng nghìn hộp, nhân với vài nghìn frame là
+            # hàng triệu đối tượng phải giữ trong RAM.
+            captured[frame_idx] = sorted(
+                raw, key=lambda d: d.score, reverse=True
+            )[:MAX_DETS_PER_IMAGE]
+            return [d for d in raw if d.score >= op_conf]
 
     result = Pipeline(cfg, detector=_Recording(detector), write_db=True).run()
 
@@ -413,6 +448,7 @@ def cmd_evaluate_real(args: argparse.Namespace) -> int:
 
     payload = {
         "dataset": seq.summary(),
+        "thresholds": {"map_conf": map_conf, "pipeline_conf": op_conf},
         "detection": det_metrics.to_dict(),
         "tracking": track_metrics.to_dict(),
         "conflicts": conflicts,
@@ -536,6 +572,9 @@ def build_parser() -> argparse.ArgumentParser:
     er.add_argument("--weights")
     er.add_argument("--device")
     er.add_argument("--max-frames", type=int, default=0)
+    er.add_argument("--map-conf", type=float, default=0.001,
+                    help="Ngưỡng tin cậy khi chấm mAP (chuẩn COCO là 0.001). "
+                         "Pipeline vẫn chạy ở ngưỡng vận hành trong config.")
     er.add_argument("--no-overlay", action="store_true")
     er.add_argument("--out", default="data/outputs/evaluation_real.json")
     er.set_defaults(func=cmd_evaluate_real)
