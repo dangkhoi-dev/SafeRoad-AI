@@ -88,7 +88,7 @@ nhân rồi chọn hướng khác. Đây là phần có giá trị nhất của 
 | 6 | 46% nhãn chuẩn có xe không bao giờ nằm trong vùng đánh giá; người đi bộ có bbox 37 px² | Cảnh dựng bằng hình chiếu bóng xuống đất, bỏ qua **chiều cao** vật thể | Dựng **camera pinhole 3D**, vẽ phương tiện dạng khối hộp ⇒ bbox người đi bộ 1.683 px² |
 | 7 | Risk Score có trung vị 98/100 — không phân biệt được gì | Trọng số chưa hiệu chỉnh, sigmoid bão hoà | Hiệu chỉnh lại trên tập có nhãn ⇒ p10=21, trung vị=56, p90=89 |
 | 8 | Bộ phân loại hành vi chỉ đạt macro-F1 0.50 | Nhãn gán cho **cả track** rồi cắt cửa sổ trượt ⇒ 20 giây chạy bình thường cũng mang nhãn "phanh gấp" | Gán nhãn theo **từng cửa sổ** ⇒ macro-F1 0.99 |
-| 9 | YOLO11n COCO chỉ đạt recall 0.19 trên ảnh giao lộ thật, gán nhãn "train" cho một chiếc ô tô | **Lệch miền**: COCO chụp ngang tầm mắt, camera giao thông đặt cao nhìn chếch xuống | Thêm suy luận theo ô (recall 0.19→0.46) + chuẩn bị fine-tune trên MVTI |
+| 9 | YOLO11n COCO chỉ đạt recall 0.19 trên ảnh giao lộ thật, gán nhãn "train" cho một chiếc ô tô | **Lệch miền**: COCO chụp ngang tầm mắt, camera giao thông đặt cao nhìn chếch xuống | Thêm suy luận theo ô chồng lấn + chuẩn bị fine-tune trên MVTI (recall của cách chia ô đang được đo lại) |
 
 ---
 

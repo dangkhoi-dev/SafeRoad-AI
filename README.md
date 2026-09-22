@@ -206,14 +206,16 @@ thể và gán nhầm nhãn `train` cho một chiếc ô tô.
 Nguyên nhân không phải model yếu mà là **lệch miền**: COCO chủ yếu là ảnh chụp
 ngang tầm mắt, còn camera giao thông đặt cao 10–18 m nhìn chếch xuống.
 
-| Cấu hình | recall@0.5 |
-|---|---:|
-| YOLO11n COCO, imgsz 640 | 0,19 |
-| YOLO11n COCO, imgsz 1600, conf 0,10 | 0,31 |
-| **YOLO11n COCO + cắt ô 2×3 (SAHI)** | **0,46** |
+| Cấu hình | recall@0.5 | mAP@0.5 |
+|---|---:|---:|
+| YOLO11n COCO, một lượt toàn khung (imgsz 640) | 0,196 | 0,104 |
+| YOLO11n COCO + cắt ô 2×3 (`backend: tiled`) | *đang đo lại* | *đang đo lại* |
 
-Cắt ô là giải pháp trước mắt (`detection.backend: tiled`). Giải pháp căn cơ là
-fine-tune — xem [`notebooks/01_finetune_yolo11n_colab.ipynb`](notebooks/01_finetune_yolo11n_colab.ipynb).
+Cắt ô là giải pháp trước mắt (`detection.backend: tiled`). Trên một khung hình
+thử, nó tìm được 9 đối tượng so với 2 của lượt đơn; con số recall trên cả tập
+đang được đo lại bằng `saferoad evaluate-real --config configs/mvti.yaml` và sẽ
+điền vào bảng khi có. Giải pháp căn cơ là fine-tune — xem
+[`notebooks/01_finetune_yolo11n_colab.ipynb`](notebooks/01_finetune_yolo11n_colab.ipynb).
 
 ---
 

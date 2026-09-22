@@ -391,7 +391,7 @@ children.push(Rich([
   { text: 'Một phát hiện quan trọng. ', bold: true },
   { text: 'Đo trực tiếp trên ảnh giao lộ thật, YOLO11n với trọng số COCO gốc chỉ đạt recall@0.5 ≈ 0,19. Trong một khung hình thử, model chỉ phát hiện đúng một vật thể và gán nhầm nhãn "train" cho một chiếc ô tô. Nguyên nhân không phải model yếu mà là lệch miền: COCO chủ yếu gồm ảnh chụp ngang tầm mắt, trong khi camera giao thông đặt cao nhìn chếch xuống, đối tượng nhỏ và bị nén phối cảnh.' },
 ]));
-children.push(P('Chúng tôi xử lý theo hai hướng. Trước mắt, bổ sung cơ chế suy luận theo ô chồng lấn (cắt khung hình thành 2×3 ô và chạy detector trên từng ô ở độ phân giải gốc), nâng recall từ 0,19 lên 0,46 với cùng bộ trọng số. Về căn cơ, chuẩn bị quy trình fine-tune trên chính tập dữ liệu thật đã có 14.488 bounding box — xem notebook Colab kèm theo repo.'));
+children.push(P('Chúng tôi xử lý theo hai hướng. Trước mắt, bổ sung cơ chế suy luận theo ô chồng lấn: cắt khung hình thành lưới 2×3 có chồng lấn 25% và chạy detector trên từng ô ở độ phân giải gốc, kèm một lượt toàn khung để không bỏ sót vật thể lớn. Trên một khung hình thử, cách này tìm được 9 đối tượng so với 2 của lượt đơn; recall trên toàn tập đang được đo lại và sẽ được bổ sung. Về căn cơ, chuẩn bị quy trình fine-tune trên chính tập dữ liệu thật đã có 14.488 bounding box — xem notebook Colab kèm theo repo.'));
 
 children.push(new Paragraph({ children: [new PageBreak()] }));
 
