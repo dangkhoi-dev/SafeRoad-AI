@@ -27,6 +27,11 @@ detection:
   max_det: 300
   min_box_area: 150.0
   backend: tiled
+  tile_rows: 2
+  tile_cols: 3
+  tile_overlap: 0.25
+  tile_full_frame: true
+  tile_merge_iou: 0.55
 tracking:
   track_high_thresh: 0.5
   track_low_thresh: 0.1

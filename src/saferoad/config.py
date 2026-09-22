@@ -32,7 +32,25 @@ class DetectionConfig:
     #: mét/giây, nên TTC tính từ đó chỉ sinh báo động giả. Lọc ở đây giúp cả
     #: tracking lẫn conflict ổn định hơn nhiều so với việc cố xử lý chúng.
     min_box_area: float = 150.0
-    backend: str = "yolo"        # "yolo" | "synthetic" (đọc GT có sẵn)
+    #: "yolo"   — chạy detector một lượt trên cả khung hình (nhanh nhất)
+    #: "tiled"  — cắt khung hình thành lưới ô chồng lấn và chạy trên từng ô ở độ
+    #:            phân giải gốc, rồi gộp lại. Chậm hơn nhiều lần nhưng bắt được
+    #:            vật thể nhỏ ở xa mà lượt toàn khung bỏ sót — cần cho camera
+    #:            hạ tầng đặt cao.
+    #: "replay" — phát lại detection có sẵn (dùng khi đánh giá trên mô phỏng)
+    backend: str = "yolo"
+    #: Chỉ dùng khi backend = "tiled".
+    tile_rows: int = 2
+    tile_cols: int = 3
+    #: Tỉ lệ chồng lấn giữa các ô kề nhau. Không có chồng lấn thì vật thể nằm
+    #: đúng trên đường cắt sẽ bị xẻ đôi và không ô nào nhận ra nó.
+    tile_overlap: float = 0.25
+    #: Có chạy thêm một lượt trên toàn khung hình hay không. Ô nhỏ bỏ sót vật
+    #: thể lớn hơn chính nó, nên lượt toàn khung bù lại phần đó.
+    tile_full_frame: bool = True
+    #: Ngưỡng IoU khi gộp kết quả của các ô — hai ô kề nhau nhìn thấy cùng một
+    #: vật trong vùng chồng lấn sẽ cho hai hộp gần trùng.
+    tile_merge_iou: float = 0.55
 
 
 @dataclass

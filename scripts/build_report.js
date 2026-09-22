@@ -441,7 +441,7 @@ children.push(T_(['Hạng mục', 'Vị trí'], [
   ['Bản kê khai công cụ AI', 'docs/ke_khai_cong_cu.md'],
   ['Prompt Log', 'docs/prompt_log.md'],
   ['Kết quả đánh giá dạng máy đọc', 'data/outputs/evaluation.json'],
-  ['Bộ kiểm thử tự động', 'tests/ — 81 test, chạy bằng pytest'],
+  ['Bộ kiểm thử tự động', 'tests/ — 85 test, chạy bằng pytest'],
   ['Notebook fine-tune', 'notebooks/01_finetune_yolo11n_colab.ipynb'],
 ], [1.3, 2]));
 

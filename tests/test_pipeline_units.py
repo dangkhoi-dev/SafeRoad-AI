@@ -452,3 +452,83 @@ class TestThroughputMetric:
         lat = [20.0] * 90 + [80.0] * 10
         assert abs(float(np.median(lat)) - 20.0) < 1e-6
         assert float(np.percentile(lat, 95)) > 60.0
+
+
+class TestTiledDetector:
+    """Detector chia ô — thứ quyết định có nhìn thấy xe ở xa hay không.
+
+    Ba tính chất phải đúng, và cả ba đều đã từng sai trong lúc phát triển:
+    ô phải phủ kín khung hình, phải chồng lấn nhau, và toạ độ trả về phải nằm
+    trong hệ của khung hình gốc chứ không phải của ô.
+    """
+
+    @staticmethod
+    def _det():
+        from saferoad.config import DetectionConfig
+        from saferoad.detection.detector import TiledYoloDetector
+        cfg = DetectionConfig(tile_rows=2, tile_cols=3, tile_overlap=0.25)
+        obj = TiledYoloDetector.__new__(TiledYoloDetector)  # bỏ qua việc nạp YOLO
+        obj.cfg = cfg
+        obj.rows, obj.cols, obj.overlap = 2, 3, 0.25
+        return obj
+
+    def test_tiles_cover_whole_frame(self):
+        import numpy as np
+
+        d = self._det()
+        h, w = 640, 1024
+        mask = np.zeros((h, w), dtype=bool)
+        for x1, y1, x2, y2 in d._tiles(h, w):
+            mask[y1:y2, x1:x2] = True
+        assert mask.all(), "có vùng khung hình không ô nào phủ tới"
+
+    def test_tiles_overlap_each_other(self):
+        d = self._det()
+        tiles = d._tiles(640, 1024)
+        assert len(tiles) == 6
+        # hai ô đầu cùng hàng phải giao nhau, nếu không thì vật nằm trên đường
+        # cắt sẽ bị xẻ đôi
+        a, b = tiles[0], tiles[1]
+        assert a[2] > b[0], "hai ô kề nhau không chồng lấn"
+
+    def test_merge_drops_duplicates_but_keeps_other_classes(self):
+        from saferoad.detection.detector import _merge
+        from saferoad.types import Detection, VehicleClass
+
+        box = (10.0, 10.0, 50.0, 50.0)
+        near = (12.0, 11.0, 52.0, 51.0)      # cùng vật, nhìn từ ô kề bên
+        far = (200.0, 200.0, 240.0, 240.0)   # vật khác hẳn
+        dets = [
+            Detection(bbox=box, score=0.9, cls=VehicleClass.CAR),
+            Detection(bbox=near, score=0.7, cls=VehicleClass.CAR),
+            Detection(bbox=box, score=0.8, cls=VehicleClass.PEDESTRIAN),
+            Detection(bbox=far, score=0.6, cls=VehicleClass.CAR),
+        ]
+        out = _merge(dets, iou_thr=0.55)
+        cars = [d for d in out if d.cls is VehicleClass.CAR]
+        peds = [d for d in out if d.cls is VehicleClass.PEDESTRIAN]
+        assert len(cars) == 2, "hai hộp trùng của cùng một xe phải gộp còn một"
+        assert max(c.score for c in cars) == 0.9, "phải giữ hộp có điểm cao hơn"
+        assert len(peds) == 1, "người đi bộ đứng cạnh xe không được gộp vào xe"
+
+    def test_boxes_are_mapped_back_to_frame_coordinates(self):
+        import numpy as np
+        from saferoad.types import Detection, VehicleClass
+
+        d = self._det()
+        d.cfg.tile_full_frame = False
+        d.cfg.tile_merge_iou = 0.55
+
+        class _Stub:
+            """Luôn báo một hộp ở góc trên trái của ô được đưa vào."""
+
+            def detect(self, tile, frame_idx=0):
+                return [Detection(bbox=(0.0, 0.0, 4.0, 4.0), score=0.9,
+                                  cls=VehicleClass.CAR)]
+
+        d.inner = _Stub()
+        frame = np.zeros((640, 1024, 3), dtype=np.uint8)
+        out = d.detect(frame)
+        xs = sorted(round(o.bbox[0]) for o in out)
+        assert xs[0] == 0, "ô đầu tiên phải cho hộp ở gốc toạ độ khung hình"
+        assert max(xs) > 100, "các ô bên phải phải được dịch sang phải, không nằm chồng ở gốc"
