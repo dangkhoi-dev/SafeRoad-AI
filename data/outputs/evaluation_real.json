@@ -13,23 +13,32 @@
     },
     "track_length_median": 646
   },
+  "thresholds": {
+    "map_conf": 0.001,
+    "pipeline_conf": 0.15
+  },
   "detection": {
-    "mAP50": 0.1041,
-    "mAP50_95": 0.0797,
-    "precision50": 0.4737,
-    "recall50": 0.196,
-    "n_pred": 6001,
+    "mAP50": 0.1637,
+    "mAP50_95": 0.1037,
+    "precision50": 0.0429,
+    "recall50": 0.5356,
+    "n_pred": 244100,
     "n_gt": 14488,
     "per_class": {
       "bicycle": {
-        "AP50": 0.0,
-        "AP50_95": 0.0,
+        "AP50": 0.0303,
+        "AP50_95": 0.0102,
         "n_gt": 1503
       },
       "car": {
-        "AP50": 0.2089,
-        "AP50_95": 0.1647,
+        "AP50": 0.2406,
+        "AP50_95": 0.1645,
         "n_gt": 7675
+      },
+      "motorcycle": {
+        "AP50": NaN,
+        "AP50_95": NaN,
+        "n_gt": 0
       },
       "pedestrian": {
         "AP50": NaN,
@@ -37,29 +46,31 @@
         "n_gt": 0
       },
       "truck": {
-        "AP50": 0.1034,
-        "AP50_95": 0.0745,
+        "AP50": 0.22,
+        "AP50_95": 0.1363,
         "n_gt": 5310
       }
     }
   },
   "tracking": {
-    "idf1": 0.2272,
-    "mota": 0.0997,
-    "id_switches": 42,
+    "idf1": 0.2615,
+    "mota": 0.0,
+    "id_switches": 86,
     "n_gt_tracks": 19,
-    "n_pred_tracks": 47,
+    "n_pred_tracks": 66,
     "mostly_tracked": 0,
-    "fragmentation": 3.471
+    "fragmentation": 6.059
   },
   "conflicts": {
-    "total": 1,
-    "severe_ttc_lt_1_5": 1,
+    "total": 6,
+    "severe_ttc_lt_1_5": 6,
     "by_type": {
-      "crossing": 1
+      "rear_end": 4,
+      "crossing": 1,
+      "turning": 1
     },
     "by_level": {
-      "high": 1
+      "high": 6
     },
     "ttc": {
       "min": 0.0,
@@ -70,15 +81,15 @@
     },
     "pet": {
       "min": 0.0,
-      "p25": 0.0,
-      "median": 0.0,
-      "p75": 0.0,
-      "max": 0.0
+      "p25": 0.014,
+      "median": 0.029,
+      "p75": 0.043,
+      "max": 0.057
     },
     "risk_score": {
-      "min": 100.0,
-      "p25": 100.0,
-      "median": 100.0,
+      "min": 85.6,
+      "p25": 92.075,
+      "median": 99.9,
       "p75": 100.0,
       "max": 100.0
     }
@@ -87,25 +98,27 @@
     "n_frames": 2441,
     "duration_s": 81.37,
     "fps_source": 30.0,
-    "processing_fps": 11.22,
-    "frame_latency_median_ms": 89.15,
-    "frame_latency_p95_ms": 157.1,
-    "wall_seconds": 258.95,
-    "total_events": 1,
-    "severe_events": 1,
-    "avg_risk_score": 100.0,
-    "n_tracks": 47,
+    "processing_fps": 1.89,
+    "frame_latency_median_ms": 528.19,
+    "frame_latency_p95_ms": 640.42,
+    "wall_seconds": 1339.95,
+    "total_events": 6,
+    "severe_events": 6,
+    "avg_risk_score": 95.8,
+    "n_tracks": 66,
     "by_type": {
-      "crossing": 1
+      "rear_end": 4,
+      "crossing": 1,
+      "turning": 1
     },
     "latency_ms": {
-      "detection": 86.08,
-      "tracking": 0.48,
-      "trajectory": 0.28,
-      "conflict": 0.12,
-      "overlay": 7.98
+      "detection": 531.33,
+      "tracking": 0.76,
+      "trajectory": 0.51,
+      "conflict": 0.22,
+      "overlay": 7.24
     },
-    "total_latency_ms": 94.95,
+    "total_latency_ms": 540.07,
     "homography_error_m": 2.312938447200457e-15
   },
   "note": "Dataset thật có nhãn bbox và ID đối tượng nhưng KHÔNG có nhãn xung đột. Vì vậy mục 'conflicts' chỉ là thống kê mô tả; Precision/Recall của near-miss được đo riêng trên tập mô phỏng có ground truth."
