@@ -5,8 +5,8 @@ qua các dataclass trong file này, nên đổi một module không phá vỡ mo
 
 Quy ước toạ độ
 --------------
-* ``(x, y)`` trong **pixel** — gốc toạ độ ở góc trên-trái khung hình.
-* ``(X, Y)`` trong **mét trên mặt đất** (ground plane) — sau khi quy đổi bằng
+* ``(x, y)`` trong **pixel** - gốc toạ độ ở góc trên-trái khung hình.
+* ``(X, Y)`` trong **mét trên mặt đất** (ground plane) - sau khi quy đổi bằng
   homography. Trục X hướng sang phải, trục Y hướng "vào trong" ảnh.
 * Vận tốc luôn tính trên mặt đất, đơn vị m/s.
 """
@@ -64,7 +64,7 @@ class VehicleClass(str, Enum):
 
     @property
     def height(self) -> float:
-        """Chiều cao (m) — quyết định kích thước bbox mà camera thật nhìn thấy.
+        """Chiều cao (m) - quyết định kích thước bbox mà camera thật nhìn thấy.
 
         Người đi bộ chỉ chiếm 0.5 × 0.5 m mặt đất nhưng cao 1.7 m, nên trên ảnh
         họ là một hình chữ nhật đứng chứ không phải một chấm nhỏ. Bỏ qua chiều
@@ -84,7 +84,7 @@ class VehicleClass(str, Enum):
         """Bán kính hình tròn **nội tiếp** theo chiều ngang (m) = nửa bề rộng.
 
         Dùng cho các phép ước lượng thô cần một con số duy nhất. Với tính toán
-        va chạm hãy dùng :pyattr:`circles` — xem giải thích ở đó.
+        va chạm hãy dùng :pyattr:`circles` - xem giải thích ở đó.
         """
         return self.footprint[1] / 2.0
 
@@ -95,7 +95,7 @@ class VehicleClass(str, Enum):
         Vì sao KHÔNG dùng một hình tròn duy nhất
         ----------------------------------------
         Hình tròn ngoại tiếp một ô tô 4.4 × 1.8 m có bán kính
-        ``½·√(4.4² + 1.8²) ≈ 2.38`` m — tức là mô hình hoá chiếc xe như một vật
+        ``½·√(4.4² + 1.8²) ≈ 2.38`` m - tức là mô hình hoá chiếc xe như một vật
         thể **rộng 4.76 m**. Hậu quả: hai ô tô đi ngược chiều ở hai làn cách nhau
         4 m sẽ bị coi là "đang va chạm", và hệ thống sinh ra hàng loạt cảnh báo
         giả kiểu "đối đầu" cho dòng xe hoàn toàn bình thường.
@@ -119,7 +119,7 @@ class VehicleClass(str, Enum):
         """Hệ số mức độ nghiêm trọng theo khối lượng, chuẩn hoá về [0, 1].
 
         Va chạm giữa xe tải và người đi bộ nghiêm trọng hơn nhiều so với va
-        chạm giữa hai xe đạp, dù TTC bằng nhau — hệ số này đưa yếu tố đó vào
+        chạm giữa hai xe đạp, dù TTC bằng nhau - hệ số này đưa yếu tố đó vào
         Risk Score.
         """
         return {
@@ -167,10 +167,10 @@ class ConflictType(str, Enum):
 class RiskLevel(str, Enum):
     """Mức rủi ro Level 0-3 theo Explainable Risk trong kế hoạch."""
 
-    NONE = "none"        # Level 0 — không có xung đột
-    LOW = "low"          # Level 1 — Risk Score < 40
-    MEDIUM = "medium"    # Level 2 — 40 <= Risk Score < 70
-    HIGH = "high"        # Level 3 — Risk Score >= 70
+    NONE = "none"        # Level 0 - không có xung đột
+    LOW = "low"          # Level 1 - Risk Score < 40
+    MEDIUM = "medium"    # Level 2 - 40 <= Risk Score < 70
+    HIGH = "high"        # Level 3 - Risk Score >= 70
 
     @property
     def vi(self) -> str:
@@ -212,7 +212,7 @@ class Detection:
 
     @property
     def anchor(self) -> tuple[float, float]:
-        """Điểm tiếp đất — đáy giữa bbox.
+        """Điểm tiếp đất - đáy giữa bbox.
 
         Đây là điểm DUY NHẤT được phép đưa qua homography: tâm bbox nằm lơ
         lửng trên không nên quy đổi sẽ sai vị trí mặt đất rất nhiều.

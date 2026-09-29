@@ -17,7 +17,7 @@ Thiết kế
   chép sẽ tốn thêm 11 GB và vài phút. Trên cùng một ổ đĩa, ``move`` gần như tức
   thời. Dùng ``--copy`` nếu muốn giữ nguyên bản gốc.
 * **Không bao giờ ghi đè**: gặp file trùng tên thì bỏ qua và báo lại.
-* ``--dry-run`` là mặc định an toàn cho lần chạy đầu — luôn xem trước.
+* ``--dry-run`` là mặc định an toàn cho lần chạy đầu - luôn xem trước.
 
 Cấu trúc kết quả::
 
@@ -43,22 +43,22 @@ from pathlib import Path
 #: Ánh xạ: tên trong thư mục nguồn → đường dẫn đích tương đối trong data/raw.
 LAYOUT: list[tuple[str, str, str]] = [
     # (tên nguồn, thư mục đích, mô tả)
-    ("Infrastructure",              "mvti/Infrastructure",        "MVTI — camera hạ tầng"),
-    ("Drone",                       "mvti/Drone",                 "MVTI — camera drone"),
-    ("infrastructure-mscoco.json",  "mvti/infrastructure-mscoco.json", "MVTI — annotation COCO (hạ tầng)"),
-    ("drone-mscoco.json",           "mvti/drone-mscoco.json",     "MVTI — annotation COCO (drone)"),
-    ("merged_annotations.json",     "mvti/merged_annotations.json", "MVTI — annotation gộp"),
+    ("Infrastructure",              "mvti/Infrastructure",        "MVTI - camera hạ tầng"),
+    ("Drone",                       "mvti/Drone",                 "MVTI - camera drone"),
+    ("infrastructure-mscoco.json",  "mvti/infrastructure-mscoco.json", "MVTI - annotation COCO (hạ tầng)"),
+    ("drone-mscoco.json",           "mvti/drone-mscoco.json",     "MVTI - annotation COCO (drone)"),
+    ("merged_annotations.json",     "mvti/merged_annotations.json", "MVTI - annotation gộp"),
 
-    ("video",                       "ucsd-highway/video",         "UCSD — 254 clip cao tốc"),
-    ("README_TRAFFICDB",            "ucsd-highway/README_TRAFFICDB", "UCSD — readme gốc"),
-    ("info.txt",                    "ucsd-highway/info.txt",      "UCSD — metadata từng clip"),
-    ("ImageMaster",                 "ucsd-highway/ImageMaster",   "UCSD — chỉ mục lớp"),
-    ("ImageMaster.mat",             "ucsd-highway/ImageMaster.mat", "UCSD — chỉ mục lớp (MATLAB)"),
-    ("EvalSet.mat",                 "ucsd-highway/EvalSet.mat",   "UCSD — tập train/test"),
-    ("EvalSet_train",               "ucsd-highway/EvalSet_train", "UCSD — tập train"),
-    ("EvalSet_test",                "ucsd-highway/EvalSet_test",  "UCSD — tập test"),
-    ("traffic_patches.mat",         "ucsd-highway/traffic_patches.mat", "UCSD — patch video"),
-    ("traffic_patches_reg.mat",     "ucsd-highway/traffic_patches_reg.mat", "UCSD — patch đã căn chỉnh"),
+    ("video",                       "ucsd-highway/video",         "UCSD - 254 clip cao tốc"),
+    ("README_TRAFFICDB",            "ucsd-highway/README_TRAFFICDB", "UCSD - readme gốc"),
+    ("info.txt",                    "ucsd-highway/info.txt",      "UCSD - metadata từng clip"),
+    ("ImageMaster",                 "ucsd-highway/ImageMaster",   "UCSD - chỉ mục lớp"),
+    ("ImageMaster.mat",             "ucsd-highway/ImageMaster.mat", "UCSD - chỉ mục lớp (MATLAB)"),
+    ("EvalSet.mat",                 "ucsd-highway/EvalSet.mat",   "UCSD - tập train/test"),
+    ("EvalSet_train",               "ucsd-highway/EvalSet_train", "UCSD - tập train"),
+    ("EvalSet_test",                "ucsd-highway/EvalSet_test",  "UCSD - tập test"),
+    ("traffic_patches.mat",         "ucsd-highway/traffic_patches.mat", "UCSD - patch video"),
+    ("traffic_patches_reg.mat",     "ucsd-highway/traffic_patches_reg.mat", "UCSD - patch đã căn chỉnh"),
 
     ("real_traffic",                "own-footage",                "Video giao thông tự quay / bổ sung"),
 ]
@@ -147,7 +147,7 @@ def main(argv: list[str] | None = None) -> int:
             continue
         size = dir_size(src)
         ok, note = move_item(src, dst, args.copy, args.dry_run)
-        status = "✓" if ok else "–"
+        status = "✓" if ok else "-"
         print(f"  {status} {name:32s} → data/raw/{target:38s} {human(size):>10s}  [{desc}]")
         if not ok:
             print(f"      ↳ {note}")
@@ -161,12 +161,12 @@ def main(argv: list[str] | None = None) -> int:
             dst = raw / "_archives" / zip_path.name
             size = zip_path.stat().st_size
             ok, note = move_item(zip_path, dst, args.copy, args.dry_run)
-            print(f"  {'✓' if ok else '–'} {zip_path.name:32s} → data/raw/_archives/"
+            print(f"  {'✓' if ok else '-'} {zip_path.name:32s} → data/raw/_archives/"
                   f"{'':22s} {human(size):>10s}  [archive gốc]")
             if not ok:
                 print(f"      ↳ {note}")
 
-    # Các mục còn lại chưa được ánh xạ — báo để không bỏ sót gì.
+    # Các mục còn lại chưa được ánh xạ - báo để không bỏ sót gì.
     known = {n for n, _t, _d in LAYOUT} | KEEP_IN_PLACE
     leftovers = [
         p for p in sorted(source.iterdir())

@@ -1,4 +1,4 @@
-"""Ẩn danh dữ liệu — làm mờ khuôn mặt và biển số.
+"""Ẩn danh dữ liệu - làm mờ khuôn mặt và biển số.
 
 Tuân thủ Điều 5 Thể lệ cuộc thi và nguyên tắc bảo vệ dữ liệu cá nhân: video thu
 tại nơi công cộng vẫn chứa thông tin nhận dạng (mặt người, biển số xe), nên phải
@@ -13,7 +13,7 @@ huấn luyện riêng), ta tận dụng ngay bbox mà detector chính đã sinh 
 * **Biển số** nằm ở dải 55-95% chiều cao bbox phương tiện, giữa theo chiều ngang.
 
 Cách này bắt được vùng nhạy cảm với chi phí gần như bằng 0. Vì làm mờ dư ra một
-chút xung quanh, nó thiên về **an toàn** (ẩn nhiều hơn cần thiết) — đúng hướng
+chút xung quanh, nó thiên về **an toàn** (ẩn nhiều hơn cần thiết) - đúng hướng
 mong muốn khi xử lý dữ liệu cá nhân.
 
 Với dữ liệu công bố ra ngoài, nên chạy thêm một detector khuôn mặt chuyên dụng;

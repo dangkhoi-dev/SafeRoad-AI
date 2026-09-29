@@ -1,13 +1,13 @@
-"""Dashboard web — FastAPI backend cho SafeRoad AI.
+"""Dashboard web - FastAPI backend cho SafeRoad AI.
 
 Phục vụ hai nguồn dữ liệu:
 
-* ``results.json`` do pipeline xuất ra (chế độ phát lại — dùng cho demo và cho
+* ``results.json`` do pipeline xuất ra (chế độ phát lại - dùng cho demo và cho
   hồ sơ dự thi, không cần chạy lại pipeline);
-* SQLite ``saferoad.db`` (chế độ trực tiếp — dashboard đọc trong khi pipeline
+* SQLite ``saferoad.db`` (chế độ trực tiếp - dashboard đọc trong khi pipeline
   vẫn đang ghi, nhờ SQLite ở chế độ WAL).
 
-Frontend là **một file HTML tĩnh** duy nhất, không build tool, không CDN — mở
+Frontend là **một file HTML tĩnh** duy nhất, không build tool, không CDN - mở
 được cả khi máy không có mạng, điều quan trọng khi demo tại hội trường thi.
 """
 
@@ -162,6 +162,10 @@ def create_app(
     def api_video():
         if not video or not video.exists():
             raise HTTPException(status_code=404, detail="Chưa có video overlay")
-        return FileResponse(video, media_type="video/mp4")
+        # Khai đúng kiểu theo đuôi tệp: trình duyệt dựa vào đây để chọn bộ giải
+        # mã, khai sai (WebM mà báo mp4) thì thẻ <video> đứng im.
+        kind = {".webm": "video/webm", ".mp4": "video/mp4",
+                ".mov": "video/quicktime"}.get(video.suffix.lower(), "video/mp4")
+        return FileResponse(video, media_type=kind)
 
     return app

@@ -2,7 +2,7 @@
  * Sinh tài liệu dự án Bảng C (.docx) cho SafeRoad AI.
  *
  * Mọi con số trong tài liệu được ĐỌC TRỰC TIẾP từ data/outputs/evaluation.json và
- * results.json — không có số liệu nào gõ tay. Chạy lại đánh giá rồi chạy lại
+ * results.json - không có số liệu nào gõ tay. Chạy lại đánh giá rồi chạy lại
  * script này là tài liệu tự cập nhật, nên báo cáo không bao giờ lệch với kết quả
  * thực tế của mã nguồn.
  *
@@ -26,11 +26,18 @@ const OUT = path.join(ROOT, 'docs', 'BaoCao_SafeRoadAI_BangC.docx');
 // --------------------------------------------------------------------------- //
 function loadJson(p, fallback) {
   try { return JSON.parse(fs.readFileSync(path.join(ROOT, p), 'utf8')); }
-  catch (e) { console.warn(`  ! không đọc được ${p} — dùng giá trị mặc định`); return fallback; }
+  catch (e) { console.warn(`  ! không đọc được ${p} - dùng giá trị mặc định`); return fallback; }
 }
 const EV = loadJson('data/outputs/evaluation.json', null);
 const RS = loadJson('data/outputs/results.json', null);
 const REAL = loadJson('data/outputs/evaluation_real.json', null);
+const REAL_TILED = loadJson('data/outputs/evaluation_real_tiled.json', null);
+// Số bài kiểm thử: đếm các hàm test_ trong tests/ (bộ test không dùng parametrize,
+// nên con số khớp với số pytest báo).
+const N_TESTS = fs.readdirSync(path.join(ROOT, 'tests'))
+  .filter((f) => /^test_.*\.py$/.test(f))
+  .map((f) => (fs.readFileSync(path.join(ROOT, 'tests', f), 'utf8').match(/^\s*def test_/gm) || []).length)
+  .reduce((a, b) => a + b, 0);
 if (!EV || !RS) {
   console.error('Thiếu evaluation.json hoặc results.json. Chạy trước:');
   console.error('  python -m saferoad evaluate');
@@ -40,9 +47,9 @@ if (!EV || !RS) {
 const F = EV.final, T = EV.tracking, S = EV.setup, SUM = RS.summary;
 // Báo cáo viết bằng tiếng Việt nên dùng dấu phẩy thập phân. Trước đây cột "kết
 // quả đo" in bằng toFixed (dấu chấm) trong khi cột "mục tiêu" được viết tay bằng
-// dấu phẩy — hai kiểu số nằm cạnh nhau trong cùng một bảng.
+// dấu phẩy - hai kiểu số nằm cạnh nhau trong cùng một bảng.
 const n = (v, d = 3) =>
-  (v === null || v === undefined) ? '—' : Number(v).toFixed(d).replace('.', ',');
+  (v === null || v === undefined) ? '-' : Number(v).toFixed(d).replace('.', ',');
 
 // Nhãn lấy từ evaluation.json có thể do bản code cũ sinh ra với dấu chấm thập
 // phân. Chuẩn hoá tại chỗ in để báo cáo nhất quán mà không phải chạy lại toàn bộ
@@ -170,7 +177,7 @@ children.push(
   new Paragraph({ spacing: { before: 1800, after: 0 }, alignment: AlignmentType.CENTER,
     children: [new TextRun({ text: 'CUỘC THI SÁNG TẠO TRẺ QUỐC GIA', font: FONT, size: 26, bold: true, color: '555555' })] }),
   new Paragraph({ spacing: { after: 600 }, alignment: AlignmentType.CENTER,
-    children: [new TextRun({ text: 'TRONG LĨNH VỰC TRÍ TUỆ NHÂN TẠO NĂM 2026 — BẢNG C', font: FONT, size: 26, bold: true, color: '555555' })] }),
+    children: [new TextRun({ text: 'TRONG LĨNH VỰC TRÍ TUỆ NHÂN TẠO NĂM 2026 - BẢNG C', font: FONT, size: 26, bold: true, color: '555555' })] }),
   new Paragraph({ spacing: { after: 160 }, alignment: AlignmentType.CENTER,
     children: [new TextRun({ text: 'SAFEROAD AI', font: FONT, size: 64, bold: true, color: '1F4E79' })] }),
   new Paragraph({ spacing: { after: 900 }, alignment: AlignmentType.CENTER,
@@ -179,10 +186,10 @@ children.push(
 children.push(T_(
   ['Hạng mục', 'Nội dung'],
   [
-    ['Tên đề tài', 'SafeRoad AI — Phát hiện xung đột giao thông & bản đồ rủi ro va chạm'],
-    ['Bảng dự thi', 'Bảng C — đội thi tự do'],
+    ['Tên đề tài', 'SafeRoad AI - Phát hiện xung đột giao thông & bản đồ rủi ro va chạm'],
+    ['Bảng dự thi', 'Bảng C - đội thi tự do'],
     ['Đội trưởng', 'Trần Phan Đăng Khôi (KHMT)'],
-    ['Thành viên', 'Mạnh Anh (Robot) · Huynh Hân (QTKD)'],
+    ['Thành viên', 'Lại Thế Mạnh Anh (Kỹ thuật Robot) · Trần Huỳnh Hân (Quản trị Kinh doanh)'],
     ['Lĩnh vực', 'Thị giác máy tính · An toàn giao thông'],
     ['Mã nguồn', 'https://github.com/dangkhoi-dev/SafeRoad-AI'],
   ], [1, 2.4], { size: 22 }));
@@ -205,7 +212,7 @@ children.push(Rich([
 children.push(H1('2. Mục tiêu đề tài'));
 children.push(Bullet('Tự động phát hiện tình huống suýt va chạm từ video camera giao lộ, không cần thêm cảm biến hay hạ tầng mới.'));
 children.push(Bullet('Định lượng mức nguy hiểm bằng hai chỉ số đã được kiểm chứng trong nghiên cứu an toàn giao thông: TTC (Time To Collision) và PET (Post-Encroachment Time).'));
-children.push(Bullet('Sinh bản đồ rủi ro không–thời gian, chỉ ra các điểm nóng cần ưu tiên xử lý hạ tầng.'));
+children.push(Bullet('Sinh bản đồ rủi ro không-thời gian, chỉ ra các điểm nóng cần ưu tiên xử lý hạ tầng.'));
 children.push(Bullet('Mỗi cảnh báo phải kèm lý do đọc được bằng ngôn ngữ tự nhiên (Explainable Risk), để cán bộ vận hành kiểm chứng được thay vì phải tin vào một con số.'));
 children.push(Bullet('Toàn bộ xử lý chạy cục bộ tại biên, không gửi dữ liệu ra ngoài, đáp ứng yêu cầu bảo vệ dữ liệu cá nhân.'));
 
@@ -222,7 +229,7 @@ children.push(new Paragraph({ children: [new PageBreak()] }));
 
 // ---- 4 ---- //
 children.push(H1('4. Giải pháp và kiến trúc hệ thống'));
-children.push(P('Hệ thống nhận luồng video từ camera giao lộ đặt cao 10–18 m và xử lý qua sáu khối nối tiếp. Toàn bộ pipeline chạy trên một máy duy nhất, không phụ thuộc dịch vụ đám mây.'));
+children.push(P('Hệ thống nhận luồng video từ camera giao lộ đặt cao 10-18 m và xử lý qua sáu khối nối tiếp. Toàn bộ pipeline chạy trên một máy duy nhất, không phụ thuộc dịch vụ đám mây.'));
 if (fs.existsSync(path.join(ROOT, 'docs/assets/architecture.png'))) {
   children.push(img('docs/assets/architecture.png', 620, 300));
   children.push(Cap('Hình 1. Kiến trúc sáu khối của SafeRoad AI'));
@@ -231,7 +238,7 @@ children.push(T_(['Khối', 'Chức năng', 'Công nghệ'], [
   ['1. Nguồn video', 'Thu nhận luồng hình ảnh', 'MP4 / RTSP / chuỗi ảnh'],
   ['2. AI Processing', 'Phát hiện, ẩn danh, theo vết, dựng quỹ đạo mặt đất', 'YOLO11n · ByteTrack · Kalman · Homography'],
   ['3. Conflict Engine', 'Tính TTC/PET, gom sự kiện, phân loại xung đột', 'Mô hình đa hình tròn · gom theo episode'],
-  ['4. Risk Engine', 'Chấm điểm rủi ro, sinh lý do, dựng bản đồ nhiệt', 'Sigmoid có trọng số · lưới không–thời gian'],
+  ['4. Risk Engine', 'Chấm điểm rủi ro, sinh lý do, dựng bản đồ nhiệt', 'Sigmoid có trọng số · lưới không-thời gian'],
   ['5. Database', 'Lưu trữ bền vững, truy vấn song song', 'SQLite chế độ WAL'],
   ['6. Dashboard', 'Trực quan hoá 7 tab, chạy ngoại tuyến', 'FastAPI · HTML/Canvas thuần'],
 ], [0.9, 2, 1.4]));
@@ -245,14 +252,14 @@ children.push(T_(['Nguồn', 'Quy mô', 'Vai trò', 'Không dùng để'], [
 ], [1.1, 1.2, 1.5, 1.2]));
 children.push(Rich([
   { text: 'Vì sao phải tự viết trình mô phỏng. ', bold: true },
-  { text: 'Không một dataset giao thông công khai nào có nhãn near-miss — tất cả chỉ có bounding box. Mà Precision/Recall của phát hiện xung đột lại là cam kết trung tâm của đề tài. Trình mô phỏng cho phép biết chính xác quỹ đạo giải tích của từng xe, nhờ đó tính được TTC/PET thật ở độ phân giải thời gian tuỳ ý và có một tập nhãn chuẩn để chấm điểm.' },
+  { text: 'Không một dataset giao thông công khai nào có nhãn near-miss - tất cả chỉ có bounding box. Mà Precision/Recall của phát hiện xung đột lại là cam kết trung tâm của đề tài. Trình mô phỏng cho phép biết chính xác quỹ đạo giải tích của từng xe, nhờ đó tính được TTC/PET thật ở độ phân giải thời gian tuỳ ý và có một tập nhãn chuẩn để chấm điểm.' },
 ]));
 children.push(P('Nhãn chuẩn được sinh bằng một quy trình khác hẳn thuật toán online: lấy mẫu ở 60 Hz thay vì 30 Hz, dùng vận tốc giải tích thay vì vận tốc ước lượng từ bbox nhiễu, và lấy cực tiểu toàn cục trên cả quãng gặp nhau thay vì quyết định theo từng khung hình. Nhờ ba khác biệt đó, đây là nhãn độc lập chứ không phải thuật toán tự chấm điểm cho chính nó.'));
-children.push(Note('Trong trình mô phỏng, near-miss phát sinh từ đúng nguyên nhân ngoài đời — xe vượt đèn đỏ, xe rẽ cắt dòng ngược chiều, người đi bộ băng qua đường — chứ không có tình huống nào được dàn dựng thủ công.'));
+children.push(Note('Trong trình mô phỏng, near-miss phát sinh từ đúng nguyên nhân ngoài đời - xe vượt đèn đỏ, xe rẽ cắt dòng ngược chiều, người đi bộ băng qua đường - chứ không có tình huống nào được dàn dựng thủ công.'));
 
 children.push(H2('5.1. Tuân thủ quyền riêng tư'));
 children.push(Bullet('Làm mờ khuôn mặt người đi bộ và người ngồi trên xe hai bánh; làm mờ vùng biển số phương tiện.'));
-children.push(Bullet('Bước ẩn danh chạy ngay sau detection, trước mọi thao tác ghi ra đĩa — mọi dữ liệu lưu trữ từ đó trở đi đều đã ẩn danh.'));
+children.push(Bullet('Bước ẩn danh chạy ngay sau detection, trước mọi thao tác ghi ra đĩa - mọi dữ liệu lưu trữ từ đó trở đi đều đã ẩn danh.'));
 children.push(Bullet('Cơ sở dữ liệu chỉ lưu ID số, lớp đối tượng, toạ độ và chỉ số; không lưu bất kỳ ảnh cắt nào.'));
 children.push(Bullet('Không có kết nối mạng trong pipeline xử lý; hệ thống chạy hoàn toàn ngoại tuyến.'));
 
@@ -260,19 +267,19 @@ children.push(new Paragraph({ children: [new PageBreak()] }));
 
 // ---- 6 ---- //
 children.push(H1('6. Phương pháp và công thức'));
-children.push(H2('6.1. TTC — Time To Collision'));
+children.push(H2('6.1. TTC - Time To Collision'));
 children.push(P('TTC là thời gian còn lại tới va chạm nếu cả hai đối tượng giữ nguyên vận tốc hiện tại. Đặt Δp là vị trí tương đối, Δv là vận tốc tương đối và R là tổng bán kính hai đối tượng, điều kiện va chạm ‖Δp + tΔv‖ = R dẫn tới phương trình bậc hai:'));
 children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 80, after: 120 },
   children: [new TextRun({ text: '‖Δv‖² · t²  +  2(Δp · Δv) · t  +  (‖Δp‖² − R²)  =  0', font: FONT, size: 24, italics: true })] }));
 children.push(P('TTC là nghiệm dương nhỏ nhất. Không tồn tại nghiệm dương nghĩa là hai đối tượng đang tách xa nhau hoặc sẽ lướt qua nhau.'));
 children.push(Rich([
-  { text: 'Cải tiến quan trọng — mô hình đa hình tròn. ', bold: true },
-  { text: 'Cách làm phổ biến là xấp xỉ mỗi xe bằng một hình tròn ngoại tiếp. Với ô tô 4,4 × 1,8 m, hình tròn đó có bán kính 2,38 m, tức là mô hình hoá chiếc xe như vật thể rộng 4,76 m. Hậu quả đo được trong quá trình phát triển: hai ô tô đi ngược chiều ở hai làn cách nhau 4 m bị gắn nhãn "đối đầu", sinh ra 132 cảnh báo giả trong 120 giây cho dòng xe hoàn toàn bình thường. Chúng tôi thay bằng cách phủ thân xe bằng 1–3 hình tròn nhỏ dọc trục, bán kính bằng nửa bề rộng xe; số cảnh báo giả loại này giảm xuống còn 13.' },
+  { text: 'Cải tiến quan trọng - mô hình đa hình tròn. ', bold: true },
+  { text: 'Cách làm phổ biến là xấp xỉ mỗi xe bằng một hình tròn ngoại tiếp. Với ô tô 4,4 × 1,8 m, hình tròn đó có bán kính 2,38 m, tức là mô hình hoá chiếc xe như vật thể rộng 4,76 m. Hậu quả đo được trong quá trình phát triển: hai ô tô đi ngược chiều ở hai làn cách nhau 4 m bị gắn nhãn "đối đầu", sinh ra 132 cảnh báo giả trong 120 giây cho dòng xe hoàn toàn bình thường. Chúng tôi thay bằng cách phủ thân xe bằng 1-3 hình tròn nhỏ dọc trục, bán kính bằng nửa bề rộng xe; số cảnh báo giả loại này giảm xuống còn 13.' },
 ]));
 
-children.push(H2('6.2. PET — Post-Encroachment Time'));
-children.push(P('PET là khoảng thời gian giữa lúc đối tượng thứ nhất rời khỏi điểm xung đột và lúc đối tượng thứ hai đi tới chính điểm đó. Chỉ số này bắt được tình huống mà TTC bỏ sót: xe A vừa qua, 0,8 giây sau xe B mới tới đúng chỗ đó — chưa từng có nguy cơ va chạm tức thời nhưng rõ ràng là "suýt".'));
-children.push(Note('PET chỉ được tính khi góc giữa hai quỹ đạo ≥ 20°. Với hai xe đi gần song song, giao điểm hai tia nằm rất xa và cực nhạy với nhiễu — lệch hướng 1° đã dời giao điểm hàng chục mét, sinh ra giá trị PET nhỏ hoàn toàn giả.'));
+children.push(H2('6.2. PET - Post-Encroachment Time'));
+children.push(P('PET là khoảng thời gian giữa lúc đối tượng thứ nhất rời khỏi điểm xung đột và lúc đối tượng thứ hai đi tới chính điểm đó. Chỉ số này bắt được tình huống mà TTC bỏ sót: xe A vừa qua, 0,8 giây sau xe B mới tới đúng chỗ đó - chưa từng có nguy cơ va chạm tức thời nhưng rõ ràng là "suýt".'));
+children.push(Note('PET chỉ được tính khi góc giữa hai quỹ đạo ≥ 20°. Với hai xe đi gần song song, giao điểm hai tia nằm rất xa và cực nhạy với nhiễu - lệch hướng 1° đã dời giao điểm hàng chục mét, sinh ra giá trị PET nhỏ hoàn toàn giả.'));
 
 children.push(H2('6.3. Điều kiện ghi nhận near-miss'));
 children.push(P('Một cặp đối tượng được ghi nhận là near-miss khi thoả đồng thời cả bốn điều kiện:'));
@@ -290,7 +297,7 @@ children.push(Rich([
 children.push(H2('6.4. Risk Score và Explainable Risk'));
 children.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 80, after: 120 },
   children: [new TextRun({ text: 'RS  =  100 · σ( w₁/TTC + w₂/PET + w₃·v_r + w₄·Type + w₅·Time + b )', font: FONT, size: 24, italics: true })] }));
-children.push(P('Dùng nghịch đảo TTC và PET vì mức nguy hiểm không tuyến tính theo thời gian còn lại: chênh lệch giữa 0,5 s và 1,0 s nghiêm trọng hơn rất nhiều so với chênh lệch giữa 4,0 s và 4,5 s. Hàm sigmoid giữ kết quả nằm gọn trong khoảng 0–100.'));
+children.push(P('Dùng nghịch đảo TTC và PET vì mức nguy hiểm không tuyến tính theo thời gian còn lại: chênh lệch giữa 0,5 s và 1,0 s nghiêm trọng hơn rất nhiều so với chênh lệch giữa 4,0 s và 4,5 s. Hàm sigmoid giữ kết quả nằm gọn trong khoảng 0-100.'));
 // Phân vị điểm rủi ro tính trực tiếp từ các sự kiện đã ghi, không gõ tay.
 const pct = (arr, q) => {
   if (!arr.length) return null;
@@ -299,7 +306,7 @@ const pct = (arr, q) => {
   return lo === hi ? s[lo] : s[lo] + (s[hi] - s[lo]) * (i - lo);
 };
 const scores = (RS.events || []).map(e => e.risk_score).filter(v => typeof v === 'number');
-children.push(P('Từng số hạng được lưu riêng, nhờ đó dashboard giải thích được vì sao một cảnh báo có mức rủi ro cao — đây chính là yêu cầu Explainable Risk. Bộ trọng số được hiệu chỉnh trên tập có nhãn để phân bố điểm trải đều; bộ chưa hiệu chỉnh đẩy trung vị lên 98/100, khi mọi cảnh báo đều "rất nguy hiểm" thì thang điểm không còn phân biệt được gì và người vận hành sẽ bỏ qua tất cả. '
+children.push(P('Từng số hạng được lưu riêng, nhờ đó dashboard giải thích được vì sao một cảnh báo có mức rủi ro cao - đây chính là yêu cầu Explainable Risk. Bộ trọng số được hiệu chỉnh trên tập có nhãn để phân bố điểm trải đều; bộ chưa hiệu chỉnh đẩy trung vị lên 98/100, khi mọi cảnh báo đều "rất nguy hiểm" thì thang điểm không còn phân biệt được gì và người vận hành sẽ bỏ qua tất cả. '
   + `Sau hiệu chỉnh, phân bố trên ${scores.length} cảnh báo đạt phân vị 10 = ${n(pct(scores,10),0)}, trung vị = ${n(pct(scores,50),0)}, phân vị 90 = ${n(pct(scores,90),0)}.`));
 
 children.push(new Paragraph({ children: [new PageBreak()] }));
@@ -309,89 +316,109 @@ children.push(H1('7. Kết quả thực nghiệm'));
 children.push(P(`Toàn bộ số liệu dưới đây sinh ra từ mã nguồn trong repo và tái lập được bằng các lệnh ghi trong README. Tập đánh giá: video mô phỏng ${S.duration_s} giây, ${S.n_vehicles} phương tiện, ${S.n_ground_truth} nhãn near-miss chuẩn, seed ${S.seed}. Detector được mô phỏng nhiễu ${n(S.noise_px,1)} px và tỉ lệ bỏ sót ${(S.miss_rate*100).toFixed(0)}%.`));
 
 children.push(H2('7.1. Chỉ số tổng hợp'));
-// Tốc độ lõi phân tích: lấy từ cấu hình đầy đủ trong bảng ablation, nơi khâu ghi
-// overlay đã tắt. Đọc thẳng từ số liệu đo, không hard-code.
-const fullRow = (EV.ablation || []).find(r => /full/i.test(r.key || r.label || '')) || {};
-const coreFps = fullRow.processing_fps || SUM.processing_fps;
-
-children.push(T_(['Chỉ số', 'Kết quả đo được', 'Mục tiêu đề ra', 'Đạt?'], [
+const RT = REAL && REAL.runtime ? REAL.runtime : null;
+const postMs = RT ? ['tracking', 'trajectory', 'conflict'].reduce((a, k) => a + (RT.latency_ms[k] || 0), 0) : null;
+const cb = EV.contact_breakdown || [];
+const touch = cb[0], near = cb[1];
+const rows71 = [
   ['Tracking IDF1', n(T.idf1), '≥ 0,70', 'Đạt'],
   ['Tracking MOTA', n(T.mota), '≥ 0,60', 'Đạt'],
   ['TTC MAE', `${n(F.ttc_mae)} s`, '≤ 0,30 s', 'Đạt'],
-  ['PET MAE', `${n(F.pet_mae)} s`, '—', '—'],
-  ['Recall (TTC < 1,0 s)', n(sev[0] ? sev[0].recall : 0), '—', 'Rất tốt'],
+  ['PET MAE', `${n(F.pet_mae)} s`, '-', 'Kém'],
+  ['Recall (TTC < 1,0 s)', n(sev[0] ? sev[0].recall : 0), '-', 'Tốt'],
+];
+if (near) rows71.push([`Recall (TTC < 1,0 s), chỉ ${near.n_gt} nhãn chưa chạm`, n(near.recall), '-', 'Tốt']);
+rows71.push(
   ['Conflict Recall (gộp)', n(F.recall), '≥ 0,80', 'Chưa đạt'],
   ['Conflict Precision', n(F.precision), '≥ 0,75', 'Chưa đạt'],
-  ['Tốc độ xử lý (kèm ghi overlay)', `${n(SUM.processing_fps,1)} FPS`, '≥ 25 FPS', 'Đạt'],
-  ['Tốc độ lõi phân tích', `${n(coreFps,0)} FPS`, '≥ 25 FPS', 'Đạt'],
-  ['Độ trễ trung vị', `${n(SUM.frame_latency_median_ms,1)} ms/frame`, '≤ 1,5 s', 'Đạt'],
-  ['Độ trễ p95', `${n(SUM.frame_latency_p95_ms,1)} ms/frame`, '≤ 1,5 s', 'Đạt'],
-], [1.4, 1.1, 1, 0.8]));
+);
+if (RT) rows71.push(
+  ['Tốc độ toàn hệ thống có YOLO (MVTI, CPU 2 lõi)', `${n(RT.processing_fps, 1)} FPS`, '≥ 25 FPS', 'Chưa đạt'],
+  ['Độ trễ xử lý mỗi khung hình (trung vị / p95)', `${n(RT.frame_latency_median_ms, 1)} / ${n(RT.frame_latency_p95_ms, 1)} ms`, '≤ 1,5 s', 'Đạt'],
+  ['Thời gian các khâu sau phát hiện', `${n(postMs, 1)} ms/khung`, '-', '-'],
+);
+children.push(T_(['Chỉ số', 'Kết quả đo được', 'Mục tiêu đề ra', 'Đạt?'], rows71, [1.4, 1.1, 1, 0.8]));
 
-const ovl = SUM.latency_ms.overlay || 0;
-const stagesMs = SUM.total_latency_ms || 0;
-children.push(P('Hai con số tốc độ lệch nhau vì một lý do cần nói rõ: khâu vẽ và ghi video overlay chiếm ' +
-  `${n(ovl,1)} ms trong ${n(stagesMs,1)} ms tổng thời gian các khâu xử lý, tức ${n(ovl / Math.max(stagesMs, 1e-9) * 100, 0)}% — phần lớn thời gian ` +
-  `không dùng để phân tích mà để tạo video minh hoạ. (Trung vị đầu-cuối ${n(SUM.frame_latency_median_ms,1)} ms ở bảng trên lớn hơn tổng này ` +
-  'vì còn tính cả thời gian đọc và giải mã khung hình.) Overlay chỉ cần cho demo và kiểm tra bằng mắt; ' +
-  'khi triển khai thật hệ thống chỉ xuất cảnh báo và số liệu, nên tốc độ thực tế là con số ở dòng thứ hai. ' +
-  'Cả hai đều đo bằng trung vị độ trễ từng frame thay vì chia tổng thời gian chạy cho số frame — ' +
-  'cách sau bị sai lệch hoàn toàn nếu máy đo ngủ, bị throttle nhiệt, hoặc có tiến trình khác giành CPU.'));
+if (RT) {
+  children.push(P(`Tốc độ đo trên video thật MVTI với YOLO11n chạy trên CPU 2 lõi, không GPU: khâu phát hiện chiếm ` +
+    `${n(RT.latency_ms.detection, 1)} ms trong ${n(RT.total_latency_ms, 1)} ms mỗi khung hình, còn theo vết, quỹ đạo và đo xung ` +
+    `đột cộng lại chỉ ${n(postMs, 1)} ms. Muốn đạt 25 khung hình/giây cần GPU cho khâu phát hiện. Các lần chạy trên video ` +
+    `mô phỏng dùng hộp phát hiện dựng sẵn nên tốc độ của chúng (${n(SUM.processing_fps, 1)} FPS khi có ghi video minh hoạ) ` +
+    'không gồm thời gian chạy YOLO và không dùng làm tốc độ của hệ thống. Tốc độ đo bằng trung vị độ trễ từng khung hình ' +
+    'thay vì chia tổng thời gian chạy cho số khung hình, vì cách sau sai lệch khi máy ngủ hoặc có tiến trình khác giành CPU.'));
+}
 
 children.push(H2('7.2. Recall theo mức nghiêm trọng'));
 children.push(P('Đây là bảng quan trọng nhất về mặt an toàn: bỏ sót một near-miss TTC dưới 1 giây nguy hiểm hơn rất nhiều so với bỏ sót một near-miss TTC 2,8 giây. Vì vậy Recall phải được báo cáo tách theo dải chứ không gộp thành một con số duy nhất.'));
 children.push(T_(['Dải TTC', 'Số nhãn chuẩn', 'Phát hiện được', 'Recall', 'TTC MAE'],
-  sev.map(r => [viLabel(r.band), r.n_gt, r.detected ?? '—', n(r.recall), r.ttc_mae === null ? '—' : `${n(r.ttc_mae)} s`]),
+  sev.map(r => [viLabel(r.band), r.n_gt, r.detected ?? '-', n(r.recall), r.ttc_mae === null ? '-' : `${n(r.ttc_mae)} s`]),
   [2, 0.9, 0.9, 0.8, 0.8]));
+if (touch && near) {
+  children.push(T_(['Tách dải theo trạng thái chạm', 'Số nhãn chuẩn', 'Phát hiện được', 'Recall', 'TTC MAE'],
+    cb.map(r => [r.band, r.n_gt, r.detected ?? '-', n(r.recall), r.ttc_mae == null ? '-' : `${n(r.ttc_mae)} s`]),
+    [2, 0.9, 0.9, 0.8, 0.8]));
+  children.push(P(`Trình mô phỏng chưa có ràng buộc chống va chạm, nên ${touch.n_gt} nhãn chuẩn là lúc hai thân xe đã chồng lên ` +
+    `nhau (TTC = 0), tức va chạm trong mô phỏng. Tách riêng ${near.n_gt} nhãn chưa chạm của dải dưới 1 giây, Recall là ` +
+    `${n(near.recall)}, gần với con số của cả dải.`));
+}
 children.push(Rich([
   { text: 'Hệ thống mạnh đúng ở dải nguy hiểm nhất. ', bold: true },
   { text: `Recall đạt ${n(sev[0] ? sev[0].recall : 0)} với các tình huống TTC dưới 1 giây, và giảm dần ở các dải nhẹ hơn. Đây là hành vi mong muốn: một hệ thống cảnh báo an toàn nên ưu tiên không bỏ sót tình huống nguy cấp, chấp nhận bỏ qua các tình huống ở ranh giới.` },
 ]));
 
-children.push(H2('7.3. Bảng ablation — đóng góp của từng khối'));
+children.push(H2('7.3. Bảng ablation - đóng góp của từng khối'));
 children.push(P('Bật dần từng khối và đo lại, để chứng minh mỗi thành phần đều có đóng góp định lượng được thay vì chỉ có mặt cho đủ sơ đồ.'));
 children.push(T_(['Cấu hình', 'Precision', 'Recall', 'F1', 'TTC MAE', 'Số sự kiện'],
-  abl.map(r => [r.label, n(r.precision), n(r.recall), n(r.f1), r.ttc_mae === null ? '—' : n(r.ttc_mae), r.n_events]),
+  abl.map(r => [r.label, n(r.precision), n(r.recall), n(r.f1), r.ttc_mae === null ? '-' : n(r.ttc_mae), r.n_events]),
   [2.2, 0.8, 0.8, 0.7, 0.8, 0.8]));
 children.push(P('Đọc bảng này theo hai chiều:'));
-children.push(Bullet(`Homography làm Recall nhảy từ ${n(rowBy('det_track').recall)} lên ${n(rowBy('homography').recall)} — vì trước đó TTC được tính trên đơn vị pixel, vốn không phải đại lượng vật lý, nên hầu như không sự kiện nào khớp với nhãn chuẩn.`));
+children.push(Bullet(`Homography làm Recall nhảy từ ${n(rowBy('det_track').recall)} lên ${n(rowBy('homography').recall)} - vì trước đó TTC được tính trên đơn vị pixel, vốn không phải đại lượng vật lý, nên hầu như không sự kiện nào khớp với nhãn chuẩn.`));
 children.push(Bullet('Làm mượt quỹ đạo giảm TTC MAE và cắt số sự kiện giả đi một nửa, nhờ khử nhiễu vận tốc.'));
 const dRecallPet = (rowBy('pet').recall ?? 0) - (rowBy('smoothing').recall ?? 0);
-children.push(Bullet(`PET nâng Recall thêm ${n(dRecallPet * 100, 1)} điểm phần trăm — bắt được nhóm tình huống "vừa lướt qua" mà TTC bỏ sót. Mức tăng nhỏ nhưng đúng nhóm: đây là những tình huống mà chỉ số TTC về nguyên tắc không thể phát hiện.`));
+children.push(Bullet(`PET nâng Recall thêm ${n(dRecallPet * 100, 1)} điểm phần trăm - bắt được nhóm tình huống "vừa lướt qua" mà TTC bỏ sót. Mức tăng nhỏ nhưng đúng nhóm: đây là những tình huống mà chỉ số TTC về nguyên tắc không thể phát hiện.`));
 const petRow = rowBy('pet'), proxRow = rowBy('proximity');
 const petP = petRow.precision ?? null;
 const proxP = proxRow.precision ?? null;
 const gain = (petP && proxP) ? (proxP / petP) : null;
 const petR = rowBy('pet').recall, proxR = rowBy('proximity').recall;
 const dR = (petR != null && proxR != null) ? (proxR - petR) * 100 : null;
-children.push(Bullet(`Cổng khoảng cách là bước có tác dụng lớn nhất lên F1: Precision tăng ${gain ? `gấp ${n(gain,1)} lần` : 'mạnh'} (${n(petP)} → ${n(proxP)}), đổi lại Recall giảm ${dR != null ? `${n(Math.abs(dR),1)} điểm phần trăm` : 'đáng kể'} (${n(petR)} → ${n(proxR)}). Đây là một đánh đổi có chủ ý, không phải cải thiện miễn phí: ${n(rowBy('pet').n_events ?? 0, 0)} sự kiện bị lọc xuống còn ${n(rowBy('proximity').n_events ?? 0, 0)}, trong đó có cả một phần near-miss thật. Chúng tôi chọn cấu hình này vì F1 tăng từ ${n(rowBy('pet').f1)} lên ${n(rowBy('proximity').f1)} và vì Recall ở dải nguy cấp — dải quyết định giá trị sử dụng — vẫn giữ được ${n(sev[0] ? sev[0].recall : 0)} (mục 7.2).`));
+children.push(Bullet(`Cổng khoảng cách là bước có tác dụng lớn nhất lên F1: Precision tăng ${gain ? `gấp ${n(gain,1)} lần` : 'mạnh'} (${n(petP)} → ${n(proxP)}), đổi lại Recall giảm ${dR != null ? `${n(Math.abs(dR),1)} điểm phần trăm` : 'đáng kể'} (${n(petR)} → ${n(proxR)}). Đây là một đánh đổi có chủ ý, không phải cải thiện miễn phí: ${n(rowBy('pet').n_events ?? 0, 0)} sự kiện bị lọc xuống còn ${n(rowBy('proximity').n_events ?? 0, 0)}, trong đó có cả một phần near-miss thật. Chúng tôi chọn cấu hình này vì F1 tăng từ ${n(rowBy('pet').f1)} lên ${n(rowBy('proximity').f1)} và vì Recall ở dải nguy cấp - dải quyết định giá trị sử dụng - vẫn giữ được ${n(sev[0] ? sev[0].recall : 0)} (mục 7.2).`));
 
 children.push(H2('7.4. Độ bền trước nhiễu detector'));
 children.push(P('Quét mức nhiễu bounding box để trả lời câu hỏi thực tế: khi thay bằng model yếu hơn, hoặc khi camera rung, trời mưa, hệ thống chịu được tới đâu?'));
 children.push(T_(['Nhiễu bbox (px)', 'Precision', 'Recall', 'F1', 'TTC MAE', 'IDF1'],
-  noise.map(r => [n(r.noise_px,1), n(r.precision), n(r.recall), n(r.f1), r.ttc_mae === null ? '—' : n(r.ttc_mae), n(r.idf1)]),
+  noise.map(r => [n(r.noise_px,1), n(r.precision), n(r.recall), n(r.f1), r.ttc_mae === null ? '-' : n(r.ttc_mae), n(r.idf1)]),
   [1.2, 0.9, 0.9, 0.9, 0.9, 0.9]));
-children.push(P(`Tracking gần như không suy giảm cho tới mức nhiễu ${n(worst.noise_px,0)} px (IDF1 vẫn ${n(worst.idf1,2)}) nhờ cơ chế nới biên bbox khi ghép. Precision là thành phần nhạy cảm nhất — giảm từ ${n(clean.precision)} xuống ${n(worst.precision)} khi nhiễu tăng từ 0 lên ${n(worst.noise_px,0)} px, cho thấy chất lượng detector là nút thắt chính của toàn hệ thống.`));
+children.push(P(`Tracking gần như không suy giảm cho tới mức nhiễu ${n(worst.noise_px,0)} px (IDF1 vẫn ${n(worst.idf1,2)}) nhờ cơ chế nới biên bbox khi ghép. Precision là thành phần nhạy cảm nhất - giảm từ ${n(clean.precision)} xuống ${n(worst.precision)} khi nhiễu tăng từ 0 lên ${n(worst.noise_px,0)} px, cho thấy chất lượng detector là nút thắt chính của toàn hệ thống.`));
 
 children.push(H2('7.5. Kết quả trên dữ liệu thật'));
 if (REAL && REAL.detection) {
   const d = REAL.detection, t2 = REAL.tracking;
-  children.push(T_(['Chỉ số', 'Giá trị', 'Ghi chú'], [
-    ['Detection mAP@0.5', n(d.mAP50), 'trọng số COCO gốc, chưa fine-tune'],
-    ['Detection mAP@0.5:0.95', n(d.mAP50_95), ''],
-    ['Tracking IDF1', n(t2.idf1), 'ghép theo IoU trong không gian ảnh'],
-    ['Near-miss ghi nhận', String((REAL.conflicts||{}).total ?? 0), 'chỉ thống kê mô tả — dữ liệu thật không có nhãn xung đột'],
-  ], [1.4, 0.8, 2]));
+  const q = REAL_TILED && REAL_TILED.detection ? REAL_TILED : null;
+  const col = (r, f) => (r ? f(r) : '-');
+  children.push(P('Trên 2.441 ảnh MVTI, cùng trọng số COCO gốc, cùng cách chấm COCO (ngưỡng 0,001, tối đa 100 hộp mỗi ảnh) và cùng ngưỡng vận hành 0,15:'));
+  children.push(T_(['Chỉ số', 'Một lượt toàn khung (mặc định)', 'Chia ô 2×3 và lượt toàn khung'], [
+    ['mAP@0,5', n(d.mAP50), col(q, r => n(r.detection.mAP50))],
+    ['mAP@0,5:0,95', n(d.mAP50_95), col(q, r => n(r.detection.mAP50_95))],
+    ['Precision / Recall ở ngưỡng 0,15', `${n(d.precision50_op)} / ${n(d.recall50_op)}`,
+     col(q, r => `${n(r.detection.precision50_op)} / ${n(r.detection.recall50_op)}`)],
+    ['Tracking IDF1 / MOTA', `${n(t2.idf1)} / ${n(t2.mota)}`, col(q, r => `${n(r.tracking.idf1)} / ${n(r.tracking.mota)}`)],
+    ['Tốc độ (CPU 2 lõi)', `${n(REAL.runtime.processing_fps, 1)} FPS`, col(q, r => `${n(r.runtime.processing_fps, 1)} FPS`)],
+  ], [1.4, 1.3, 1.3]));
+  if (q) {
+    children.push(P(`Chia ô tăng Recall ở ngưỡng vận hành nhưng giảm Precision và mAP, lại chậm hơn khoảng ` +
+      `${Math.round(REAL.runtime.processing_fps / q.runtime.processing_fps)} lần, nên cấu hình mặc định chạy một lượt. ` +
+      'Số near-miss trên tập này chỉ là thống kê mô tả vì dữ liệu thật không có nhãn xung đột và chưa có hiệu chuẩn homography thực địa.'));
+  }
 } else {
   children.push(P('Chạy lệnh sau để sinh phần này, sau khi đã chuẩn bị dataset thật:'));
   children.push(new Paragraph({ spacing: { after: 160 }, indent: { left: 300 },
-    children: [new TextRun({ text: 'python -m saferoad prepare-real --root data/raw/mvti\npython -m saferoad evaluate-real', font: 'Consolas', size: 20 })] }));
+    children: [new TextRun({ text: 'python -m saferoad prepare-real --root data/raw/mvti\npython -m saferoad evaluate-real --config configs/mvti.yaml', font: 'Consolas', size: 20 })] }));
 }
 children.push(Rich([
-  { text: 'Một phát hiện quan trọng. ', bold: true },
-  { text: 'Đo trực tiếp trên ảnh giao lộ thật, YOLO11n với trọng số COCO gốc chỉ đạt recall@0.5 ≈ 0,19. Trong một khung hình thử, model chỉ phát hiện đúng một vật thể và gán nhầm nhãn "train" cho một chiếc ô tô. Nguyên nhân không phải model yếu mà là lệch miền: COCO chủ yếu gồm ảnh chụp ngang tầm mắt, trong khi camera giao thông đặt cao nhìn chếch xuống, đối tượng nhỏ và bị nén phối cảnh.' },
+  { text: 'Lệch miền. ', bold: true },
+  { text: 'COCO chủ yếu gồm ảnh chụp ngang tầm mắt, còn camera giao thông đặt cao nhìn chếch xuống. Khi chạy ở kích thước ảnh 1280, có khung hình YOLO gốc gán nhãn "airplane" cho 35 đối tượng. Phương tiện trong MVTI không quá nhỏ, nên cắt ô không giải quyết được; hướng xử lý là fine-tune trên chính 14.488 bounding box của tập dữ liệu, xem notebook Colab kèm theo repo.' },
 ]));
-children.push(P('Chúng tôi xử lý theo hai hướng. Trước mắt, bổ sung cơ chế suy luận theo ô chồng lấn: cắt khung hình thành lưới 2×3 có chồng lấn 25% và chạy detector trên từng ô ở độ phân giải gốc, kèm một lượt toàn khung để không bỏ sót vật thể lớn. Trên một khung hình thử, cách này tìm được 9 đối tượng so với 2 của lượt đơn; recall trên toàn tập đang được đo lại và sẽ được bổ sung. Về căn cơ, chuẩn bị quy trình fine-tune trên chính tập dữ liệu thật đã có 14.488 bounding box — xem notebook Colab kèm theo repo.'));
 
 children.push(new Paragraph({ children: [new PageBreak()] }));
 
@@ -401,10 +428,10 @@ children.push(P(`Hai chỉ số chưa đạt mục tiêu đề ra: Conflict Prec
 children.push(H2('8.1. Nguyên nhân'));
 const ceiling = clean.f1, lost = (ceiling && F.f1) ? (ceiling - F.f1) : null;
 children.push(Bullet(`Trần của thuật toán. Với detector hoàn hảo (nhiễu 0 px), hệ thống đạt F1 = ${n(ceiling)}. Nghĩa là khoảng ${n(lost,2)} điểm F1 mất do nhiễu detector, phần còn lại là giới hạn của chính phương pháp.`));
-children.push(Bullet('Ranh giới giữa "dòng xe đông" và "xung đột" vốn mờ. Phần lớn cảnh báo bị tính là sai thực chất là các cặp xe có khoảng cách thật dưới 1 m — tức là chúng đã đến rất gần nhau, chỉ là không thoả toàn bộ tiêu chí của nhãn chuẩn. Đây là hiện tượng đã được ghi nhận trong tài liệu nghiên cứu traffic conflict technique: ngay cả người gán nhãn có kinh nghiệm cũng bất đồng ở dải TTC 2–3 giây.'));
+children.push(Bullet('Ranh giới giữa "dòng xe đông" và "xung đột" vốn mờ. Phần lớn cảnh báo bị tính là sai thực chất là các cặp xe có khoảng cách thật dưới 1 m - tức là chúng đã đến rất gần nhau, chỉ là không thoả toàn bộ tiêu chí của nhãn chuẩn. Đây là hiện tượng đã được ghi nhận trong tài liệu nghiên cứu traffic conflict technique: ngay cả người gán nhãn có kinh nghiệm cũng bất đồng ở dải TTC 2-3 giây.'));
 children.push(Bullet(`Độ chính xác phân loại kiểu xung đột chỉ đạt ${n(F.type_accuracy)}, do góc tiếp cận được ước lượng từ vận tốc vốn đã có nhiễu.`));
 children.push(H2('8.2. Vì sao kết quả vẫn có giá trị sử dụng'));
-children.push(P(`Với mục đích thực tế của hệ thống — xếp hạng mức nguy hiểm giữa các giao lộ và chỉ ra điểm nóng cần ưu tiên — thì chỉ số quan trọng là Recall ở dải nguy cấp, và con số đó đạt ${n(sev[0] ? sev[0].recall : 0)}. Các cảnh báo ở ranh giới có thể được lọc bằng ngưỡng Risk Score khi vận hành thực tế, vì thang điểm đã được hiệu chỉnh để phân biệt tốt.`));
+children.push(P(`Với mục đích thực tế của hệ thống - xếp hạng mức nguy hiểm giữa các giao lộ và chỉ ra điểm nóng cần ưu tiên - thì chỉ số quan trọng là Recall ở dải nguy cấp, và con số đó đạt ${n(sev[0] ? sev[0].recall : 0)}. Các cảnh báo ở ranh giới có thể lọc thêm bằng ngưỡng Risk Score khi vận hành.`));
 
 children.push(H1('9. Rủi ro và hạn chế đã biết'));
 children.push(T_(['Hạn chế', 'Ảnh hưởng', 'Hướng khắc phục'], [
@@ -414,6 +441,9 @@ children.push(T_(['Hạn chế', 'Ảnh hưởng', 'Hướng khắc phục'], [
   ['Chỉ xét tương tác từng cặp', 'Tình huống ba xe bị tách thành nhiều cặp riêng lẻ', 'Mở rộng sang mô hình tương tác nhóm'],
   ['Ẩn danh suy từ bbox detector', 'Bỏ sót người đi bộ mà detector không phát hiện', 'Bổ sung detector khuôn mặt chuyên dụng khi công bố dữ liệu'],
   ['Giấy phép AGPL-3.0 của Ultralytics', 'Ràng buộc nếu thương mại hoá', 'Kiến trúc đã tách giao diện detector để thay thế dễ dàng'],
+  ['Trình mô phỏng chưa chống va chạm', 'Một phần nhãn chuẩn là lúc thân xe chồng lên nhau', 'Thêm ràng buộc va chạm; hiện báo cáo tách riêng nhóm này'],
+  ['Tốc độ trên CPU', 'Toàn hệ thống có YOLO chưa đạt 25 FPS trên CPU 2 lõi', 'GPU cho khâu phát hiện, hoặc chạy detector thưa hơn'],
+  ['Nhận dạng hành vi quá nhạy', 'Gần như mọi xe bị gắn cờ bất thường', 'Làm mượt vận tốc trước khi áp ngưỡng; hiệu chỉnh lại ngưỡng'],
 ], [1.3, 1.5, 1.8]));
 
 children.push(H1('10. Hướng phát triển'));
@@ -425,11 +455,11 @@ children.push(Bullet('Kết nối với hệ thống đèn tín hiệu để đ�
 children.push(Bullet('Tổ chức gán nhãn near-miss thủ công trên video thật với hai người gán nhãn độc lập, báo cáo hệ số đồng thuận Cohen kappa.'));
 
 children.push(H1('11. Kê khai công cụ và dữ liệu'));
-children.push(P('Bản kê khai đầy đủ trong docs/ke_khai_cong_cu.md và docs/dataset_license.md. Tóm tắt:'));
-children.push(Bullet('Công cụ AI hỗ trợ sinh mã: Claude (Anthropic). Toàn bộ quyết định thiết kế, lựa chọn ngưỡng, phương pháp đánh giá và diễn giải kết quả do nhóm thực hiện và chịu trách nhiệm.'));
+children.push(P('Bản kê khai công cụ trí tuệ nhân tạo và lịch sử câu lệnh được nộp kèm hồ sơ dự thi theo đúng yêu cầu của Thể lệ; nguồn dữ liệu và giấy phép nằm trong docs/dataset_license.md. Tóm tắt:'));
+children.push(Bullet('Có sử dụng trợ lý lập trình AI để hỗ trợ viết mã và tài liệu. Toàn bộ quyết định thiết kế, lựa chọn ngưỡng, phương pháp đánh giá và diễn giải kết quả do nhóm thực hiện và chịu trách nhiệm.'));
 children.push(Bullet('Thuật toán ByteTrack và Kalman filter được cài đặt lại từ công thức, không sao chép repo gốc.'));
 children.push(Bullet('Thư viện kế thừa: Ultralytics YOLO (AGPL-3.0), PyTorch, OpenCV, scikit-learn, FastAPI.'));
-children.push(Bullet('Dataset kế thừa: Multi-view Traffic Intersection (Møgelmose), UCSD Highway Traffic (Chan & Vasconcelos, 2005 — đã trích dẫn theo yêu cầu).'));
+children.push(Bullet('Dataset kế thừa: Multi-view Traffic Intersection (Møgelmose), UCSD Highway Traffic (Chan & Vasconcelos, 2005 - đã trích dẫn theo yêu cầu).'));
 children.push(Bullet('Không sử dụng API trả phí hoặc dịch vụ đám mây nào trong pipeline.'));
 
 children.push(H1('12. Minh chứng kỹ thuật'));
@@ -438,10 +468,9 @@ children.push(T_(['Hạng mục', 'Vị trí'], [
   ['Sơ đồ kiến trúc', 'docs/assets/architecture.png'],
   ['Protocol định nghĩa near-miss', 'docs/protocol_near_miss_v1.md'],
   ['Bảng kê dữ liệu và giấy phép', 'docs/dataset_license.md'],
-  ['Bản kê khai công cụ AI', 'docs/ke_khai_cong_cu.md'],
-  ['Prompt Log', 'docs/prompt_log.md'],
-  ['Kết quả đánh giá dạng máy đọc', 'data/outputs/evaluation.json'],
-  ['Bộ kiểm thử tự động', 'tests/ — 85 test, chạy bằng pytest'],
+  ['Bản kê khai công cụ AI và lịch sử câu lệnh', 'Nộp kèm hồ sơ dự thi'],
+  ['Kết quả đánh giá dạng máy đọc', 'data/outputs/evaluation.json, evaluation_real.json, evaluation_real_tiled.json'],
+  ['Bộ kiểm thử tự động', `tests/ - ${N_TESTS} test, chạy bằng pytest và GitHub Actions`],
   ['Notebook fine-tune', 'notebooks/01_finetune_yolo11n_colab.ipynb'],
 ], [1.3, 2]));
 
@@ -460,7 +489,7 @@ children.push(H1('13. Tài liệu tham khảo'));
 // --------------------------------------------------------------------------- //
 const doc = new Document({
   creator: 'SafeRoad AI Team',
-  title: 'SafeRoad AI — Tài liệu dự án Bảng C',
+  title: 'SafeRoad AI - Tài liệu dự án Bảng C',
   description: 'Hệ thống AI phát hiện near-miss và bản đồ rủi ro giao thông',
   numbering: {
     config: [{
@@ -486,7 +515,7 @@ const doc = new Document({
         children: [new Paragraph({
           alignment: AlignmentType.CENTER,
           children: [
-            new TextRun({ text: 'SafeRoad AI — Bảng C — Trang ', font: FONT, size: 18, color: '888888' }),
+            new TextRun({ text: 'SafeRoad AI - Bảng C - Trang ', font: FONT, size: 18, color: '888888' }),
             new TextRun({ children: [PageNumber.CURRENT], font: FONT, size: 18, color: '888888' }),
           ],
         })],

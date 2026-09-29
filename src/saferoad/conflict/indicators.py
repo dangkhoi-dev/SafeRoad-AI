@@ -4,7 +4,7 @@
 trong nghiên cứu an toàn giao thông, cho phép đo mức nguy hiểm mà **không cần
 chờ tai nạn xảy ra**.
 
-TTC — Time To Collision
+TTC - Time To Collision
 -----------------------
 Thời gian còn lại đến va chạm nếu cả hai đối tượng giữ nguyên vận tốc hiện tại.
 Ta xấp xỉ mỗi đối tượng bằng một hình tròn bán kính :math:`r` (suy ra từ kích
@@ -24,16 +24,16 @@ Bình phương hai vế cho phương trình bậc hai theo :math:`t`:
 TTC là **nghiệm dương nhỏ nhất**. Không có nghiệm dương ⇒ hai đối tượng đang
 tách xa nhau hoặc sẽ đi lướt qua nhau ⇒ không có xung đột.
 
-PET — Post-Encroachment Time
+PET - Post-Encroachment Time
 ----------------------------
 Khoảng thời gian giữa lúc đối tượng thứ nhất **rời khỏi** điểm xung đột và lúc
 đối tượng thứ hai **đi tới** chính điểm đó. Khác với TTC, PET vẫn đo được cả khi
-hai xe không bao giờ có nguy cơ va chạm tức thời — nó bắt được tình huống "suýt"
+hai xe không bao giờ có nguy cơ va chạm tức thời - nó bắt được tình huống "suýt"
 mà TTC bỏ sót (ví dụ: xe A vừa qua, 0.8 s sau xe B mới tới đúng chỗ đó).
 
 Tham khảo:
-* Hayward (1972) — khái niệm TTC.
-* Allen, Shin & Cooper (1978) — PET và conflict analysis.
+* Hayward (1972) - khái niệm TTC.
+* Allen, Shin & Cooper (1978) - PET và conflict analysis.
 * Zheng, Ismail & Meng (2014), "Traffic conflict techniques for road safety
   analysis", Canadian Journal of Civil Engineering.
 """
@@ -116,19 +116,19 @@ def post_encroachment_time(
     """PET (giây) và toạ độ điểm xung đột, hoặc ``None`` nếu không xác định.
 
     PET = ``|t_a - t_b|`` tại giao điểm quỹ đạo. Giá trị nhỏ nghĩa là hai đối
-    tượng đi qua cùng một điểm cách nhau rất ngắn — đúng định nghĩa "suýt va chạm".
+    tượng đi qua cùng một điểm cách nhau rất ngắn - đúng định nghĩa "suýt va chạm".
 
     Ta trừ đi thời gian mỗi xe cần để **giải phóng** điểm xung đột (chiều dài xe
     chia cho tốc độ), vì PET đo từ lúc đuôi xe trước rời điểm đó.
 
     Hai điều kiện bảo vệ quan trọng
     -------------------------------
-    * ``min_crossing_angle`` — PET chỉ có nghĩa với hai quỹ đạo **thực sự cắt
+    * ``min_crossing_angle`` - PET chỉ có nghĩa với hai quỹ đạo **thực sự cắt
       nhau**. Với hai xe đi gần song song (ví dụ xe máy vượt nhau cùng làn), giao
       điểm của hai tia nằm rất xa và cực kỳ nhạy với nhiễu: lệch hướng 1° đã dời
       giao điểm hàng chục mét, sinh ra một giá trị PET nhỏ hoàn toàn giả. Trường
       hợp đó phải để TTC xử lý, không phải PET.
-    * ``max_conflict_distance`` — giao điểm nằm quá xa thì tình huống chưa xảy
+    * ``max_conflict_distance`` - giao điểm nằm quá xa thì tình huống chưa xảy
       ra, và ngoại suy tuyến tính tới đó không còn đáng tin.
     """
     if approach_angle(state_a, state_b) < min_crossing_angle:
@@ -157,7 +157,7 @@ def post_encroachment_time(
     occupancy_b = cls_b.footprint[0] / speed_b
 
     gap = abs(t_a - t_b)
-    # Trừ đi phần chiếm dụng của xe tới trước — nếu âm nghĩa là hai xe chồng
+    # Trừ đi phần chiếm dụng của xe tới trước - nếu âm nghĩa là hai xe chồng
     # lấn thời gian tại điểm đó (PET = 0, cực kỳ nguy hiểm).
     lead_occupancy = occupancy_a if t_a < t_b else occupancy_b
     pet = max(0.0, gap - lead_occupancy)

@@ -1,4 +1,4 @@
-"""Cấu hình pipeline — nạp từ YAML, có giá trị mặc định an toàn.
+"""Cấu hình pipeline - nạp từ YAML, có giá trị mặc định an toàn.
 
 Toàn bộ ngưỡng kỹ thuật (TTC, PET, trọng số Risk Score...) đều nằm ở đây chứ
 không rải rác trong code, để khi hiệu chỉnh theo hiện trường chỉ phải sửa 1 file.
@@ -32,12 +32,12 @@ class DetectionConfig:
     #: mét/giây, nên TTC tính từ đó chỉ sinh báo động giả. Lọc ở đây giúp cả
     #: tracking lẫn conflict ổn định hơn nhiều so với việc cố xử lý chúng.
     min_box_area: float = 150.0
-    #: "yolo"   — chạy detector một lượt trên cả khung hình (nhanh nhất)
-    #: "tiled"  — cắt khung hình thành lưới ô chồng lấn và chạy trên từng ô ở độ
+    #: "yolo"   - chạy detector một lượt trên cả khung hình (nhanh nhất)
+    #: "tiled"  - cắt khung hình thành lưới ô chồng lấn và chạy trên từng ô ở độ
     #:            phân giải gốc, rồi gộp lại. Chậm hơn nhiều lần nhưng bắt được
-    #:            vật thể nhỏ ở xa mà lượt toàn khung bỏ sót — cần cho camera
+    #:            vật thể nhỏ ở xa mà lượt toàn khung bỏ sót - cần cho camera
     #:            hạ tầng đặt cao.
-    #: "replay" — phát lại detection có sẵn (dùng khi đánh giá trên mô phỏng)
+    #: "replay" - phát lại detection có sẵn (dùng khi đánh giá trên mô phỏng)
     backend: str = "yolo"
     #: Chỉ dùng khi backend = "tiled".
     tile_rows: int = 2
@@ -48,7 +48,7 @@ class DetectionConfig:
     #: Có chạy thêm một lượt trên toàn khung hình hay không. Ô nhỏ bỏ sót vật
     #: thể lớn hơn chính nó, nên lượt toàn khung bù lại phần đó.
     tile_full_frame: bool = True
-    #: Ngưỡng IoU khi gộp kết quả của các ô — hai ô kề nhau nhìn thấy cùng một
+    #: Ngưỡng IoU khi gộp kết quả của các ô - hai ô kề nhau nhìn thấy cùng một
     #: vật trong vùng chồng lấn sẽ cho hai hộp gần trùng.
     tile_merge_iou: float = 0.55
 
@@ -75,7 +75,7 @@ class HomographyConfig:
 
     ``image_points`` và ``world_points`` là 4 cặp điểm tương ứng. Khi không có
     calibration thực địa, đặt ``fallback_scale`` (mét trên mỗi pixel) để pipeline
-    vẫn chạy được — kết quả TTC khi đó chỉ mang tính tương đối.
+    vẫn chạy được - kết quả TTC khi đó chỉ mang tính tương đối.
     """
 
     image_points: list[list[float]] = field(default_factory=list)
@@ -87,7 +87,7 @@ class HomographyConfig:
 
 @dataclass
 class ConflictConfig:
-    """Ngưỡng phát hiện xung đột — bám theo poster SafeRoad AI."""
+    """Ngưỡng phát hiện xung đột - bám theo poster SafeRoad AI."""
 
     ttc_threshold: float = 3.0        # giây; TTC < 3.0s ⇒ ứng viên conflict
     pet_threshold: float = 1.5        # giây; PET < 1.5s ⇒ ứng viên conflict
@@ -98,12 +98,12 @@ class ConflictConfig:
     #: nhưng vận tốc tương đối ~0, và đó không phải tình huống nguy hiểm.
     min_rel_speed: float = 3.0
     #: Khoảng cách mặt-tới-mặt (m) mà cặp xe phải thực sự đạt tới thì mới ghi
-    #: nhận là near-miss. Chỉ dựa vào TTC là chưa đủ — TTC là một *phép ngoại
+    #: nhận là near-miss. Chỉ dựa vào TTC là chưa đủ - TTC là một *phép ngoại
     #: suy*, còn đây là kiểm chứng rằng hai xe đã thật sự đến sát nhau.
     proximity_gate: float = 3.0
-    #: Tốc độ tối thiểu của ít nhất một đối tượng (m/s) — lọc xe đang dừng.
+    #: Tốc độ tối thiểu của ít nhất một đối tượng (m/s) - lọc xe đang dừng.
     min_abs_speed: float = 0.8
-    #: Khoảng thời gian tối thiểu giữa hai lần ghi cùng một cặp (giây) —
+    #: Khoảng thời gian tối thiểu giữa hai lần ghi cùng một cặp (giây) -
     #: chống việc một near-miss bị đếm thành hàng chục sự kiện.
     dedup_window: float = 3.0
     #: Giới hạn thời gian mô phỏng tiến để tìm điểm giao (giây).
@@ -125,7 +125,7 @@ class RiskConfig:
 
     Trọng số mặc định dưới đây được **hiệu chỉnh trên tập synthetic có ground
     truth**: chọn sao cho phân bố Risk Score trải đều trong [0, 100] thay vì dồn
-    cục ở một đầu. Bộ trọng số chưa hiệu chỉnh đẩy trung vị lên 98/100 — khi mọi
+    cục ở một đầu. Bộ trọng số chưa hiệu chỉnh đẩy trung vị lên 98/100 - khi mọi
     cảnh báo đều "rất nguy hiểm" thì thang điểm không còn phân biệt được gì và
     người vận hành sẽ bỏ qua tất cả.
 
@@ -168,7 +168,7 @@ class BehaviorConfig:
 
 @dataclass
 class PrivacyConfig:
-    """Ẩn danh dữ liệu — tuân thủ Điều 5 Thể lệ."""
+    """Ẩn danh dữ liệu - tuân thủ Điều 5 Thể lệ."""
 
     enabled: bool = False
     blur_faces: bool = True
@@ -197,7 +197,7 @@ class VideoConfig:
 
 @dataclass
 class SiteConfig:
-    """Mô tả hiện trường — hiển thị trên dashboard và báo cáo."""
+    """Mô tả hiện trường - hiển thị trên dashboard và báo cáo."""
 
     name: str = "Ngã tư Hàng Xanh, Q. Bình Thạnh, TP.HCM"
     short_name: str = "Hàng Xanh"

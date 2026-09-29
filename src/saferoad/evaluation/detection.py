@@ -2,7 +2,7 @@
 
 Dùng cho dữ liệu **thật** có nhãn bbox (MVTI). Đây là chỉ số mà poster cam kết
 (mAP@0.5 ≥ 0.70) và là thứ duy nhất trong bộ chỉ số có thể đo trực tiếp trên
-ảnh thật — vì dataset công khai có nhãn bbox nhưng không có nhãn xung đột.
+ảnh thật - vì dataset công khai có nhãn bbox nhưng không có nhãn xung đột.
 
 Cài đặt theo đúng định nghĩa COCO: với mỗi lớp, sắp dự đoán theo điểm tin cậy
 giảm dần, ghép tham lam với ground truth theo IoU, rồi lấy Average Precision
@@ -27,8 +27,17 @@ class DetectionMetrics:
     ap_per_class: dict[str, float] = field(default_factory=dict)
     ap50_per_class: dict[str, float] = field(default_factory=dict)
     n_gt_per_class: dict[str, int] = field(default_factory=dict)
+    #: Precision/Recall ở IoU 0,5 trên TOÀN BỘ danh sách dự đoán được chấm. Khi
+    #: chấm mAP ở ngưỡng tin cậy rất thấp (0,001 theo chuẩn COCO), đây là điểm
+    #: cuối của đường precision-recall: recall cao nhất có thể, precision thấp
+    #: nhất. Không phải hiệu năng lúc vận hành.
     precision50: float = 0.0
     recall50: float = 0.0
+    #: Precision/Recall ở IoU 0,5 khi chỉ giữ dự đoán có điểm ≥ ngưỡng vận hành
+    #: của pipeline. Đây mới là con số mô tả hệ thống lúc chạy thật.
+    operating_conf: float | None = None
+    precision50_op: float | None = None
+    recall50_op: float | None = None
     n_pred: int = 0
     n_gt: int = 0
 
@@ -48,6 +57,11 @@ class DetectionMetrics:
             "mAP50_95": round(self.map, 4),
             "precision50": round(self.precision50, 4),
             "recall50": round(self.recall50, 4),
+            "operating_conf": self.operating_conf,
+            "precision50_op": (None if self.precision50_op is None
+                               else round(self.precision50_op, 4)),
+            "recall50_op": (None if self.recall50_op is None
+                            else round(self.recall50_op, 4)),
             "n_pred": self.n_pred,
             "n_gt": self.n_gt,
             "per_class": {
@@ -84,6 +98,7 @@ def evaluate_detection(
     predictions: dict[int, list[Detection]],
     ground_truth: dict[int, list[Detection]],
     iou_thresholds: tuple[float, ...] = tuple(np.arange(0.5, 1.0, 0.05)),
+    operating_conf: float | None = None,
 ) -> DetectionMetrics:
     """So khớp dự đoán với nhãn chuẩn theo từng lớp và tính mAP.
 
@@ -100,6 +115,7 @@ def evaluate_detection(
 
     tp50_total = fp50_total = 0
     gt50_total = 0
+    tp50_op = fp50_op = 0
 
     for cls in sorted(classes, key=lambda c: c.value):
         gt_by_frame = {
@@ -145,10 +161,22 @@ def evaluate_detection(
                 tp50_total += int(tp.sum())
                 fp50_total += int(fp.sum())
                 gt50_total += n_gt
+                if operating_conf is not None:
+                    # Dự đoán đã xếp theo điểm giảm dần và được ghép tham lam
+                    # theo đúng thứ tự đó, nên kết quả ghép của k dự đoán đầu
+                    # (điểm ≥ ngưỡng) trùng khít với việc chạy riêng tập con ấy.
+                    k = sum(1 for s, _f, _d in preds if s >= operating_conf)
+                    tp50_op += int(tp[:k].sum())
+                    fp50_op += int(fp[:k].sum())
 
         metrics.ap_per_class[cls.value] = float(np.nanmean(aps))
 
     denom = tp50_total + fp50_total
     metrics.precision50 = tp50_total / denom if denom else 0.0
     metrics.recall50 = tp50_total / gt50_total if gt50_total else 0.0
+    if operating_conf is not None:
+        metrics.operating_conf = float(operating_conf)
+        d_op = tp50_op + fp50_op
+        metrics.precision50_op = tp50_op / d_op if d_op else 0.0
+        metrics.recall50_op = tp50_op / gt50_total if gt50_total else 0.0
     return metrics

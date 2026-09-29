@@ -3,16 +3,16 @@
 Bảng ablation trả lời một câu hỏi cụ thể: **từng khối trong pipeline đóng góp
 bao nhiêu?** Ta bật dần các khối và đo lại:
 
-1. ``det+track`` — chỉ detection + tracking, TTC tính thẳng trên toạ độ **pixel**
+1. ``det+track`` - chỉ detection + tracking, TTC tính thẳng trên toạ độ **pixel**
    (không homography, không làm mượt). Đây là baseline ngây thơ.
-2. ``+homography`` — thêm quy đổi sang mặt đất. Kỳ vọng: TTC MAE giảm mạnh, vì
+2. ``+homography`` - thêm quy đổi sang mặt đất. Kỳ vọng: TTC MAE giảm mạnh, vì
    pixel không phải đơn vị vật lý.
-3. ``+smoothing`` — thêm làm mượt quỹ đạo và ước lượng vận tốc bằng hồi quy.
+3. ``+smoothing`` - thêm làm mượt quỹ đạo và ước lượng vận tốc bằng hồi quy.
    Kỳ vọng: giảm báo động giả do nhiễu vận tốc.
-4. ``+pet`` — thêm tiêu chí PET bên cạnh TTC. Kỳ vọng: Recall tăng (bắt được
+4. ``+pet`` - thêm tiêu chí PET bên cạnh TTC. Kỳ vọng: Recall tăng (bắt được
    tình huống "vừa lướt qua" mà TTC bỏ sót).
-5. ``+proximity`` — thêm cổng khoảng cách. Kỳ vọng: Precision tăng mạnh.
-6. ``full`` — bật thêm Risk Scoring và phân loại kiểu xung đột.
+5. ``+proximity`` - thêm cổng khoảng cách. Kỳ vọng: Precision tăng mạnh.
+6. ``full`` - bật thêm Risk Scoring và phân loại kiểu xung đột.
 
 Ngoài ra ta quét mức nhiễu detector (``noise_px``) để đo độ bền của hệ thống
 trước sai số của khối phía trước.
@@ -72,7 +72,7 @@ def _no_pet(cfg: Config) -> None:
 
 
 def _no_proximity(cfg: Config) -> None:
-    """Bỏ cổng khoảng cách — chấp nhận mọi cặp có TTC/PET dưới ngưỡng."""
+    """Bỏ cổng khoảng cách - chấp nhận mọi cặp có TTC/PET dưới ngưỡng."""
     cfg.conflict.proximity_gate = 1e9
     cfg.conflict.min_rel_speed = 0.3
 
@@ -195,7 +195,7 @@ def run_noise_sweep(
     """Quét mức nhiễu detector để đo độ bền của các khối phía sau.
 
     Ý nghĩa thực tiễn: khi thay YOLO11n bằng một model yếu hơn (hoặc camera rung,
-    trời mưa), chất lượng bbox giảm — bảng này cho biết hệ thống chịu được tới
+    trời mưa), chất lượng bbox giảm - bảng này cho biết hệ thống chịu được tới
     mức nào trước khi các chỉ số tụt dưới ngưỡng cam kết.
     """
     rows: list[dict[str, Any]] = []
@@ -257,6 +257,6 @@ def to_markdown(ablation: list[AblationResult]) -> str:
         mae = m["ttc_mae"]
         lines.append(
             f"| {r.label} | {m['precision']:.3f} | {m['recall']:.3f} | {m['f1']:.3f} | "
-            f"{mae if mae is not None else '—'} | {r.n_events} | {r.processing_fps:.1f} |"
+            f"{mae if mae is not None else '-'} | {r.n_events} | {r.processing_fps:.1f} |"
         )
     return "\n".join(lines)

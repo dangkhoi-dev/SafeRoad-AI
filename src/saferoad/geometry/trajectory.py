@@ -5,7 +5,7 @@ lượng toàn hệ thống. Lấy hiệu hai vị trí liên tiếp (finite dif
 đại nhiễu bbox lên rất mạnh: bbox rung ±3 px ở 30 FPS tương đương nhiễu vận tốc
 tới vài m/s. Module này khử nhiễu đó bằng hai bước:
 
-1. **Làm mượt vị trí** — trung bình trượt có trọng số trên cửa sổ ngắn.
+1. **Làm mượt vị trí** - trung bình trượt có trọng số trên cửa sổ ngắn.
 2. **Ước lượng vận tốc bằng hồi quy tuyến tính** trên cửa sổ trượt, thay vì lấy
    hiệu 2 điểm. Hệ số góc của đường hồi quy chính là vận tốc, và nó dùng toàn bộ
    các điểm trong cửa sổ nên nhiễu bị triệt tiêu theo :math:`1/\\sqrt{n}`.
@@ -49,7 +49,7 @@ def smooth_positions(points: np.ndarray, window: int) -> np.ndarray:
 
 
 def velocity_from_window(times: np.ndarray, values: np.ndarray) -> float:
-    """Hệ số góc của hồi quy tuyến tính ``values ~ times`` — chính là vận tốc.
+    """Hệ số góc của hồi quy tuyến tính ``values ~ times`` - chính là vận tốc.
 
     Trả về 0 khi cửa sổ quá ngắn hoặc mọi mốc thời gian trùng nhau.
     """
@@ -113,7 +113,7 @@ class TrajectoryProcessor:
         ``anchor`` là **đáy giữa** của bounding box, tức là điểm của thân xe nằm
         gần camera nhất, chứ không phải tâm xe. Chiếu thẳng điểm đó xuống mặt
         đất sẽ đặt chiếc xe lệch về phía camera một khoảng bằng nửa bề dài biểu
-        kiến của nó — đo được trên tập synthetic là 0.5 m với xe máy và tới
+        kiến của nó - đo được trên tập synthetic là 0.5 m với xe máy và tới
         2.3 m với xe tải. Sai lệch này *có hệ thống* và phụ thuộc loại xe, nên
         nó bóp méo cả khoảng cách giữa các xe lẫn TTC suy ra từ đó.
 
@@ -146,7 +146,7 @@ class TrajectoryProcessor:
             return
 
         last = track.history[-1]
-        # Hướng xe lấy từ vận tốc của frame TRƯỚC — vận tốc frame này chưa tính
+        # Hướng xe lấy từ vận tốc của frame TRƯỚC - vận tốc frame này chưa tính
         # được vì nó phụ thuộc chính vị trí đang cần bù.
         heading = None
         if len(track.history) >= 2:
@@ -160,7 +160,7 @@ class TrajectoryProcessor:
             last.velocity = (0.0, 0.0)
             return
 
-        # Chỉ lấy phần đuôi để làm mượt — đủ cho ước lượng vận tốc tức thời.
+        # Chỉ lấy phần đuôi để làm mượt - đủ cho ước lượng vận tốc tức thời.
         win = max(self.min_states, min(self.smooth_window * 2 + 1, n))
         tail = track.history[-win:]
 
@@ -195,7 +195,7 @@ def acceleration(track: Track, window: int = 10) -> float:
 
 
 def heading_change_rate(track: Track, window: int = 15, min_speed: float = 1.5) -> float:
-    """Tốc độ đổi hướng (độ/giây) — dùng để phát hiện tạt đầu / chuyển làn gấp.
+    """Tốc độ đổi hướng (độ/giây) - dùng để phát hiện tạt đầu / chuyển làn gấp.
 
     Chỉ dùng các trạng thái có tốc độ trên ``min_speed``: hướng đi được suy ra
     từ vector vận tốc, nên khi xe gần như đứng yên thì hướng chỉ là nhiễu chia

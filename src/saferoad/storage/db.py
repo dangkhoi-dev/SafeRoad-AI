@@ -1,8 +1,8 @@
-"""Lưu trữ sự kiện bằng SQLite — khối "Database (Time-series)" trong kiến trúc.
+"""Lưu trữ sự kiện bằng SQLite - khối "Database (Time-series)" trong kiến trúc.
 
 Vì sao SQLite: hệ thống chạy trên Jetson Orin Nano ở biên, không có server
 database. SQLite cho phép ghi bền vững, truy vấn SQL đầy đủ, và cả file chỉ là
-một file duy nhất — dễ đóng gói vào hồ sơ dự thi và dễ đồng bộ lên trung tâm.
+một file duy nhất - dễ đóng gói vào hồ sơ dự thi và dễ đồng bộ lên trung tâm.
 
 Mọi truy vấn của dashboard đều đi qua module này, nên đổi sang PostgreSQL/
 TimescaleDB sau này chỉ cần thay lớp cài đặt mà không đụng tầng trên.

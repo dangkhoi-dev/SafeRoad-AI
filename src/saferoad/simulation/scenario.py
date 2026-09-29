@@ -9,21 +9,21 @@ có nhãn xung đột; còn gán nhãn tay thì tốn công và phụ thuộc ch
 
 Simulator giải quyết vấn đề: ta biết **chính xác** quỹ đạo từng xe nên tính được
 TTC/PET thật ở độ phân giải thời gian tuỳ ý. Hệ thống thực chỉ nhìn thấy bbox
-nhiễu ở 30 FPS và phải tái tạo lại các con số đó — đúng bài toán cần đo.
+nhiễu ở 30 FPS và phải tái tạo lại các con số đó - đúng bài toán cần đo.
 
 Mô hình hành vi
 ---------------
-Xe **không** chạy theo quỹ đạo định sẵn một cách máy móc — nếu vậy chúng sẽ đi
+Xe **không** chạy theo quỹ đạo định sẵn một cách máy móc - nếu vậy chúng sẽ đi
 xuyên qua nhau và sinh ra hàng trăm "near-miss" vô nghĩa. Thay vào đó ta chạy vi
 mô phỏng với ba cơ chế của giao thông thật:
 
-1. **Đèn tín hiệu** — giao lộ có chu kỳ đèn Bắc-Nam / Đông-Tây luân phiên, đúng
+1. **Đèn tín hiệu** - giao lộ có chu kỳ đèn Bắc-Nam / Đông-Tây luân phiên, đúng
    như Ngã tư Hàng Xanh. Đây là thứ giữ cho hai dòng cắt nhau không cùng lúc
    chiếm giao lộ. (Cơ chế "ai cũng nhường ai" không dùng được: nó gây tắc nghẽn
-   chết — mọi xe cùng dừng và không xe nào đi tiếp.)
-2. **Car-following (mô hình IDM)** — Treiber, Hennecke & Helbing (2000). Xe giữ
+   chết - mọi xe cùng dừng và không xe nào đi tiếp.)
+2. **Car-following (mô hình IDM)** - Treiber, Hennecke & Helbing (2000). Xe giữ
    khoảng cách an toàn với xe phía trước và với vạch dừng khi đèn đỏ.
-3. **Phanh tránh khẩn cấp** — khi TTC tụt xuống dưới ~1.2 s, người lái phanh gấp.
+3. **Phanh tránh khẩn cấp** - khi TTC tụt xuống dưới ~1.2 s, người lái phanh gấp.
    Đây là lý do phần lớn tình huống nguy hiểm kết thúc bằng "suýt" chứ không
    phải va chạm thật.
 
@@ -32,7 +32,7 @@ Near-miss sinh ra từ đúng những nguyên nhân ngoài đời: xe **vượt 
 băng qua đường. Không có tình huống nào được "dàn dựng" thủ công.
 
 Nguyên tắc trung thực: nhãn chuẩn (oracle) tính bằng quy trình **khác** với
-thuật toán online — lấy cực tiểu toàn cục trên chuỗi thời gian mịn, dùng vận tốc
+thuật toán online - lấy cực tiểu toàn cục trên chuỗi thời gian mịn, dùng vận tốc
 giải tích thay vì vận tốc ước lượng từ bbox nhiễu.
 """
 
@@ -54,11 +54,11 @@ CENTER = (0.0, 30.0)
 ROAD_HALF_WIDTH = 7.5
 #: Bán kính vùng giao lộ.
 JUNCTION_RADIUS = 11.0
-#: Bán kính vạch dừng — xe dừng đèn đỏ tại đây.
+#: Bán kính vạch dừng - xe dừng đèn đỏ tại đây.
 STOP_LINE_RADIUS = 9.0
 #: Khoảng trống (giây) mà xe rẽ đòi hỏi trước khi cắt qua dòng ngược chiều.
 TURN_GAP = 2.6
-#: Sau chừng này giây chờ, người lái mất kiên nhẫn và cứ thế cắt qua —
+#: Sau chừng này giây chờ, người lái mất kiên nhẫn và cứ thế cắt qua -
 #: đây là một trong những nguồn xung đột "chuyển hướng" thực tế nhất.
 TURN_PATIENCE = 6.0
 
@@ -81,7 +81,7 @@ IDM_B_COMFORT = {
     VehicleClass.BICYCLE: 1.6,
     VehicleClass.PEDESTRIAN: 1.2,
 }
-#: Khoảng cách tối thiểu khi dừng (m) — xe máy Việt Nam bám rất sát.
+#: Khoảng cách tối thiểu khi dừng (m) - xe máy Việt Nam bám rất sát.
 IDM_S0 = {
     VehicleClass.MOTORCYCLE: 0.9,
     VehicleClass.CAR: 2.0,
@@ -190,11 +190,11 @@ class VehicleSpec:
 
     @property
     def is_turning(self) -> bool:
-        """Xe rẽ (tuyến có đoạn bo cung) — cần nhường dòng cắt trước khi vào giao lộ."""
+        """Xe rẽ (tuyến có đoạn bo cung) - cần nhường dòng cắt trước khi vào giao lộ."""
         return len(self.waypoints) > 2
 
     def _find_stop_line(self) -> float:
-        """Quãng đường tới vạch dừng — nơi tuyến đường chạm mép vùng giao lộ."""
+        """Quãng đường tới vạch dừng - nơi tuyến đường chạm mép vùng giao lộ."""
         total = self._cum[-1]
         if total < 1e-6:
             return 0.0
@@ -253,7 +253,7 @@ _CROSSWALKS = {
     "Vạch bộ hành Tây": ((-11.0, 19.5), (-11.0, 40.5)),
 }
 
-#: Phân bố lớp phương tiện tại giao lộ Việt Nam — xe máy áp đảo.
+#: Phân bố lớp phương tiện tại giao lộ Việt Nam - xe máy áp đảo.
 #: Người đi bộ không nằm trong bảng này vì họ đi trên vạch bộ hành riêng.
 _CLASS_WEIGHTS = [
     (VehicleClass.MOTORCYCLE, 0.68),
@@ -271,7 +271,7 @@ _SPEED_RANGE = {
     VehicleClass.PEDESTRIAN: (1.1, 1.7),
 }
 
-#: Số làn mỗi chiều — dùng để rải xe theo làn thay vì xếp một hàng.
+#: Số làn mỗi chiều - dùng để rải xe theo làn thay vì xếp một hàng.
 _LANE_OFFSETS = (-1.7, 0.0, 1.7)
 
 
@@ -311,7 +311,7 @@ def _lane_shift(
 
 
 def _pick_vehicle_class(rng: np.random.Generator) -> VehicleClass:
-    """Chọn lớp phương tiện (không gồm người đi bộ — họ đi trên vạch riêng)."""
+    """Chọn lớp phương tiện (không gồm người đi bộ - họ đi trên vạch riêng)."""
     r = rng.random()
     acc = 0.0
     for cls, w in _CLASS_WEIGHTS:
@@ -333,7 +333,7 @@ def build_scenario(
 
     Tham số:
         duration: độ dài kịch bản (giây).
-        seed: hạt giống ngẫu nhiên — cùng seed cho kịch bản y hệt (tái lập được).
+        seed: hạt giống ngẫu nhiên - cùng seed cho kịch bản y hệt (tái lập được).
         arrival_rate: số xe/giây (tiến trình Poisson).
         reckless_ratio: tỉ lệ người lái **vượt đèn đỏ**. Đây là tham số điều
             khiển chính tần suất xung đột cắt ngang. 0.08 tương ứng một giao lộ
@@ -359,7 +359,7 @@ def build_scenario(
         lo, hi = _SPEED_RANGE[cls]
         speed = float(rng.uniform(lo, hi))
 
-        # Chọn làn — rải xe ngang thay vì xếp một hàng dọc.
+        # Chọn làn - rải xe ngang thay vì xếp một hàng dọc.
         offset = float(_LANE_OFFSETS[int(rng.integers(len(_LANE_OFFSETS)))])
         offset += float(rng.uniform(-0.25, 0.25))
         e, x_out = _lane_shift(entry, straight_exit, offset)
@@ -433,14 +433,14 @@ def simulate(
     Mỗi bước thời gian, gia tốc của mỗi xe là **giá trị nhỏ nhất** trong bốn
     thành phần (tức là ràng buộc chặt nhất thắng):
 
-    1. **IDM tự do + bám xe trước** — giữ tốc độ mong muốn, giảm tốc khi tới gần
+    1. **IDM tự do + bám xe trước** - giữ tốc độ mong muốn, giảm tốc khi tới gần
        xe phía trước cùng làn.
-    2. **Đèn tín hiệu** — khi đèn đỏ/vàng, vạch dừng đóng vai trò một "xe đứng
+    2. **Đèn tín hiệu** - khi đèn đỏ/vàng, vạch dừng đóng vai trò một "xe đứng
        yên" trong công thức IDM, nên xe dừng lại mượt mà. Xe ``runs_red`` bỏ qua
        ràng buộc này.
-    3. **Phanh tránh khẩn cấp** — TTC với bất kỳ xe nào tụt dưới ``emergency_ttc``
+    3. **Phanh tránh khẩn cấp** - TTC với bất kỳ xe nào tụt dưới ``emergency_ttc``
        thì phanh gấp. Chỉ kích hoạt khi thật sự sắp va chạm nên không gây tắc.
-    4. **Phanh gấp chủ động** — tạo nhãn cho module Behavior.
+    4. **Phanh gấp chủ động** - tạo nhãn cho module Behavior.
 
     Toàn bộ phép tính theo cặp được vector hoá bằng numpy: với ~40 xe hoạt động
     và 7200 bước thời gian, vòng lặp Python thuần sẽ mất hàng phút.
@@ -457,7 +457,7 @@ def simulate(
     }
     pending = sorted(vehicles, key=lambda v: v.t_start)
     next_spawn = 0
-    #: Xe đã tới giờ nhưng chưa có chỗ trống ở điểm vào — chờ ở đây.
+    #: Xe đã tới giờ nhưng chưa có chỗ trống ở điểm vào - chờ ở đây.
     waiting: list[VehicleSpec] = []
 
     for step in range(n_steps):
@@ -471,7 +471,7 @@ def simulate(
 
         # --- Kết nạp xe đang chờ, nếu điểm vào đủ trống ----------------- #
         # Không có bước này thì hai xe cùng làn có thể xuất hiện chồng lên nhau
-        # và khoá cứng lối vào — cả hàng phía sau đứng im vĩnh viễn.
+        # và khoá cứng lối vào - cả hàng phía sau đứng im vĩnh viễn.
         if waiting:
             occupied = [
                 (veh, state[veh.vid]["s"]) for veh in active
@@ -493,7 +493,7 @@ def simulate(
                     occupied.append((veh, 0.0))
                 elif now - veh.t_start < 25.0:
                     still_waiting.append(veh)   # thử lại ở bước sau
-                # Quá 25 s không vào được thì bỏ — tránh dồn ứ vô hạn.
+                # Quá 25 s không vào được thì bỏ - tránh dồn ứ vô hạn.
             waiting = still_waiting
 
         n = len(active)
@@ -537,7 +537,7 @@ def simulate(
         # Điều kiện ``cos_dir > 0.7`` (lệch hướng dưới ~45°) là bắt buộc: nếu
         # thiếu nó, một xe đang cắt ngang trước mũi xe ta sẽ bị coi là "xe phía
         # trước cùng làn" và IDM sẽ hãm ta lại phía sau nó. Hai xe cắt nhau
-        # trong giao lộ khi đó cùng dừng và cùng chờ nhau — nút giao khoá chết
+        # trong giao lộ khi đó cùng dừng và cùng chờ nhau - nút giao khoá chết
         # vĩnh viễn. Xe cắt ngang không phải xe dẫn đầu; đó là xung đột, và do
         # cơ chế phanh tránh khẩn cấp bên dưới xử lý.
         lane_width = half_wid[:, None] + half_wid[None, :] + 0.35
@@ -616,7 +616,7 @@ def simulate(
             if np.isfinite(lead_gap[i]):
                 accel = min(accel, idm_brake(float(lead_gap[i]), float(lead_speed[i])))
 
-            # 2. Đèn tín hiệu — vạch dừng như một vật cản đứng yên.
+            # 2. Đèn tín hiệu - vạch dừng như một vật cản đứng yên.
             if veh.signal_group in ("NS", "EW") and not veh.runs_red:
                 phase = signal.phase(now, veh.signal_group)
                 dist_to_stop = veh.stop_line_s - st["s"]
@@ -633,10 +633,10 @@ def simulate(
                 if signal.phase(now, cross_group) == "green" and 0.0 < dist_to_stop < 25.0:
                     accel = min(accel, idm_brake(max(dist_to_stop, 0.30), 0.0))
 
-            # 3. Xe rẽ nhường dòng cắt — quyết định TRƯỚC vạch dừng.
+            # 3. Xe rẽ nhường dòng cắt - quyết định TRƯỚC vạch dừng.
             # Người lái rẽ chờ ở vạch dừng cho tới khi thấy khoảng trống, rồi
             # mới "cắm đầu" đi qua. Nếu để họ dừng giữa giao lộ thì cả nút bị
-            # khoá và dòng phía sau tắc dây chuyền — đó chính là lỗi phải tránh.
+            # khoá và dòng phía sau tắc dây chuyền - đó chính là lỗi phải tránh.
             if veh.is_turning and not in_junction[i]:
                 dist_to_stop = veh.stop_line_s - st["s"]
                 if 0.0 < dist_to_stop < 22.0 and st["wait"] < TURN_PATIENCE:
@@ -715,11 +715,11 @@ def compute_ground_truth(
     ---------------------------------------------------------
     Một cặp ``(a, b)`` là near-miss khi thoả **đồng thời** cả ba điều kiện:
 
-    1. **Thực sự đến gần nhau** — khoảng cách mặt-tới-mặt nhỏ nhất trong cả quá
+    1. **Thực sự đến gần nhau** - khoảng cách mặt-tới-mặt nhỏ nhất trong cả quá
        trình < ``proximity`` mét.
-    2. **Có nguy cơ va chạm** — cực tiểu TTC < ``ttc_threshold``, hoặc PET tại
+    2. **Có nguy cơ va chạm** - cực tiểu TTC < ``ttc_threshold``, hoặc PET tại
        điểm gặp < ``pet_threshold``.
-    3. **Có tốc độ tiếp cận thật** — vận tốc tương đối tại thời điểm căng thẳng
+    3. **Có tốc độ tiếp cận thật** - vận tốc tương đối tại thời điểm căng thẳng
        nhất > ``min_closing_speed`` m/s.
 
     Điều kiện 1 và 3 là thứ phân biệt near-miss với **bám đuôi bình thường**.

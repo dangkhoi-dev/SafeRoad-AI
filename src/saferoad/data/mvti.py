@@ -6,7 +6,7 @@ https://www.kaggle.com/datasets/andreasmoegelmose/multiview-traffic-intersection
 Vì sao dataset này quan trọng với SafeRoad AI
 --------------------------------------------
 Đây là dữ liệu **thật** của một giao lộ, quay từ camera hạ tầng cố định trên cao
-— đúng cấu hình mà đề bài mô tả. Quan trọng hơn, mỗi annotation mang trường
+- đúng cấu hình mà đề bài mô tả. Quan trọng hơn, mỗi annotation mang trường
 ``object_id`` **bền vững qua các khung hình**, nghĩa là dataset có sẵn *ground
 truth cho tracking*. Nhờ đó ta đo được IDF1/MOTA và mAP trên dữ liệu thật, chứ
 không chỉ trên mô phỏng.
@@ -22,7 +22,7 @@ Mô phỏng (synthetic) Precision/Recall near-miss, Độ khó thị giác của
                      TTC MAE, ablation
 ===================  ==========================  ==============================
 
-Ánh xạ lớp: dataset dùng bộ nhãn kiểu COCO nhưng chỉ xuất hiện 4 lớp —
+Ánh xạ lớp: dataset dùng bộ nhãn kiểu COCO nhưng chỉ xuất hiện 4 lớp -
 car(3), lorry/truck(8), bicycle(2), bus(6). Không có người đi bộ và xe máy, nên
 khi báo cáo phải nói rõ hai lớp đó chỉ được đánh giá trên tập mô phỏng.
 """
@@ -122,7 +122,7 @@ def load_coco(
     Tham số:
         annotation_path: file ``infrastructure-mscoco.json`` hoặc ``drone-mscoco.json``.
         dataset_root: thư mục gốc chứa ``Infrastructure/`` và ``Drone/``.
-        view: ``"Infrastructure"`` hoặc ``"Drone"`` — lọc theo tiền tố ``file_name``.
+        view: ``"Infrastructure"`` hoặc ``"Drone"`` - lọc theo tiền tố ``file_name``.
         min_box_area: bỏ qua bbox nhỏ hơn ngưỡng (pixel²).
 
     Trả về ``MvtiSequence`` với ``detections``, ``id_map`` và ``tracks`` đã điền.

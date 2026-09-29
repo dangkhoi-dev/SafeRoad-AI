@@ -1,4 +1,4 @@
-"""Phân loại hành vi lái xe nguy hiểm — rule-based kết hợp ML classifier.
+"""Phân loại hành vi lái xe nguy hiểm - rule-based kết hợp ML classifier.
 
 Kiến trúc lai có chủ đích:
 
@@ -6,7 +6,7 @@ Kiến trúc lai có chủ đích:
   tốc đột ngột, đổi hướng gấp). Ưu điểm: giải thích được ngay, không cần dữ
   liệu huấn luyện, không bao giờ "ảo giác".
 * **ML classifier** (Gradient Boosting) học các tổ hợp đặc trưng tinh vi hơn mà
-  luật cứng bỏ sót — ví dụ chuỗi "giảm tốc nhẹ → lệch làn → tăng tốc" đặc trưng
+  luật cứng bỏ sót - ví dụ chuỗi "giảm tốc nhẹ → lệch làn → tăng tốc" đặc trưng
   cho hành vi lách ẩu.
 
 Nhãn huấn luyện được sinh tự động từ simulator (biết chính xác xe nào có pha
@@ -115,7 +115,7 @@ def extract_features(track: Track, window: int = 15) -> dict[str, float]:
     straight = float(np.linalg.norm(pts[-1] - pts[0]))
     curvature = 0.0 if path_len < 1e-6 else max(0.0, 1.0 - straight / path_len)
 
-    # Độ lệch ngang so với đường thẳng nối đầu-cuối — bắt hành vi lượn lách.
+    # Độ lệch ngang so với đường thẳng nối đầu-cuối - bắt hành vi lượn lách.
     lateral = 0.0
     if straight > 1e-6:
         direction = (pts[-1] - pts[0]) / straight
@@ -153,7 +153,7 @@ class BehaviorClassifier:
         bản scikit-learn: pickle của ``HistGradientBoostingClassifier`` tham
         chiếu các module nội bộ (``_loss``, ``_predictor``…) mà scikit-learn đổi
         tên giữa các minor release. Model train bằng 1.8 nạp trên 1.9 sẽ báo
-        ``No module named '_loss'``. Không có cách vá phía đọc — phải train lại
+        ``No module named '_loss'``. Không có cách vá phía đọc - phải train lại
         trên chính môi trường đang chạy, nên thông báo phải nói thẳng điều đó.
         """
         try:
@@ -170,7 +170,7 @@ class BehaviorClassifier:
                 if sklearn.__version__ != trained_with:
                     log.warning(
                         "Behavior model train bằng scikit-learn %s, đang chạy %s "
-                        "— nếu kết quả bất thường hãy chạy: saferoad train-behavior",
+                        "- nếu kết quả bất thường hãy chạy: saferoad train-behavior",
                         trained_with, sklearn.__version__,
                     )
         except Exception as exc:  # pragma: no cover - phụ thuộc môi trường
@@ -180,11 +180,11 @@ class BehaviorClassifier:
                     import sklearn
 
                     hint = (
-                        f" — lệch phiên bản scikit-learn (đang chạy "
+                        f" - lệch phiên bản scikit-learn (đang chạy "
                         f"{sklearn.__version__}); train lại bằng: saferoad train-behavior"
                     )
                 except Exception:
-                    hint = " — train lại bằng: saferoad train-behavior"
+                    hint = " - train lại bằng: saferoad train-behavior"
             log.warning(
                 "Không nạp được behavior model (%s)%s. Tạm dùng luật cứng.", exc, hint
             )

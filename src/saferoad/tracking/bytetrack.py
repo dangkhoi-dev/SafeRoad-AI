@@ -1,9 +1,9 @@
-"""ByteTrack — multi-object tracking hai vòng ghép.
+"""ByteTrack - multi-object tracking hai vòng ghép.
 
 Ý tưởng cốt lõi của ByteTrack (Zhang et al., ECCV 2022): thay vì vứt bỏ mọi
 detection có điểm thấp, hãy dùng chúng ở **vòng ghép thứ hai** để nối lại các
-track đang bị che khuất. Với giao lộ Việt Nam — xe máy chen dày, che nhau liên
-tục — điều này giữ ID ổn định hơn hẳn so với SORT thuần.
+track đang bị che khuất. Với giao lộ Việt Nam - xe máy chen dày, che nhau liên
+tục - điều này giữ ID ổn định hơn hẳn so với SORT thuần.
 
 Cài đặt tự viết (không phụ thuộc thư viện ngoài) để repo tự chứa và để có thể
 gắn thêm phần quy đổi mặt đất ngay trong track.
@@ -85,7 +85,7 @@ def _iou_cost(tracks: list[_Strack], dets: list[Detection]) -> np.ndarray:
     det_boxes = [_expand(d.bbox) for d in dets]
     cost = np.ones((len(tracks), len(dets)), dtype=float)
     for i, t in enumerate(tracks):
-        # Track đã mất dấu lâu thì bbox dự đoán kém tin cậy — nới thêm biên
+        # Track đã mất dấu lâu thì bbox dự đoán kém tin cậy - nới thêm biên
         # theo số frame mất dấu để còn cơ hội bắt lại.
         tb = _expand(t.bbox, extra=1.5 * min(t.time_since_update, 8))
         for j, d in enumerate(dets):
@@ -152,7 +152,7 @@ class ByteTracker:
         """
         cfg = self.cfg
 
-        # Chia detection theo điểm tin cậy — đây là điểm mấu chốt của ByteTrack.
+        # Chia detection theo điểm tin cậy - đây là điểm mấu chốt của ByteTrack.
         high = [d for d in detections if d.score >= cfg.track_high_thresh]
         low = [
             d for d in detections
@@ -177,7 +177,7 @@ class ByteTracker:
                 tr.state = "confirmed"
             activated.append(tr)
 
-        # Bước 3: ghép vòng 2 — track còn lại với detection điểm THẤP.
+        # Bước 3: ghép vòng 2 - track còn lại với detection điểm THẤP.
         # Đây là bước cứu các track đang bị che khuất một phần.
         rest = [pool[i] for i in u_track if pool[i].state == "confirmed"]
         cost2 = _iou_cost(rest, low)

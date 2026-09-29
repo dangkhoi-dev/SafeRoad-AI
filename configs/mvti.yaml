@@ -26,7 +26,7 @@ detection:
   quantize: null            # null = FP32 | 16 = FP16 | 8 = INT8
   max_det: 300
   min_box_area: 120.0
-  backend: tiled
+  backend: yolo             # yolo = một lượt toàn khung | tiled = chia ô 2x3 (chậm hơn nhiều, mAP thấp hơn trên MVTI)
   tile_rows: 2
   tile_cols: 3
   tile_overlap: 0.25

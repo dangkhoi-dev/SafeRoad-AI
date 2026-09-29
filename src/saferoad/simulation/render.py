@@ -2,7 +2,7 @@
 
 Cảnh được vẽ qua một camera pinhole thật (:mod:`saferoad.simulation.camera`),
 phương tiện là khối hộp 3D chứ không phải hình chiếu bóng xuống đất. Nhờ vậy
-bounding box phản ánh đúng thứ camera thật nhìn thấy — đặc biệt quan trọng với
+bounding box phản ánh đúng thứ camera thật nhìn thấy - đặc biệt quan trọng với
 người đi bộ, vốn chỉ chiếm 0.5 × 0.5 m mặt đất nhưng cao 1.7 m.
 
 Homography mà pipeline dùng được **suy ra từ chính ma trận camera** này, nên
@@ -60,7 +60,7 @@ class SceneRenderer:
 
     # ------------------------------------------------------------------ #
     def _draw_background(self) -> np.ndarray:
-        """Vẽ nền tĩnh: mặt đường, vạch kẻ, vạch dừng — chỉ tính một lần."""
+        """Vẽ nền tĩnh: mặt đường, vạch kẻ, vạch dừng - chỉ tính một lần."""
         img = np.full((self.h, self.w, 3), (58, 78, 62), dtype=np.uint8)  # nền cỏ
         x_min, y_min, x_max, y_max = WORLD_BOUNDS
         cx, cy = CENTER
@@ -107,7 +107,7 @@ class SceneRenderer:
             cv2.line(img, tuple(pa.astype(int)), tuple(pb.astype(int)),
                      (238, 238, 238), 4, cv2.LINE_AA)
 
-        # Vạch bộ hành (kẻ sọc ngựa vằn) — chỉ trải hết bề rộng mặt đường.
+        # Vạch bộ hành (kẻ sọc ngựa vằn) - chỉ trải hết bề rộng mặt đường.
         span = 2 * ROAD_HALF_WIDTH + 1.0
         n_bands = 9
         pitch = span / n_bands
@@ -150,7 +150,7 @@ class SceneRenderer:
         colour = CLASS_COLOR[veh.cls]
         dark = tuple(int(c * 0.62) for c in colour)
 
-        # Mặt bên (nối đáy với nóc) — vẽ trước để nóc đè lên.
+        # Mặt bên (nối đáy với nóc) - vẽ trước để nóc đè lên.
         for i in range(4):
             j = (i + 1) % 4
             side = np.array([bottom[i], bottom[j], top[j], top[i]], dtype=np.int32)

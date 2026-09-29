@@ -5,7 +5,7 @@ Mỗi phương tiện được phủ bằng 1-3 hình tròn đặt dọc trục 
 này bám sát hình chữ nhật thật nên không còn báo động giả giữa hai xe đi song
 song ở hai làn cạnh nhau.
 
-Các hàm ở đây là **nguyên hàm hình học thuần tuý** — không chứa quyết định nào
+Các hàm ở đây là **nguyên hàm hình học thuần tuý** - không chứa quyết định nào
 về "thế nào là một xung đột". Nhờ vậy cả thuật toán online lẫn bộ sinh nhãn
 chuẩn (oracle) đều dùng chung được mà không làm hỏng tính độc lập của phép đánh
 giá: hai bên khác nhau ở *cách quyết định* (tần số lấy mẫu, vận tốc ước lượng
@@ -71,10 +71,10 @@ def vehicle_ttc(
     pos_b: tuple[float, float], vel_b: tuple[float, float], cls_b: VehicleClass,
     horizon: float = 10.0,
 ) -> float:
-    """TTC giữa hai phương tiện — nhỏ nhất trên mọi cặp hình tròn.
+    """TTC giữa hai phương tiện - nhỏ nhất trên mọi cặp hình tròn.
 
     Hướng của mỗi xe suy từ vector vận tốc. Xe gần như đứng yên không có hướng
-    xác định nên lấy hướng mặc định 0 — sai số khi đó không quan trọng vì xe
+    xác định nên lấy hướng mặc định 0 - sai số khi đó không quan trọng vì xe
     đứng yên không sinh xung đột do chuyển động của chính nó.
     """
     head_a = math.atan2(vel_a[1], vel_a[0]) if math.hypot(*vel_a) > 1e-6 else 0.0
@@ -83,7 +83,7 @@ def vehicle_ttc(
     circles_a = circle_centres(pos_a, head_a, cls_a)
     circles_b = circle_centres(pos_b, head_b, cls_b)
 
-    # Vận tốc tương đối chung cho mọi cặp hình tròn (bỏ qua chuyển động quay —
+    # Vận tốc tương đối chung cho mọi cặp hình tròn (bỏ qua chuyển động quay -
     # không đáng kể trong khoảng dự báo 1-3 giây).
     vx = vel_b[0] - vel_a[0]
     vy = vel_b[1] - vel_a[1]
@@ -117,7 +117,7 @@ def vehicle_gap(
 
 
 # --------------------------------------------------------------------------- #
-# Phiên bản vector hoá — dùng cho oracle, chạy trên cả chuỗi thời gian một lần
+# Phiên bản vector hoá - dùng cho oracle, chạy trên cả chuỗi thời gian một lần
 # --------------------------------------------------------------------------- #
 def series_ttc_and_gap(
     pos_a: np.ndarray, vel_a: np.ndarray, cls_a: VehicleClass,

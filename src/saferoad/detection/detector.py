@@ -1,4 +1,4 @@
-"""Khối Detection — phát hiện phương tiện & người đi bộ.
+"""Khối Detection - phát hiện phương tiện & người đi bộ.
 
 Mặc định dùng YOLO11n với trọng số COCO: 5 lớp cần thiết (person, bicycle,
 motorcycle, car, bus/truck) đã có sẵn trong COCO nên MVP chạy được ngay mà
@@ -21,7 +21,7 @@ log = logging.getLogger(__name__)
 
 
 class BaseDetector(ABC):
-    """Giao diện chung — cho phép thay detector mà không đụng pipeline."""
+    """Giao diện chung - cho phép thay detector mà không đụng pipeline."""
 
     @abstractmethod
     def detect(self, frame: np.ndarray, frame_idx: int = 0) -> list[Detection]:
@@ -37,7 +37,7 @@ def _precision_kwargs(quantize: int | None) -> dict:
     """Chọn tham số độ chính xác đúng với phiên bản Ultralytics đang cài.
 
     Ultralytics thay cờ ``half`` bằng ``quantize`` và in một dòng cảnh báo cho
-    MỖI lần gọi ``predict`` nếu còn dùng tên cũ — chạy một video 2.441 frame là
+    MỖI lần gọi ``predict`` nếu còn dùng tên cũ - chạy một video 2.441 frame là
     2.441 dòng cảnh báo lấp kín toàn bộ log, che mất những thông báo thật sự
     cần đọc. Đồng thời, truyền ``half=False`` chẳng làm gì ngoài việc kích hoạt
     cảnh báo đó, nên khi chạy FP32 ta không truyền tham số nào cả.
@@ -149,10 +149,16 @@ def _merge(dets: list[Detection], iou_thr: float) -> list[Detection]:
 class TiledYoloDetector(BaseDetector):
     """Chạy YOLO trên từng ô của khung hình rồi gộp kết quả lại.
 
-    Vì sao cần: camera giao thông đặt cao nhìn chếch xuống, phương tiện ở xa chỉ
-    chiếm vài chục pixel. Một lượt suy luận trên cả khung hình 1024×640 thu nhỏ
-    về 640 px làm chúng teo thêm một lần nữa, và detector bỏ sót gần hết — đo
-    trên tập MVTI, cách chạy một lượt chỉ đạt recall@0,5 ≈ 0,20.
+    Ý định: camera giao thông đặt cao nhìn chếch xuống, phương tiện ở xa chỉ
+    chiếm vài chục pixel. Một lượt suy luận trên cả khung hình thu nhỏ về 640 px
+    làm chúng teo thêm một lần nữa.
+
+    Kết quả đo trên tập MVTI (2.441 ảnh, cùng cách chấm COCO) KHÔNG ủng hộ ý định
+    đó: mAP@0,5 giảm từ 0,208 (một lượt) xuống 0,164; ở ngưỡng vận hành 0,15,
+    recall tăng từ 0,277 lên 0,323 nhưng precision giảm từ 0,468 xuống 0,353, và
+    chậm hơn khoảng 9 lần. Phương tiện trong MVTI không quá nhỏ; cái khó là góc
+    nhìn khác ảnh COCO. Vì vậy cấu hình mặc định dùng một lượt, còn detector này
+    giữ lại như một tuỳ chọn (``backend: tiled``) cho cảnh có vật thể thật sự nhỏ.
 
     Cắt khung hình thành lưới ô chồng lấn và chạy detector trên từng ô ở độ phân
     giải gốc của ô giúp mỗi vật thể chiếm nhiều pixel hơn trong ảnh đưa vào model.
@@ -221,7 +227,7 @@ class TiledYoloDetector(BaseDetector):
 
 
 class ReplayDetector(BaseDetector):
-    """Phát lại detection đã có sẵn — dùng cho video synthetic.
+    """Phát lại detection đã có sẵn - dùng cho video synthetic.
 
     Simulator sinh ra bbox tuyệt đối chính xác. Khi chấm ablation ta cần tách
     được sai số của *detector* khỏi sai số của *conflict logic*; detector này
@@ -262,7 +268,7 @@ class ReplayDetector(BaseDetector):
 
 
 def build_detector(cfg: DetectionConfig, **kwargs) -> BaseDetector:
-    """Factory — chọn detector theo ``cfg.backend``."""
+    """Factory - chọn detector theo ``cfg.backend``."""
     if cfg.backend == "yolo":
         return YoloDetector(cfg)
     if cfg.backend == "tiled":

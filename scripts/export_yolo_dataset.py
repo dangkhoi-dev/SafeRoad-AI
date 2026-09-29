@@ -9,7 +9,7 @@ gồm ảnh chụp ngang tầm mắt, trong khi camera giao thông đặt cao 10
 chếch xuống, đối tượng nhỏ và bị nén phối cảnh. Trong một khung hình thử,
 YOLO11n chỉ phát hiện đúng một vật thể và gán nhầm nhãn "train" cho một chiếc ô tô.
 
-MVTI có sẵn 14.488 bounding box trên 2.441 ảnh — quá đủ để fine-tune và đóng
+MVTI có sẵn 14.488 bounding box trên 2.441 ảnh - quá đủ để fine-tune và đóng
 phần lớn khoảng cách đó.
 
 Cách dùng::
@@ -99,7 +99,7 @@ def main(argv: list[str] | None = None) -> int:
                 if name is None:
                     continue
                 x, y, bw, bh = a["bbox"]
-                # YOLO: cx, cy, w, h — tất cả chuẩn hoá về [0, 1].
+                # YOLO: cx, cy, w, h - tất cả chuẩn hoá về [0, 1].
                 cx, cy = (x + bw / 2) / w, (y + bh / 2) / h
                 nw, nh = bw / w, bh / h
                 if nw <= 0 or nh <= 0:
@@ -109,7 +109,7 @@ def main(argv: list[str] | None = None) -> int:
                 labels.append((CLASS_INDEX[name], cx, cy, nw, nh))
                 class_counts[name] += 1
             # Giữ cả ảnh không có nhãn: chúng là mẫu nền (negative), giúp giảm
-            # cảnh báo giả — YOLO xử lý được file nhãn rỗng.
+            # cảnh báo giả - YOLO xử lý được file nhãn rỗng.
             records.append((src, labels))
 
     if not records:

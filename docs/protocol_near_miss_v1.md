@@ -1,7 +1,7 @@
-# Protocol định nghĩa Near-miss / Traffic Conflict — v1.0
+# Protocol định nghĩa Near-miss / Traffic Conflict - v1.0
 
 **Dự án:** SafeRoad AI · **Nhóm 2** · Cuộc thi Sáng tạo trẻ Quốc gia về AI 2026 (Bảng C)
-**Tương ứng công việc:** mục 4.0 trong kế hoạch — *"Xây dựng protocol định nghĩa near-miss/conflict rõ ràng, nhất quán làm ground truth"*
+**Tương ứng công việc:** mục 4.0 trong kế hoạch - *"Xây dựng protocol định nghĩa near-miss/conflict rõ ràng, nhất quán làm ground truth"*
 
 ---
 
@@ -22,11 +22,11 @@ nó được cài đặt trong `saferoad/simulation/scenario.py::compute_ground_
 
 ## 2. Hai chỉ số nền tảng
 
-### 2.1 TTC — Time To Collision
+### 2.1 TTC - Time To Collision
 
 Thời gian còn lại tới va chạm **nếu cả hai giữ nguyên vận tốc hiện tại**.
 
-Mỗi phương tiện được phủ bằng 1–3 hình tròn dọc trục thân xe, bán kính bằng nửa
+Mỗi phương tiện được phủ bằng 1-3 hình tròn dọc trục thân xe, bán kính bằng nửa
 bề rộng xe (xem §5). Với một cặp hình tròn, đặt Δp = p_b − p_a, Δv = v_b − v_a
 và R = r_a + r_b, va chạm xảy ra khi ‖Δp + tΔv‖ = R, dẫn tới phương trình bậc hai:
 
@@ -37,7 +37,7 @@ và R = r_a + r_b, va chạm xảy ra khi ‖Δp + tΔv‖ = R, dẫn tới phư
 TTC là **nghiệm dương nhỏ nhất trên mọi cặp hình tròn**. Không có nghiệm dương
 nghĩa là hai đối tượng đang tách xa nhau hoặc sẽ lướt qua nhau.
 
-### 2.2 PET — Post-Encroachment Time
+### 2.2 PET - Post-Encroachment Time
 
 Khoảng thời gian giữa lúc đối tượng thứ nhất **rời khỏi** điểm xung đột và lúc
 đối tượng thứ hai **đi tới** chính điểm đó:
@@ -47,11 +47,11 @@ PET = |t_a − t_b| − (thời gian xe tới trước chiếm dụng điểm gi
 ```
 
 PET bắt được tình huống mà TTC bỏ sót: xe A vừa qua, 0.8 s sau xe B mới tới đúng
-chỗ đó — chưa bao giờ có nguy cơ va chạm tức thời, nhưng rõ ràng là "suýt".
+chỗ đó - chưa bao giờ có nguy cơ va chạm tức thời, nhưng rõ ràng là "suýt".
 
 **Điều kiện bảo vệ bắt buộc:** PET chỉ được tính khi góc giữa hai quỹ đạo **≥ 20°**
 và điểm giao nằm trong phạm vi 40 m. Với hai xe đi gần song song, giao điểm của
-hai tia nằm rất xa và cực nhạy với nhiễu — lệch hướng 1° đã dời điểm giao hàng
+hai tia nằm rất xa và cực nhạy với nhiễu - lệch hướng 1° đã dời điểm giao hàng
 chục mét, sinh ra một giá trị PET nhỏ hoàn toàn giả. Trường hợp đó phải để TTC
 xử lý.
 
@@ -64,10 +64,10 @@ bốn** điều kiện sau trong suốt quãng thời gian hai đối tượng c
 
 | # | Điều kiện | Ngưỡng | Vì sao |
 |---|---|---|---|
-| 1 | **Thực sự đến gần nhau** — khoảng cách mặt-tới-mặt nhỏ nhất | < 2.0 m (oracle) / 3.0 m (online) | TTC chỉ là *phép ngoại suy*. Nếu một bên kịp phanh và hai xe chưa bao giờ tới gần, đó là tình huống được xử lý **tốt**, không phải sự cố. |
-| 2 | **Có nguy cơ va chạm** — cực tiểu TTC **hoặc** PET | TTC < 3.0 s **hoặc** PET < 1.5 s | Ngưỡng theo thông lệ nghiên cứu conflict và theo cam kết trong poster đề tài. |
-| 3 | **Có tốc độ tiếp cận thật** — vận tốc tương đối tại thời điểm căng nhất | > 2.5 m/s (oracle) / 3.0 m/s (online) | Đây là thứ phân biệt xung đột thật với **dòng xe bám đuôi bình thường**. Hai xe máy nối đuôi cách 0.9 m ở cùng tốc độ có TTC rất nhỏ theo mô hình hình học, nhưng đó là giao thông bình thường. |
-| 4 | **Nằm trong vùng cảm biến** — vị trí xung đột trong tầm phủ của camera | vùng `COVERAGE` | Không thể quy trách nhiệm cho hệ thống về thứ nằm ngoài khung hình. |
+| 1 | **Thực sự đến gần nhau** - khoảng cách mặt-tới-mặt nhỏ nhất | < 2.0 m (oracle) / 3.0 m (online) | TTC chỉ là *phép ngoại suy*. Nếu một bên kịp phanh và hai xe chưa bao giờ tới gần, đó là tình huống được xử lý **tốt**, không phải sự cố. |
+| 2 | **Có nguy cơ va chạm** - cực tiểu TTC **hoặc** PET | TTC < 3.0 s **hoặc** PET < 1.5 s | Ngưỡng theo thông lệ nghiên cứu conflict và theo cam kết trong poster đề tài. |
+| 3 | **Có tốc độ tiếp cận thật** - vận tốc tương đối tại thời điểm căng nhất | > 2.5 m/s (oracle) / 3.0 m/s (online) | Đây là thứ phân biệt xung đột thật với **dòng xe bám đuôi bình thường**. Hai xe máy nối đuôi cách 0.9 m ở cùng tốc độ có TTC rất nhỏ theo mô hình hình học, nhưng đó là giao thông bình thường. |
+| 4 | **Nằm trong vùng cảm biến** - vị trí xung đột trong tầm phủ của camera | vùng `COVERAGE` | Không thể quy trách nhiệm cho hệ thống về thứ nằm ngoài khung hình. |
 
 Điều kiện 1 và 3 là phần **quan trọng nhất và cũng dễ bị bỏ quên nhất**. Chỉ dùng
 TTC đơn thuần sẽ gán nhãn near-miss cho hàng trăm cặp xe đang lưu thông hoàn toàn
@@ -80,20 +80,20 @@ bình thường trong dòng đông đúc.
 | Mức | TTC nhỏ nhất | Diễn giải | Recall đo được |
 |---|---|---|---|
 | **Rất nghiêm trọng** | < 1.0 s | Gần như không còn thời gian phản ứng | **0.824** |
-| **Nghiêm trọng** | 1.0 – 1.5 s | Chỉ vừa đủ thời gian phản xạ | 0.625 |
-| **Trung bình** | 1.5 – 2.5 s | Còn kịp phanh nếu chú ý | 0.333 |
-| **Nhẹ** | 2.5 – 3.0 s | Đáng ghi nhận nhưng chưa nguy hiểm | 0.000 |
+| **Nghiêm trọng** | 1.0 - 1.5 s | Chỉ vừa đủ thời gian phản xạ | 0.625 |
+| **Trung bình** | 1.5 - 2.5 s | Còn kịp phanh nếu chú ý | 0.333 |
+| **Nhẹ** | 2.5 - 3.0 s | Đáng ghi nhận nhưng chưa nguy hiểm | 0.000 |
 
 Đây là bảng quan trọng nhất về mặt an toàn: **bỏ sót một near-miss TTC < 1 s nguy
 hiểm hơn rất nhiều so với bỏ sót một near-miss TTC 2.8 s.** Recall phải được báo
 cáo tách theo dải chứ không gộp thành một con số duy nhất. Hệ thống hiện tại
-mạnh đúng ở dải nguy hiểm nhất — đó là hành vi mong muốn.
+mạnh đúng ở dải nguy hiểm nhất - đó là hành vi mong muốn.
 
 ---
 
 ## 5. Mô hình hình học của phương tiện
 
-Mỗi đối tượng được phủ bằng **1–3 hình tròn** đặt dọc trục thân xe, bán kính bằng
+Mỗi đối tượng được phủ bằng **1-3 hình tròn** đặt dọc trục thân xe, bán kính bằng
 nửa bề rộng xe:
 
 | Lớp | Dài × Rộng × Cao (m) | Số hình tròn | Bán kính (m) |
@@ -105,7 +105,7 @@ nửa bề rộng xe:
 | Xe tải / Bus | 7.5 × 2.5 × 3.20 | 3 | 1.25 |
 
 **Vì sao không dùng một hình tròn duy nhất.** Hình tròn ngoại tiếp một ô tô
-4.4 × 1.8 m có bán kính ½·√(4.4² + 1.8²) ≈ 2.38 m — tức là mô hình hoá chiếc xe
+4.4 × 1.8 m có bán kính ½·√(4.4² + 1.8²) ≈ 2.38 m - tức là mô hình hoá chiếc xe
 như một vật thể **rộng 4.76 m**. Hậu quả đo được trong quá trình phát triển: hai
 ô tô đi ngược chiều ở hai làn cách nhau 4 m bị gắn nhãn "đối đầu", sinh ra 132
 cảnh báo giả trong 120 giây cho dòng xe hoàn toàn bình thường. Chuyển sang mô
@@ -133,18 +133,18 @@ nhóm dễ tổn thương nhất và cần tách riêng trong mọi thống kê 
 
 ## 7. Gom sự kiện theo episode
 
-Một tình huống suýt va chạm kéo dài 1–2 giây. Ở 30 FPS, nếu phát một sự kiện cho
-mỗi khung hình thoả ngưỡng thì **một** tình huống sẽ biến thành 30–60 "sự kiện".
+Một tình huống suýt va chạm kéo dài 1-2 giây. Ở 30 FPS, nếu phát một sự kiện cho
+mỗi khung hình thoả ngưỡng thì **một** tình huống sẽ biến thành 30-60 "sự kiện".
 
 Quy tắc:
 
 1. **Mở episode** khi cặp đối tượng lần đầu thoả điều kiện 2 + 3.
-2. **Duy trì** episode, liên tục cập nhật TTC/PET/khoảng cách nhỏ nhất — kể cả ở
+2. **Duy trì** episode, liên tục cập nhật TTC/PET/khoảng cách nhỏ nhất - kể cả ở
    những khung hình điều kiện tạm thời tắt (khoảnh khắc hai xe gần nhau **nhất**
    thường rơi vào lúc TTC đã hết ý nghĩa vì chúng đang lướt qua nhau).
 3. **Đóng** episode sau 5 khung hình liên tiếp không còn xung đột.
 4. **Phát một sự kiện duy nhất**, gán nhãn thời gian tại **thời điểm TTC nhỏ nhất**
-   — khoảnh khắc căng thẳng nhất, không phải lúc bắt đầu hay lúc kết thúc.
+   - khoảnh khắc căng thẳng nhất, không phải lúc bắt đầu hay lúc kết thúc.
 5. **Gộp** hai episode của cùng một cặp nếu cách nhau dưới 8 giây.
 
 ---
@@ -155,10 +155,10 @@ Khi nhóm quay video tại Hàng Xanh và cần gán nhãn tay để đối ch�
 
 1. Xem video ở tốc độ **0.25×**, đánh dấu mọi thời điểm cảm thấy "suýt va chạm".
 2. Với mỗi thời điểm, ghi: `t_bắt_đầu`, `t_căng_nhất`, `t_kết_thúc`, hai đối tượng,
-   kiểu xung đột, mức nghiêm trọng chủ quan (1–4).
+   kiểu xung đột, mức nghiêm trọng chủ quan (1-4).
 3. **Hai người gán nhãn độc lập** cùng một đoạn video.
 4. Tính độ đồng thuận (Cohen's kappa). Nếu κ < 0.6, ngồi lại thống nhất cách hiểu
-   protocol rồi gán lại — **không** lấy trung bình hai kết quả bất đồng.
+   protocol rồi gán lại - **không** lấy trung bình hai kết quả bất đồng.
 5. Chỉ giữ các sự kiện cả hai người cùng đánh dấu, làm nhãn chuẩn.
 
 Ghi rõ số người gán nhãn và giá trị κ trong báo cáo. Không có κ thì không thể
@@ -178,8 +178,8 @@ Nêu ra để người đọc báo cáo đánh giá đúng phạm vi kết luậ
    phẳng. Với giao lộ dốc hoặc có cầu vượt, cần chia vùng và calibrate riêng.
 
 3. **Ranh giới "dòng xe đông" và "xung đột" vốn mờ.** Ngay cả người gán nhãn có
-   kinh nghiệm cũng bất đồng ở dải TTC 2–3 s. Đây là lý do chính khiến Precision
-   dừng ở khoảng 0.53–0.67 chứ không tiến sát 1.0, và cũng là phát hiện được ghi
+   kinh nghiệm cũng bất đồng ở dải TTC 2-3 s. Đây là lý do chính khiến Precision
+   dừng ở khoảng 0.53-0.67 chứ không tiến sát 1.0, và cũng là phát hiện được ghi
    nhận trong tài liệu nghiên cứu về traffic conflict technique.
 
 4. **Chưa mô hình hoá tương tác nhiều bên.** Hệ thống xét từng **cặp**; tình huống
@@ -198,11 +198,11 @@ Nêu ra để người đọc báo cáo đánh giá đúng phạm vi kết luậ
    Engineering, 41(7).
 4. Treiber, M., Hennecke, A., Helbing, D. (2000). *Congested traffic states in
    empirical observations and microscopic simulations.* Physical Review E, 62(2).
-   — mô hình IDM dùng trong trình mô phỏng.
+   - mô hình IDM dùng trong trình mô phỏng.
 5. Zhang, Y. et al. (2022). *ByteTrack: Multi-Object Tracking by Associating Every
    Detection Box.* ECCV 2022.
 
 ---
 
-*Phiên bản 1.0 — chốt trước khi bắt đầu đo đạc. Mọi thay đổi ngưỡng sau thời điểm
+*Phiên bản 1.0 - chốt trước khi bắt đầu đo đạc. Mọi thay đổi ngưỡng sau thời điểm
 này phải ghi rõ trong changelog và chạy lại toàn bộ đánh giá.*

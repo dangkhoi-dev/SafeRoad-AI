@@ -444,7 +444,7 @@ class TestThroughputMetric:
     def test_reports_tail_not_just_centre(self):
         """Trung vị giấu mất đuôi phân phối, nên phải báo cáo kèm p95.
 
-        Với 10% frame chậm gấp 4 lần, trung vị vẫn 20 ms — đúng nhưng không đủ:
+        Với 10% frame chậm gấp 4 lần, trung vị vẫn 20 ms - đúng nhưng không đủ:
         người đọc cần biết trường hợp xấu. p95 mới cho thấy điều đó.
         """
         import numpy as np
@@ -455,7 +455,7 @@ class TestThroughputMetric:
 
 
 class TestTiledDetector:
-    """Detector chia ô — thứ quyết định có nhìn thấy xe ở xa hay không.
+    """Detector chia ô - thứ quyết định có nhìn thấy xe ở xa hay không.
 
     Ba tính chất phải đúng, và cả ba đều đã từng sai trong lúc phát triển:
     ô phải phủ kín khung hình, phải chồng lấn nhau, và toạ độ trả về phải nằm
@@ -532,3 +532,91 @@ class TestTiledDetector:
         xs = sorted(round(o.bbox[0]) for o in out)
         assert xs[0] == 0, "ô đầu tiên phải cho hộp ở gốc toạ độ khung hình"
         assert max(xs) > 100, "các ô bên phải phải được dịch sang phải, không nằm chồng ở gốc"
+
+
+class TestDetectionMetricsHonesty:
+    """Hai chỗ từng làm số liệu đẹp hơn thực tế: P/R đọc ở ngưỡng chấm mAP
+    thay vì ngưỡng vận hành, và MOTA bị kẹp về 0."""
+
+    def test_operating_point_differs_from_curve_end(self):
+        from saferoad.evaluation.detection import evaluate_detection
+        from saferoad.types import Detection, VehicleClass
+
+        car = VehicleClass.CAR
+        gt = {0: [Detection(bbox=(0, 0, 10, 10), score=1.0, cls=car),
+                  Detection(bbox=(50, 50, 60, 60), score=1.0, cls=car)]}
+        pred = {0: [
+            Detection(bbox=(0, 0, 10, 10), score=0.9, cls=car),      # đúng, điểm cao
+            Detection(bbox=(100, 100, 110, 110), score=0.5, cls=car),  # sai, điểm vừa
+            Detection(bbox=(50, 50, 60, 60), score=0.01, cls=car),   # đúng, điểm rất thấp
+        ]}
+        m = evaluate_detection(pred, gt, operating_conf=0.3)
+        # Cuối đường PR: bắt được cả 2 nhưng có 1 hộp sai
+        assert abs(m.recall50 - 1.0) < 1e-9
+        assert abs(m.precision50 - 2 / 3) < 1e-9
+        # Ở ngưỡng vận hành 0,3: chỉ còn 2 hộp đầu, bắt được 1/2
+        assert abs(m.recall50_op - 0.5) < 1e-9
+        assert abs(m.precision50_op - 0.5) < 1e-9
+
+    def test_mota_is_not_clamped(self):
+        import pathlib
+        src = pathlib.Path("src/saferoad/evaluation/real.py").read_text(encoding="utf-8")
+        src2 = pathlib.Path("src/saferoad/evaluation/metrics.py").read_text(encoding="utf-8")
+        for s in (src, src2):
+            assert "mota = max(" not in s, "MOTA không được kẹp về 0 - MOTA âm là thông tin thật"
+
+
+class TestPortableBundle:
+    """Nhãn chuẩn tạo trên Windows phải mở được trên Linux (Colab, CI)."""
+
+    @staticmethod
+    def _windows_pickle() -> bytes:
+        """Luồng pickle giống hệt thứ máy Windows sinh cho một WindowsPath.
+
+        Dùng protocol 0 (dạng văn bản, không có tiền tố độ dài) để có thể thay
+        tên lớp trong luồng byte mà không làm hỏng nó.
+        """
+        import pathlib
+        import pickle
+
+        class _P:
+            def __reduce__(self):
+                return (pathlib.PurePosixPath, ("data", "raw", "mvti"))
+
+        raw = pickle.dumps({"root": _P()}, protocol=0)
+        assert b"PurePosixPath" in raw
+        return raw.replace(b"PurePosixPath", b"WindowsPath")
+
+    def test_plain_pickle_fails_off_windows(self):
+        import os
+        import pickle
+
+        if os.name == "nt":
+            pytest.skip("trên Windows thì pickle thường đọc được")
+        with pytest.raises(Exception):
+            pickle.loads(self._windows_pickle())
+
+    def test_load_bundle_reads_it(self, tmp_path):
+        import pathlib
+        from saferoad.utils.bundle import load_bundle
+
+        f = tmp_path / "b.pkl"
+        f.write_bytes(self._windows_pickle())
+        out = load_bundle(f)
+        assert isinstance(out["root"], pathlib.Path)
+        assert out["root"].parts[-3:] == ("data", "raw", "mvti")
+
+
+class TestJsonReport:
+    def test_nan_becomes_null(self):
+        """Lớp không có nhãn cho AP = NaN; báo cáo JSON phải đọc được bằng mọi trình đọc."""
+        import json
+
+        from saferoad.cli import _json_safe
+
+        payload = {"per_class": {"motorcycle": {"AP50": float("nan"), "n_gt": 0}},
+                   "values": [1.0, float("inf"), (2.0, float("-inf"))]}
+        text = json.dumps(_json_safe(payload), allow_nan=False)
+        back = json.loads(text)
+        assert back["per_class"]["motorcycle"]["AP50"] is None
+        assert back["values"] == [1.0, None, [2.0, None]]

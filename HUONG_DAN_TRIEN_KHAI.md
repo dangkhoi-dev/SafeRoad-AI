@@ -1,4 +1,4 @@
-# Hướng dẫn triển khai — từng bước một
+# Hướng dẫn triển khai - từng bước một
 
 Tài liệu này dành riêng cho Khôi, để đưa dự án từ trạng thái hiện tại lên GitHub
 và chạy được toàn bộ trên máy của bạn.
@@ -8,7 +8,7 @@ và chạy được toàn bộ trên máy của bạn.
 
 ---
 
-## Phần 0 — Chuẩn bị (một lần, ~5 phút)
+## Phần 0 - Chuẩn bị (một lần, ~5 phút)
 
 Mở **PowerShell** hoặc **Command Prompt**, rồi:
 
@@ -34,34 +34,34 @@ Nếu `python` không chạy được, thử `py -3` thay thế.
 
 ---
 
-## Phần 1 — Chạy thử để chắc mọi thứ hoạt động (~6 phút)
+## Phần 1 - Chạy thử để chắc mọi thứ hoạt động (~20 phút)
 
 ```powershell
-REM 1.1 Chạy bộ kiểm thử — phải thấy "78 passed"
+REM 1.1 Chạy bộ kiểm thử - phải thấy "91 passed"
 pytest tests\ -q
 
 REM 1.2 Sinh video mô phỏng + nhãn chuẩn (~2 phút)
 python -m saferoad simulate --duration 300 --seed 42
 
-REM 1.3 Chạy pipeline end-to-end (~1 phút)
+REM 1.3 Chạy pipeline end-to-end (~4 phút)
 python -m saferoad run --config configs\synthetic.yaml ^
     --ground-truth data\samples\synthetic_groundtruth.pkl --replay-detections
 
-REM 1.4 Chấm điểm + bảng ablation (~3 phút)
+REM 1.4 Chấm điểm + bảng ablation (~15 phút)
 python -m saferoad evaluate
 
 REM 1.5 Mở dashboard
 python -m saferoad serve
 ```
 
-Rồi mở trình duyệt vào **http://127.0.0.1:8000** — bạn sẽ thấy dashboard 7 tab.
+Rồi mở trình duyệt vào **http://127.0.0.1:8000** - bạn sẽ thấy dashboard 7 tab.
 Nhấn `Ctrl+C` trong terminal để dừng.
 
-**Nếu bước 1.2–1.4 chạy đúng, toàn bộ hệ thống đã hoạt động.**
+**Nếu bước 1.2-1.4 chạy đúng, toàn bộ hệ thống đã hoạt động.**
 
 ---
 
-## Phần 2 — Đẩy lên GitHub (~3 phút)
+## Phần 2 - Đẩy lên GitHub (~3 phút)
 
 ### 2.1 Tạo Personal Access Token
 
@@ -109,17 +109,17 @@ git push -u origin main
 
 ### 2.4 Kiểm tra
 
-Mở https://github.com/dangkhoi-dev/SafeRoad-AI — phải thấy README hiển thị đầy đủ
+Mở https://github.com/dangkhoi-dev/SafeRoad-AI - phải thấy README hiển thị đầy đủ
 kèm sơ đồ kiến trúc, và 18 commit trong lịch sử.
 
 ---
 
-## Phần 3 — Chạy trên dataset thật (~20 phút)
+## Phần 3 - Chạy trên dataset thật (~20 phút)
 
 ### 3.1 Sắp xếp dữ liệu đã tải về
 
 ```powershell
-REM Xem trước — KHÔNG đụng vào file nào
+REM Xem trước - KHÔNG đụng vào file nào
 python scripts\organize_dataset.py --source D:\SV7 --dry-run
 
 REM Nếu bảng xem trước trông đúng, chạy thật (di chuyển, gần như tức thời)
@@ -154,21 +154,21 @@ python -m saferoad evaluate-real --config configs\mvti.yaml
 
 Bạn sẽ nhận được mAP detection và IDF1 tracking trên **ảnh thật**.
 
-⚠️ **Con số mAP sẽ thấp** (khoảng 0.09). Đây **không phải lỗi** — đó là phát hiện
-thật của dự án: YOLO11n với trọng số COCO gốc không hợp với góc nhìn camera giao
+⚠️ **Con số mAP sẽ thấp** (mAP@0,5 khoảng 0,21). Đây **không phải lỗi** - đó là phát
+hiện thật của dự án: YOLO11n với trọng số COCO gốc không hợp với góc nhìn camera giao
 thông. Xem Phần 4 để khắc phục.
 
-Muốn thử ngay cách cải thiện tạm thời (cắt ô, chậm hơn ~6 lần nhưng recall gấp
-2,4 lần):
+Muốn so sánh với detector chia ô (khoảng 30 phút; trên MVTI cách này cho mAP thấp hơn
+và chậm hơn khoảng 9 lần, nên không phải cấu hình mặc định):
 
 ```powershell
-python -m saferoad evaluate-real --config configs\mvti.yaml ^
+python -m saferoad evaluate-real --config configs\mvti.yaml --backend tiled --no-overlay ^
     --out data\outputs\evaluation_real_tiled.json
 ```
 
 ---
 
-## Phần 4 — Fine-tune YOLO trên Colab (~1 giờ, cần GPU)
+## Phần 4 - Fine-tune YOLO trên Colab (~1 giờ, cần GPU)
 
 Đây là bước **nâng chất lượng lớn nhất** cho phần dữ liệu thật.
 
@@ -195,7 +195,7 @@ Tải file `yolo_mvti.zip` vừa tạo lên Google Drive (thư mục gốc MyDri
 Notebook đã xử lý sẵn hai điểm quan trọng:
 - Đo **baseline trước khi train** để có số liệu so sánh cho báo cáo.
 - Trộn thêm mẫu COCO có `person` và `motorcycle`, vì MVTI **không có** hai lớp
-  này — nếu không, model fine-tune sẽ quên mất người đi bộ và xe máy.
+  này - nếu không, model fine-tune sẽ quên mất người đi bộ và xe máy.
 
 ### 4.4 Đưa trọng số mới về và chạy lại
 
@@ -223,7 +223,7 @@ quả mới. Không cần sửa tay con số nào.
 
 ---
 
-## Phần 5 — Chạy trên video tự quay của nhóm
+## Phần 5 - Chạy trên video tự quay của nhóm
 
 ```powershell
 REM Bước 1: ẩn danh (BẮT BUỘC theo Điều 5 Thể lệ)
@@ -263,11 +263,11 @@ Cách lấy 4 điểm mốc:
 4. Điền vào file cấu hình.
 
 Sau đó chạy với `--config configs\hangxanh.yaml`. Sai số tái chiếu được in ra khi
-chạy — nếu lớn hơn 0,5 m thì cần đo lại điểm mốc.
+chạy - nếu lớn hơn 0,5 m thì cần đo lại điểm mốc.
 
 ---
 
-## Phần 6 — Chuẩn bị hồ sơ nộp
+## Phần 6 - Chuẩn bị hồ sơ nộp
 
 ### Checklist
 
@@ -277,21 +277,21 @@ chạy — nếu lớn hơn 0,5 m thì cần đo lại điểm mốc.
 | Mã nguồn công khai | ⬜ Bạn làm | Đẩy lên GitHub (Phần 2), đặt repo **public** |
 | Protocol near-miss | ✅ Có sẵn | `docs\protocol_near_miss_v1.md` |
 | Bảng kê dataset + license | ✅ Có sẵn | `docs\dataset_license.md` |
-| Bản kê khai công cụ AI | ⚠️ Cần điền | `docs\ke_khai_cong_cu.md` — điền tên công cụ nhóm dùng |
-| Prompt Log | ⚠️ Cần điền | `docs\prompt_log.md` — xuất hội thoại, tải Drive, **mở quyền xem** |
-| Video thuyết trình ≤5' | ⬜ Team quay | Kịch bản: `docs\video_script.md` |
-| Video demo ≤5' | ⬜ Team quay | Kịch bản: `docs\video_script.md` |
+| Bản kê khai công cụ AI | Nộp kèm hồ sơ | Nằm trong thư mục hồ sơ gửi trường, không để trong repo |
+| Prompt Log | Nộp kèm hồ sơ | Xuất hội thoại, tải lên Drive, **mở quyền xem** |
+| Video thuyết trình ≤5' | ⬜ Team quay | Slide + kịch bản trong thư mục hồ sơ |
+| Video demo ≤5' | Có sẵn | Trong thư mục hồ sơ |
 | Sơ đồ kiến trúc | ✅ Có sẵn | `docs\assets\architecture.png` |
 | Kết quả đánh giá | ✅ Có sẵn | `data\outputs\evaluation.json` |
 
 ### Ba việc bắt buộc phải tự làm
 
-1. **Prompt Log** — mở `docs\prompt_log.md`, làm theo hướng dẫn trong file. Nhớ
-   **mở quyền truy cập Drive** và kiểm tra bằng cửa sổ ẩn danh.
-2. **Quay 2 video** — `docs\video_script.md` có kịch bản chi tiết theo từng phút,
-   đã phân vai cho cả 3 thành viên. Điều Thể lệ yêu cầu: **cả 3 phải xuất hiện**
-   và trình bày phần mình phụ trách.
-3. **Đặt repo GitHub thành public** — Settings → General → Danger Zone → Change
+1. **Prompt Log** - xuất toàn bộ hội thoại với công cụ AI, tải lên Drive,
+   **mở quyền truy cập** và kiểm tra bằng cửa sổ ẩn danh.
+2. **Video thuyết trình** - trình bày theo slide và kịch bản trong thư mục hồ sơ.
+   Ở vòng khu vực, Thể lệ yêu cầu **cả 3 thành viên phải xuất hiện** trong video
+   demo và trình bày phần mình phụ trách.
+3. **Đặt repo GitHub thành public** - Settings → General → Danger Zone → Change
    visibility.
 
 ---
@@ -303,14 +303,14 @@ chạy — nếu lớn hơn 0,5 m thì cần đo lại điểm mốc.
 | `ModuleNotFoundError: saferoad` | Chưa kích hoạt venv hoặc chưa cài | `.venv\Scripts\activate` rồi `pip install -e ".[dev,docs]"` |
 | `pytest ... is not recognized` | Cài thiếu nhóm `dev` | `pip install -e ".[dev,docs]"` |
 | `Không nạp được behavior model (No module named '_loss')` | Model train bằng scikit-learn khác phiên bản máy đang chạy | `saferoad train-behavior` (2-3 phút, train lại tại chỗ) |
-| Cột FPS trong bảng ablation thấp bất thường (< 10) | Máy ngủ giữa lúc đo (chỉ ảnh hưởng bản trước v1.0.1) | Cập nhật code mới nhất — FPS nay đo bằng trung vị độ trễ từng frame nên miễn nhiễm với việc máy ngủ |
+| Cột FPS trong bảng ablation thấp bất thường (< 10) | Máy ngủ giữa lúc đo (chỉ ảnh hưởng bản trước v1.0.1) | Cập nhật code mới nhất - FPS nay đo bằng trung vị độ trễ từng frame nên miễn nhiễm với việc máy ngủ |
 | `Không tìm thấy trọng số models/yolo11n.pt` | Chưa tải model | `python scripts\download_assets.py` |
 | `Không mở được video` | Sai đường dẫn | Kiểm tra `video.source` trong file cấu hình |
 | Chạy rất chậm | Đang chạy CPU | Bình thường. Thêm `--max-frames 900` để rút ngắn, hoặc `--device cuda:0` nếu có GPU NVIDIA |
 | `git push` báo 403 | Token sai hoặc thiếu quyền | Tạo lại token với quyền **Contents: Read and write** |
 | `git push` báo "rejected" | Repo trên GitHub đã có commit | Xem mục 2.3 |
 | Dashboard trắng trang | Chưa có `results.json` | Chạy `python -m saferoad run …` trước |
-| mAP trên dữ liệu thật rất thấp | Lệch miền của YOLO COCO | Đây là kết quả đúng — xem Phần 4 để fine-tune |
+| mAP trên dữ liệu thật rất thấp | Lệch miền của YOLO COCO | Đây là kết quả đúng - xem Phần 4 để fine-tune |
 
 ---
 

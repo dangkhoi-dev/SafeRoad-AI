@@ -27,6 +27,7 @@ from ..risk.scoring import RiskScorer
 from ..storage.db import EventStore
 from ..tracking.bytetrack import ByteTracker
 from ..types import ConflictEvent, Track
+from ..utils.video import open_video_writer
 from .overlay import OverlayRenderer
 
 log = logging.getLogger(__name__)
@@ -50,6 +51,9 @@ class PipelineResult:
     risk_map: RiskMap | None = None
     session_id: int | None = None
     overlay_path: str | None = None
+    # Tên lớp detector đã dùng. Cần để đọc đúng con số FPS: với ReplayDetector
+    # (hộp dựng sẵn từ trình mô phỏng) thì FPS không bao gồm thời gian chạy YOLO.
+    detector: str = ""
     homography_error: float | None = None
 
     @property
@@ -82,6 +86,7 @@ class PipelineResult:
             "latency_ms": {k: round(v, 2) for k, v in self.latency.items()},
             "total_latency_ms": round(sum(self.latency.values()), 2),
             "homography_error_m": self.homography_error,
+            "detector": self.detector,
         }
 
 
@@ -133,7 +138,7 @@ class Pipeline:
 
         homo_cfg = cfg.homography
         if not homo_cfg.image_points:
-            log.info("Chưa có calibration — sinh homography xấp xỉ từ kích thước khung hình")
+            log.info("Chưa có calibration - sinh homography xấp xỉ từ kích thước khung hình")
             homo_cfg = make_default_homography(
                 width, height, camera_height_m=cfg.site.camera_height_m
             )
@@ -152,11 +157,8 @@ class Pipeline:
         if cfg.video.write_overlay:
             Path(cfg.video.overlay_path).parent.mkdir(parents=True, exist_ok=True)
             overlay = OverlayRenderer(ground, cfg)
-            writer = cv2.VideoWriter(
-                cfg.video.overlay_path,
-                cv2.VideoWriter_fourcc(*"mp4v"),
-                fps / max(1, cfg.video.stride),
-                (width, height),
+            writer, _codec = open_video_writer(
+                cfg.video.overlay_path, fps / max(1, cfg.video.stride), (width, height)
             )
 
         store = self.store
@@ -178,7 +180,7 @@ class Pipeline:
         # bị throttle nhiệt, hay một tiến trình khác giành CPU trong vài giây là
         # con số FPS tụt xuống mức vô nghĩa (đã gặp: 0.9 FPS khi máy sleep giữa
         # lúc đo, trong khi các cấu hình khác của cùng pipeline đạt 70-90).
-        # Trung vị của độ trễ từng frame chịu được những gián đoạn đó — một
+        # Trung vị của độ trễ từng frame chịu được những gián đoạn đó - một
         # khoảng ngủ dài chỉ làm hỏng đúng một mẫu.
         frame_latencies: list[float] = []
 
@@ -213,7 +215,7 @@ class Pipeline:
                     detections = [d for d in detections if d.area >= min_area]
                 self._record("detection", time.perf_counter() - t0)
 
-                # 2. Ẩn danh (nếu bật) — làm ngay sau detection để mọi thứ ghi
+                # 2. Ẩn danh (nếu bật) - làm ngay sau detection để mọi thứ ghi
                 #    ra đĩa từ đây trở đi đều đã được ẩn danh.
                 if cfg.privacy.enabled:
                     t0 = time.perf_counter()
@@ -271,7 +273,7 @@ class Pipeline:
             if writer is not None:
                 writer.release()
 
-        # Đóng nốt các episode xung đột còn dở khi video kết thúc — nếu không,
+        # Đóng nốt các episode xung đột còn dở khi video kết thúc - nếu không,
         # mọi tình huống đang diễn ra ở những giây cuối sẽ bị mất.
         tail_events = conflicts.flush(risk_scorer=scorer)
         if tail_events:
@@ -306,6 +308,7 @@ class Pipeline:
             session_id=session_id,
             overlay_path=cfg.video.overlay_path if cfg.video.write_overlay else None,
             homography_error=ground.reprojection_error(),
+            detector=getattr(self.detector, "name", type(self.detector).__name__),
         )
         return result
 
@@ -340,11 +343,11 @@ def _ground_bounds(
 
     Hai điều chỉnh cần thiết
     ------------------------
-    * **Bỏ phần trên khung hình** — các điểm ảnh gần đường chân trời chiếu xuống
+    * **Bỏ phần trên khung hình** - các điểm ảnh gần đường chân trời chiếu xuống
       mặt đất ở khoảng cách gần như vô hạn (tia nhìn gần song song mặt đất). Lấy
       nguyên bốn góc ảnh sẽ cho ra một vùng rộng hàng trăm mét mà 99% là trống,
       khiến bản đồ nhiệt co lại thành một chấm nhỏ ở góc.
-    * **Chặn kích thước tối đa** — thêm một lớp bảo vệ cho trường hợp camera đặt
+    * **Chặn kích thước tối đa** - thêm một lớp bảo vệ cho trường hợp camera đặt
       rất thoải hoặc homography chưa chuẩn.
     """
     ys = np.linspace(height * skip_top, height - 1, 6)

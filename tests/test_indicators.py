@@ -1,4 +1,4 @@
-"""Kiểm thử các chỉ số xung đột — TTC, PET, phân loại.
+"""Kiểm thử các chỉ số xung đột - TTC, PET, phân loại.
 
 Đây là phần **toán lõi** của toàn hệ thống: mọi con số trên dashboard và trong
 báo cáo đều bắt nguồn từ đây, nên nó được kiểm bằng các tình huống có đáp án
@@ -144,7 +144,7 @@ class TestPostEncroachmentTime:
         """Quỹ đạo gần song song ⇒ PET vô nghĩa, phải trả về None.
 
         Nếu không chặn, giao điểm của hai tia gần song song nằm rất xa và cực
-        nhạy với nhiễu — lệch hướng 1° đã dời điểm đó hàng chục mét.
+        nhạy với nhiễu - lệch hướng 1° đã dời điểm đó hàng chục mét.
         """
         a = state(0.0, 0.0, 10.0, 0.0)
         b = state(0.0, 3.0, 10.0, 0.1)

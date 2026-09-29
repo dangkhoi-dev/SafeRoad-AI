@@ -6,11 +6,11 @@ Công thức (theo poster SafeRoad AI)::
 
 trong đó σ là hàm sigmoid. Vì sao dùng **nghịch đảo** TTC và PET: mức nguy hiểm
 không tuyến tính theo thời gian còn lại. Chênh lệch giữa TTC 0.5 s và 1.0 s
-nghiêm trọng hơn rất nhiều so với chênh lệch giữa 4.0 s và 4.5 s — nghịch đảo
+nghiêm trọng hơn rất nhiều so với chênh lệch giữa 4.0 s và 4.5 s - nghịch đảo
 phản ánh đúng điều đó, còn sigmoid giữ kết quả nằm gọn trong [0, 100].
 
 Mỗi số hạng đều được ghi lại riêng trong ``severity_terms`` để dashboard giải
-thích được **vì sao** một cảnh báo có mức rủi ro cao — đó chính là yêu cầu
+thích được **vì sao** một cảnh báo có mức rủi ro cao - đó chính là yêu cầu
 "Explainable Risk (cảnh báo kèm lý do)" trong kế hoạch.
 """
 
@@ -101,7 +101,7 @@ class RiskScorer:
     def explain(self, event: ConflictEvent, is_peak: bool = False) -> list[str]:
         """Sinh danh sách lý do bằng tiếng Việt, sắp theo mức đóng góp giảm dần.
 
-        Đây là phần "Explainable" — người vận hành đọc cảnh báo phải hiểu ngay
+        Đây là phần "Explainable" - người vận hành đọc cảnh báo phải hiểu ngay
         vì sao hệ thống cho là nguy hiểm, thay vì chỉ thấy một con số.
         """
         reasons: list[tuple[float, str]] = []
@@ -111,14 +111,14 @@ class RiskScorer:
             sharpness = "rất gấp" if event.ttc < 1.0 else "gấp" if event.ttc < 2.0 else "đáng chú ý"
             reasons.append((
                 terms.get("ttc", 0.0),
-                f"TTC chỉ còn {event.ttc:.2f}s — thời gian tới va chạm {sharpness} "
+                f"TTC chỉ còn {event.ttc:.2f}s - thời gian tới va chạm {sharpness} "
                 f"(ngưỡng cảnh báo 3.0s)",
             ))
 
         if event.pet is not None and event.pet < 1.5:
             reasons.append((
                 terms.get("pet", 0.0),
-                f"PET {event.pet:.2f}s — hai đối tượng đi qua cùng một điểm cách nhau "
+                f"PET {event.pet:.2f}s - hai đối tượng đi qua cùng một điểm cách nhau "
                 f"quá ngắn (ngưỡng 1.5s)",
             ))
 
@@ -144,7 +144,7 @@ class RiskScorer:
         if VehicleClass.PEDESTRIAN in (event.cls_a, event.cls_b):
             reasons.append((
                 0.9,
-                "Có người đi bộ tham gia — nhóm đối tượng dễ tổn thương nhất",
+                "Có người đi bộ tham gia - nhóm đối tượng dễ tổn thương nhất",
             ))
 
         if is_peak:

@@ -4,17 +4,17 @@ Vì sao cần camera 3D thật thay vì chỉ một homography
 ----------------------------------------------------
 Homography chỉ ánh xạ được **mặt phẳng mặt đất**. Nếu vẽ mỗi phương tiện bằng
 hình chiếu bóng của nó xuống đất, bounding box thu được sẽ nhỏ hơn rất nhiều so
-với thực tế — một người đi bộ chiếm vỏn vẹn 0.5 × 0.5 m mặt đất và cho ra bbox
+với thực tế - một người đi bộ chiếm vỏn vẹn 0.5 × 0.5 m mặt đất và cho ra bbox
 ~37 px², trong khi camera thật nhìn thấy một người **cao 1.7 m** với bbox lớn
 gấp gần mười lần. Hệ quả: mọi người đi bộ đều nằm dưới ngưỡng phát hiện, và toàn
-bộ nhóm xung đột với người đi bộ trở nên không thể phát hiện — không phải vì
+bộ nhóm xung đột với người đi bộ trở nên không thể phát hiện - không phải vì
 thuật toán kém mà vì cảnh dựng sai.
 
 Module này dựng một camera pinhole đầy đủ (nội tham số + ngoại tham số), nên:
 
 * phương tiện được vẽ như khối hộp 3D, bbox phản ánh đúng chiều cao thật;
 * homography mặt đất được **suy ra** từ chính ma trận camera, nên phép quy đổi
-  mà pipeline dùng khớp chính xác với cảnh đã dựng — không có sai lệch ngầm nào
+  mà pipeline dùng khớp chính xác với cảnh đã dựng - không có sai lệch ngầm nào
   giữa bộ sinh dữ liệu và bộ xử lý.
 
 Quy ước toạ độ thế giới: X sang phải, Y hướng vào trong cảnh, Z hướng lên.
@@ -150,7 +150,7 @@ class PinholeCamera:
 
 #: Vùng mặt đất mà camera mặc định bao phủ đủ tốt để phát hiện đáng tin cậy,
 #: dạng ``(x_min, y_min, x_max, y_max)`` tính bằng mét. Xung đột xảy ra ngoài
-#: vùng này không được đưa vào tập chấm điểm — không thể bắt hệ thống chịu
+#: vùng này không được đưa vào tập chấm điểm - không thể bắt hệ thống chịu
 #: trách nhiệm cho thứ nằm ngoài tầm nhìn của cảm biến.
 #:
 #: Bề rộng bị giới hạn bởi **hàng gần camera nhất**: tầm nhìn là một hình nón,
@@ -172,8 +172,8 @@ def build_default_camera(
 
     Tham số mặc định được chọn để khung hình có bố cục giống camera giao thông
     thật: mép dưới khung ứng với khoảng 17 m trước tâm giao lộ, toàn bộ bề rộng
-    ±19 m nằm trong khung, và mọi phương tiện trong vùng giao lộ — kể cả người
-    đi bộ — đều đủ lớn để phát hiện.
+    ±19 m nằm trong khung, và mọi phương tiện trong vùng giao lộ - kể cả người
+    đi bộ - đều đủ lớn để phát hiện.
 
     Đặt camera quá gần sẽ khiến vài chiếc xe ở tiền cảnh chiếm hết khung hình
     còn giao lộ bị đẩy lên sát đường chân trời; lùi xa và nâng cao khắc phục

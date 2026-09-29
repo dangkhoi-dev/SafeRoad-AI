@@ -12,7 +12,12 @@ import pytest
 
 from saferoad.conflict.geometry import series_ttc_and_gap
 from saferoad.evaluation.detection import evaluate_detection
-from saferoad.evaluation.metrics import ConflictMetrics, evaluate_conflicts
+from saferoad.evaluation.metrics import (
+    CONTACT_BANDS,
+    ConflictMetrics,
+    evaluate_conflicts,
+    severity_breakdown,
+)
 from saferoad.simulation.camera import COVERAGE, PinholeCamera, build_default_camera
 from saferoad.simulation.scenario import (
     TrafficSignal, build_scenario, compute_ground_truth, simulate,
@@ -25,7 +30,7 @@ from saferoad.types import (
 # --------------------------------------------------------------------------- #
 class TestTrafficSignal:
     def test_phases_are_mutually_exclusive(self):
-        """Hai nhóm hướng KHÔNG BAO GIỜ được cùng đèn xanh — đó là toàn bộ lý do
+        """Hai nhóm hướng KHÔNG BAO GIỜ được cùng đèn xanh - đó là toàn bộ lý do
         đèn tín hiệu tồn tại trong mô phỏng này."""
         sig = TrafficSignal()
         for i in range(1000):
@@ -56,7 +61,7 @@ class TestCamera:
         assert np.allclose(back, pts, atol=1e-6)
 
     def test_taller_object_has_taller_bbox(self):
-        """Chiều cao thật phải thể hiện trên bbox — đây là lý do phải dùng camera 3D.
+        """Chiều cao thật phải thể hiện trên bbox - đây là lý do phải dùng camera 3D.
 
         Nếu chỉ chiếu bóng xuống đất, người đi bộ (0.5 × 0.5 m) cho ra bbox tí
         hon và không bao giờ được phát hiện.
@@ -101,7 +106,8 @@ class TestCamera:
 # --------------------------------------------------------------------------- #
 class TestSimulation:
     @pytest.fixture(scope="class")
-    def sim(self):
+    @classmethod
+    def sim(cls):
         vehicles = build_scenario(duration=45.0, seed=11)
         vehicles = simulate(vehicles, 45.0)
         return vehicles
@@ -150,7 +156,7 @@ class TestSimulation:
         assert overlaps / total < 0.10, f"tỉ lệ chồng lấn {overlaps / total:.2%} quá cao"
 
     def test_reproducible(self):
-        """Cùng seed phải cho kịch bản y hệt — điều kiện để kết quả kiểm chứng được."""
+        """Cùng seed phải cho kịch bản y hệt - điều kiện để kết quả kiểm chứng được."""
         a = simulate(build_scenario(duration=20.0, seed=5), 20.0)
         b = simulate(build_scenario(duration=20.0, seed=5), 20.0)
         assert len(a) == len(b)
@@ -240,6 +246,24 @@ class TestEvaluationMetrics:
     def test_empty_inputs(self):
         m = evaluate_conflicts([], [], {})
         assert m.precision == 0.0 and m.recall == 0.0 and m.f1 == 0.0
+
+    def test_contact_bands_separate_overlapping_bodies(self):
+        """Nhãn TTC = 0 (thân xe đã chồng lên nhau) phải tách khỏi nhóm chưa chạm."""
+        gt = [
+            GroundTruthConflict(t=10.0, track_a=101, track_b=102, ttc=0.0),
+            GroundTruthConflict(t=20.0, track_a=103, track_b=104, ttc=0.6),
+            GroundTruthConflict(t=30.0, track_a=105, track_b=106, ttc=2.0),
+        ]
+        preds = [self._event(3, 4, 20.0, ttc=0.7)]       # chỉ bắt được ca chưa chạm
+        mapping = {3: 103, 4: 104}
+        rows = {r["band"]: r for r in severity_breakdown(preds, gt, mapping, bands=CONTACT_BANDS)}
+        touch, near, far = (rows[b[0]] for b in CONTACT_BANDS)
+        assert (touch["n_gt"], touch["detected"]) == (1, 0)
+        assert (near["n_gt"], near["detected"]) == (1, 1)
+        assert (far["n_gt"], far["detected"]) == (1, 0)
+        # Dải "< 1 giây" mặc định vẫn gộp cả hai, đúng như trước đây.
+        default = severity_breakdown(preds, gt, mapping)[0]
+        assert default["n_gt"] == 2 and default["detected"] == 1
 
 
 class TestDetectionMetrics:

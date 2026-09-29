@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SafeRoad AI — Dashboard giám sát an toàn giao thông</title>
+<title>SafeRoad AI - Dashboard giám sát an toàn giao thông</title>
 <style>
 /* ------------------------------------------------------------------ *
  * Không dùng CDN, không font ngoài: dashboard phải mở được cả khi máy
- * không có mạng — điều kiện thường gặp khi demo trực tiếp tại hội trường.
+ * không có mạng - điều kiện thường gặp khi demo trực tiếp tại hội trường.
  * ------------------------------------------------------------------ */
 :root{
   --bg:#0d1117; --panel:#161b22; --panel-2:#1c2230; --line:#2a3140;
@@ -160,11 +160,11 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
     <div class="topbar">
       <div>
         <h1 id="view-title">Tổng quan</h1>
-        <div class="site" id="site-name">—</div>
+        <div class="site" id="site-name">-</div>
       </div>
       <div class="clock">
         <div class="t" id="clock">--:--:--</div>
-        <div id="proc-info">—</div>
+        <div id="proc-info">-</div>
       </div>
     </div>
 
@@ -172,16 +172,16 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
     <section class="view on" id="view-overview">
       <div class="kpis">
         <div class="kpi"><div class="lbl">Tổng near-miss</div>
-          <div class="val" id="kpi-total">—</div>
+          <div class="val" id="kpi-total">-</div>
           <div class="sub" id="kpi-total-sub">trong toàn bộ phiên</div></div>
         <div class="kpi k2"><div class="lbl">Near-miss nghiêm trọng</div>
-          <div class="val" id="kpi-severe">—</div>
+          <div class="val" id="kpi-severe">-</div>
           <div class="sub">TTC &lt; 1.5s</div></div>
         <div class="kpi k3"><div class="lbl">Risk Score trung bình</div>
-          <div class="val" id="kpi-risk">—</div>
-          <div class="sub" id="kpi-risk-sub">thang 0–100</div></div>
+          <div class="val" id="kpi-risk">-</div>
+          <div class="sub" id="kpi-risk-sub">thang 0-100</div></div>
         <div class="kpi k4"><div class="lbl">Điểm nóng rủi ro</div>
-          <div class="val" id="kpi-hotspots">—</div>
+          <div class="val" id="kpi-hotspots">-</div>
           <div class="sub">vị trí cần ưu tiên xử lý</div></div>
       </div>
 
@@ -220,7 +220,7 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
     <!-- ===================== CAMERA ===================== -->
     <section class="view" id="view-camera">
       <div class="panel">
-        <h3>Live camera — overlay tracking &amp; cảnh báo
+        <h3>Live camera - overlay tracking &amp; cảnh báo
           <span class="hint">khung màu theo mức rủi ro, nhãn TTC hiện khi có xung đột</span></h3>
         <div class="video-wrap" id="video-wrap">
           <div class="video-empty">Chưa có video overlay.<br>
@@ -259,7 +259,7 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
     <section class="view" id="view-riskmap">
       <div class="grid g2">
         <div class="panel">
-          <h3>Bản đồ rủi ro không–thời gian
+          <h3>Bản đồ rủi ro không-thời gian
             <span class="hint">toạ độ mặt đất (m), gốc tại tâm giao lộ</span></h3>
           <canvas id="c-riskmap" height="440"></canvas>
           <div class="legend">
@@ -340,9 +340,19 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
 <script>
 /* ==================================================================== *
  * Toàn bộ logic trong một file, không phụ thuộc thư viện ngoài.
- * Biểu đồ vẽ tay bằng Canvas 2D — nhẹ và chạy offline.
+ * Biểu đồ vẽ tay bằng Canvas 2D - nhẹ và chạy offline.
  * ==================================================================== */
 const S = { data:null, events:[], filtered:[], filter:{kind:'', minRisk:0}, selected:null };
+
+/* Chế độ tĩnh: khi trang được xuất ra thư mục tĩnh (bản trình diễn trực tuyến),
+ * không có máy chủ FastAPI phía sau. Mỗi endpoint /api/<tên> được thay bằng
+ * tệp data/<tên>.json đã xuất sẵn, video bằng data/video.mp4. */
+const STATIC = !!window.SAFEROAD_STATIC;
+function api(path){
+  if (!STATIC) return path;
+  const name = path.replace(/^\/api\//, '').split('?')[0];
+  return name === 'video' ? 'data/video.mp4' : `data/${name}.json`;
+}
 
 const VI_TYPE = {crossing:'Cắt ngang', turning:'Chuyển hướng', rear_end:'Tạt đầu/đâm đuôi',
   head_on:'Đối đầu', lane_change:'Chuyển làn', pedestrian:'Người đi bộ'};
@@ -353,7 +363,7 @@ const TYPE_COLOR = {crossing:'#f97316', turning:'#3b82f6', rear_end:'#22c55e',
   head_on:'#ef4444', lane_change:'#a855f7', pedestrian:'#eab308'};
 
 const $ = id => document.getElementById(id);
-const fmt = (v, d=2) => (v===null||v===undefined) ? '—' : Number(v).toFixed(d);
+const fmt = (v, d=2) => (v===null||v===undefined) ? '-' : Number(v).toFixed(d);
 const mmss = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}`;
 
 /* ---------------------------- Điều hướng ---------------------------- */
@@ -377,11 +387,11 @@ setInterval(()=>{ $('clock').textContent = new Date().toLocaleTimeString('vi-VN'
 async function load(){
   try{
     const [sum, ev, rm, tl, bh] = await Promise.all([
-      fetch('/api/summary').then(r=>r.json()),
-      fetch('/api/events?limit=2000').then(r=>r.json()),
-      fetch('/api/riskmap').then(r=>r.json()),
-      fetch('/api/timeline').then(r=>r.json()),
-      fetch('/api/behaviors').then(r=>r.json()),
+      fetch(api('/api/summary')).then(r=>r.json()),
+      fetch(api('/api/events?limit=2000')).then(r=>r.json()),
+      fetch(api('/api/riskmap')).then(r=>r.json()),
+      fetch(api('/api/timeline')).then(r=>r.json()),
+      fetch(api('/api/behaviors')).then(r=>r.json()),
     ]);
     S.data = {sum, riskmap:rm, timeline:tl.timeline||[], behaviors:bh.behaviors||[]};
     S.events = ev.events||[];
@@ -397,7 +407,7 @@ async function load(){
 
 function mountVideo(){
   $('video-wrap').innerHTML =
-    '<video controls preload="metadata" src="/api/video"></video>';
+    `<video controls preload="metadata" src="${api('/api/video')}"></video>`;
 }
 
 /* ------------------------------ Render ------------------------------ */
@@ -411,7 +421,8 @@ function render(){
   const hs = (S.data.riskmap.hotspots)||[];
   $('kpi-hotspots').textContent = hs.length;
   $('proc-info').textContent =
-    `${fmt(s.processing_fps,1)} FPS · ${fmt(s.total_latency_ms,1)} ms/frame`;
+    `${fmt(s.processing_fps,1)} FPS · ${fmt(s.total_latency_ms,1)} ms/frame` +
+    (isReplay(s) ? ' · hộp phát hiện dựng sẵn' : '');
   $('foot-status').textContent = `${s.n_tracks ?? 0} đối tượng đã theo dõi`;
 
   drawTimeline(); drawTypes();
@@ -426,7 +437,7 @@ function fillRecent(){
       <td>${VI_CLASS[e.cls_a]||e.cls_a} ↔ ${VI_CLASS[e.cls_b]||e.cls_b}</td>
       <td><span class="chip">${VI_TYPE[e.conflict_type]||e.conflict_type}</span></td>
       <td class="num">${fmt(e.ttc)}s</td>
-      <td class="num">${e.pet===null?'—':fmt(e.pet)+'s'}</td>
+      <td class="num">${e.pet===null?'-':fmt(e.pet)+'s'}</td>
       <td class="num"><span class="badge b-${e.risk_level}">${fmt(e.risk_score,0)}</span></td>
     </tr>`).join('') || '<tr><td colspan="6" class="empty">Chưa có sự kiện</td></tr>';
 }
@@ -475,7 +486,7 @@ function fillEvents(){
       <td>${VI_CLASS[e.cls_a]||e.cls_a} ↔ ${VI_CLASS[e.cls_b]||e.cls_b}</td>
       <td><span class="chip">${VI_TYPE[e.conflict_type]||e.conflict_type}</span></td>
       <td class="num">${fmt(e.ttc)}s</td>
-      <td class="num">${e.pet===null?'—':fmt(e.pet)+'s'}</td>
+      <td class="num">${e.pet===null?'-':fmt(e.pet)+'s'}</td>
       <td class="num">${fmt(e.risk_score,0)}</td>
       <td><span class="badge b-${e.risk_level}">${VI_LEVEL[e.risk_level]||e.risk_level}</span></td>
     </tr>`).join('') || '<tr><td colspan="8" class="empty">Không có sự kiện khớp bộ lọc</td></tr>';
@@ -502,12 +513,12 @@ window.selectEvent = (id, jump)=>{
       <div class="row"><span>Thời điểm</span><b>${mmss(e.t)} (frame ${e.frame_idx})</b></div>
       <div class="row"><span>Đối tượng</span><b>#${e.track_a} ${VI_CLASS[e.cls_a]||''} ↔ #${e.track_b} ${VI_CLASS[e.cls_b]||''}</b></div>
       <div class="row"><span>Loại xung đột</span><b>${VI_TYPE[e.conflict_type]||e.conflict_type}</b></div>
-      <div class="row"><span>TTC / PET</span><b>${fmt(e.ttc)}s / ${e.pet===null?'—':fmt(e.pet)+'s'}</b></div>
+      <div class="row"><span>TTC / PET</span><b>${fmt(e.ttc)}s / ${e.pet===null?'-':fmt(e.pet)+'s'}</b></div>
       <div class="row"><span>Góc tiếp cận</span><b>${fmt(e.approach_angle,0)}°</b></div>
       <div class="row"><span>Tốc độ tiếp cận</span><b>${fmt(e.rel_speed,1)} m/s (~${fmt(e.rel_speed*3.6,0)} km/h)</b></div>
       <div class="row"><span>Khoảng cách gần nhất</span><b>${fmt(e.gap,1)} m</b></div>
       <div class="row"><span>Vị trí mặt đất</span><b>(${fmt(e.location[0],1)}, ${fmt(e.location[1],1)}) m</b></div>
-      <div class="row"><span>Risk Score</span><b><span class="badge b-${e.risk_level}">${fmt(e.risk_score,1)} — ${VI_LEVEL[e.risk_level]}</span></b></div>
+      <div class="row"><span>Risk Score</span><b><span class="badge b-${e.risk_level}">${fmt(e.risk_score,1)} - ${VI_LEVEL[e.risk_level]}</span></b></div>
     </div>
     <h3 style="margin-top:12px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px">
       Vì sao hệ thống cảnh báo</h3>
@@ -545,27 +556,29 @@ function fillPairs(){
     const avgT = ttcs.length ? ttcs.reduce((a,b)=>a+b,0)/ttcs.length : null;
     const avgR = v.reduce((a,b)=>a+b.risk_score,0)/v.length;
     return `<tr><td>${k}</td><td class="num">${v.length}</td>
-      <td class="num">${avgT===null?'—':fmt(avgT)+'s'}</td>
+      <td class="num">${avgT===null?'-':fmt(avgT)+'s'}</td>
       <td class="num">${fmt(avgR,0)}</td></tr>`;
   }).join('');
-  $('tb-pairs').innerHTML = rows || '<tr><td colspan="4" class="empty">—</td></tr>';
+  $('tb-pairs').innerHTML = rows || '<tr><td colspan="4" class="empty">-</td></tr>';
 }
 
 function fillPerf(){
   const s = S.data.sum.summary||{};
   const lat = s.latency_ms||{};
-  const NAME = {detection:'Detection (YOLO)', tracking:'Tracking (ByteTrack)',
+  const replay = isReplay(s);
+  const NAME = {detection: replay ? 'Detection (hộp dựng sẵn, không chạy YOLO)' : 'Detection (YOLO)',
+    tracking:'Tracking (ByteTrack)',
     trajectory:'Quỹ đạo + homography', conflict:'Phát hiện xung đột',
     overlay:'Vẽ overlay', privacy:'Ẩn danh'};
   const tot = Object.values(lat).reduce((a,b)=>a+b,0)||1;
   $('perf').innerHTML = `
     <div class="detail">
-      <div class="row"><span>Tốc độ xử lý</span><b>${fmt(s.processing_fps,1)} FPS</b></div>
+      <div class="row"><span>Tốc độ xử lý${replay ? ' (không gồm YOLO)' : ''}</span><b>${fmt(s.processing_fps,1)} FPS</b></div>
       <div class="row"><span>Độ trễ end-to-end</span><b>${fmt(s.total_latency_ms,1)} ms/frame</b></div>
       <div class="row"><span>Số frame</span><b>${s.n_frames||0}</b></div>
       <div class="row"><span>Đối tượng đã theo dõi</span><b>${s.n_tracks||0}</b></div>
       <div class="row"><span>Sai số homography</span><b>${
-        s.homography_error_m===null||s.homography_error_m===undefined?'—':fmt(s.homography_error_m,3)+' m'}</b></div>
+        s.homography_error_m===null||s.homography_error_m===undefined?'-':fmt(s.homography_error_m,3)+' m'}</b></div>
     </div>
     <div style="margin-top:11px">${Object.entries(lat).map(([k,v])=>`
       <div style="margin-bottom:7px">
@@ -719,7 +732,7 @@ function heat(v){
 /* ------------------------------ Đánh giá ---------------------------- */
 async function loadEval(){
   try{
-    const d = await fetch('/api/evaluation').then(r=>r.json());
+    const d = await fetch(api('/api/evaluation')).then(r=>r.json());
     if(!d.available) return;
     const f = d.final||{}, tr = d.tracking||{}, st = d.setup||{};
     $('eval-body').innerHTML = `
@@ -733,12 +746,12 @@ async function loadEval(){
         <div class="kpi k4"><div class="lbl">Tracking IDF1</div><div class="val">${fmt(tr.idf1,3)}</div>
           <div class="sub">${tr.id_switches} ID switch</div></div>
       </div>
-      <h3>Bảng ablation — đóng góp của từng khối</h3>
+      <h3>Bảng ablation - đóng góp của từng khối</h3>
       <table><thead><tr><th>Cấu hình</th><th class="num">Precision</th><th class="num">Recall</th>
         <th class="num">F1</th><th class="num">TTC MAE</th><th class="num">Sự kiện</th></tr></thead>
         <tbody>${(d.ablation||[]).map(r=>`<tr><td>${r.label}</td>
           <td class="num">${fmt(r.precision,3)}</td><td class="num">${fmt(r.recall,3)}</td>
-          <td class="num">${fmt(r.f1,3)}</td><td class="num">${r.ttc_mae===null?'—':fmt(r.ttc_mae,3)+'s'}</td>
+          <td class="num">${fmt(r.f1,3)}</td><td class="num">${r.ttc_mae===null?'-':fmt(r.ttc_mae,3)+'s'}</td>
           <td class="num">${r.n_events}</td></tr>`).join('')}</tbody></table>
       <h3 style="margin-top:16px">Độ bền trước nhiễu detector</h3>
       <table><thead><tr><th class="num">Nhiễu bbox (px)</th><th class="num">Precision</th>
@@ -746,14 +759,19 @@ async function loadEval(){
         <th class="num">IDF1</th></tr></thead>
         <tbody>${(d.noise_sweep||[]).map(r=>`<tr><td class="num">${fmt(r.noise_px,1)}</td>
           <td class="num">${fmt(r.precision,3)}</td><td class="num">${fmt(r.recall,3)}</td>
-          <td class="num">${fmt(r.f1,3)}</td><td class="num">${r.ttc_mae===null?'—':fmt(r.ttc_mae,3)+'s'}</td>
+          <td class="num">${fmt(r.f1,3)}</td><td class="num">${r.ttc_mae===null?'-':fmt(r.ttc_mae,3)+'s'}</td>
           <td class="num">${fmt(r.idf1,3)}</td></tr>`).join('')}</tbody></table>
       <h3 style="margin-top:16px">Recall theo mức nghiêm trọng</h3>
       <table><thead><tr><th>Dải TTC</th><th class="num">Số nhãn chuẩn</th>
         <th class="num">Phát hiện được</th><th class="num">Recall</th></tr></thead>
         <tbody>${(d.severity_breakdown||[]).filter(r=>r.n_gt>0).map(r=>`<tr><td>${r.band}</td>
-          <td class="num">${r.n_gt}</td><td class="num">${r.detected??'—'}</td>
-          <td class="num">${r.recall===null?'—':fmt(r.recall,3)}</td></tr>`).join('')}</tbody></table>
+          <td class="num">${r.n_gt}</td><td class="num">${r.detected??'-'}</td>
+          <td class="num">${r.recall===null?'-':fmt(r.recall,3)}</td></tr>`).join('')}
+        ${(d.contact_breakdown||[]).length ? `<tr><td colspan="4" style="color:var(--muted);font-size:12px;padding-top:12px">
+          Tách riêng các nhãn mà hai thân xe đã chồng lên nhau (trình mô phỏng chưa có ràng buộc chống va chạm)</td></tr>` +
+          d.contact_breakdown.filter(r=>r.n_gt>0).map(r=>`<tr><td>${r.band}</td>
+          <td class="num">${r.n_gt}</td><td class="num">${r.detected??'-'}</td>
+          <td class="num">${r.recall===null?'-':fmt(r.recall,3)}</td></tr>`).join('') : ''}</tbody></table>
       <div class="metrics-note">
         Nhãn chuẩn sinh từ trình mô phỏng có ground truth giải tích
         (${st.n_ground_truth} near-miss trên ${st.n_vehicles} phương tiện,
@@ -761,6 +779,13 @@ async function loadEval(){
         ${fmt(st.noise_px,1)} px và tỉ lệ bỏ sót ${fmt(st.miss_rate*100,0)}%.
       </div>`;
   }catch(e){ console.warn('Chưa có kết quả đánh giá', e); }
+}
+
+// Phiên chạy dùng hộp phát hiện dựng sẵn (ReplayDetector) thì FPS không gồm YOLO.
+// Kết quả cũ chưa ghi tên detector: nhận ra qua thời gian phát hiện gần như bằng 0.
+function isReplay(s){
+  if (s.detector) return s.detector === 'ReplayDetector';
+  return !!(s.latency_ms && s.latency_ms.detection !== undefined && s.latency_ms.detection < 1);
 }
 
 window.addEventListener('resize', ()=>{

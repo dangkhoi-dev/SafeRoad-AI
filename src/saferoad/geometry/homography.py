@@ -9,7 +9,7 @@ trên khung hình sai lệch có hệ thống so với nửa dưới. Homography
 ứng phối cảnh đó.
 
 Giả thiết: mọi đối tượng di chuyển trên **một mặt phẳng** (mặt đường). Với camera
-đặt cao 10-12 m nhìn xuống giao lộ, giả thiết này đủ chính xác — sai số chủ yếu
+đặt cao 10-12 m nhìn xuống giao lộ, giả thiết này đủ chính xác - sai số chủ yếu
 đến từ việc bbox không chạm đất chính xác, chứ không phải từ giả thiết mặt phẳng.
 """
 
@@ -30,10 +30,10 @@ class GroundPlane:
 
     Có 2 chế độ:
 
-    * **Calibrated** — người dùng cung cấp ≥4 cặp điểm ảnh/thế giới trong config.
+    * **Calibrated** - người dùng cung cấp ≥4 cặp điểm ảnh/thế giới trong config.
       Đây là chế độ nên dùng cho dữ liệu thật: đo 4 điểm mốc trên mặt đường
       (vạch kẻ, góc đảo giao thông) bằng Google Maps hoặc thước, nhập vào YAML.
-    * **Fallback** — không có calibration thì dùng một tỉ lệ phẳng
+    * **Fallback** - không có calibration thì dùng một tỉ lệ phẳng
       ``fallback_scale`` (m/px). Pipeline vẫn chạy nhưng TTC chỉ đúng tương đối;
       báo cáo phải ghi rõ điều này.
     """
@@ -61,7 +61,7 @@ class GroundPlane:
                 log.info("Homography đã calibrate từ %d cặp điểm", len(img_pts))
         if not self.calibrated:
             log.warning(
-                "Chưa có calibration — dùng fallback_scale=%.4f m/px. "
+                "Chưa có calibration - dùng fallback_scale=%.4f m/px. "
                 "TTC/PET chỉ chính xác tương đối.",
                 cfg.fallback_scale,
             )
@@ -77,7 +77,7 @@ class GroundPlane:
         return (pt[0] * s, pt[1] * s)
 
     def to_ground_batch(self, pts: np.ndarray) -> np.ndarray:
-        """Quy đổi hàng loạt — ``pts`` dạng (N, 2)."""
+        """Quy đổi hàng loạt - ``pts`` dạng (N, 2)."""
         pts = np.asarray(pts, dtype=np.float32).reshape(-1, 1, 2)
         if self.calibrated and self.H is not None:
             return cv2.perspectiveTransform(pts, self.H).reshape(-1, 2)

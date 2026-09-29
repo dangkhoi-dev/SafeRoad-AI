@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Kiểm thử (pytest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      # opencv-python cần libGL; runner Ubuntu mới không cài sẵn.
+      - name: Thư viện hệ thống cho OpenCV
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0
+
+      # Cài PyTorch bản CPU trước. Nếu để pip tự kéo theo ultralytics, nó lấy bản
+      # CUDA vài GB, vừa chậm vừa vô ích trên runner không có GPU.
+      - name: PyTorch CPU
+        run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Cài đặt SafeRoad AI
+        run: pip install -e ".[dev]"
+
+      - name: Chạy bộ kiểm thử
+        run: pytest tests/ -q
+
+  site:
+    name: Dựng trang dashboard tĩnh
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Xuất dashboard tĩnh
+        run: node scripts/build_static_site.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: saferoad-dashboard
+          path: site/

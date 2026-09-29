@@ -1,4 +1,4 @@
-"""Risk Map — bản đồ nhiệt rủi ro theo không gian và thời gian.
+"""Risk Map - bản đồ nhiệt rủi ro theo không gian và thời gian.
 
 Mỗi ``ConflictEvent`` được "rải" lên một lưới ô vuông trên mặt đất bằng nhân
 Gauss: sự kiện không chỉ ảnh hưởng đúng một ô mà lan sang các ô lân cận, vì
@@ -69,7 +69,7 @@ class RiskMap:
         self.nx = max(1, int(math.ceil((x_max - x_min) / cfg.grid_size)))
         self.ny = max(1, int(math.ceil((y_max - y_min) / cfg.grid_size)))
         self.events: list[ConflictEvent] = []
-        #: Nhân Gauss dựng sẵn — tránh tính lại cho từng sự kiện.
+        #: Nhân Gauss dựng sẵn - tránh tính lại cho từng sự kiện.
         self._kernel = self._build_kernel()
 
     # ------------------------------------------------------------------ #
@@ -209,7 +209,7 @@ class RiskMap:
         }
 
     def coverage_ratio(self, threshold: float = 0.5) -> float:
-        """Tỉ lệ diện tích có mức rủi ro vượt ngưỡng — chỉ số "khu vực rủi ro cao"."""
+        """Tỉ lệ diện tích có mức rủi ro vượt ngưỡng - chỉ số "khu vực rủi ro cao"."""
         grid = self.render()
         if grid.size == 0:
             return 0.0

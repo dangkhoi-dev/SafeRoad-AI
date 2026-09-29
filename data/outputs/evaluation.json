@@ -5,12 +5,12 @@
       "label": "1. Detection + Tracking",
       "description": "TTC tính trên pixel, không homography, không làm mượt, không PET/proximity",
       "n_events": 445,
-      "processing_fps": 156.03,
+      "processing_fps": 164.95,
       "latency_ms": {
-        "detection": 0.12,
-        "tracking": 2.4,
-        "trajectory": 2.05,
-        "conflict": 1.82
+        "detection": 0.11,
+        "tracking": 2.19,
+        "trajectory": 2.02,
+        "conflict": 1.81
       },
       "tp": 3,
       "fp": 84,
@@ -26,7 +26,7 @@
       "n_matched_ttc": 3,
       "tracking": {
         "idf1": 0.0841,
-        "mota": 0.0,
+        "mota": -0.8045,
         "id_switches": 597,
         "n_gt_tracks": 310,
         "n_pred_tracks": 307,
@@ -38,26 +38,26 @@
       "key": "homography",
       "label": "2. + Homography",
       "description": "Quy đổi toạ độ ảnh sang mặt đất (mét)",
-      "n_events": 1711,
-      "processing_fps": 130.61,
+      "n_events": 1713,
+      "processing_fps": 130.48,
       "latency_ms": {
-        "detection": 0.14,
-        "tracking": 2.44,
-        "trajectory": 0.82,
-        "conflict": 4.34
+        "detection": 0.13,
+        "tracking": 2.43,
+        "trajectory": 0.97,
+        "conflict": 4.72
       },
-      "tp": 104,
-      "fp": 1288,
-      "fn": 48,
-      "precision": 0.0747,
-      "recall": 0.6842,
-      "f1": 0.1347,
-      "ttc_mae": 0.3954,
-      "ttc_rmse": 0.7066,
-      "pet_mae": 5.1846,
-      "time_mae": 0.4133,
-      "type_accuracy": 0.2885,
-      "n_matched_ttc": 93,
+      "tp": 102,
+      "fp": 1293,
+      "fn": 50,
+      "precision": 0.0731,
+      "recall": 0.6711,
+      "f1": 0.1319,
+      "ttc_mae": 0.401,
+      "ttc_rmse": 0.7139,
+      "pet_mae": 5.3084,
+      "time_mae": 0.4251,
+      "type_accuracy": 0.2941,
+      "n_matched_ttc": 91,
       "tracking": {
         "idf1": 0.9821,
         "mota": 0.9562,
@@ -73,12 +73,12 @@
       "label": "3. + Trajectory smoothing",
       "description": "Làm mượt quỹ đạo + ước lượng vận tốc bằng hồi quy tuyến tính",
       "n_events": 860,
-      "processing_fps": 131.13,
+      "processing_fps": 144.27,
       "latency_ms": {
-        "detection": 0.14,
-        "tracking": 2.61,
-        "trajectory": 2.25,
-        "conflict": 3.05
+        "detection": 0.11,
+        "tracking": 2.21,
+        "trajectory": 2.06,
+        "conflict": 2.88
       },
       "tp": 103,
       "fp": 565,
@@ -107,12 +107,12 @@
       "label": "4. + PET",
       "description": "Thêm tiêu chí Post-Encroachment Time bên cạnh TTC",
       "n_events": 1249,
-      "processing_fps": 130.52,
+      "processing_fps": 147.14,
       "latency_ms": {
-        "detection": 0.17,
-        "tracking": 2.56,
-        "trajectory": 2.19,
-        "conflict": 3.03
+        "detection": 0.14,
+        "tracking": 2.17,
+        "trajectory": 1.97,
+        "conflict": 2.77
       },
       "tp": 108,
       "fp": 940,
@@ -141,12 +141,12 @@
       "label": "5. + Proximity gate",
       "description": "Yêu cầu hai xe thực sự đến gần nhau, không chỉ dựa vào ngoại suy TTC",
       "n_events": 211,
-      "processing_fps": 153.23,
+      "processing_fps": 156.82,
       "latency_ms": {
-        "detection": 0.12,
-        "tracking": 2.28,
-        "trajectory": 1.96,
-        "conflict": 2.28
+        "detection": 0.11,
+        "tracking": 2.18,
+        "trajectory": 1.97,
+        "conflict": 2.34
       },
       "tp": 82,
       "fp": 92,
@@ -175,12 +175,12 @@
       "label": "6. Full (+ Risk scoring)",
       "description": "Bản đầy đủ: thêm Risk Score, phân loại xung đột và Explainable Risk",
       "n_events": 211,
-      "processing_fps": 141.15,
+      "processing_fps": 153.62,
       "latency_ms": {
-        "detection": 0.13,
-        "tracking": 2.52,
-        "trajectory": 2.16,
-        "conflict": 2.5
+        "detection": 0.11,
+        "tracking": 2.21,
+        "trajectory": 2.0,
+        "conflict": 2.42
       },
       "tp": 82,
       "fp": 92,
@@ -294,28 +294,28 @@
   ],
   "severity_breakdown": [
     {
-      "band": "Rất nghiêm trọng (TTC<1.0s)",
+      "band": "Rất nghiêm trọng (TTC < 1,0 s)",
       "n_gt": 77,
       "detected": 61,
       "recall": 0.7922,
       "ttc_mae": 0.1463
     },
     {
-      "band": "Nghiêm trọng (1.0-1.5s)",
+      "band": "Nghiêm trọng (1,0-1,5 s)",
       "n_gt": 18,
       "detected": 12,
       "recall": 0.6667,
       "ttc_mae": 0.5253
     },
     {
-      "band": "Trung bình (1.5-2.5s)",
+      "band": "Trung bình (1,5-2,5 s)",
       "n_gt": 16,
       "detected": 3,
       "recall": 0.1875,
       "ttc_mae": 1.4567
     },
     {
-      "band": "Nhẹ (2.5-3.0s)",
+      "band": "Nhẹ (2,5-3,0 s)",
       "n_gt": 8,
       "detected": 1,
       "recall": 0.125,
@@ -336,6 +336,29 @@
     "type_accuracy": 0.5976,
     "n_matched_ttc": 77
   },
+  "contact_breakdown": [
+    {
+      "band": "Thân xe đã chồng lên nhau (TTC = 0)",
+      "n_gt": 55,
+      "detected": 44,
+      "recall": 0.8,
+      "ttc_mae": 0.1121
+    },
+    {
+      "band": "Chưa chạm, TTC dưới 1,0 s",
+      "n_gt": 22,
+      "detected": 17,
+      "recall": 0.7727,
+      "ttc_mae": 0.2347
+    },
+    {
+      "band": "Chưa chạm, TTC từ 1,0 s trở lên",
+      "n_gt": 46,
+      "detected": 16,
+      "recall": 0.3478,
+      "ttc_mae": 0.8198
+    }
+  ],
   "tracking": {
     "idf1": 0.983,
     "mota": 0.9656,
@@ -349,10 +372,10 @@
     "n_frames": 9000,
     "duration_s": 300.0,
     "fps_source": 30.0,
-    "processing_fps": 128.42,
-    "frame_latency_median_ms": 7.79,
-    "frame_latency_p95_ms": 13.14,
-    "wall_seconds": 99.2,
+    "processing_fps": 155.32,
+    "frame_latency_median_ms": 6.44,
+    "frame_latency_p95_ms": 10.64,
+    "wall_seconds": 67.2,
     "total_events": 211,
     "severe_events": 195,
     "avg_risk_score": 60.6,
@@ -366,13 +389,14 @@
       "head_on": 25
     },
     "latency_ms": {
-      "detection": 0.13,
-      "tracking": 2.75,
-      "trajectory": 2.36,
-      "conflict": 2.72
+      "detection": 0.11,
+      "tracking": 2.2,
+      "trajectory": 1.97,
+      "conflict": 2.34
     },
-    "total_latency_ms": 7.96,
-    "homography_error_m": 4.76837158203125e-07
+    "total_latency_ms": 6.62,
+    "homography_error_m": 4.76837158203125e-07,
+    "detector": "ReplayDetector"
   },
   "setup": {
     "n_ground_truth": 152,
@@ -380,6 +404,12 @@
     "noise_px": 1.5,
     "miss_rate": 0.03,
     "duration_s": 300.0,
-    "seed": 42
+    "seed": 42,
+    "environment": {
+      "python": "3.11.15",
+      "os": "Linux",
+      "numpy": "2.4.4",
+      "opencv": "4.13.0"
+    }
   }
 }

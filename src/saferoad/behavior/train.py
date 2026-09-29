@@ -2,7 +2,7 @@
 
 Nhãn được sinh **tự động** từ chính simulator: ta biết chính xác xe nào có pha
 phanh gấp chủ động, xe nào đang rẽ cắt dòng, nên không cần gán nhãn tay. Đây là
-lợi thế lớn của việc có một simulator — module ML có dữ liệu huấn luyện sạch
+lợi thế lớn của việc có một simulator - module ML có dữ liệu huấn luyện sạch
 ngay từ đầu.
 
 Mô hình: Gradient Boosting trên 10 đặc trưng động học (xem
@@ -31,7 +31,7 @@ def _label_window(speeds: np.ndarray, times: np.ndarray, headings: np.ndarray) -
 
     Đây là điểm dễ sai nhất khi sinh nhãn tự động: nếu gán nhãn cho toàn bộ
     track rồi cắt cửa sổ trượt, thì một chiếc xe chỉ phanh gấp trong 1.4 giây sẽ
-    khiến **mọi** cửa sổ của nó — kể cả 20 giây chạy hoàn toàn bình thường — đều
+    khiến **mọi** cửa sổ của nó - kể cả 20 giây chạy hoàn toàn bình thường - đều
     mang nhãn "phanh gấp". Model học từ dữ liệu đó sẽ chỉ học được nhiễu.
 
     Nhãn phải mô tả đúng những gì xảy ra *trong* cửa sổ đang xét.
@@ -108,8 +108,8 @@ def build_dataset(
 ) -> tuple[np.ndarray, np.ndarray]:
     """Sinh tập đặc trưng/nhãn từ nhiều kịch bản mô phỏng khác nhau.
 
-    Mỗi track đóng góp **nhiều mẫu** — trích đặc trưng ở các cửa sổ trượt khác
-    nhau dọc quỹ đạo — nên một kịch bản 120 s cho ra vài nghìn mẫu.
+    Mỗi track đóng góp **nhiều mẫu** - trích đặc trưng ở các cửa sổ trượt khác
+    nhau dọc quỹ đạo - nên một kịch bản 120 s cho ra vài nghìn mẫu.
     """
     from ..simulation.scenario import build_scenario, simulate
 
@@ -174,7 +174,7 @@ def train_from_simulation(
     model = HistGradientBoostingClassifier(
         max_iter=250, learning_rate=0.08, max_depth=6,
         l2_regularization=1.0, random_state=42,
-        # Lớp "bình thường" áp đảo về số lượng — cân bằng lại để không bỏ sót
+        # Lớp "bình thường" áp đảo về số lượng - cân bằng lại để không bỏ sót
         # hành vi nguy hiểm (recall của lớp hiếm mới là thứ quan trọng).
         class_weight="balanced",
     )

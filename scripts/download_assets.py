@@ -15,7 +15,7 @@ from pathlib import Path
 ASSETS = {
     "yolo11n.pt": (
         "https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.pt",
-        "YOLO11n — trọng số COCO (5,6 MB)",
+        "YOLO11n - trọng số COCO (5,6 MB)",
     ),
 }
 

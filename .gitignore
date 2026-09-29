@@ -40,3 +40,6 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+# Trang dashboard tĩnh do scripts/build_static_site.mjs sinh ra
+site/

@@ -19,7 +19,7 @@ còn chờ tới lúc đã gần nhất mới phát thì nhãn thời gian lại
 nguy hiểm thật.
 
 Cách làm ở đây: **theo dõi cả episode**, đóng lại khi điều kiện xung đột chấm
-dứt, rồi phát **một** sự kiện duy nhất gán nhãn tại **thời điểm TTC nhỏ nhất** —
+dứt, rồi phát **một** sự kiện duy nhất gán nhãn tại **thời điểm TTC nhỏ nhất** -
 đúng khoảnh khắc căng thẳng nhất của tình huống.
 
 Cho hiển thị thời gian thực, :meth:`ConflictDetector.active_alerts` trả về các
@@ -74,7 +74,7 @@ class _Episode:
     peak_rel_speed: float = 0.0
     peak_type: ConflictType = ConflictType.CROSSING
 
-    #: TTC ở frame gần nhất — dùng cho cảnh báo thời gian thực.
+    #: TTC ở frame gần nhất - dùng cho cảnh báo thời gian thực.
     current_ttc: float = NO_COLLISION
     #: Mức rủi ro tạm tính để overlay tô màu ngay khi đang diễn ra.
     live_level: RiskLevel = RiskLevel.LOW
@@ -175,7 +175,7 @@ class ConflictDetector:
                     else RiskLevel.LOW
                 )
 
-                # Ghi lại "đỉnh" — thời điểm TTC nhỏ nhất trong cả episode.
+                # Ghi lại "đỉnh" - thời điểm TTC nhỏ nhất trong cả episode.
                 if ttc < ep.min_ttc or ep.peak_frame < 0:
                     ep.min_ttc = min(ep.min_ttc, ttc)
                     ep.peak_frame = frame_idx
@@ -232,7 +232,7 @@ class ConflictDetector:
         cfg = self.cfg
 
         # Cổng khoảng cách: hai xe phải THỰC SỰ đến sát nhau. TTC nhỏ chỉ là
-        # phép ngoại suy — nếu một bên kịp phanh và hai xe chưa bao giờ tới gần,
+        # phép ngoại suy - nếu một bên kịp phanh và hai xe chưa bao giờ tới gần,
         # đó là tình huống được xử lý tốt, không phải sự cố cần ghi nhận.
         if ep.min_gap > cfg.proximity_gate:
             return None
@@ -253,7 +253,7 @@ class ConflictDetector:
             prev_ttc = float("inf") if prev.ttc is None else prev.ttc
             new_ttc = float("inf") if ttc_out is None else ttc_out
             if new_ttc < prev_ttc:
-                # Đoạn mới nguy hiểm hơn — cập nhật bản ghi cũ tại chỗ.
+                # Đoạn mới nguy hiểm hơn - cập nhật bản ghi cũ tại chỗ.
                 prev.ttc = ttc_out
                 prev.t = round(ep.peak_t, 3)
                 prev.frame_idx = ep.peak_frame
@@ -311,7 +311,7 @@ class ConflictDetector:
     def active_alerts(
         self, frame_idx: int, max_age: int = 3
     ) -> dict[tuple[int, int], _Episode]:
-        """Các cặp đang xung đột — dùng cho overlay/dashboard thời gian thực.
+        """Các cặp đang xung đột - dùng cho overlay/dashboard thời gian thực.
 
         Tách khỏi luồng sự kiện đã chốt: cảnh báo trên màn hình phải xuất hiện
         **ngay lúc** tình huống đang diễn ra, còn bản ghi thống kê chỉ chốt sau
@@ -327,5 +327,5 @@ class ConflictDetector:
         return len(self.events)
 
     def severe_events(self, ttc_threshold: float = 1.5) -> list[ConflictEvent]:
-        """Near-miss nghiêm trọng — TTC < ngưỡng (mặc định 1.5 s theo poster)."""
+        """Near-miss nghiêm trọng - TTC < ngưỡng (mặc định 1.5 s theo poster)."""
         return [e for e in self.events if e.ttc is not None and e.ttc < ttc_threshold]

@@ -1,4 +1,4 @@
-"""Đánh giá trên dữ liệu **thật** (MVTI) — detection + tracking + tốc độ.
+"""Đánh giá trên dữ liệu **thật** (MVTI) - detection + tracking + tốc độ.
 
 Bổ sung cho :mod:`saferoad.evaluation.ablation` (chạy trên tập mô phỏng). Ranh
 giới giữa hai bên là có chủ đích và phải nêu rõ trong báo cáo:
@@ -104,10 +104,8 @@ def tracking_metrics_from_boxes(
         total_matched / (total_matched + false_pos) if (total_matched + false_pos) else 0.0
     )
     idf1 = 2 * precision * recall / (precision + recall) if (precision + recall) else 0.0
-    mota = max(
-        0.0,
-        1.0 - ((total_gt - total_matched) + false_pos + switches) / max(total_gt, 1),
-    )
+    # Không kẹp về 0: MOTA âm là thông tin thật (xem metrics.py).
+    mota = 1.0 - ((total_gt - total_matched) + false_pos + switches) / max(total_gt, 1)
 
     return mapping, TrackingMetrics(
         idf1=round(idf1, 4), mota=round(mota, 4), id_switches=switches,
@@ -120,7 +118,7 @@ def tracking_metrics_from_boxes(
 def conflict_statistics(events: list) -> dict[str, Any]:
     """Thống kê mô tả về near-miss trên dữ liệu thật.
 
-    Không có nhãn chuẩn nên **không** báo cáo Precision/Recall ở đây — chỉ mô tả
+    Không có nhãn chuẩn nên **không** báo cáo Precision/Recall ở đây - chỉ mô tả
     những gì hệ thống quan sát được, đúng như một báo cáo khảo sát hiện trường.
     """
     if not events:

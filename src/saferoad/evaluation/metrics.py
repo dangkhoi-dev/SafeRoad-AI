@@ -2,11 +2,11 @@
 
 Ba nhóm chỉ số, tương ứng ba cam kết trong poster:
 
-* **Conflict Precision / Recall / F1** — hệ thống có bắt đúng các near-miss thật
+* **Conflict Precision / Recall / F1** - hệ thống có bắt đúng các near-miss thật
   và có ít báo động giả không.
-* **TTC MAE** — sai số ước lượng thời gian tới va chạm, tính trên các sự kiện
+* **TTC MAE** - sai số ước lượng thời gian tới va chạm, tính trên các sự kiện
   khớp đúng.
-* **Tracking IDF1 / MOTA** — chất lượng gán ID, vì mọi thứ phía sau đều phụ
+* **Tracking IDF1 / MOTA** - chất lượng gán ID, vì mọi thứ phía sau đều phụ
   thuộc vào việc một chiếc xe giữ nguyên một ID.
 
 Bài toán ghép cặp
@@ -14,7 +14,7 @@ Bài toán ghép cặp
 Một sự kiện dự đoán và một nhãn chuẩn được coi là **khớp** khi chúng nói về cùng
 một cặp đối tượng và lệch nhau không quá ``time_tol`` giây. Vì hệ thống dùng ID
 do tracker sinh ra còn nhãn chuẩn dùng ID của simulator, ta phải **ánh xạ ID**
-trước — xem :func:`build_id_mapping`.
+trước - xem :func:`build_id_mapping`.
 
 Ghép được thực hiện bằng thuật toán tham lam theo thứ tự lệch thời gian tăng
 dần, mỗi nhãn và mỗi dự đoán chỉ được dùng một lần. Cách này tránh việc một dự
@@ -137,8 +137,8 @@ def build_gt_points(
     Chỉ giữ các đối tượng mà hệ thống **thực sự có cơ hội nhìn thấy**:
 
     * đúng tần số khung hình của video (30 Hz), không phải tần số mô phỏng
-      (60 Hz) — nếu không, IDF1 bị chặn trên ở 0.5 một cách nhân tạo;
-    * bbox đủ lớn (``min_box_area``) — đối tượng nhỏ hơn nằm ngoài khả năng
+      (60 Hz) - nếu không, IDF1 bị chặn trên ở 0.5 một cách nhân tạo;
+    * bbox đủ lớn (``min_box_area``) - đối tượng nhỏ hơn nằm ngoài khả năng
       phát hiện của detector, nên tính chúng vào mẫu số là chấm điểm hệ thống
       trên thứ nó đã chủ động loại bỏ.
 
@@ -253,13 +253,12 @@ def build_id_mapping(
     idf1 = (
         2 * precision * recall / (precision + recall) if (precision + recall) else 0.0
     )
-    mota = max(
-        0.0,
-        1.0
-        - (
-            (total_gt_points - total_matched) + false_positives + switches
-        ) / max(total_gt_points, 1),
-    )
+    # MOTA KHÔNG bị kẹp về 0. Theo định nghĩa CLEAR MOT, MOTA âm khi tổng số
+    # bỏ sót + báo sai + đổi ID vượt quá số điểm chuẩn - tức hệ thống gây hại
+    # nhiều hơn là giúp. Kẹp về 0 sẽ giấu mất đúng thông tin đó.
+    mota = 1.0 - (
+        (total_gt_points - total_matched) + false_positives + switches
+    ) / max(total_gt_points, 1)
 
     metrics = TrackingMetrics(
         idf1=round(idf1, 4),
@@ -290,7 +289,7 @@ def evaluate_conflicts(
         time_tol: dung sai thời gian khi ghép (giây).
         region: vùng camera bao phủ. Dự đoán nằm ngoài vùng này được **bỏ qua**
             (không tính TP cũng không tính FP), vì nhãn chuẩn cũng chỉ được sinh
-            trong vùng đó — chấm chúng là FP thì đơn thuần là phạt hệ thống vì
+            trong vùng đó - chấm chúng là FP thì đơn thuần là phạt hệ thống vì
             hai bên đo trên hai phạm vi khác nhau. Đây chính là cơ chế "ignore
             region" quen thuộc trong các benchmark MOT/detection.
     """
@@ -304,7 +303,7 @@ def evaluate_conflicts(
             x_min, y_min, x_max, y_max = region
             x, y = ev.location
             if not (x_min <= x <= x_max and y_min <= y <= y_max):
-                continue          # ngoài vùng đánh giá — bỏ qua
+                continue          # ngoài vùng đánh giá - bỏ qua
         va = id_mapping.get(ev.track_a)
         vb = id_mapping.get(ev.track_b)
         if va is None or vb is None or va == vb:
@@ -357,17 +356,28 @@ def evaluate_conflicts(
     return metrics
 
 
+# Trình mô phỏng chưa có ràng buộc chống va chạm, nên một phần nhãn chuẩn là lúc
+# hai thân xe (hoặc xe và người) đã chồng lên nhau, TTC bằng 0. Đó là va chạm
+# chứ không còn là suýt va chạm. Nhóm này dồn hết vào dải "< 1 giây", nên Recall
+# của dải đó phải được tách ra để người đọc biết con số đến từ đâu.
+CONTACT_BANDS: tuple[tuple[str, float, float], ...] = (
+    ("Thân xe đã chồng lên nhau (TTC = 0)", 0.0, 1e-9),
+    ("Chưa chạm, TTC dưới 1,0 s", 1e-9, 1.0),
+    ("Chưa chạm, TTC từ 1,0 s trở lên", 1.0, math.inf),
+)
+
+
 def severity_breakdown(
     predictions: list[ConflictEvent],
     ground_truth: list[GroundTruthConflict],
     id_mapping: dict[int, int],
     bands: tuple[tuple[str, float, float], ...] = (
         # Nhãn viết bằng dấu phẩy thập phân cho khớp phần còn lại của báo cáo
-        # tiếng Việt — các nhãn này được in nguyên văn vào bảng.
+        # tiếng Việt - các nhãn này được in nguyên văn vào bảng.
         ("Rất nghiêm trọng (TTC < 1,0 s)", 0.0, 1.0),
-        ("Nghiêm trọng (1,0–1,5 s)", 1.0, 1.5),
-        ("Trung bình (1,5–2,5 s)", 1.5, 2.5),
-        ("Nhẹ (2,5–3,0 s)", 2.5, 3.0),
+        ("Nghiêm trọng (1,0-1,5 s)", 1.0, 1.5),
+        ("Trung bình (1,5-2,5 s)", 1.5, 2.5),
+        ("Nhẹ (2,5-3,0 s)", 2.5, 3.0),
     ),
     region: tuple[float, float, float, float] | None = None,
 ) -> list[dict[str, Any]]:

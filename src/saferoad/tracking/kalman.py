@@ -7,7 +7,7 @@ Vector trạng thái 8 chiều::
 trong đó ``(cx, cy)`` là tâm bbox, ``a`` là tỉ lệ khung (w/h), ``h`` là chiều
 cao, và 4 thành phần còn lại là đạo hàm theo thời gian.
 
-Mô hình vận tốc không đổi (constant velocity) — đủ tốt cho khoảng thời gian
+Mô hình vận tốc không đổi (constant velocity) - đủ tốt cho khoảng thời gian
 giữa 2 frame (~33 ms) kể cả khi xe đang tăng/giảm tốc.
 """
 
@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import numpy as np
 
-#: Bảng phân vị chi-square 0.95 theo bậc tự do — dùng cho gating Mahalanobis.
+#: Bảng phân vị chi-square 0.95 theo bậc tự do - dùng cho gating Mahalanobis.
 CHI2_INV95 = {1: 3.8415, 2: 5.9915, 3: 7.8147, 4: 9.4877, 5: 11.070, 6: 12.592}
 
 
@@ -64,7 +64,7 @@ class KalmanBoxFilter:
         return mean, covariance
 
     def predict(self, mean: np.ndarray, covariance: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-        """Bước dự đoán — đẩy trạng thái tiến 1 frame."""
+        """Bước dự đoán - đẩy trạng thái tiến 1 frame."""
         h = mean[3]
         std_pos = [self._std_pos * h, self._std_pos * h, 1e-2, self._std_pos * h]
         std_vel = [self._std_vel * h, self._std_vel * h, 1e-5, self._std_vel * h]
@@ -87,7 +87,7 @@ class KalmanBoxFilter:
     def update(
         self, mean: np.ndarray, covariance: np.ndarray, measurement: np.ndarray
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Bước hiệu chỉnh — hợp nhất phép đo mới vào trạng thái."""
+        """Bước hiệu chỉnh - hợp nhất phép đo mới vào trạng thái."""
         proj_mean, proj_cov = self.project(mean, covariance)
 
         # Giải hệ thay vì nghịch đảo ma trận: ổn định số học hơn.
