@@ -115,7 +115,9 @@ class OverlayRenderer:
             cv2.rectangle(canvas, (x1, y1), (x2, y2), colour, thickness)
 
             label = f"{CLASS_LABEL.get(tr.cls, '?')} #{tr.track_id}"
-            if st.speed > 0.5:
+            # Homography ước lượng (chưa hiệu chuẩn thực địa) cho tốc độ không có
+            # ý nghĩa vật lý, có thể lên tới hàng trăm km/h; khi đó không in tốc độ.
+            if st.speed > 0.5 and not getattr(self.ground, "approximate", False):
                 label += f" {st.speed * 3.6:.0f}km/h"
             (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.42, 1)
             cv2.rectangle(canvas, (x1, y1 - th - 6), (x1 + tw + 6, y1), colour, -1)
@@ -165,6 +167,9 @@ class OverlayRenderer:
             f"SafeRoad AI | t={t:6.2f}s  f={frame_idx:05d} | "
             f"tracks={n_tracks:2d} | near-miss={total:3d} | severe={severe:2d}"
         )
+        if getattr(self.ground, "approximate", False):
+            text += " | homography xap xi"
+
         cv2.putText(canvas, text, (12, 27), cv2.FONT_HERSHEY_SIMPLEX, 0.58,
                     (235, 240, 245), 1, cv2.LINE_AA)
 

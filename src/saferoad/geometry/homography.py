@@ -44,6 +44,9 @@ class GroundPlane:
         self.H: np.ndarray | None = None
         self.H_inv: np.ndarray | None = None
         self.calibrated = False
+        #: True khi homography chỉ là ước lượng từ kích thước khung hình (chưa đo
+        #: thực địa). Khi đó toạ độ mét và tốc độ không có ý nghĩa vật lý.
+        self.approximate = False
 
         img_pts = cfg.image_points
         wld_pts = cfg.world_points

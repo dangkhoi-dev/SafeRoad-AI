@@ -143,6 +143,7 @@ class Pipeline:
                 width, height, camera_height_m=cfg.site.camera_height_m
             )
         ground = GroundPlane(homo_cfg, (width, height))
+        ground.approximate = not cfg.homography.image_points
         traj = TrajectoryProcessor(ground, homo_cfg, cfg.tracking)
         tracker = ByteTracker(cfg.tracking)
         scorer = RiskScorer(cfg.risk)
