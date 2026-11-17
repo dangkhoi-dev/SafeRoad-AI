@@ -14,11 +14,10 @@ from saferoad.conflict.geometry import series_ttc_and_gap
 from saferoad.evaluation.detection import evaluate_detection
 from saferoad.evaluation.metrics import (
     CONTACT_BANDS,
-    ConflictMetrics,
     evaluate_conflicts,
     severity_breakdown,
 )
-from saferoad.simulation.camera import COVERAGE, PinholeCamera, build_default_camera
+from saferoad.simulation.camera import COVERAGE, build_default_camera
 from saferoad.simulation.scenario import (
     TrafficSignal, build_scenario, compute_ground_truth, simulate,
 )

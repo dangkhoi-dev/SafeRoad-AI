@@ -14,7 +14,6 @@ phương pháp.
 from __future__ import annotations
 
 import logging
-import math
 from collections import Counter, defaultdict
 from typing import Any
 
@@ -31,6 +30,7 @@ def tracking_metrics_from_boxes(
     tracks: dict[int, Track],
     seq: MvtiSequence,
     iou_threshold: float = 0.3,
+    min_area: float = 0.0,
 ) -> tuple[dict[int, int], TrackingMetrics]:
     """Chấm tracking trên dữ liệu thật, ghép theo IoU của bbox.
 
@@ -51,9 +51,20 @@ def tracking_metrics_from_boxes(
 
     for frame_idx, gt_dets in seq.detections.items():
         ids = seq.id_map.get(frame_idx, {})
-        truth = [
-            (ids.get(i, -1), d.bbox) for i, d in enumerate(gt_dets) if ids.get(i, -1) >= 0
-        ]
+        # Hộp chuẩn nhỏ hơn ``min_area`` là vùng "bỏ qua" (quy ước MOT): không
+        # tính vào mẫu số, và dự đoán trùng với nó cũng không bị coi là FP -
+        # pipeline chủ động lọc vật thể quá nhỏ nên không thể bắt nó chịu
+        # trách nhiệm cho chúng.
+        truth = []
+        ignore = []
+        for i, d in enumerate(gt_dets):
+            oid = ids.get(i, -1)
+            if oid < 0:
+                continue
+            if d.area < min_area:
+                ignore.append(d.bbox)
+            else:
+                truth.append((oid, d.bbox))
         total_gt += len(truth)
         preds = states_by_frame.get(frame_idx, [])
 
@@ -75,7 +86,12 @@ def tracking_metrics_from_boxes(
             votes[tid][oid] += 1
             gt_hits[oid].append((frame_idx, tid))
             total_matched += 1
-        false_pos += len(preds) - len(used_t)
+        for tid, pbox in preds:
+            if tid in used_t:
+                continue
+            if any(box_iou(pbox, ib) >= iou_threshold for ib in ignore):
+                continue
+            false_pos += 1
 
     mapping = {tid: c.most_common(1)[0][0] for tid, c in votes.items() if c}
 
@@ -91,9 +107,9 @@ def tracking_metrics_from_boxes(
     gt_frames = Counter()
     for frame_idx, gt_dets in seq.detections.items():
         ids = seq.id_map.get(frame_idx, {})
-        for i in range(len(gt_dets)):
+        for i, d in enumerate(gt_dets):
             oid = ids.get(i, -1)
-            if oid >= 0:
+            if oid >= 0 and d.area >= min_area:
                 gt_frames[oid] += 1
     mostly = sum(
         1 for oid, n in gt_frames.items() if len(gt_hits.get(oid, [])) >= 0.8 * n

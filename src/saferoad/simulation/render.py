@@ -24,7 +24,7 @@ import numpy as np
 from ..config import HomographyConfig
 from ..types import Detection, VehicleClass
 from .camera import PinholeCamera, build_default_camera
-from .scenario import CENTER, ROAD_HALF_WIDTH, WORLD_BOUNDS, VehicleSpec
+from .scenario import CENTER, ROAD_HALF_WIDTH, STOP_LINE_RADIUS, WORLD_BOUNDS, VehicleSpec
 
 #: Màu thân xe (BGR).
 CLASS_COLOR: dict[VehicleClass, tuple[int, int, int]] = {
@@ -96,7 +96,7 @@ class SceneRenderer:
         dashes((x_min, cy), (x_max, cy), "h")
 
         # Vạch dừng ở 4 nhánh.
-        stop = ROAD_HALF_WIDTH + 1.5
+        stop = STOP_LINE_RADIUS
         for a, b in [
             ((cx - ROAD_HALF_WIDTH, cy + stop), (cx, cy + stop)),
             ((cx, cy - stop), (cx + ROAD_HALF_WIDTH, cy - stop)),
@@ -247,3 +247,56 @@ def render_video(
 
     writer.release()
     return dets_by_frame, ids_by_frame, renderer
+
+
+def project_detections(
+    vehicles: list[VehicleSpec],
+    duration: float,
+    fps: int = 30,
+    frame_w: int = 1280,
+    frame_h: int = 720,
+    camera: PinholeCamera | None = None,
+) -> tuple[dict[int, list[Detection]], dict[int, dict[int, int]], "SceneRenderer"]:
+    """Như :func:`render_video` nhưng KHÔNG vẽ ảnh - chỉ chiếu hộp 3D ra bbox.
+
+    Dùng cho lưới thực nghiệm (nhiều mật độ, nhiều góc camera): detector phát
+    lại chỉ cần bbox, nên bỏ được bước vẽ và mã hoá video vốn chiếm phần lớn
+    thời gian. Hình học chiếu giống hệt :meth:`SceneRenderer._draw_vehicle`.
+    """
+    renderer = SceneRenderer.__new__(SceneRenderer)
+    renderer.w, renderer.h = frame_w, frame_h
+    renderer.cam = camera or build_default_camera(frame_w, frame_h, centre=CENTER)
+    renderer.camera = camera_to_homography(renderer.cam)
+    renderer._background = None
+
+    dets_by_frame: dict[int, list[Detection]] = {}
+    ids_by_frame: dict[int, dict[int, int]] = {}
+    n_frames = int(duration * fps)
+    for idx in range(n_frames):
+        t = idx / fps
+        drawable = []
+        for veh in vehicles:
+            pose = veh.pose_at(t)
+            if pose is None:
+                continue
+            pos, vel = pose
+            heading = math.atan2(vel[1], vel[0]) if math.hypot(*vel) > 1e-6 else 0.0
+            drawable.append((veh, pos, heading))
+        drawable.sort(key=lambda item: -item[1][1])
+        pairs: list[tuple[int, Detection]] = []
+        for veh, pos, heading in drawable:
+            length, width = veh.cls.footprint
+            corners = renderer.cam.cuboid_corners(pos, heading, length, width, veh.cls.height)
+            pts = renderer.cam.project(corners)
+            if not np.isfinite(pts).all() or pts.min() < -5e4:
+                continue
+            x1, y1 = pts[:, 0].min(), pts[:, 1].min()
+            x2, y2 = pts[:, 0].max(), pts[:, 1].max()
+            if x2 < 0 or y2 < 0 or x1 > frame_w or y1 > frame_h:
+                continue
+            pairs.append((veh.vid, Detection(
+                bbox=(float(x1), float(y1), float(x2), float(y2)), score=1.0, cls=veh.cls)))
+        dets_by_frame[idx] = [d for _vid, d in pairs]
+        ids_by_frame[idx] = {i: vid for i, (vid, _d) in enumerate(pairs)}
+    return dets_by_frame, ids_by_frame, renderer
+

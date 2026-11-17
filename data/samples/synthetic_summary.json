@@ -1,9 +1,25 @@
 {
-  "video": "data\\samples\\synthetic_intersection.mp4",
-  "ground_truth_bundle": "data\\samples\\synthetic_groundtruth.pkl",
-  "n_vehicles": 315,
-  "n_ground_truth_conflicts": 152,
-  "n_severe": 95,
+  "video": "data/samples/synthetic_intersection.mp4",
+  "ground_truth_bundle": "data/samples/synthetic_groundtruth.pkl",
+  "n_vehicles": 285,
+  "n_ground_truth_conflicts": 64,
+  "n_ground_truth_near_miss": 54,
+  "n_ground_truth_collision": 10,
+  "n_severe": 47,
+  "seed": 42,
+  "arrival_rate": 1.1,
+  "scenario_check": {
+    "n_scheduled": 359,
+    "n_spawned": 285,
+    "n_dropped_at_entry": 55,
+    "n_with_trajectory": 285,
+    "n_completed_route": 222,
+    "n_still_on_road_at_end": 18,
+    "n_crashes": 23,
+    "n_vehicles_in_crash": 47,
+    "n_runs_red": 28,
+    "n_turning": 88
+  },
   "duration_s": 300.0,
   "fps": 30
 }

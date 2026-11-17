@@ -62,18 +62,31 @@ write('riskmap.json', results.risk_map || { cells: [], hotspots: [], bounds: nul
 write('timeline.json', { timeline: results.timeline || [] });
 write('behaviors.json', { behaviors: results.behaviors || [] });
 
-const evalPath = path.join(ROOT, 'data/outputs/evaluation.json');
-write('evaluation.json', fs.existsSync(evalPath)
-  ? { available: true, ...read('data/outputs/evaluation.json') }
+// Gộp đúng như endpoint /api/evaluation của máy chủ: mô phỏng + lưới điều kiện +
+// dữ liệu thật + hiệu chuẩn, để trang tĩnh và dashboard chạy thật hiện cùng số.
+const opt = (p) => fs.existsSync(path.join(ROOT, p)) ? read(p) : null;
+const evalMain = opt('data/outputs/evaluation.json');
+const real = {};
+for (const [k, p] of [['street', 'data/outputs/evaluation_street.json'],
+                      ['street_pretrained_test', 'data/outputs/evaluation_street_pretrained_test.json'],
+                      ['street_finetuned_test', 'data/outputs/evaluation_street_finetuned_test.json'],
+                      ['mvti', 'data/outputs/evaluation_real.json']]) {
+  const v = opt(p);
+  if (v) real[k] = v;
+}
+write('evaluation.json', evalMain
+  ? { available: true, ...evalMain, grid: opt('data/outputs/evaluation_grid.json'), real,
+      calibration_street: opt('data/outputs/calibration_street.json') }
   : { available: false });
 
 // Trang giao diện: bật chế độ tĩnh và gắn dòng ghi chú để người xem biết đây là
 // dữ liệu tính sẵn, không phải camera đang chạy.
 const s = results.summary || {};
 const note =
-  `Bản trình diễn trực tuyến: dữ liệu tính sẵn từ video mô phỏng ` +
+  `Trang tĩnh: dữ liệu tính sẵn từ video mô phỏng ` +
   `${Math.round(s.duration_s || 0)} giây (${s.n_frames || 0} khung hình). ` +
-  `Pipeline đầy đủ chạy cục bộ bằng lệnh <code>saferoad serve</code>.`;
+  `Bản chạy thật (tải video lên, máy chủ chạy YOLO + toàn bộ pipeline) nằm ở ` +
+  `Hugging Face Spaces - xem README.`;
 let html = fs.readFileSync(
   path.join(ROOT, 'src/saferoad/dashboard/static/index.html'), 'utf-8');
 html = html.replace('<script>',

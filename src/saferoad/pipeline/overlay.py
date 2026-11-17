@@ -87,6 +87,15 @@ class OverlayRenderer:
                 if prev is None or level.level > prev.level:
                     alert_ids[tid] = level
 
+        # --- 0. Vùng phân tích (nếu cấu hình giới hạn) ------------------ #
+        region = getattr(self.cfg.conflict, "analysis_region_px", None) or []
+        if len(region) >= 3:
+            poly = np.array([[int(x), int(y)] for x, y in region], dtype=np.int32)
+            cv2.polylines(canvas, [poly], True, (90, 220, 255), 2, cv2.LINE_AA)
+            top = min(region, key=lambda p: p[1])
+            cv2.putText(canvas, "VUNG PHAN TICH", (int(max(5, top[0])), int(max(18, top[1] - 8))),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.55, (90, 220, 255), 2, cv2.LINE_AA)
+
         # --- 1. Quỹ đạo ------------------------------------------------- #
         for tr in tracks:
             pts = [s.anchor for s in tr.history[-self.trail_length:]]

@@ -89,10 +89,12 @@ class MvtiSequence:
     tracks: dict[int, GtTrack] = field(default_factory=dict)
     width: int = 0
     height: int = 0
+    #: Số khung hình khi nguồn là một video (không có danh sách file ảnh).
+    n_frames_override: int = 0
 
     @property
     def n_frames(self) -> int:
-        return len(self.frame_files)
+        return self.n_frames_override or len(self.frame_files)
 
     def summary(self) -> dict:
         from collections import Counter

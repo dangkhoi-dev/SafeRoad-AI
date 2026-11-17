@@ -43,3 +43,12 @@ Thumbs.db
 
 # Trang dashboard tĩnh do scripts/build_static_site.mjs sinh ra
 site/
+
+# Sinh ra khi chạy
+data/jobs/
+data/yolo_street/
+runs/
+data/outputs/**/*.db
+data/outputs/**/*.db-wal
+data/outputs/**/*.db-shm
+data/outputs/**/*.mp4

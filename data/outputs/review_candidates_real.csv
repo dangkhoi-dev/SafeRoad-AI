@@ -1,0 +1,2 @@
+﻿candidate_id,source,t_s,frame,clip_start_s,clip_end_s,system_event,track_a,track_b,gt_object_a,gt_object_b,ttc_s,pet_s,pet_status,contact,type,risk,px_x,px_y,video,label,reviewer,note
+C0001,system,48.033,1441,45.03,51.03,CF00001,73,75,208,208,0.0,,parallel,body_overlap,crossing,100.0,755.4,119.7,data/processed/mvti/infrastructure.mp4,,,

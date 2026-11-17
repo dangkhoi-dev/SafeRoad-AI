@@ -11,7 +11,7 @@ import math
 
 import pytest
 
-from saferoad.conflict.geometry import NO_COLLISION, vehicle_gap, vehicle_ttc
+from saferoad.conflict.geometry import NO_COLLISION, vehicle_gap
 from saferoad.conflict.indicators import (
     approach_angle,
     classify_conflict,

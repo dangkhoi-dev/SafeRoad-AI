@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "dataset": {
     "name": "infrastructure-infrastructure-mscoco",
     "n_frames": 2441,
@@ -11,13 +12,23 @@
       "truck": 7,
       "bicycle": 2
     },
-    "track_length_median": 646
+    "track_length_median": 646,
+    "frames_evaluated": [
+      0,
+      2441
+    ],
+    "stitch": null
   },
   "thresholds": {
     "map_conf": 0.001,
-    "pipeline_conf": 0.15
+    "pipeline_conf": 0.15,
+    "min_box_area": 120.0
   },
   "detector_backend": "yolo",
+  "weights": "models/yolo11n.pt",
+  "class_remap_for_scoring": {},
+  "calibration": null,
+  "calibration_speed_check": null,
   "detection": {
     "mAP50": 0.2078,
     "mAP50_95": 0.1392,
@@ -28,6 +39,7 @@
     "recall50_op": 0.2771,
     "n_pred": 131320,
     "n_gt": 14488,
+    "n_gt_ignored": 0,
     "per_class": {
       "bicycle": {
         "AP50": 0.0099,
@@ -56,54 +68,151 @@
       }
     }
   },
+  "detection_min_area": {
+    "mAP50": 0.2087,
+    "mAP50_95": 0.1398,
+    "precision50": 0.0683,
+    "recall50": 0.5543,
+    "operating_conf": 0.15,
+    "precision50_op": 0.4677,
+    "recall50_op": 0.2782,
+    "n_pred": 131320,
+    "n_gt": 14426,
+    "n_gt_ignored": 62,
+    "per_class": {
+      "bicycle": {
+        "AP50": 0.0099,
+        "AP50_95": 0.0021,
+        "n_gt": 1503
+      },
+      "car": {
+        "AP50": 0.3408,
+        "AP50_95": 0.2389,
+        "n_gt": 7619
+      },
+      "motorcycle": {
+        "AP50": null,
+        "AP50_95": null,
+        "n_gt": 0
+      },
+      "pedestrian": {
+        "AP50": null,
+        "AP50_95": null,
+        "n_gt": 0
+      },
+      "truck": {
+        "AP50": 0.2755,
+        "AP50_95": 0.1783,
+        "n_gt": 5304
+      }
+    }
+  },
   "tracking": {
-    "idf1": 0.2346,
-    "mota": 0.0607,
+    "idf1": 0.2354,
+    "mota": 0.061,
     "id_switches": 42,
     "n_gt_tracks": 19,
     "n_pred_tracks": 46,
     "mostly_tracked": 0,
     "fragmentation": 3.471
   },
-  "conflicts": {
-    "total": 1,
-    "severe_ttc_lt_1_5": 1,
-    "by_type": {
-      "crossing": 1
+  "alerts": {
+    "metrics_vs_reference": {
+      "precision": {
+        "value": 0.0,
+        "num": 0,
+        "den": 1
+      },
+      "recall": {
+        "value": null,
+        "num": 0,
+        "den": 0
+      },
+      "f1": 0.0,
+      "ttc_mae": null,
+      "ttc_mae_n": 0,
+      "time_mae": null,
+      "type_accuracy": {
+        "value": null,
+        "num": 0,
+        "den": 0
+      }
     },
-    "by_level": {
-      "high": 1
+    "reconciliation": {
+      "rows": {
+        "episodes_opened": 1,
+        "merged_into_previous": 0,
+        "emitted": 1,
+        "exported_to_results": 1,
+        "ignored_outside_eval_region": 0,
+        "scored": 1,
+        "scored_unmapped_track_fp": 1,
+        "scored_mapped_fp": 0,
+        "scored_tp": 0,
+        "gt_total": 0,
+        "gt_matched_tp": 0,
+        "gt_missed_fn": 0
+      },
+      "checks": {
+        "opened = rejected + merged + emitted": true,
+        "emitted = exported": true,
+        "exported = ignored + scored": true,
+        "scored = TP + FP": true,
+        "gt = TP + FN": true
+      },
+      "all_checks_pass": true,
+      "per_hour": {
+        "false_alarms_per_hour": 44.2,
+        "misses_per_hour": 0.0,
+        "alerts_per_hour": 44.2,
+        "hours": 0.0226
+      }
     },
-    "ttc": {
-      "min": 0.0,
-      "p25": 0.0,
-      "median": 0.0,
-      "p75": 0.0,
-      "max": 0.0
+    "n_reference": 0,
+    "reference_contact": {},
+    "system_contact": {
+      "body_overlap": 1
     },
-    "pet": {
-      "min": 0.0,
-      "p25": 0.0,
-      "median": 0.0,
-      "p75": 0.0,
-      "max": 0.0
+    "reference_funnel": {
+      "episodes_opened": 3,
+      "rejected_proximity_gate": 3
     },
-    "risk_score": {
-      "min": 100.0,
-      "p25": 100.0,
-      "median": 100.0,
-      "p75": 100.0,
-      "max": 100.0
-    }
+    "system_statistics": {
+      "total": 1,
+      "severe_ttc_lt_1_5": 1,
+      "by_type": {
+        "crossing": 1
+      },
+      "by_level": {
+        "high": 1
+      },
+      "ttc": {
+        "min": 0.0,
+        "p25": 0.0,
+        "median": 0.0,
+        "p75": 0.0,
+        "max": 0.0
+      },
+      "pet": null,
+      "risk_score": {
+        "min": 100.0,
+        "p25": 100.0,
+        "median": 100.0,
+        "p75": 100.0,
+        "max": 100.0
+      }
+    },
+    "review_candidates_csv": "data/outputs/review_candidates_real.csv",
+    "n_review_candidates": 1
   },
   "runtime": {
     "n_frames": 2441,
     "duration_s": 81.37,
     "fps_source": 30.0,
-    "processing_fps": 12.13,
-    "frame_latency_median_ms": 82.43,
-    "frame_latency_p95_ms": 93.43,
-    "wall_seconds": 207.41,
+    "processing_fps": 17.08,
+    "frame_latency_median_ms": 58.54,
+    "frame_latency_p95_ms": 81.35,
+    "wall_seconds": 153.93,
     "total_events": 1,
     "severe_events": 1,
     "avg_risk_score": 100.0,
@@ -112,19 +221,150 @@
       "crossing": 1
     },
     "latency_ms": {
-      "detection": 81.19,
-      "tracking": 0.33,
-      "trajectory": 0.23,
-      "conflict": 0.1
+      "detection": 57.67,
+      "tracking": 0.34,
+      "trajectory": 0.21,
+      "conflict": 0.09,
+      "overlay": 3.96
     },
-    "total_latency_ms": 81.84,
-    "homography_error_m": 2.312938447200457e-15
+    "total_latency_ms": 62.27,
+    "homography_error_m": 2.312938447200457e-15,
+    "detector": "YoloDetector",
+    "event_funnel": {
+      "episodes_opened": 1,
+      "emitted": 1
+    }
   },
-  "note": "Dataset thật có nhãn bbox và ID đối tượng nhưng KHÔNG có nhãn xung đột. Vì vậy mục 'conflicts' chỉ là thống kê mô tả; Precision/Recall của near-miss được đo riêng trên tập mô phỏng có ground truth.",
-  "environment": {
-    "python": "3.11.15",
-    "os": "Linux",
-    "numpy": "2.4.4",
-    "opencv": "4.13.0"
-  }
+  "reproducibility": {
+    "command": "saferoad evaluate-real --config configs/mvti.yaml --no-db",
+    "git_commit": "5249dcc-dirty",
+    "config_sha256": "4033db58803e1d13",
+    "config": {
+      "site": {
+        "name": "Multi-view Traffic Intersection Dataset (camera hạ tầng)",
+        "short_name": "MVTI",
+        "camera_height_m": 12.0,
+        "approaches": [
+          "Hướng 1",
+          "Hướng 2",
+          "Hướng 3",
+          "Hướng 4"
+        ],
+        "lanes": 3
+      },
+      "video": {
+        "source": "data/processed/mvti/infrastructure.mp4",
+        "start_frame": 0,
+        "max_frames": 0,
+        "stride": 1,
+        "resize_width": 0,
+        "fps_override": 0.0,
+        "write_overlay": true,
+        "overlay_path": "data/outputs/overlay_real.mp4"
+      },
+      "detection": {
+        "weights": "models/yolo11n.pt",
+        "imgsz": 640,
+        "conf": 0.001,
+        "iou": 0.45,
+        "device": "cpu",
+        "quantize": null,
+        "max_det": 300,
+        "min_box_area": 120.0,
+        "backend": "yolo",
+        "tile_rows": 2,
+        "tile_cols": 3,
+        "tile_overlap": 0.25,
+        "tile_full_frame": true,
+        "tile_merge_iou": 0.55,
+        "replay_noise_px": 1.5,
+        "replay_miss_rate": 0.03,
+        "replay_seed": 17
+      },
+      "tracking": {
+        "track_high_thresh": 0.5,
+        "track_low_thresh": 0.1,
+        "new_track_thresh": 0.55,
+        "match_thresh": 0.8,
+        "track_buffer": 30,
+        "min_hits": 3,
+        "velocity_alpha": 0.35,
+        "min_states_for_velocity": 3,
+        "stationary_speed": 0.0,
+        "stationary_window_s": 2.0
+      },
+      "homography": {
+        "image_points": [],
+        "world_points": [],
+        "fallback_scale": 0.05,
+        "smooth_window": 5
+      },
+      "conflict": {
+        "ttc_threshold": 3.0,
+        "pet_threshold": 1.5,
+        "max_pair_distance": 30.0,
+        "min_rel_speed": 3.0,
+        "proximity_gate": 3.0,
+        "min_abs_speed": 0.8,
+        "dedup_window": 3.0,
+        "horizon": 6.0,
+        "use_measured_pet": true,
+        "pet_lookback_s": 4.0,
+        "pet_max_wait_s": 4.0,
+        "pet_min_angle": 20.0,
+        "ignore_pedestrian_pairs": true,
+        "analysis_region_px": [],
+        "contact_settle_s": 2.0,
+        "episode_grouping": true,
+        "angle_rear_end": 30.0,
+        "angle_crossing_min": 60.0,
+        "angle_crossing_max": 120.0,
+        "angle_head_on": 150.0
+      },
+      "risk": {
+        "w_ttc": 0.52,
+        "w_pet": 0.32,
+        "w_rel_speed": 0.072,
+        "w_type": 0.38,
+        "w_time": 0.14,
+        "bias": -2.69,
+        "grid_size": 2.0,
+        "kernel_radius": 6.0,
+        "decay_tau": 900.0,
+        "top_k_hotspots": 5
+      },
+      "behavior": {
+        "enabled": true,
+        "model_path": "models/behavior_clf.joblib",
+        "harsh_brake": -3.5,
+        "harsh_accel": 3.0,
+        "sharp_turn_rate": 45.0,
+        "window": 15
+      },
+      "privacy": {
+        "enabled": false,
+        "blur_faces": true,
+        "blur_plates": true,
+        "blur_kernel": 31,
+        "face_ratio": 0.28,
+        "plate_band": [
+          0.55,
+          0.95
+        ]
+      },
+      "db_path": "data/outputs/saferoad_real.db",
+      "output_dir": "data/outputs"
+    },
+    "environment": {
+      "python": "3.13.18",
+      "os": "Linux",
+      "numpy": "2.5.3",
+      "opencv": "5.0.0",
+      "scikit_learn": "1.9.1"
+    },
+    "ground_truth": "data/processed/mvti/infrastructure_groundtruth.pkl",
+    "ground_truth_sha256": "8be650d7bb093784",
+    "weights_sha256": "0ebbc80d4a7680d1"
+  },
+  "note": "Bộ dữ liệu có nhãn bbox + ID nhưng KHÔNG có nhãn xung đột. 'alerts' so pipeline với cảnh báo tham chiếu (cùng thuật toán chạy trên quỹ đạo người gán nhãn) - đo sai số do detection + tracking, không phải độ đúng tuyệt đối. Độ đúng tuyệt đối cần nhãn người rà soát: xem review_candidates_*.csv và lệnh 'saferoad review-score'."
 }

@@ -1,0 +1,77 @@
+# Cấu hình cho video đại lộ (Kaggle). Homography lấy từ configs/calib_street.yaml
+# (ước lượng từ vạch kẻ đường, xem data/outputs/calibration_street.json).
+site:
+  name: Đại lộ nhiều làn - video Kaggle quay từ mái nhà (iPhone 13, 4K→1080p)
+  short_name: Đại lộ (Kaggle)
+  camera_height_m: 20.0
+  approaches: [Chiều đi, Chiều về]
+  lanes: 4
+video: {source: data/processed/street/street_labeled_0_300s.mp4, start_frame: 0, max_frames: 0, stride: 1, resize_width: 0,
+  fps_override: 0.0, write_overlay: true, overlay_path: data/outputs/overlay_street.mp4}
+detection: {weights: models/saferoad_street_yolo11n.pt, imgsz: 640, conf: 0.2, iou: 0.45, device: cpu, quantize: null, max_det: 300, min_box_area: 200.0,
+  backend: yolo, tile_rows: 2, tile_cols: 3, tile_overlap: 0.25, tile_full_frame: true, tile_merge_iou: 0.55}
+tracking: {track_high_thresh: 0.5, track_low_thresh: 0.1, new_track_thresh: 0.55, match_thresh: 0.8, track_buffer: 30, min_hits: 3,
+  velocity_alpha: 0.35, min_states_for_velocity: 3,
+  # Xe đỗ/đứng trong hàng chờ ở xa: bbox rung hơn 1 m - kẹp vận tốc về 0 nếu
+  # dịch chuyển ròng trong 2 s nhỏ hơn 1 m/s.
+  stationary_speed: 1.0, stationary_window_s: 2.0}
+homography:
+  image_points:
+  - [860.4, 709.6]
+  - [869.9, 720.1]
+  - [904.6, 759.3]
+  - [916.6, 772.4]
+  - [957.3, 816.7]
+  - [973.0, 834.0]
+  - [1019.5, 885.6]
+  - [1037.1, 905.9]
+  - [1097.1, 971.9]
+  - [1122.0, 998.9]
+  - [880.3, 828.8]
+  - [887.2, 837.8]
+  - [928.5, 892.6]
+  - [945.1, 912.9]
+  - [997.9, 982.3]
+  - [1018.6, 1009.3]
+  world_points:
+  - [0.0, 51.0]
+  - [0.0, 48.0]
+  - [0.0, 39.0]
+  - [0.0, 36.0]
+  - [0.0, 27.0]
+  - [0.0, 24.0]
+  - [0.0, 15.0]
+  - [0.0, 12.0]
+  - [0.0, 3.0]
+  - [0.0, 0.0]
+  - [-3.5, 21.792]
+  - [-3.5, 18.792]
+  - [-3.5, 9.792]
+  - [-3.5, 6.792]
+  - [-3.5, -2.208]
+  - [-3.5, -5.208]
+  fallback_scale: 0.05
+  smooth_window: 5
+conflict:
+  {ttc_threshold: 3.0, pet_threshold: 1.5, max_pair_distance: 30.0, min_rel_speed: 3.0, proximity_gate: 3.0, min_abs_speed: 0.8,
+  dedup_window: 3.0, horizon: 6.0, angle_rear_end: 30.0, angle_crossing_min: 60.0, angle_crossing_max: 120.0, angle_head_on: 150.0,
+  ignore_pedestrian_pairs: true,
+  # Vùng phân tích = lòng đường bên trái, nơi có các vạch dùng để hiệu chuẩn:
+  # hình chữ nhật mặt đất x ∈ [-10, 4.5] m, y ∈ [-8, 65] m chiếu ngược ra pixel.
+  # Ngoài vùng này homography là ngoại suy: ở lòng đường bên phải (cách vạch
+  # hiệu chuẩn hơn 10 m) sai số ngang ~1 m đủ biến xe chạy sát hàng xe đỗ thành
+  # "chồng thân"; ở xa hơn 65 m mỗi pixel đã là hàng mét.
+  analysis_region_px: [[623, 639], [920, 676], [1418, 1136], [798, 968]]}
+risk: {w_ttc: 0.52, w_pet: 0.32, w_rel_speed: 0.072, w_type: 0.38, w_time: 0.14, bias: -2.69, grid_size: 2.0, kernel_radius: 6.0,
+  decay_tau: 900.0, top_k_hotspots: 5}
+behavior: {enabled: true, model_path: models/behavior_clf.joblib, harsh_brake: -3.5, harsh_accel: 3.0, sharp_turn_rate: 45.0,
+  window: 15}
+privacy:
+  enabled: false
+  blur_faces: true
+  blur_plates: true
+  blur_kernel: 31
+  face_ratio: 0.28
+  plate_band: [0.55, 0.95]
+db_path: data/outputs/saferoad_street.db
+output_dir: data/outputs

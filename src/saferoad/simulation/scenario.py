@@ -54,8 +54,11 @@ CENTER = (0.0, 30.0)
 ROAD_HALF_WIDTH = 7.5
 #: Bán kính vùng giao lộ.
 JUNCTION_RADIUS = 11.0
-#: Bán kính vạch dừng - xe dừng đèn đỏ tại đây.
-STOP_LINE_RADIUS = 9.0
+#: Bán kính vạch dừng - xe dừng đèn đỏ tại đây (đầu xe không vượt qua).
+#: Phải nằm NGOÀI vạch bộ hành (tâm cách giao lộ 11 m, rộng 2,4 m). Bản cũ đặt
+#: 9 m, tức vạch dừng nằm bên trong vạch bộ hành: xe chờ đèn đỗ đè lên lối đi bộ
+#: và người đi bộ đi thẳng vào thân xe - một kiểu "va chạm" do dựng cảnh sai.
+STOP_LINE_RADIUS = 12.6
 #: Khoảng trống (giây) mà xe rẽ đòi hỏi trước khi cắt qua dòng ngược chiều.
 TURN_GAP = 2.6
 #: Sau chừng này giây chờ, người lái mất kiên nhẫn và cứ thế cắt qua -
@@ -169,6 +172,9 @@ class VehicleSpec:
     forced_brake: tuple[float, float] | None = None
     #: Quãng đường (m) dọc tuyến tới vạch dừng. Tính trong ``__post_init__``.
     stop_line_s: float = field(default=0.0, init=False)
+    #: Thời điểm va chạm (giây) và xe va chạm cùng, nếu có.
+    crash_t: float | None = field(default=None, init=False)
+    crash_with: int | None = field(default=None, init=False)
 
     # -- Kết quả mô phỏng ------------------------------------------------ #
     times: np.ndarray = field(default_factory=lambda: np.empty(0), repr=False)
@@ -194,15 +200,32 @@ class VehicleSpec:
         return len(self.waypoints) > 2
 
     def _find_stop_line(self) -> float:
-        """Quãng đường tới vạch dừng - nơi tuyến đường chạm mép vùng giao lộ."""
+        """Quãng đường tới điểm phải dừng chờ đèn.
+
+        * Xe: nơi tuyến đường chạm vòng vạch dừng quanh giao lộ.
+        * Người đi bộ: nơi lối đi chạm **mép mặt đường** của nhánh đường cần
+          băng qua. Bản cũ dùng chung vòng vạch dừng bán kính 9 m cho cả người đi
+          bộ, nhưng các vạch bộ hành nằm cách tâm 11 m - lối đi không bao giờ
+          chạm vòng đó, nên **không người đi bộ nào chờ đèn**: mọi người đều cư xử
+          như người băng ẩu, khác hẳn kịch bản đã khai báo (35%). Đây là một chỗ
+          trình mô phỏng lệch kịch bản, phát hiện khi kiểm tra lại các vụ chạm.
+        """
         total = self._cum[-1]
         if total < 1e-6:
             return 0.0
-        steps = 200
+        steps = 400
         for i in range(steps + 1):
             s = total * i / steps
             pos, _ = self.point_at(s)
-            if math.dist(pos, CENTER) <= STOP_LINE_RADIUS:
+            if self.cls == VehicleClass.PEDESTRIAN:
+                cx, cy = CENTER
+                if ("Bắc" in self.approach or "Nam" in self.approach):
+                    on_road = abs(pos[0] - cx) <= ROAD_HALF_WIDTH + 0.3
+                else:
+                    on_road = abs(pos[1] - cy) <= ROAD_HALF_WIDTH + 0.3
+                if on_road:
+                    return s
+            elif math.dist(pos, CENTER) <= STOP_LINE_RADIUS:
                 return s
         return total  # tuyến không đi qua giao lộ
 
@@ -427,6 +450,8 @@ def simulate(
     dt: float = 1.0 / 60.0,
     signal: TrafficSignal | None = None,
     emergency_ttc: float = 1.2,
+    crash_clear_s: float = 4.0,
+    report: dict | None = None,
 ) -> list[VehicleSpec]:
     """Chạy vi mô phỏng, điền quỹ đạo thực tế vào từng ``VehicleSpec``.
 
@@ -445,6 +470,25 @@ def simulate(
     Toàn bộ phép tính theo cặp được vector hoá bằng numpy: với ~40 xe hoạt động
     và 7200 bước thời gian, vòng lặp Python thuần sẽ mất hàng phút.
 
+    Va chạm có vật lý (bản cải tiến)
+    --------------------------------
+    Bản cũ không có ràng buộc chống va chạm: khi phanh tránh không kịp, hai xe
+    **đi xuyên qua nhau** rồi giữ nguyên tốc độ. 55/152 nhãn chuẩn khi đó là lúc
+    hai thân xe đang chồng lên nhau - một tình huống không thể có ngoài đời, nên
+    không biết nó là "suýt va chạm" hay "va chạm". Nay:
+
+    * phanh tránh tính TTC trên **mô hình đa hình tròn** (giống bộ đo), thay vì
+      một hình tròn bán kính nửa bề rộng xe - bản cũ đánh giá thấp nguy cơ khi
+      xe dài cắt ngang nên phanh muộn;
+    * khi hai thân xe vẫn chạm nhau, đó là **va chạm**: cả hai phanh tối đa về 0,
+      đứng tại chỗ ``crash_clear_s`` giây (là vật cản cho xe khác) rồi được dọn
+      khỏi đường. Nhãn chuẩn tách riêng nhóm này (``kind="collision"``).
+
+    ``report`` (nếu truyền vào một dict) được điền thống kê kiểm tra kịch bản:
+    số xe lên lịch / vào được / bị bỏ ở điểm vào / đi hết tuyến, số vụ va chạm,
+    số lần xuyên thân không thành va chạm (phải bằng 0). Đây là cách phát hiện
+    mô phỏng **lệch kịch bản** thay vì tin rằng nó chạy đúng ý đồ.
+
     Trả về danh sách các xe thực sự có quỹ đạo (đã cập nhật tại chỗ).
     """
     signal = signal or TrafficSignal()
@@ -452,9 +496,11 @@ def simulate(
 
     state = {
         v.vid: {"s": 0.0, "v": 0.0, "active": False, "done": False, "wait": 0.0,
+                "crash_t": None, "crash_with": None, "dropped": False,
                 "log_t": [], "log_p": [], "log_v": []}
         for v in vehicles
     }
+    crashes: list[tuple[float, int, int]] = []
     pending = sorted(vehicles, key=lambda v: v.t_start)
     next_spawn = 0
     #: Xe đã tới giờ nhưng chưa có chỗ trống ở điểm vào - chờ ở đây.
@@ -493,7 +539,10 @@ def simulate(
                     occupied.append((veh, 0.0))
                 elif now - veh.t_start < 25.0:
                     still_waiting.append(veh)   # thử lại ở bước sau
-                # Quá 25 s không vào được thì bỏ - tránh dồn ứ vô hạn.
+                else:
+                    # Quá 25 s không vào được thì bỏ - tránh dồn ứ vô hạn. Ghi
+                    # lại để báo cáo kiểm tra kịch bản thấy được.
+                    state[veh.vid]["dropped"] = True
             waiting = still_waiting
 
         n = len(active)
@@ -562,27 +611,47 @@ def simulate(
         # mọi xe trong hàng chờ sẽ phanh gấp lẫn nhau đến mức đứng im.
         dv = vel[None, :, :] - vel[:, None, :]
         aa = np.einsum("ijk,ijk->ij", dv, dv)
-        bb = 2.0 * np.einsum("ijk,ijk->ij", delta, dv)
-        dist_sq = np.einsum("ijk,ijk->ij", delta, delta)
-        rr = (radius[:, None] + radius[None, :]) ** 2
-        cc = dist_sq - rr
-        disc = bb**2 - 4.0 * aa * cc
-
-        with np.errstate(invalid="ignore", divide="ignore"):
-            root = (-bb - np.sqrt(np.maximum(disc, 0.0))) / (2.0 * aa)
         closing = np.sqrt(aa)
+
+        # TTC trên mô hình đa hình tròn: thân xe dài được phủ đủ chiều dài, nên
+        # xe tải cắt ngang không còn bị coi như một chấm tròn rộng 2,5 m.
+        circ, circ_r = _circle_layout(active, pos, dir_vec)      # (n,3,2), (n,3)
+        cdelta = circ[None, :, None, :, :] - circ[:, None, :, None, :]   # (n,n,3,3,2)
+        cbb = 2.0 * np.einsum("ijpqk,ijk->ijpq", cdelta, dv)
+        cdist_sq = np.einsum("ijpqk,ijpqk->ijpq", cdelta, cdelta)
+        crr = (circ_r[:, None, :, None] + circ_r[None, :, None, :]) ** 2
+        ccc = cdist_sq - crr
+        caa = aa[:, :, None, None]
+        with np.errstate(invalid="ignore", divide="ignore", over="ignore"):
+            cdisc = cbb**2 - 4.0 * caa * ccc
+            croot = (-cbb - np.sqrt(np.maximum(cdisc, 0.0))) / (2.0 * caa)
+        cok = (caa > 1e-6) & (cbb < 0) & (cdisc >= 0) & (croot >= 0) & np.isfinite(crr)
+        root = np.where(cok, croot, np.inf).min(axis=(2, 3))
+        touching = (np.where(np.isfinite(crr), ccc, np.inf) <= 0.0).any(axis=(2, 3))
+
         ok = (
             (~is_leader)                    # bỏ qua xe cùng làn phía trước
-            & (aa > 1e-6)
-            & (bb < 0)
-            & (disc >= 0)
-            & (root >= 0)
             & (root <= emergency_ttc)
-            & (closing > 1.0)               # phải có tốc độ tiếp cận thật
+            & (closing > 0.1)               # phải có tốc độ tiếp cận thật
         )
         np.fill_diagonal(ok, False)
         ttc_pair = np.where(ok, root, np.inf)
         min_ttc = ttc_pair.min(axis=1)
+
+        # --- Va chạm: thân xe chồng nhau ⇒ cả hai dừng lại ---------------- #
+        np.fill_diagonal(touching, False)
+        is_ped = np.array([v.cls == VehicleClass.PEDESTRIAN for v in active])
+        touching &= ~(is_ped[:, None] & is_ped[None, :])   # người đi bộ tự né nhau
+        for i, j in zip(*np.nonzero(np.triu(touching))):
+            vi, vj = active[i], active[j]
+            si, sj = state[vi.vid], state[vj.vid]
+            if si["crash_t"] is None or sj["crash_t"] is None:
+                if si["crash_t"] is None and sj["crash_t"] is None:
+                    crashes.append((now, vi.vid, vj.vid))
+                for st_, other in ((si, vj), (sj, vi)):
+                    if st_["crash_t"] is None:
+                        st_["crash_t"] = now
+                        st_["crash_with"] = other.vid
 
         # --- Trạng thái vùng giao lộ ----------------------------------- #
         dist_centre = np.linalg.norm(pos - np.asarray(CENTER), axis=1)
@@ -594,6 +663,19 @@ def simulate(
         for i, veh in enumerate(active):
             st = state[veh.vid]
             cls = veh.cls
+            if st["crash_t"] is not None:
+                # Xe đã va chạm: phanh tối đa, đứng yên, rồi được dọn khỏi đường.
+                new_v = max(0.0, speed[i] - 9.0 * dt)
+                st["v"] = new_v
+                st["s"] += new_v * dt
+                if now - st["crash_t"] >= crash_clear_s and new_v == 0.0:
+                    st["done"] = True
+                    continue
+                p, h = veh.point_at(st["s"])
+                st["log_t"].append(now)
+                st["log_p"].append(p)
+                st["log_v"].append((new_v * math.cos(h), new_v * math.sin(h)))
+                continue
             a_max = IDM_A_MAX[cls]
             b_comf = IDM_B_COMFORT[cls]
             s0 = IDM_S0[cls]
@@ -619,7 +701,10 @@ def simulate(
             # 2. Đèn tín hiệu - vạch dừng như một vật cản đứng yên.
             if veh.signal_group in ("NS", "EW") and not veh.runs_red:
                 phase = signal.phase(now, veh.signal_group)
-                dist_to_stop = veh.stop_line_s - st["s"]
+                # Khoảng cách từ ĐẦU XE (không phải tâm xe) tới vạch dừng. Bản cũ
+                # tính tới tâm nên xe dừng với nửa thân nhô qua vạch, rồi bò dần
+                # vào làn cắt ngang và chạm xe/người ở tốc độ đi bộ.
+                dist_to_stop = veh.stop_line_s - st["s"] - half_len[i] - 0.3
                 if phase != "green" and 0.0 < dist_to_stop < 60.0:
                     # Vùng lưỡng lự: quá gần vạch khi đèn vàng thì đi tiếp cho an toàn.
                     braking_distance = v_now**2 / (2.0 * b_comf)
@@ -629,7 +714,7 @@ def simulate(
                 # Người đi bộ chờ khi dòng xe cắt ngang đang được đi.
                 # Vạch bộ hành Bắc/Nam cắt qua trục Bắc-Nam ⇒ xung đột với nhóm NS.
                 cross_group = "NS" if ("Bắc" in veh.approach or "Nam" in veh.approach) else "EW"
-                dist_to_stop = veh.stop_line_s - st["s"]
+                dist_to_stop = veh.stop_line_s - st["s"] - half_len[i]
                 if signal.phase(now, cross_group) == "green" and 0.0 < dist_to_stop < 25.0:
                     accel = min(accel, idm_brake(max(dist_to_stop, 0.30), 0.0))
 
@@ -638,7 +723,7 @@ def simulate(
             # mới "cắm đầu" đi qua. Nếu để họ dừng giữa giao lộ thì cả nút bị
             # khoá và dòng phía sau tắc dây chuyền - đó chính là lỗi phải tránh.
             if veh.is_turning and not in_junction[i]:
-                dist_to_stop = veh.stop_line_s - st["s"]
+                dist_to_stop = veh.stop_line_s - st["s"] - half_len[i] - 0.3
                 if 0.0 < dist_to_stop < 22.0 and st["wait"] < TURN_PATIENCE:
                     blocked = False
                     for j in range(n):
@@ -687,13 +772,60 @@ def simulate(
     out: list[VehicleSpec] = []
     for veh in vehicles:
         st = state[veh.vid]
+        veh.crash_t = st["crash_t"]
+        veh.crash_with = st["crash_with"]
         if len(st["log_t"]) < 5:
             continue
         veh.times = np.asarray(st["log_t"], dtype=float)
         veh.positions = np.asarray(st["log_p"], dtype=float)
         veh.velocities = np.asarray(st["log_v"], dtype=float)
         out.append(veh)
+
+    if report is not None:
+        completed = 0
+        for veh in out:
+            if veh.crash_t is None and st_done_route(veh):
+                completed += 1
+        report.update({
+            "n_scheduled": len(vehicles),
+            "n_spawned": sum(1 for v in vehicles if state[v.vid]["active"]),
+            "n_dropped_at_entry": sum(1 for v in vehicles if state[v.vid]["dropped"]),
+            "n_with_trajectory": len(out),
+            "n_completed_route": completed,
+            "n_still_on_road_at_end": sum(
+                1 for v in vehicles if state[v.vid]["active"] and not state[v.vid]["done"]
+            ),
+            "n_crashes": len(crashes),
+            "n_vehicles_in_crash": sum(1 for v in vehicles if state[v.vid]["crash_t"] is not None),
+            "n_runs_red": sum(1 for v in vehicles if v.runs_red),
+            "n_turning": sum(1 for v in vehicles if v.is_turning),
+            "crashes": [
+                {"t": round(t, 2), "a": a, "b": b} for t, a, b in crashes
+            ],
+        })
     return out
+
+
+def st_done_route(veh: VehicleSpec, tol: float = 1.0) -> bool:
+    """Xe đã đi gần hết tuyến dự định (không bị cắt ngang giữa chừng)."""
+    if veh.positions.size == 0:
+        return False
+    last = veh.positions[-1]
+    end = np.asarray(veh.waypoints[-1], dtype=float)
+    # Bước tích phân cuối có thể dừng trước điểm cuối một đoạn ≤ v·dt.
+    return float(np.linalg.norm(last - end)) <= max(tol, 0.5)
+
+
+def _circle_layout(active: list, pos: np.ndarray, dir_vec: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Tâm (n, 3, 2) và bán kính (n, 3) các hình tròn phủ thân xe; ô trống = inf."""
+    n = len(active)
+    centres = np.full((n, 3, 2), 1e6)
+    radii = np.full((n, 3), np.inf)
+    for i, veh in enumerate(active):
+        for k, (off, r) in enumerate(veh.cls.circles):
+            centres[i, k] = pos[i] + off * dir_vec[i]
+            radii[i, k] = r
+    return centres, radii
 
 
 # --------------------------------------------------------------------------- #
@@ -708,47 +840,50 @@ def compute_ground_truth(
     min_speed: float = 0.8,
     horizon: float = 10.0,
     region: tuple[float, float, float, float] | None = None,
+    pet_window: float = 6.0,
+    pet_min_angle: float = 20.0,
 ) -> list[GroundTruthConflict]:
-    """Tính nhãn near-miss chuẩn từ quỹ đạo đã mô phỏng.
+    """Tính nhãn chuẩn (near-miss và va chạm) từ quỹ đạo đã mô phỏng.
 
-    Định nghĩa near-miss (bám theo Traffic Conflict Technique)
-    ---------------------------------------------------------
-    Một cặp ``(a, b)`` là near-miss khi thoả **đồng thời** cả ba điều kiện:
+    Định nghĩa (protocol v2 - ``docs/protocol_near_miss_v2.md``)
+    ------------------------------------------------------------
+    Một cặp ``(a, b)`` là **xung đột** khi thoả đồng thời:
 
-    1. **Thực sự đến gần nhau** - khoảng cách mặt-tới-mặt nhỏ nhất trong cả quá
-       trình < ``proximity`` mét.
-    2. **Có nguy cơ va chạm** - cực tiểu TTC < ``ttc_threshold``, hoặc PET tại
-       điểm gặp < ``pet_threshold``.
-    3. **Có tốc độ tiếp cận thật** - vận tốc tương đối tại thời điểm căng thẳng
-       nhất > ``min_closing_speed`` m/s.
+    1. **Thực sự đến gần nhau** - khoảng cách mặt-tới-mặt nhỏ nhất (tại cùng
+       thời điểm) < ``proximity`` mét.
+    2. **Có nguy cơ va chạm** - cực tiểu TTC < ``ttc_threshold``, hoặc **PET đo**
+       < ``pet_threshold``.
+    3. **Có tốc độ tiếp cận thật** - vận tốc tương đối tại thời điểm căng nhất
+       > ``min_closing_speed`` m/s.
+    4. **Nằm trong vùng camera bao phủ** (``region``).
 
-    Điều kiện 1 và 3 là thứ phân biệt near-miss với **bám đuôi bình thường**.
-    Chỉ dùng TTC là không đủ: hai xe nối đuôi nhau cách 1 m ở cùng tốc độ có TTC
-    rất nhỏ theo mô hình hình tròn, nhưng đó là dòng xe bình thường chứ không
-    phải tình huống nguy hiểm. Ngược lại, một xe phanh gấp phía sau xe khác với
-    chênh lệch tốc độ 4 m/s thì đúng là xung đột.
+    Xung đột được chia hai loại, báo cáo **riêng**:
 
-    Khác biệt then chốt so với thuật toán online:
+    * ``kind="collision"`` - hai thân xe chạm nhau thật (khoảng cách cùng thời
+      điểm bằng 0). Trong trình mô phỏng mới, va chạm có vật lý: cả hai dừng lại.
+    * ``kind="near_miss"`` - còn lại: suýt va chạm, không chạm.
 
-    * lấy mẫu ở tần số mô phỏng (60 Hz) thay vì tần số video (30 Hz);
-    * dùng vận tốc **giải tích** thay vì ước lượng từ chuỗi bbox nhiễu;
-    * lấy **cực tiểu toàn cục** trên cả quãng gặp nhau, thay vì quyết định tại
-      từng frame riêng lẻ.
+    PET ở đây là **PET đo** từ mốc vào/ra vùng xung đột của từng xe, cùng định
+    nghĩa với thuật toán online (:func:`saferoad.conflict.encroachment.measure_pet`)
+    để sai số PET so sánh được. Khác biệt có chủ đích so với online vẫn giữ:
 
-    Nhờ đó đây là nhãn độc lập, không phải thuật toán tự chấm điểm cho chính nó.
+    * lấy mẫu ở tần số mô phỏng (60 Hz) thay vì 30 Hz của video;
+    * dùng vị trí/vận tốc **giải tích** thay vì ước lượng từ bbox nhiễu;
+    * lấy **cực tiểu toàn cục** trên cả quãng gặp nhau.
 
-    ``region`` giới hạn nhãn trong vùng camera thực sự bao phủ, dạng
-    ``(x_min, y_min, x_max, y_max)``. Xung đột xảy ra ngoài khung hình không thể
-    quy trách nhiệm cho hệ thống, nên đưa chúng vào mẫu số của Recall sẽ cho ra
-    một con số vô nghĩa. Giới hạn phạm vi đánh giá theo vùng cảm biến là thực
-    hành chuẩn trong các benchmark thị giác.
+    Cặp hai người đi bộ không được xét: họ tự né nhau ở tốc độ đi bộ, và mô hình
+    hình tròn không mô tả được điều đó.
     """
+    from ..conflict.encroachment import PET_CONTACT, measure_pet
+
     results: list[GroundTruthConflict] = []
     usable = [v for v in vehicles if v.times.size > 5]
 
     for i in range(len(usable)):
         for j in range(i + 1, len(usable)):
             va, vb = usable[i], usable[j]
+            if va.cls == VehicleClass.PEDESTRIAN and vb.cls == VehicleClass.PEDESTRIAN:
+                continue
 
             # Khoảng thời gian cùng xuất hiện.
             t0 = max(va.times[0], vb.times[0])
@@ -756,7 +891,6 @@ def compute_ground_truth(
             if t1 - t0 < 0.15:
                 continue
 
-            # Lấy mẫu chung trên lưới thời gian của xe a.
             mask = (va.times >= t0) & (va.times <= t1)
             ts = va.times[mask]
             if ts.size < 5:
@@ -769,22 +903,14 @@ def compute_ground_truth(
             pb = vb.positions[idx_b]
             wb = vb.velocities[idx_b]
 
-            # Loại các cặp mà cả hai gần như đứng yên.
-            speeds = np.maximum(
-                np.linalg.norm(wa, axis=1), np.linalg.norm(wb, axis=1)
-            )
+            speeds = np.maximum(np.linalg.norm(wa, axis=1), np.linalg.norm(wb, axis=1))
             if speeds.max() < min_speed:
                 continue
 
             dv = wb - wa
-            # TTC và khoảng cách theo mô hình đa hình tròn, vector hoá trên
-            # toàn chuỗi thời gian.
             ttc_series, gaps = series_ttc_and_gap(
                 pa, wa, va.cls, pb, wb, vb.cls, horizon=horizon
             )
-
-            best_ttc = float(ttc_series.min())
-            best_idx = int(np.argmin(ttc_series))
             min_gap = float(gaps.min())
             gap_idx = int(np.argmin(gaps))
 
@@ -792,40 +918,44 @@ def compute_ground_truth(
             if min_gap > proximity:
                 continue
 
-            # PET thật tại điểm hai xe đi gần nhau nhất.
-            #
-            # Chỉ có nghĩa với hai quỹ đạo **thực sự cắt nhau**: với hai xe đi
-            # gần song song (bám đuôi, cùng làn), "điểm hai xe gần nhau nhất"
-            # nằm dọc theo cả đoạn đường và |t_a − t_b| tại đó chỉ phản ánh
-            # khoảng cách bám đuôi, không phải mức nguy hiểm. Áp dụng cùng
-            # ngưỡng góc mà thuật toán online dùng, để hai bên đo cùng một đại
-            # lượng và sai số PET so sánh được.
-            sa = float(np.linalg.norm(wa[gap_idx]))
-            sb = float(np.linalg.norm(wb[gap_idx]))
-            pet_val = None
-            if sa > 1e-3 and sb > 1e-3:
-                cos_t = float(np.dot(wa[gap_idx], wb[gap_idx])) / (sa * sb)
-                angle = math.degrees(math.acos(max(-1.0, min(1.0, cos_t))))
-                if angle >= 20.0:
-                    mid = 0.5 * (pa[gap_idx] + pb[gap_idx])
-                    ia = int(np.argmin(np.linalg.norm(va.positions - mid, axis=1)))
-                    ib = int(np.argmin(np.linalg.norm(vb.positions - mid, axis=1)))
-                    pet_val = abs(float(va.times[ia]) - float(vb.times[ib]))
+            contact = min_gap <= 0.0
+            if contact:
+                # Va chạm: lấy thời điểm CHẠM ĐẦU TIÊN, TTC = 0.
+                first_touch = int(np.argmax(gaps <= 0.0))
+                # TTC nhỏ nhất trước lúc chạm (để biết có cảnh báo trước không).
+                best_ttc = 0.0
+                idx = first_touch
+            else:
+                best_ttc = float(ttc_series.min())
+                idx = int(np.argmin(ttc_series)) if np.isfinite(best_ttc) else gap_idx
+
+            # --- PET đo quanh lúc hai xe gần nhau nhất ------------------ #
+            tc = float(ts[gap_idx])
+            wa_mask = (va.times >= tc - pet_window) & (va.times <= tc + pet_window)
+            wb_mask = (vb.times >= tc - pet_window) & (vb.times <= tc + pet_window)
+            enc = measure_pet(
+                va.times[wa_mask], va.positions[wa_mask], va.velocities[wa_mask], va.cls,
+                vb.times[wb_mask], vb.positions[wb_mask], vb.velocities[wb_mask], vb.cls,
+                min_angle=pet_min_angle,
+            )
+            pet_val = enc.pet if enc.is_measured else None
 
             # --- Điều kiện 2: có nguy cơ va chạm ------------------------ #
             hit_ttc = best_ttc < ttc_threshold
             hit_pet = pet_val is not None and pet_val < pet_threshold
-            if not (hit_ttc or hit_pet):
+            if not (contact or hit_ttc or hit_pet):
                 continue
-
-            idx = best_idx if np.isfinite(best_ttc) else gap_idx
 
             # --- Điều kiện 3: có tốc độ tiếp cận thật ------------------- #
-            # Loại bỏ bám đuôi bình thường: cùng tốc độ, khoảng cách nhỏ nhưng
-            # ổn định thì không phải xung đột.
             closing = float(np.linalg.norm(dv[idx]))
-            if closing < min_closing_speed:
+            if not contact and closing < min_closing_speed:
                 continue
+            if contact:
+                # Va chạm "chậm" (hai xe chen nhau ở tốc độ bò) không phải sự cố
+                # an toàn - đòi hỏi tốc độ tiếp cận ngay trước lúc chạm.
+                pre = max(0, idx - 6)
+                if float(np.linalg.norm(dv[pre])) < min_closing_speed:
+                    continue
 
             # --- Điều kiện 4: nằm trong vùng camera bao phủ -------------- #
             location = 0.5 * (pa[idx] + pb[idx])
@@ -833,6 +963,12 @@ def compute_ground_truth(
                 x_min, y_min, x_max, y_max = region
                 if not (x_min <= location[0] <= x_max and y_min <= location[1] <= y_max):
                     continue
+
+            pet_times = {k: (None if v is None else round(v, 3)) for k, v in (
+                ("a_in", enc.t_a_in), ("a_out", enc.t_a_out),
+                ("b_in", enc.t_b_in), ("b_out", enc.t_b_out))}
+            if enc.first:
+                pet_times["first"] = enc.first
             results.append(
                 GroundTruthConflict(
                     t=float(ts[idx]),
@@ -840,8 +976,12 @@ def compute_ground_truth(
                     track_b=vb.vid,
                     ttc=round(best_ttc, 3) if np.isfinite(best_ttc) else float("inf"),
                     pet=None if pet_val is None else round(pet_val, 3),
-                    conflict_type=_gt_type(va, vb, wa[idx], wb[idx]),
+                    conflict_type=_gt_type(va, vb, wa[max(0, idx - 3)], wb[max(0, idx - 3)]),
                     source="synthetic-oracle",
+                    kind="collision" if (contact or enc.status == PET_CONTACT and min_gap <= 0) else "near_miss",
+                    pet_status=enc.status,
+                    pet_times=pet_times,
+                    min_gap=round(min_gap, 3),
                 )
             )
 

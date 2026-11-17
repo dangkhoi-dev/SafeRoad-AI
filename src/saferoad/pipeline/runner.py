@@ -55,6 +55,8 @@ class PipelineResult:
     # (hộp dựng sẵn từ trình mô phỏng) thì FPS không bao gồm thời gian chạy YOLO.
     detector: str = ""
     homography_error: float | None = None
+    #: Đối soát luồng sự kiện: episode mở / bị loại ở cổng nào / gộp / phát ra.
+    funnel: dict = field(default_factory=dict)
 
     @property
     def severe_events(self) -> list[ConflictEvent]:
@@ -87,6 +89,7 @@ class PipelineResult:
             "total_latency_ms": round(sum(self.latency.values()), 2),
             "homography_error_m": self.homography_error,
             "detector": self.detector,
+            "event_funnel": self.funnel,
         }
 
 
@@ -105,12 +108,22 @@ class Pipeline:
         detector: BaseDetector | None = None,
         store: EventStore | None = None,
         write_db: bool = True,
+        frameless: tuple[int, float, int, int] | None = None,
     ):
         self.cfg = cfg
         self.detector = detector
         self.store = store
         self.write_db = write_db
+        #: ``(số_frame, fps, rộng, cao)``: chạy KHÔNG đọc video. Chỉ dùng được
+        #: với detector phát lại hộp dựng sẵn (ReplayDetector) - khi đánh giá
+        #: trên mô phỏng, giải mã 9.000 khung hình 1280×720 tốn thời gian hơn cả
+        #: phần xử lý, trong khi detector không hề nhìn vào ảnh.
+        self.frameless = frameless
         self._timings: dict[str, list[float]] = {}
+        #: Bảng đối soát luồng sự kiện của lần chạy gần nhất.
+        self.funnel: dict[str, int] = {}
+        #: Gọi ``on_progress(số_frame_đã_xử_lý, tổng)`` mỗi 15 frame (demo web).
+        self.on_progress = None
 
     # ------------------------------------------------------------------ #
     def _record(self, stage: str, dt: float) -> None:
@@ -119,7 +132,14 @@ class Pipeline:
     def run(self, progress_every: int = 150) -> PipelineResult:
         cfg = self.cfg
         video_path = cfg.video.source
-        cap = cv2.VideoCapture(video_path)
+        if self.frameless is not None:
+            cap = _NullCapture(*self.frameless)
+            if cfg.video.write_overlay or cfg.privacy.enabled:
+                log.info("Chế độ không đọc video: tắt overlay và ẩn danh")
+            cfg.video.write_overlay = False
+            cfg.privacy.enabled = False
+        else:
+            cap = cv2.VideoCapture(video_path)
         if not cap.isOpened():
             raise FileNotFoundError(
                 f"Không mở được video: {video_path}\n"
@@ -262,6 +282,9 @@ class Pipeline:
 
                 frame_idx += 1
                 processed += 1
+                if self.on_progress is not None and processed % 15 == 0:
+                    total = cfg.video.max_frames or n_total
+                    self.on_progress(processed, total)
                 if progress_every and processed % progress_every == 0:
                     recent = float(np.median(frame_latencies[-progress_every:]))
                     print(
@@ -276,7 +299,9 @@ class Pipeline:
 
         # Đóng nốt các episode xung đột còn dở khi video kết thúc - nếu không,
         # mọi tình huống đang diễn ra ở những giây cuối sẽ bị mất.
-        tail_events = conflicts.flush(risk_scorer=scorer)
+        tail_events = conflicts.flush(
+            risk_scorer=scorer, now=(frame_idx - 1) / fps if processed else 0.0
+        )
         if tail_events:
             all_events.extend(tail_events)
             risk_map.extend(tail_events)
@@ -286,6 +311,8 @@ class Pipeline:
         wall = time.perf_counter() - wall_start
         med_ms = float(np.median(frame_latencies)) if frame_latencies else 0.0
         p95_ms = float(np.percentile(frame_latencies, 95)) if frame_latencies else 0.0
+
+        self.funnel = conflicts.funnel.to_dict()
 
         # --- Hành vi (tính một lần trên toàn bộ track) ------------------- #
         behaviors = behavior.classify_all(list(tracker.all_tracks.values()))
@@ -310,6 +337,7 @@ class Pipeline:
             overlay_path=cfg.video.overlay_path if cfg.video.write_overlay else None,
             homography_error=ground.reprojection_error(),
             detector=getattr(self.detector, "name", type(self.detector).__name__),
+            funnel=dict(self.funnel),
         )
         return result
 
@@ -331,6 +359,42 @@ class Pipeline:
         path.write_text(
             json.dumps(payload, ensure_ascii=False, indent=2, default=str), encoding="utf-8"
         )
+
+
+class _NullCapture:
+    """Thay ``cv2.VideoCapture`` khi chạy không đọc video (xem ``frameless``)."""
+
+    def __init__(self, n_frames: int, fps: float, width: int, height: int):
+        self.n = int(n_frames)
+        self.fps = float(fps)
+        self.w = int(width)
+        self.h = int(height)
+        self.i = 0
+
+    def isOpened(self) -> bool:  # noqa: N802 - giữ đúng tên API của OpenCV
+        return True
+
+    def get(self, prop: int) -> float:
+        return {
+            cv2.CAP_PROP_FPS: self.fps,
+            cv2.CAP_PROP_FRAME_WIDTH: float(self.w),
+            cv2.CAP_PROP_FRAME_HEIGHT: float(self.h),
+            cv2.CAP_PROP_FRAME_COUNT: float(self.n),
+        }.get(prop, 0.0)
+
+    def set(self, prop: int, value: float) -> bool:
+        if prop == cv2.CAP_PROP_POS_FRAMES:
+            self.i = int(value)
+        return True
+
+    def read(self):
+        if self.i >= self.n:
+            return False, None
+        self.i += 1
+        return True, None
+
+    def release(self) -> None:
+        pass
 
 
 def _ground_bounds(

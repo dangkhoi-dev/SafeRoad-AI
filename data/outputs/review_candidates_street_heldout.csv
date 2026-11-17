@@ -1,0 +1,12 @@
+﻿candidate_id,source,t_s,frame,clip_start_s,clip_end_s,system_event,track_a,track_b,gt_object_a,gt_object_b,ttc_s,pet_s,pet_status,contact,type,risk,px_x,px_y,video,label,reviewer,note
+C0001,system,91.868,2756,88.87,94.87,CF00001,165,213,,,1.823,,no_zone,near_miss,rear_end,12.1,715.5,720.4,data/processed/street/street_heldout_300_741s.mp4,,,
+C0002,system,96.968,2909,93.97,99.97,CF00002,218,220,,,1.469,,parallel,near_miss,rear_end,13.5,767.7,802.9,data/processed/street/street_heldout_300_741s.mp4,,,
+C0003,system,228.836,6865,225.84,231.84,CF00003,556,564,,,0.751,,no_zone,near_miss,rear_end,16.9,767.4,790.3,data/processed/street/street_heldout_300_741s.mp4,,,
+C0004,system,233.536,7006,230.54,236.54,CF00004,565,580,,,1.758,,no_zone,near_miss,rear_end,13.3,901.4,759.0,data/processed/street/street_heldout_300_741s.mp4,,,
+C0005,system,237.003,7110,234.0,240.0,CF00005,605,614,,,1.08,,no_zone,near_miss,rear_end,14.7,761.0,678.0,data/processed/street/street_heldout_300_741s.mp4,,,
+C0006,system,238.569,7157,235.57,241.57,CF00006,609,614,,,1.707,,no_zone,near_miss,rear_end,16.3,851.0,704.7,data/processed/street/street_heldout_300_741s.mp4,,,
+C0007,system,321.303,9639,318.3,324.3,CF00007,763,786,,,2.054,,no_zone,near_miss,rear_end,11.7,786.8,700.2,data/processed/street/street_heldout_300_741s.mp4,,,
+C0008,system,338.104,10143,335.1,341.1,CF00008,820,834,,,2.206,,no_zone,near_miss,rear_end,10.5,900.5,870.8,data/processed/street/street_heldout_300_741s.mp4,,,
+C0009,system,342.104,10263,339.1,345.1,CF00009,867,872,,,0.166,,no_zone,near_miss,lane_change,69.0,771.3,677.8,data/processed/street/street_heldout_300_741s.mp4,,,
+C0010,system,347.47,10424,344.47,350.47,CF00010,854,860,,,,0.617,measured,near_miss,turning,24.3,1156.8,1040.3,data/processed/street/street_heldout_300_741s.mp4,,,
+C0011,system,432.471,12974,429.47,435.47,CF00011,1024,1029,,,1.137,,parallel,near_miss,rear_end,17.1,692.5,712.0,data/processed/street/street_heldout_300_741s.mp4,,,

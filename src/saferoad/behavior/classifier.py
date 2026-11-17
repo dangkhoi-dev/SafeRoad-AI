@@ -22,7 +22,6 @@ from pathlib import Path
 import numpy as np
 
 from ..config import BehaviorConfig
-from ..geometry.trajectory import acceleration, heading_change_rate
 from ..types import Track
 
 log = logging.getLogger(__name__)
@@ -40,6 +39,9 @@ FEATURE_NAMES = [
     "path_curvature",
     "lateral_drift",
 ]
+
+#: Tăng khi cách tính đặc trưng thay đổi - model train bằng phiên bản khác bị bỏ qua.
+FEATURE_VERSION = 2
 
 #: Nhãn hành vi.
 BEHAVIOR_LABELS = ["binh_thuong", "phanh_gap", "tang_toc_dot_ngot", "doi_huong_gap"]
@@ -81,56 +83,114 @@ class BehaviorResult:
         }
 
 
-def extract_features(track: Track, window: int = 15) -> dict[str, float]:
-    """Trích 10 đặc trưng động học từ phần đuôi quỹ đạo của một track."""
-    hist = track.history[-window:] if len(track.history) > window else track.history
-    if len(hist) < 3:
+def _sliding_slope(times: np.ndarray, values: np.ndarray, half: int) -> np.ndarray:
+    """Hệ số góc hồi quy tuyến tính trên cửa sổ trượt ``2*half+1`` mẫu."""
+    n = len(times)
+    out = np.full(n, np.nan)
+    w = 2 * half + 1
+    if n < w:
+        return out
+    k = np.ones(w)
+    t0 = times - times[0]                  # dịch gốc để tránh mất chính xác
+    st = np.convolve(t0, k, "valid")
+    sv = np.convolve(values, k, "valid")
+    stt = np.convolve(t0 * t0, k, "valid")
+    stv = np.convolve(t0 * values, k, "valid")
+    den = w * stt - st * st
+    with np.errstate(invalid="ignore", divide="ignore"):
+        slope = np.where(np.abs(den) > 1e-12, (w * stv - st * sv) / den, np.nan)
+    out[half: n - half] = slope
+    return out
+
+
+def _sustained(series: np.ndarray, n: int, mode: str) -> float:
+    """Giá trị cực trị được DUY TRÌ ít nhất ``n`` mẫu liên tiếp.
+
+    Lấy cực trị của trung vị trượt thay vì cực trị thô: một mẫu nhiễu đơn lẻ
+    không thể kéo kết quả, chỉ một xu hướng kéo dài mới làm được.
+    """
+    s = series[np.isfinite(series)]
+    if s.size == 0:
+        return 0.0
+    if s.size < n:
+        return float(np.median(s))
+    win = np.lib.stride_tricks.sliding_window_view(s, n)
+    med = np.median(win, axis=1)
+    return float(med.min() if mode == "min" else med.max())
+
+
+def extract_features(
+    track: Track,
+    window: int = 15,
+    trim_s: float = 0.4,
+    sustain_s: float = 0.3,
+    min_turn_speed: float = 3.0,
+) -> dict[str, float]:
+    """Trích 10 đặc trưng động học trên **toàn bộ** quỹ đạo của một track.
+
+    Vì sao bản cũ gắn cờ 305/307 quỹ đạo
+    ------------------------------------
+    Bản cũ (i) chỉ nhìn ``window`` khung hình CUỐI của track - đúng lúc xe đang
+    ra khỏi khung hình và bbox bị cắt mép, vị trí nhảy; (ii) lấy gia tốc bằng
+    hiệu hai mẫu liên tiếp của tốc độ đã ước lượng từ bbox, rồi lấy cực trị
+    thô. Sai số 0,1 m/s giữa hai khung hình cách nhau 1/30 s đã là 3 m/s² - vượt
+    ngưỡng "phanh gấp". Kết quả là gần như xe nào cũng bị gắn cờ.
+
+    Cách làm mới:
+
+    * bỏ ``trim_s`` giây đầu và cuối track (xe vào/ra khung hình);
+    * gia tốc = hệ số góc hồi quy tốc độ trên cửa sổ ``window`` khung hình;
+    * tốc độ đổi hướng = hệ số góc hồi quy của hướng đi (đã unwrap), chỉ tính
+      khi xe chạy trên ``min_turn_speed`` m/s;
+    * ngưỡng phải được **duy trì** ít nhất ``sustain_s`` giây (trung vị trượt).
+    """
+    hist = track.history
+    if len(hist) < max(6, window):
         return {name: 0.0 for name in FEATURE_NAMES}
 
-    speeds = np.array([s.speed for s in hist], dtype=float)
     times = np.array([s.t for s in hist], dtype=float)
+    keep = (times >= times[0] + trim_s) & (times <= times[-1] - trim_s)
+    if keep.sum() < max(6, window // 2):
+        keep = np.ones(len(hist), dtype=bool)
+    sub = [s for s, k in zip(hist, keep) if k]
+    times = times[keep]
+    speeds = np.array([s.speed for s in sub], dtype=float)
+    fps = 1.0 / max(float(np.median(np.diff(times))), 1e-3) if len(times) > 1 else 30.0
+    half = max(2, int(round(window / 2)))
+    n_sustain = max(2, int(round(sustain_s * fps)))
 
-    # Gia tốc theo từng bước, dùng để lấy cực trị.
-    accels: list[float] = []
-    for i in range(1, len(hist)):
-        dt = times[i] - times[i - 1]
-        if dt > 1e-6:
-            accels.append((speeds[i] - speeds[i - 1]) / dt)
-    accel_arr = np.array(accels, dtype=float) if accels else np.zeros(1)
+    accel = _sliding_slope(times, speeds, half)
 
-    # Tốc độ đổi hướng theo từng bước.
-    turns: list[float] = []
-    moving = [s for s in hist if s.speed > 0.3]
-    for a, b in zip(moving, moving[1:]):
-        dt = b.t - a.t
-        if dt > 1e-6:
-            dh = np.degrees(np.arctan2(np.sin(b.heading - a.heading),
-                                       np.cos(b.heading - a.heading)))
-            turns.append(dh / dt)
-    turn_arr = np.array(turns, dtype=float) if turns else np.zeros(1)
+    moving = speeds >= min_turn_speed
+    turn = np.full(len(sub), np.nan)
+    if moving.sum() >= 2 * half + 1:
+        idx = np.nonzero(moving)[0]
+        head = np.unwrap(np.array([sub[i].heading for i in idx], dtype=float))
+        rates = np.degrees(_sliding_slope(times[idx], head, half))
+        turn[idx] = rates
 
-    # Độ cong quỹ đạo: 1 - (đường chim bay / quãng đường đi thực tế).
-    pts = np.array([s.ground for s in hist], dtype=float)
+    pts = np.array([s.ground for s in sub], dtype=float)
     path_len = float(np.sum(np.linalg.norm(np.diff(pts, axis=0), axis=1)))
     straight = float(np.linalg.norm(pts[-1] - pts[0]))
     curvature = 0.0 if path_len < 1e-6 else max(0.0, 1.0 - straight / path_len)
-
-    # Độ lệch ngang so với đường thẳng nối đầu-cuối - bắt hành vi lượn lách.
     lateral = 0.0
     if straight > 1e-6:
         direction = (pts[-1] - pts[0]) / straight
         normal = np.array([-direction[1], direction[0]])
         lateral = float(np.max(np.abs((pts - pts[0]) @ normal)))
 
+    acc_f = accel[np.isfinite(accel)]
+    turn_abs = np.abs(turn)
+    turn_f = turn[np.isfinite(turn)]
     return {
         "mean_speed": float(speeds.mean()),
         "max_speed": float(speeds.max()),
         "speed_std": float(speeds.std()),
-        "min_accel": float(accel_arr.min()),
-        "max_accel": float(accel_arr.max()),
-        "accel_std": float(accel_arr.std()),
-        "max_turn_rate": float(np.abs(turn_arr).max()),
-        "turn_rate_std": float(turn_arr.std()),
+        "min_accel": _sustained(accel, n_sustain, "min"),
+        "max_accel": _sustained(accel, n_sustain, "max"),
+        "accel_std": float(acc_f.std()) if acc_f.size else 0.0,
+        "max_turn_rate": _sustained(turn_abs, n_sustain, "max") if turn_f.size else 0.0,
+        "turn_rate_std": float(turn_f.std()) if turn_f.size else 0.0,
         "path_curvature": curvature,
         "lateral_drift": lateral,
     }
@@ -160,6 +220,16 @@ class BehaviorClassifier:
             import joblib
 
             bundle = joblib.load(path)
+            if bundle.get("feature_version") != FEATURE_VERSION:
+                # Model cũ train trên đặc trưng kiểu cũ (cực trị thô ở đuôi
+                # track) - đưa đặc trưng mới vào sẽ cho kết quả vô nghĩa.
+                log.info(
+                    "Behavior model %s train với đặc trưng phiên bản %s, cần %s - "
+                    "bỏ qua tầng ML, chỉ dùng luật. Train lại: saferoad train-behavior",
+                    path, bundle.get("feature_version"), FEATURE_VERSION,
+                )
+                self.model = None
+                return
             self.model = bundle["model"]
             self.scaler = bundle.get("scaler")
             trained_with = bundle.get("sklearn_version")

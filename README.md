@@ -13,62 +13,110 @@ Cuộc thi Sáng tạo trẻ Quốc gia trong lĩnh vực Trí tuệ nhân tạo
 ## Vấn đề
 
 Quản lý an toàn giao thông ở Việt Nam đang chạy theo cơ chế **phản ứng**: một giao
-lộ chỉ được coi là "điểm đen" sau khi đã đủ số vụ tai nạn được thống kê. Nghĩa là
-dữ liệu để ra quyết định chỉ xuất hiện **sau khi đã có người thiệt mạng**.
+lộ chỉ được coi là "điểm đen" sau khi đã đủ số vụ tai nạn được thống kê. Trong khi
+đó, trước mỗi vụ tai nạn có hàng trăm tình huống **suýt va chạm** mang cùng cơ chế
+nguy hiểm nhưng kết thúc may mắn - diễn ra ngay trước ống kính camera đã lắp sẵn.
 
-Trong khi đó, trước mỗi vụ tai nạn có hàng trăm tình huống **suýt va chạm** mang
-cùng cơ chế nguy hiểm nhưng kết thúc may mắn. Chúng diễn ra liên tục ngay trước
-ống kính camera giao thông đã lắp sẵn - và không ai ghi nhận.
+**SafeRoad AI biến luồng video giám sát sẵn có thành chỉ báo xung đột giao thông
+định lượng** (TTC, PET, mức rủi ro). Xung đột là chỉ báo, không phải tai nạn: hệ
+thống tách riêng near-miss, chồng thân xe do sai số đo và nghi va chạm, và mọi cảnh
+báo cần người rà soát trước khi dùng để ra quyết định.
 
-**SafeRoad AI biến luồng video giám sát sẵn có thành chỉ số rủi ro định lượng.**
+---
+
+## Bản cải tiến Chặng 1
+
+Phản hồi ba yêu cầu của hội đồng - chi tiết và minh chứng trong
+[`docs/BaoCaoCaiTien_SafeRoadAI_Chang1.pdf`](docs/BaoCaoCaiTien_SafeRoadAI_Chang1.pdf):
+
+1. **Video thật và chất lượng phát hiện** - thêm video đại lộ thật có nhãn bbox + ID
+   (ghép nhãn CVAT bị cắt đoạn), hiệu chuẩn camera có kiểm tra chéo
+   (`saferoad calibrate`), bảng detection → tracking → cảnh báo trên cùng một video,
+   báo nhầm/bỏ sót theo giờ, công cụ rà soát nhãn của người + Cohen's kappa
+   (`saferoad review-score`), demo **chạy pipeline thật** trên video tải lên.
+2. **PET và near-miss** - tách PET ngoại suy và PET đo từ mốc vào/ra vùng xung đột,
+   lưu 4 mốc thời gian; xử lý quỹ đạo song song và xe đã qua giao điểm; phân loại
+   near-miss / chồng thân xe / nghi va chạm; trình mô phỏng có vật lý va chạm. Mỗi lỗi
+   có ca tái hiện trong `tests/test_pet_and_contact.py`.
+3. **Đánh giá nhất quán** - một luồng đếm sự kiện với 5 đẳng thức tự kiểm, mọi tỉ lệ
+   kèm tử/mẫu số, sửa cờ hành vi 305/307 quỹ đạo, ablation bỏ từng khối + cộng dồn
+   trên cùng mẫu, lưới 3 mật độ × 3 góc camera × 3 điều kiện ánh sáng, log cấu hình có
+   mã băm.
 
 ---
 
 ## Kết quả đo được
 
-Toàn bộ số liệu sinh ra từ mã trong repo này và chạy lại được bằng các lệnh ở mục
-[Chạy thử](#chạy-thử). Tệp kết quả gốc nằm trong `data/outputs/`, mỗi tệp ghi kèm
-phiên bản thư viện lúc chạy.
+Toàn bộ số dưới đây do `scripts/build_readme_tables.py` ghi từ `data/outputs/*.json`;
+chạy lại được bằng các lệnh ở mục [Tái hiện](#tái-hiện).
 
-**Trên tập mô phỏng có đáp án** (300 giây, 315 phương tiện, 152 nhãn near-miss,
-detector mô phỏng nhiễu 1,5 px và bỏ sót 3%):
+<!-- AUTO:RESULTS:START -->
+**Mô phỏng có đáp án** (300 s, seed 42, 64 xung đột chuẩn = 54 near-miss + 10 va chạm; detector mô phỏng nhiễu 1,5 px, bỏ sót 3%, seed 17):
 
-| Chỉ số | Kết quả | Mục tiêu | |
-|---|---:|---:|:--:|
-| Tracking IDF1 | **0,983** | ≥ 0,70 | ✅ |
-| Tracking MOTA | **0,966** | ≥ 0,60 | ✅ |
-| TTC MAE | **0,286 s** | ≤ 0,30 s | ✅ |
-| Recall khi TTC < 1 s (77 nhãn) | **0,792** | - | |
-| Recall khi TTC < 1 s, chỉ nhãn chưa chạm (22 nhãn) | 0,773 | - | |
-| Conflict Recall (gộp mọi mức) | 0,539 | ≥ 0,80 | ❌ |
-| Conflict Precision | 0,471 | ≥ 0,75 | ❌ |
+| Chỉ số | Kết quả (tử/mẫu) |
+|---|---:|
+| Precision | 0,538 (49/91) |
+| Recall | 0,766 (49/64) |
+| F1 | 0,632 |
+| TTC MAE | 0,203 s |
+| PET đo - MAE | 0,035 s (n=30) |
+| PET ngoại suy - MAE | 0,136 s (n=35) |
+| Recall near-miss / va chạm | 0,759 (41/54) / 0,800 (8/10) |
+| Tracking IDF1 / MOTA / đổi ID | 0,983 / 0,965 / 142 |
+| Quỹ đạo bị gắn cờ hành vi | 0,478 (131/274) |
 
-**Trên dữ liệu thật MVTI** (2.441 ảnh, YOLO11n trọng số COCO gốc, CPU 2 lõi, không GPU):
+Đối soát: 133 sự kiện phát ra = 133 trên dashboard = 42 ngoài vùng đánh giá + 91 được chấm (49 TP + 42 FP). Đẳng thức tự kiểm: đều đúng.
 
-| Chỉ số | Một lượt toàn khung (mặc định) | Chia ô 2×3 (`--backend tiled`) |
-|---|---:|---:|
-| mAP@0,5 | 0,208 | 0,164 |
-| mAP@0,5:0,95 | 0,139 | 0,104 |
-| Precision / Recall ở ngưỡng 0,15 | 0,468 / 0,277 | 0,353 / 0,323 |
-| IDF1 / MOTA | 0,235 / 0,061 | 0,262 / -0,022 |
-| Tốc độ toàn hệ thống | 12,1 FPS | 1,4 FPS |
+Ablation bỏ từng khối (cùng mẫu, cùng seed):
 
-Các chỉ số chưa đạt được báo cáo nguyên trạng:
+| Cấu hình | Precision | Recall | F1 |
+|---|---:|---:|---:|
+| Bản đầy đủ | 0,538 (49/91) | 0,766 (49/64) | 0,632 |
+| Bỏ homography | 0,091 (1/11) | 0,016 (1/64) | 0,027 |
+| Bỏ làm mượt quỹ đạo | 0,155 (49/316) | 0,766 (49/64) | 0,258 |
+| Bỏ gom episode | 0,378 (14/37) | 0,219 (14/64) | 0,277 |
+| Bỏ cổng tốc độ tiếp cận | 0,331 (47/142) | 0,734 (47/64) | 0,456 |
+| Bỏ PET | 0,623 (38/61) | 0,594 (38/64) | 0,608 |
+| Bỏ PET đo (chỉ PET ngoại suy) | 0,485 (49/101) | 0,766 (49/64) | 0,594 |
+| Bỏ cổng khoảng cách | 0,238 (56/235) | 0,875 (56/64) | 0,375 |
 
-- Precision và Recall gộp chưa đạt mục tiêu. Với detector hoàn hảo (nhiễu 0 px) F1 = 0,583,
-  nên khoảng 0,08 điểm F1 mất do nhiễu detector, phần còn lại là giới hạn của phương
-  pháp. 127/214 cảnh báo có khoảng cách thật giữa hai xe dưới 1 m: phần lớn cảnh báo bị
-  chấm là sai vẫn là hai xe đã rất gần nhau.
-- Trình mô phỏng chưa có ràng buộc chống va chạm: 55/152 nhãn là lúc hai thân xe đã
-  chồng lên nhau. `saferoad evaluate` in riêng Recall của nhóm này.
-- Trên video thật, detector là nút thắt: camera đặt cao nhìn xuống khác hẳn ảnh COCO.
-  Chia ô không giúp và chậm hơn khoảng 9 lần; hướng xử lý là fine-tune
-  (`notebooks/01_finetune_yolo11n_colab.ipynb`).
-- 12,1 FPS là tốc độ toàn hệ thống có YOLO trên CPU 2 lõi, chưa đạt 25 FPS. Phần sau
-  phát hiện chỉ tốn 0,7 ms mỗi khung hình. FPS hiển thị trên dashboard của phiên mô
-  phỏng dùng hộp phát hiện dựng sẵn nên không gồm YOLO (dashboard có ghi chú).
+**Video thật - detection → tracking → cảnh báo trên cùng một video** (cảnh báo so với tham chiếu = cùng thuật toán chạy trên quỹ đạo người gán nhãn):
 
-Phân tích đầy đủ: [`docs/BaoCao_SafeRoadAI_BangC.pdf`](docs/BaoCao_SafeRoadAI_BangC.pdf).
+| Dữ liệu / detector | mAP@0,5 | mAP@0,5 (bỏ hộp nhỏ) | Recall @ngưỡng chạy | IDF1 | Cảnh báo / tham chiếu | P so tham chiếu | R so tham chiếu | Báo nhầm/giờ | FPS |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Đại lộ (Kaggle), 300 s, YOLO11n gốc | 0,095 | 0,100 | 0,084 | 0,097 | 0 / 2 | - (0/0) | 0,000 (0/2) | 0,0 | 16,7 |
+| Đại lộ, test 220-300 s, YOLO11n gốc | 0,052 | 0,054 | 0,054 | 0,021 | 0 / 1 | - (0/0) | 0,000 (0/1) | 0,0 | 16,3 |
+| Đại lộ, test 220-300 s, YOLO11n tinh chỉnh | 0,202 | 0,219 | 0,453 | 0,223 | 2 / 1 | 0,500 (1/2) | 1,000 (1/1) | 44,8 | 14,3 |
+| MVTI, YOLO11n gốc | 0,208 | 0,209 | 0,278 | 0,235 | 1 / 0 | 0,000 (0/1) | - (0/0) | 44,2 | 17,1 |
+
+"Bỏ hộp nhỏ": hộp chuẩn nhỏ hơn `detection.min_box_area` (200 px² với đại lộ) được coi là vùng bỏ qua theo quy ước COCO, vì pipeline cố ý không xử lý vật thể xa như vậy. Người đi bộ trên video đại lộ có kích thước trung vị 8×23 px - ở đầu vào 640 px chỉ còn khoảng 3×8 px nên YOLO11n gần như không thấy.
+
+**Cảnh báo tham chiếu trên video đại lộ theo từng bước lọc** (300 s, quỹ đạo người gán nhãn):
+
+| Bước | Cấu hình | Cảnh báo | /giờ | Near-miss / chồng thân / nghi va chạm |
+|---|---|---:|---:|---:|
+| A | Toàn khung hình, cấu hình cũ | 1956 | 23448,6 | 1139 / 541 / 276 |
+| B | + bỏ cặp hai người đi bộ | 1794 | 21506,5 | 1061 / 487 / 246 |
+| C | + chỉ xét mặt đường ≤ 65 m | 232 | 2781,2 | 143 / 58 / 31 |
+| D | + kẹp vận tốc xe đứng yên | 117 | 1402,6 | 89 / 15 / 13 |
+| E | + chỉ lòng đường đã hiệu chuẩn (cấu hình dùng) | 2 | 24,0 | 2 / 0 / 0 |
+
+Phần lớn cảnh báo ở bước A-D là sai số hình học (xe đỗ ở xa có bbox rung hơn 1 m; lòng đường bên phải nằm ngoài vùng có điểm hiệu chuẩn), nên cảnh báo chỉ được phân tích trong lòng đường đã hiệu chuẩn (vàng):
+
+![Vùng phân tích](docs/assets/street_analysis_region.jpg)
+
+**Chạy đầu-cuối trên đoạn chưa từng dùng** (đại lộ 300-741 s, không nhãn, detector tinh chỉnh): 11 cảnh báo trong 442 s (89,7/giờ), 14,0 FPS; toàn bộ cảnh báo nằm trong `data/outputs/review_candidates_street_heldout.csv` để người rà soát.
+
+Hiệu chuẩn video đại lộ: 16 điểm mốc từ vạch kẻ, sai số fit 0,306 m, leave-one-out 0,740 m (tối đa 1,684 m) - ước lượng, chưa đo thực địa.
+
+<!-- AUTO:RESULTS:END -->
+
+Giới hạn còn lại được báo cáo nguyên trạng: chưa có nhãn xung đột do người rà soát
+trên video thật (công cụ đã sẵn sàng); hiệu chuẩn video đại lộ là ước lượng từ vạch
+kẻ đường chứ chưa đo thực địa và chỉ phủ lòng đường bên trái, nên cảnh báo chỉ được
+phân tích trong vùng đó; người đi bộ trên video đại lộ quá nhỏ cho YOLO ở 640 px; hai
+bộ video thật không có xe máy; mô phỏng dày đặc va chạm hơn thực tế; "ánh sáng" trong
+lưới thực nghiệm là hồ sơ chất lượng detector.
 
 ---
 
@@ -80,10 +128,10 @@ Phân tích đầy đủ: [`docs/BaoCao_SafeRoadAI_BangC.pdf`](docs/BaoCao_SafeR
 |---|---|---|
 | 1. Nguồn video | Thu nhận luồng hình ảnh | MP4 / RTSP / chuỗi ảnh |
 | 2. AI Processing | Phát hiện · ẩn danh · theo vết · quỹ đạo mặt đất | YOLO11n · ByteTrack · Kalman · Homography |
-| 3. Conflict Engine | TTC/PET · gom episode · phân loại xung đột | Mô hình đa hình tròn |
+| 3. Conflict Engine | TTC · PET ngoại suy + PET đo · gom episode · phân loại kết cục | Mô hình đa hình tròn |
 | 4. Risk Engine | Risk Score · Explainable Risk · bản đồ nhiệt | Sigmoid có trọng số |
 | 5. Database | Lưu trữ bền vững, đọc/ghi song song | SQLite chế độ WAL |
-| 6. Dashboard | 7 tab trực quan, chạy ngoại tuyến | FastAPI · HTML/Canvas thuần |
+| 6. Dashboard | 9 tab, có chạy thử video và rà soát nhãn | FastAPI · HTML/Canvas thuần |
 
 ---
 
@@ -92,74 +140,95 @@ Phân tích đầy đủ: [`docs/BaoCao_SafeRoadAI_BangC.pdf`](docs/BaoCao_SafeR
 ```bash
 git clone https://github.com/dangkhoi-dev/SafeRoad-AI.git
 cd SafeRoad-AI
-
 python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-
-pip install -e ".[dev,docs]"      # [dev,docs] = pytest + thư viện sinh báo cáo
-python scripts/download_assets.py  # tải trọng số YOLO11n (~5,6 MB)
+.venv\Scripts\activate             # Linux/macOS: source .venv/bin/activate
+pip install -e ".[dev,docs]"
+python scripts/download_assets.py  # trọng số YOLO11n (~5,6 MB)
+pytest tests -q
 ```
-
-Yêu cầu: Python ≥ 3.10. Chạy được trên CPU; có GPU thì nhanh hơn.
 
 ---
 
-## Chạy thử
-
-Không cần tải dataset - hệ thống **tự sinh dữ liệu kiểm chứng**:
+## Tái hiện
 
 ```bash
-# 1. Sinh video mô phỏng + nhãn chuẩn (~2 phút)
+# Mô phỏng có đáp án: kết quả chính + đối soát + ablation + quét nhiễu (~15 phút CPU)
 python -m saferoad simulate --duration 300 --seed 42
-
-# 2. Chạy pipeline end-to-end (~1 phút)
-python -m saferoad run --config configs/synthetic.yaml \
-    --ground-truth data/samples/synthetic_groundtruth.pkl --replay-detections
-
-# 3. Chấm điểm + bảng ablation (~15 phút trên CPU)
+python -m saferoad train-behavior         # tầng ML của bộ phân loại hành vi (đặc trưng v2)
 python -m saferoad evaluate
+python -m saferoad evaluate-grid          # lưới mật độ × camera × ánh sáng (~20 phút)
 
-# 4. Mở dashboard
-python -m saferoad serve
-#   → http://127.0.0.1:8000
-```
+# Video đại lộ (Kaggle): ghép nhãn, hiệu chuẩn, chấm detection → tracking → cảnh báo
+python -m saferoad prepare-street --annotations data/raw/mvti/merged_annotations.json
+python -m saferoad calibrate --points configs/calib_street.yaml \
+    --frame data/processed/street/street_labeled_0_300s.mp4 \
+    --image docs/assets/calib_street.jpg --out data/outputs/calibration_street.json
+# YOLO11n gốc trên toàn bộ 300 s có nhãn
+python -m saferoad evaluate-real --config configs/street.yaml --weights models/yolo11n.pt \
+    --no-db --no-overlay --source data/processed/street/street_labeled_0_300s.mp4 \
+    --ground-truth data/processed/street/street_groundtruth.pkl \
+    --calibration-report data/outputs/calibration_street.json \
+    --out data/outputs/evaluation_street.json
+# Cảnh báo tham chiếu theo từng bước lọc (vì sao chỉ phân tích lòng đường đã hiệu chuẩn)
+python scripts/street_reference_sensitivity.py
 
-Chạy trên video của bạn:
+# Tinh chỉnh YOLO11n: train 0-210 s, bỏ trống 210-220 s, test 220-300 s (~35 phút CPU)
+python scripts/export_street_yolo.py --video data/processed/street/street_labeled_0_300s.mp4 \
+    --ground-truth data/processed/street/street_groundtruth.pkl --out data/yolo_street
+python scripts/train_street_yolo.py
+# So sánh gốc / tinh chỉnh trên đúng đoạn test (thay --weights và --out cho từng bản)
+python -m saferoad evaluate-real --config configs/street.yaml --weights models/saferoad_street_yolo11n.pt \
+    --start-frame 6600 --no-db --no-overlay --source data/processed/street/street_labeled_0_300s.mp4 \
+    --ground-truth data/processed/street/street_groundtruth.pkl \
+    --calibration-report data/outputs/calibration_street.json \
+    --out data/outputs/evaluation_street_finetuned_test.json
 
-```bash
-python -m saferoad run --source video_cua_ban.mp4 --anonymize
-```
+# Chạy đầu-cuối trên 441 s chưa từng dùng + xuất danh sách để người rà soát
+python -m saferoad run --config configs/street.yaml --no-overlay \
+    --source data/processed/street/street_heldout_300_741s.mp4 \
+    --output data/outputs/street_heldout \
+    --review-csv data/outputs/review_candidates_street_heldout.csv
 
----
-
-## Dùng với dataset thật
-
-```bash
-# Sắp xếp dữ liệu đã tải về vào cấu trúc chuẩn (xem trước trước khi làm thật)
-python scripts/organize_dataset.py --source D:\SV7 --dry-run
-python scripts/organize_dataset.py --source D:\SV7
-
-# Dựng video + nhãn từ Multi-view Traffic Intersection Dataset
+# MVTI
 python -m saferoad prepare-real --root data/raw/mvti --view Infrastructure
+python -m saferoad evaluate-real --config configs/mvti.yaml --no-db
 
-# Chấm mAP detection + IDF1 tracking trên ảnh thật (~4 phút)
-python -m saferoad evaluate-real --config configs/mvti.yaml
+# Cập nhật bảng số trong README và báo cáo cải tiến
+python scripts/build_readme_tables.py
+node scripts/build_improvement_report.js
+```
 
-# So sánh với detector chia ô (~30 phút)
-python -m saferoad evaluate-real --config configs/mvti.yaml --backend tiled --no-overlay \
-    --out data/outputs/evaluation_real_tiled.json
+Video đại lộ gốc là 4K HEVC; bản 1080p dùng ở trên tạo bằng FFmpeg:
+
+```bash
+ffmpeg -i data/raw/own-footage/input-001.MOV -t 300.3 -vf scale=1920:1080 -c:v libx264 -crf 23 -an data/processed/street/street_labeled_0_300s.mp4
+ffmpeg -ss 300.3 -i data/raw/own-footage/input-001.MOV -vf scale=1920:1080 -c:v libx264 -crf 25 -an data/processed/street/street_heldout_300_741s.mp4
 ```
 
 ---
 
-## Bản trình diễn trực tuyến
+## Rà soát nhãn của người
 
 ```bash
-node scripts/build_static_site.mjs    # dựng site/ từ kết quả trong data/outputs/
+python -m saferoad serve --results data/outputs/results.json
+# mở http://127.0.0.1:8000 → tab "Rà soát nhãn", mỗi người gán độc lập rồi bấm "Lưu nhãn"
+python -m saferoad review-score --candidates data/outputs/review_candidates_street.csv \
+    --labels data/outputs/labels_street_khoi.csv data/outputs/labels_street_anh.csv \
+    --duration 300 --extra-missed 0
 ```
 
-Thư mục `site/` là đúng giao diện dashboard, đọc dữ liệu tính sẵn thay cho API.
-`vercel.json` đã cấu hình để Vercel dựng trang này khi import repo.
+Nhãn: `near_miss`, `collision`, `normal`, `overlap_artifact`, `unclear`. κ < 0,6 thì
+thống nhất lại cách hiểu protocol rồi gán lại ([`docs/protocol_near_miss_v2.md`](docs/protocol_near_miss_v2.md) §8).
+
+---
+
+## Demo
+
+* **Chạy thật (Hugging Face Spaces, Docker CPU):** tab *Chạy thử video* - tải video lên,
+  máy chủ chạy YOLO → ByteTrack → TTC/PET → Risk, xem tiến độ, video overlay, cảnh báo
+  và bảng đối soát của chính lần chạy đó. Đẩy lên Space: `python scripts/deploy_hf_space.py --space <tài_khoản>/saferoad-ai`.
+* **Chạy tại máy:** `python -m saferoad serve --demo` → http://127.0.0.1:8000.
+* **Trang tĩnh (Vercel):** `node scripts/build_static_site.mjs` - chỉ hiển thị kết quả tính sẵn.
 
 ---
 
@@ -167,85 +236,18 @@ Thư mục `site/` là đúng giao diện dashboard, đọc dữ liệu tính s�
 
 | Lệnh | Chức năng |
 |---|---|
-| `saferoad simulate` | Sinh video mô phỏng + nhãn chuẩn near-miss |
-| `saferoad run` | Chạy pipeline end-to-end trên một video |
-| `saferoad evaluate` | Chấm Precision/Recall/TTC-MAE + bảng ablation |
-| `saferoad serve` | Bật dashboard web |
+| `saferoad simulate` | Sinh kịch bản + nhãn chuẩn (near-miss, va chạm) + bảng kiểm tra kịch bản |
+| `saferoad run` | Chạy pipeline trên một video (`--review-csv` để xuất danh sách rà soát) |
+| `saferoad evaluate` | Kết quả chính, đối soát sự kiện, ablation, quét nhiễu, log cấu hình |
+| `saferoad evaluate-grid` | Lưới mật độ × góc camera × ánh sáng, so baseline |
+| `saferoad prepare-street` | Ghép nhãn CVAT của video đại lộ thành quỹ đạo liên tục |
+| `saferoad prepare-real` | Dựng video + nhãn từ MVTI |
+| `saferoad calibrate` | Homography từ điểm mốc + sai số fit / leave-one-out / kiểm tra |
+| `saferoad evaluate-real` | Detection → tracking → cảnh báo trên cùng video thật |
+| `saferoad review-score` | Kappa + Precision/Recall + báo nhầm/giờ theo nhãn người |
+| `saferoad serve` | Dashboard (`--demo` để bật chạy thử video) |
 | `saferoad anonymize` | Ẩn danh video (làm mờ mặt, biển số) |
 | `saferoad train-behavior` | Huấn luyện bộ phân loại hành vi |
-| `saferoad prepare-real` | Dựng video + nhãn từ dataset thật (MVTI) |
-| `saferoad evaluate-real` | Chấm mAP + IDF1 trên dữ liệu thật |
-
----
-
-## Bốn quyết định kỹ thuật đáng chú ý
-
-### 1. Tự viết trình mô phỏng vì không dataset nào có nhãn near-miss
-
-Mọi dataset giao thông công khai chỉ có bounding box. Mà Precision/Recall của
-phát hiện xung đột lại là cam kết trung tâm của đề tài.
-
-Trình mô phỏng chạy vi mô phỏng thật - đèn tín hiệu hai pha, car-following IDM,
-gap acceptance cho xe rẽ, phanh tránh khẩn cấp. Near-miss **phát sinh** từ đúng
-nguyên nhân ngoài đời (vượt đèn đỏ, rẽ cắt dòng, người đi bộ băng qua), không có
-tình huống nào được dàn dựng thủ công.
-
-Nhãn chuẩn được tính bằng quy trình **khác** thuật toán online: 60 Hz thay vì
-30 Hz, vận tốc giải tích thay vì ước lượng từ bbox nhiễu, cực tiểu toàn cục thay
-vì quyết định từng khung hình. Nhờ đó đây là nhãn độc lập, không phải thuật toán
-tự chấm điểm cho chính nó.
-
-### 2. Mô hình đa hình tròn thay cho hình tròn ngoại tiếp
-
-Hình tròn ngoại tiếp một ô tô 4,4 × 1,8 m có bán kính 2,38 m - tức là mô hình hoá
-chiếc xe như vật thể **rộng 4,76 m**. Hậu quả đo được: hai ô tô đi ngược chiều ở
-hai làn cách nhau 4 m bị gắn nhãn "đối đầu", sinh ra **132 cảnh báo giả trong 120
-giây** cho dòng xe hoàn toàn bình thường.
-
-Phủ thân xe bằng 1-3 hình tròn nhỏ dọc trục (bán kính = nửa bề rộng xe) đưa con
-số đó xuống còn **13**, mà vẫn giữ được công thức TTC dạng đóng.
-
-### 3. Gom sự kiện theo episode, gán nhãn tại đỉnh nguy hiểm
-
-Một tình huống suýt va chạm kéo dài 1-2 giây. Ở 30 FPS, phát sự kiện mỗi khung
-hình sẽ biến **một** tình huống thành 30-60 "sự kiện".
-
-Hệ thống theo dõi cả episode, đóng lại khi điều kiện chấm dứt, rồi phát **một**
-sự kiện duy nhất gán nhãn tại **thời điểm TTC nhỏ nhất**. Riêng thay đổi này nâng
-Recall từ 0,18 lên 0,42.
-
-### 4. Cổng khoảng cách - thành phần có tác dụng lớn nhất
-
-TTC chỉ là một **phép ngoại suy**. Nếu một bên kịp phanh và hai xe chưa bao giờ
-tới gần nhau, đó là tình huống được xử lý **tốt**, không phải sự cố.
-
-Thêm điều kiện "hai xe phải thực sự đến gần nhau" làm Precision tăng
-**4,6 lần** (0,103 → 0,471), đổi lại Recall giảm
-17 điểm phần trăm. F1 tăng từ 0,180 lên 0,503:
-
-| Cấu hình | Precision | Recall | F1 |
-|---|---:|---:|---:|
-| Detection + Tracking | 0,035 | 0,020 | 0,025 |
-| + Homography | 0,073 | 0,671 | 0,132 |
-| + Làm mượt quỹ đạo | 0,154 | 0,678 | 0,251 |
-| + PET | 0,103 | 0,711 | 0,180 |
-| **+ Cổng khoảng cách** | **0,471** | **0,539** | **0,503** |
-
----
-
-## Một phát hiện về YOLO trên camera giao thông
-
-Đo trên 2.441 ảnh giao lộ thật theo chuẩn COCO, YOLO11n với trọng số COCO gốc chỉ đạt
-**mAP@0,5 = 0,208**. Khi chạy ở kích thước ảnh 1280, có khung hình model gán nhãn
-`airplane` cho 35 đối tượng.
-
-Nguyên nhân chính là **lệch miền**: COCO chủ yếu là ảnh chụp ngang tầm mắt, còn camera
-giao thông đặt cao nhìn chếch xuống.
-
-Đã thử suy luận chia ô 2×3 (`--backend tiled`): Recall ở ngưỡng vận hành tăng
-(0,277 → 0,323) nhưng Precision và mAP giảm, và chậm hơn khoảng 9 lần, nên
-cấu hình mặc định giữ một lượt. Giải pháp căn cơ là fine-tune - xem
-[`notebooks/01_finetune_yolo11n_colab.ipynb`](notebooks/01_finetune_yolo11n_colab.ipynb).
 
 ---
 
@@ -254,27 +256,19 @@ cấu hình mặc định giữ một lượt. Giải pháp căn cơ là fine-tu
 ```
 SafeRoad-AI/
 ├── src/saferoad/
-│   ├── types.py              # kiểu dữ liệu lõi, mô hình đa hình tròn
-│   ├── config.py             # toàn bộ ngưỡng kỹ thuật ở một chỗ
-│   ├── cli.py                # giao diện dòng lệnh
-│   ├── detection/            # YOLO + suy luận theo ô
-│   ├── tracking/             # ByteTrack + Kalman (tự cài đặt)
-│   ├── geometry/             # homography, làm mượt quỹ đạo
-│   ├── conflict/             # TTC, PET, gom episode
-│   ├── risk/                 # Risk Score, Risk Map, Explainable Risk
-│   ├── behavior/             # phân loại hành vi rule + ML
-│   ├── privacy/              # ẩn danh mặt & biển số
-│   ├── simulation/           # vi mô phỏng + camera pinhole + oracle
-│   ├── evaluation/           # ablation, mAP, IDF1/MOTA
-│   ├── data/                 # bộ nạp dataset thật
-│   ├── storage/              # SQLite
-│   ├── pipeline/             # điều phối + overlay
-│   └── dashboard/            # FastAPI + giao diện web
-├── configs/                  # default · synthetic · hangxanh · mvti
-├── notebooks/                # fine-tune YOLO trên Colab
-├── scripts/                  # sắp xếp dữ liệu, xuất YOLO, dựng báo cáo
-├── tests/                    # 91 test
-└── docs/                     # báo cáo kỹ thuật, protocol, giấy phép dữ liệu
+│   ├── conflict/        # TTC, PET ngoại suy, PET đo (encroachment.py), gom episode, kết cục
+│   ├── simulation/      # vi mô phỏng có vật lý va chạm + camera pinhole + nhãn chuẩn
+│   ├── evaluation/      # scoring (đối soát), experiment, ablation, grid, real_conflicts
+│   ├── geometry/        # homography, hiệu chuẩn (calibration.py), làm mượt quỹ đạo
+│   ├── data/            # MVTI, nhãn CVAT dạng video (cvat_video.py)
+│   ├── dashboard/       # FastAPI + giao diện + chạy thử video (jobs.py)
+│   └── ...              # detection, tracking, risk, behavior, privacy, storage, pipeline
+├── configs/             # default · synthetic · mvti · street · calib_street
+├── data/outputs/        # kết quả JSON (minh chứng số liệu), archive_v1/ = số liệu bản cũ
+├── docs/                # báo cáo cải tiến, báo cáo v1, protocol v2, giấy phép dữ liệu
+├── scripts/             # báo cáo, README, xuất YOLO, deploy Hugging Face
+├── tests/               # pytest
+└── Dockerfile           # bản demo chạy thật
 ```
 
 ---
@@ -283,45 +277,22 @@ SafeRoad-AI/
 
 | Tài liệu | Nội dung |
 |---|---|
-| [`docs/BaoCao_SafeRoadAI_BangC.pdf`](docs/BaoCao_SafeRoadAI_BangC.pdf) | Báo cáo kỹ thuật: phương pháp, kiến trúc, kết quả đánh giá, ablation |
-| [`docs/protocol_near_miss_v1.md`](docs/protocol_near_miss_v1.md) | Định nghĩa chính thức near-miss dùng làm ground truth |
-| [`docs/dataset_license.md`](docs/dataset_license.md) | Bảng kê nguồn dữ liệu và điều kiện bản quyền |
-
----
-
-## Kiểm thử
-
-```bash
-pytest tests/ -q          # 91 test
-```
-
-Bộ test kiểm tra những chỗ **dễ sai nhất**, không chỉ chạy cho có:
-
-- TTC/PET đúng trên các tình huống tính tay được;
-- hai xe đi ngược chiều ở hai làn cạnh nhau **không** phải xung đột;
-- một episode kéo dài sinh **đúng một** sự kiện;
-- mô phỏng **không bị tắc nghẽn** (từng có lỗi khiến cả nút giao khoá chết);
-- xe **không đi xuyên qua nhau**;
-- một dự đoán **không** được khớp với hai nhãn chuẩn;
-- mAP chấm đúng chuẩn COCO, MOTA âm không bị kẹp về 0.
-
-Bộ test chạy tự động trên GitHub Actions ở mỗi lần đẩy mã (`.github/workflows/ci.yml`).
+| [`docs/BaoCaoCaiTien_SafeRoadAI_Chang1.pdf`](docs/BaoCaoCaiTien_SafeRoadAI_Chang1.pdf) | Báo cáo cải tiến Chặng 1 (bản Word: `.docx` cùng tên) |
+| [`docs/protocol_near_miss_v2.md`](docs/protocol_near_miss_v2.md) | Định nghĩa near-miss, PET hai cách tính, ba kết cục, quy trình rà soát |
+| [`docs/dataset_license.md`](docs/dataset_license.md) | Nguồn dữ liệu và điều kiện bản quyền |
+| [`docs/BaoCao_SafeRoadAI_BangC.pdf`](docs/BaoCao_SafeRoadAI_BangC.pdf) | Báo cáo kỹ thuật bản trước (v1) - số liệu đã được thay bằng báo cáo cải tiến |
 
 ---
 
 ## Giấy phép
 
-Mã nguồn: **MIT**.
+Mã nguồn: **MIT**. Ultralytics YOLO dùng **AGPL-3.0** - hợp lệ cho nghiên cứu và dự
+thi; thương mại hoá cần giấy phép doanh nghiệp hoặc thay detector (giao diện
+`BaseDetector` đã tách riêng).
 
-⚠️ Ultralytics YOLO dùng **AGPL-3.0** - có tính lây lan. Dùng cho nghiên cứu và dự
-thi thì hợp lệ; nếu thương mại hoá cần mua giấy phép doanh nghiệp hoặc thay
-detector. Kiến trúc đã tách `BaseDetector` thành giao diện riêng để việc thay thế
-chỉ cần cài đặt một lớp con.
-
-Trích dẫn bắt buộc khi dùng UCSD Highway Traffic Database:
-
-> A. B. Chan and N. Vasconcelos, "Probabilistic Kernels for the Classification of
-> Auto-Regressive Visual Processes", *IEEE CVPR*, San Diego, 2005.
+Trích dẫn bắt buộc khi dùng UCSD Highway Traffic Database: A. B. Chan and
+N. Vasconcelos, "Probabilistic Kernels for the Classification of Auto-Regressive
+Visual Processes", *IEEE CVPR*, San Diego, 2005.
 
 ---
 

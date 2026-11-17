@@ -1,0 +1,3 @@
+﻿candidate_id,source,t_s,frame,clip_start_s,clip_end_s,system_event,track_a,track_b,gt_object_a,gt_object_b,ttc_s,pet_s,pet_status,contact,type,risk,px_x,px_y,video,label,reviewer,note
+C0001,reference,30.8,924,27.8,33.8,,,,218,219,0.336,,parallel,near_miss,rear_end,34.8,731.4,685.5,data/processed/street/street_labeled_0_300s.mp4,,,
+C0002,reference,288.567,8657,285.57,291.57,,,,1741,1785,2.538,,no_zone,near_miss,rear_end,10.7,749.5,670.1,data/processed/street/street_labeled_0_300s.mp4,,,

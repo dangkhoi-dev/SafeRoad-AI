@@ -22,6 +22,11 @@ from typing import Any, Sequence
 # --------------------------------------------------------------------------- #
 # Lớp đối tượng
 # --------------------------------------------------------------------------- #
+#: Bộ nhớ đệm cho :pyattr:`VehicleClass.circles` - thuộc tính này được gọi hàng
+#: trăm nghìn lần mỗi phút video trong vòng lặp đo khoảng cách.
+_CIRCLES_CACHE: dict[str, tuple[tuple[float, float], ...]] = {}
+
+
 class VehicleClass(str, Enum):
     """5 lớp đối tượng theo đề bài SafeRoad AI.
 
@@ -106,13 +111,19 @@ class VehicleClass(str, Enum):
         dạng đóng cho từng cặp hình tròn (chỉ cần lấy giá trị nhỏ nhất trên các
         cặp).
         """
+        cached = _CIRCLES_CACHE.get(self.value)
+        if cached is not None:
+            return cached
         length, width = self.footprint
         r = width / 2.0
         if length <= width * 1.5:
-            return ((0.0, r),)
-        n = min(3, max(2, int(round(length / width))))
-        span = length / 2.0 - r
-        return tuple((-span + 2.0 * span * i / (n - 1), r) for i in range(n))
+            out = ((0.0, r),)
+        else:
+            n = min(3, max(2, int(round(length / width))))
+            span = length / 2.0 - r
+            out = tuple((-span + 2.0 * span * i / (n - 1), r) for i in range(n))
+        _CIRCLES_CACHE[self.value] = out
+        return out
 
     @property
     def mass_factor(self) -> float:
@@ -323,6 +334,20 @@ class ConflictEvent:
     gap: float                        # m, khoảng cách mặt-tới-mặt
     reasons: list[str] = field(default_factory=list)  # Explainable Risk
     severity_terms: dict[str, float] = field(default_factory=dict)
+    # --- PET tách hai cách tính (xem saferoad.conflict.encroachment) -------- #
+    #: PET ngoại suy nhỏ nhất trong episode (tính trước, từ vận tốc tức thời).
+    pet_pred: float | None = None
+    #: PET đo từ mốc vào/ra vùng xung đột (tính sau, từ quỹ đạo đã ghi).
+    pet_measured: float | None = None
+    #: Trạng thái phép đo: measured | parallel | no_zone | incomplete |
+    #: simultaneous | contact. Rỗng nếu chưa đo.
+    pet_status: str = ""
+    #: ``pet`` ở trên lấy từ đâu: "measured" | "predicted" | "".
+    pet_source: str = ""
+    #: Mốc thời gian (giây) xe A/B vào/ra vùng xung đột.
+    pet_times: dict[str, Any] = field(default_factory=dict)
+    #: Kết cục: near_miss | body_overlap | collision_suspected.
+    contact: str = "near_miss"
 
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)
@@ -347,6 +372,13 @@ class GroundTruthConflict:
     pet: float | None = None
     conflict_type: ConflictType = ConflictType.CROSSING
     source: str = "synthetic"
+    #: "near_miss" (không chạm) hoặc "collision" (hai thân xe chạm nhau thật).
+    kind: str = "near_miss"
+    #: Trạng thái + mốc thời gian của phép đo PET, cùng định nghĩa với online.
+    pet_status: str = ""
+    pet_times: dict[str, Any] = field(default_factory=dict)
+    #: Khoảng cách mặt-tới-mặt nhỏ nhất (m) tại cùng thời điểm.
+    min_gap: float | None = None
 
     def matches(self, ev: ConflictEvent, time_tol: float = 1.0) -> bool:
         """Khớp GT với sự kiện dự đoán: cùng cặp đối tượng và lệch thời gian nhỏ.

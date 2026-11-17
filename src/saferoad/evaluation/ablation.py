@@ -1,55 +1,36 @@
-"""Chạy baseline / ablation trên tập synthetic có ground truth.
+"""Ablation: đo đóng góp của từng khối **trên cùng một mẫu**.
 
-Bảng ablation trả lời một câu hỏi cụ thể: **từng khối trong pipeline đóng góp
-bao nhiêu?** Ta bật dần các khối và đo lại:
+Hai cách đọc, báo cáo cả hai
+----------------------------
+* **Cộng dồn** (bật dần từng khối, như bản cũ) - kể câu chuyện hệ thống được
+  dựng lên thế nào, nhưng đóng góp của một khối phụ thuộc thứ tự bật.
+* **Bỏ từng khối khỏi bản đầy đủ** (leave-one-out) - mỗi dòng chỉ khác bản đầy
+  đủ đúng một khối, nên chênh lệch là đóng góp *biên* của khối đó khi mọi khối
+  khác vẫn có mặt. Đây là cách hội đồng yêu cầu.
 
-1. ``det+track`` - chỉ detection + tracking, TTC tính thẳng trên toạ độ **pixel**
-   (không homography, không làm mượt). Đây là baseline ngây thơ.
-2. ``+homography`` - thêm quy đổi sang mặt đất. Kỳ vọng: TTC MAE giảm mạnh, vì
-   pixel không phải đơn vị vật lý.
-3. ``+smoothing`` - thêm làm mượt quỹ đạo và ước lượng vận tốc bằng hồi quy.
-   Kỳ vọng: giảm báo động giả do nhiễu vận tốc.
-4. ``+pet`` - thêm tiêu chí PET bên cạnh TTC. Kỳ vọng: Recall tăng (bắt được
-   tình huống "vừa lướt qua" mà TTC bỏ sót).
-5. ``+proximity`` - thêm cổng khoảng cách. Kỳ vọng: Precision tăng mạnh.
-6. ``full`` - bật thêm Risk Scoring và phân loại kiểu xung đột.
+Mọi dòng dùng cùng bbox gốc, cùng seed nhiễu detector, cùng vùng đánh giá, cùng
+hàm chấm (:func:`saferoad.evaluation.experiment.run_case`), và in kèm mẫu số.
 
-Ngoài ra ta quét mức nhiễu detector (``noise_px``) để đo độ bền của hệ thống
-trước sai số của khối phía trước.
+Ngoài ra :func:`run_noise_sweep` quét nhiễu bbox, còn
+:mod:`saferoad.evaluation.grid` chạy lưới mật độ × góc camera × điều kiện ánh
+sáng (đại diện bằng chất lượng detector).
 """
 
 from __future__ import annotations
 
-import copy
-import json
-import logging
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any
+from dataclasses import dataclass
+from typing import Any, Callable
 
 from ..config import Config
-from ..detection.detector import ReplayDetector
-from ..pipeline.runner import Pipeline
-from ..types import Detection
-from .metrics import (
-    ConflictMetrics,
-    build_gt_points,
-    build_id_mapping,
-    evaluate_conflicts,
-    severity_breakdown,
-)
-
-log = logging.getLogger(__name__)
+from .experiment import SimCase, run_case, strip_private
 
 
 @dataclass
 class AblationStage:
-    """Một cấu hình trong bảng ablation."""
-
     key: str
     label: str
     description: str
-    mutate: Any = None    # hàm nhận Config và sửa tại chỗ
+    mutate: Callable[[Config], Any] | None = None
 
 
 def _no_homography(cfg: Config) -> None:
@@ -67,196 +48,125 @@ def _no_smoothing(cfg: Config) -> None:
 
 
 def _no_pet(cfg: Config) -> None:
-    """Vô hiệu tiêu chí PET bằng cách đặt ngưỡng về 0."""
     cfg.conflict.pet_threshold = 0.0
 
 
+def _no_measured_pet(cfg: Config) -> None:
+    cfg.conflict.use_measured_pet = False
+
+
 def _no_proximity(cfg: Config) -> None:
-    """Bỏ cổng khoảng cách - chấp nhận mọi cặp có TTC/PET dưới ngưỡng."""
     cfg.conflict.proximity_gate = 1e9
+
+
+def _no_closing_speed(cfg: Config) -> None:
     cfg.conflict.min_rel_speed = 0.3
 
 
-STAGES: list[AblationStage] = [
-    AblationStage(
-        "det_track", "1. Detection + Tracking",
-        "TTC tính trên pixel, không homography, không làm mượt, không PET/proximity",
-        lambda c: (_no_homography(c), _no_smoothing(c), _no_pet(c), _no_proximity(c)),
-    ),
-    AblationStage(
-        "homography", "2. + Homography",
-        "Quy đổi toạ độ ảnh sang mặt đất (mét)",
-        lambda c: (_no_smoothing(c), _no_pet(c), _no_proximity(c)),
-    ),
-    AblationStage(
-        "smoothing", "3. + Trajectory smoothing",
-        "Làm mượt quỹ đạo + ước lượng vận tốc bằng hồi quy tuyến tính",
-        lambda c: (_no_pet(c), _no_proximity(c)),
-    ),
-    AblationStage(
-        "pet", "4. + PET",
-        "Thêm tiêu chí Post-Encroachment Time bên cạnh TTC",
-        lambda c: _no_proximity(c),
-    ),
-    AblationStage(
-        "proximity", "5. + Proximity gate",
-        "Yêu cầu hai xe thực sự đến gần nhau, không chỉ dựa vào ngoại suy TTC",
-        None,
-    ),
-    AblationStage(
-        "full", "6. Full (+ Risk scoring)",
-        "Bản đầy đủ: thêm Risk Score, phân loại xung đột và Explainable Risk",
-        None,
-    ),
+def _no_episode(cfg: Config) -> None:
+    cfg.conflict.episode_grouping = False
+
+
+def _chain(*fns):
+    def run(cfg: Config) -> None:
+        for fn in fns:
+            fn(cfg)
+    return run
+
+
+#: Bật dần từng khối (dòng 1 là baseline ngây thơ).
+CUMULATIVE: list[AblationStage] = [
+    AblationStage("baseline", "0. Baseline: TTC < 3 s trên toạ độ ảnh",
+                  "Không homography, không làm mượt, không PET, không cổng, mỗi khung hình một cảnh báo (chống trùng 3 s)",
+                  _chain(_no_homography, _no_smoothing, _no_pet, _no_proximity,
+                         _no_closing_speed, _no_episode)),
+    AblationStage("homography", "1. + Homography (mét)", "Quy đổi toạ độ ảnh sang mặt đất",
+                  _chain(_no_smoothing, _no_pet, _no_proximity, _no_closing_speed, _no_episode)),
+    AblationStage("smoothing", "2. + Làm mượt quỹ đạo", "Làm mượt + vận tốc hồi quy",
+                  _chain(_no_pet, _no_proximity, _no_closing_speed, _no_episode)),
+    AblationStage("episode", "3. + Gom episode", "Một tình huống → một sự kiện, gán nhãn tại đỉnh",
+                  _chain(_no_pet, _no_proximity, _no_closing_speed)),
+    AblationStage("closing", "4. + Cổng tốc độ tiếp cận", "Loại bám đuôi cùng tốc độ",
+                  _chain(_no_pet, _no_proximity)),
+    AblationStage("pet", "5. + PET (ngoại suy + đo)", "Thêm tiêu chí PET",
+                  _no_proximity),
+    AblationStage("full", "6. + Cổng khoảng cách = bản đầy đủ", "Hai xe phải thực sự đến gần nhau",
+                  None),
+]
+
+#: Bỏ đúng một khối khỏi bản đầy đủ.
+LEAVE_ONE_OUT: list[AblationStage] = [
+    AblationStage("full", "Bản đầy đủ", "Mọi khối", None),
+    AblationStage("-homography", "Bỏ homography", "TTC/khoảng cách tính trên tỉ lệ phẳng", _no_homography),
+    AblationStage("-smoothing", "Bỏ làm mượt quỹ đạo", "Vận tốc từ hiệu vị trí, không EMA", _no_smoothing),
+    AblationStage("-episode", "Bỏ gom episode", "Mỗi khung hình thoả ngưỡng một cảnh báo", _no_episode),
+    AblationStage("-closing", "Bỏ cổng tốc độ tiếp cận", "Chấp nhận cả cặp bám đuôi cùng tốc độ", _no_closing_speed),
+    AblationStage("-pet", "Bỏ PET", "Chỉ dùng TTC", _no_pet),
+    AblationStage("-measured_pet", "Bỏ PET đo (chỉ PET ngoại suy)", "Hành vi PET của bản cũ", _no_measured_pet),
+    AblationStage("-proximity", "Bỏ cổng khoảng cách", "Không đòi hai xe thực sự đến gần", _no_proximity),
 ]
 
 
-@dataclass
-class AblationResult:
-    """Kết quả một dòng trong bảng ablation."""
-
-    key: str
-    label: str
-    description: str
-    metrics: dict[str, Any]
-    n_events: int
-    processing_fps: float
-    latency_ms: dict[str, float] = field(default_factory=dict)
-
-
-def run_ablation(
-    base_cfg: Config,
-    detections: dict[int, list[Detection]],
-    ground_truth: list,
-    vehicles: list,
-    gt_points: dict,
-    region: tuple | None = None,
-    noise_px: float = 1.5,
-    miss_rate: float = 0.03,
-    stages: list[AblationStage] | None = None,
-    progress: bool = True,
-) -> list[AblationResult]:
-    """Chạy toàn bộ bảng ablation trên cùng một video synthetic.
-
-    ``detections`` là bbox chuẩn theo frame do simulator sinh; ``noise_px`` và
-    ``miss_rate`` mô phỏng một detector không hoàn hảo để kết quả phản ánh điều
-    kiện thực tế thay vì đầu vào lý tưởng.
-    """
-    stages = stages or STAGES
-    results: list[AblationResult] = []
-
-    for stage in stages:
-        cfg = copy.deepcopy(base_cfg)
-        cfg.video.write_overlay = False
-        if stage.mutate is not None:
-            stage.mutate(cfg)
-
-        detector = ReplayDetector(detections, noise_px=noise_px, miss_rate=miss_rate, seed=17)
-        pipe = Pipeline(cfg, detector=detector, write_db=False)
-        result = pipe.run(progress_every=0)
-
-        mapping, track_metrics = build_id_mapping(result.tracks, gt_points)
-        conflict_metrics = evaluate_conflicts(
-            result.events, ground_truth, mapping, region=region
-        )
-
-        row = conflict_metrics.to_dict()
-        row["tracking"] = track_metrics.to_dict()
-
-        results.append(
-            AblationResult(
-                key=stage.key, label=stage.label, description=stage.description,
-                metrics=row, n_events=len(result.events),
-                processing_fps=round(result.processing_fps, 2),
-                latency_ms={k: round(v, 2) for k, v in result.latency.items()},
-            )
-        )
-        if progress:
-            print(
-                f"  [{stage.key:11s}] P={row['precision']:.3f} R={row['recall']:.3f} "
-                f"F1={row['f1']:.3f} TTC-MAE={row['ttc_mae']} n_events={len(result.events)}",
-                flush=True,
-            )
-
-    return results
+def _row(stage: AblationStage, rec: dict) -> dict[str, Any]:
+    m = rec["metrics"]
+    rows = rec["reconciliation"]["rows"]
+    return {
+        "key": stage.key,
+        "label": stage.label,
+        "description": stage.description,
+        "precision": m["precision"],
+        "recall": m["recall"],
+        "f1": m["f1"],
+        "ttc_mae": m["ttc_mae"],
+        "pet_final": (rec["pet_errors"].get("final") or {}).get("mae"),
+        "n_emitted": rows["emitted"],
+        "n_ignored_outside": rows["ignored_outside_eval_region"],
+        "n_scored": rows["scored"],
+        "near_miss_recall": rec["by_kind"]["near_miss"]["recall"],
+        "collision_recall": rec["by_kind"]["collision"]["recall"],
+        "false_alarms_per_hour": rec["reconciliation"]["per_hour"]["false_alarms_per_hour"],
+        "idf1": rec["tracking"]["idf1"],
+        "config_sha256": rec["config_sha256"],
+        "checks_pass": rec["reconciliation"]["all_checks_pass"],
+    }
 
 
-def run_noise_sweep(
-    base_cfg: Config,
-    detections: dict[int, list[Detection]],
-    ground_truth: list,
-    vehicles: list,
-    gt_points: dict,
-    region: tuple | None = None,
-    noise_levels: tuple[float, ...] = (0.0, 1.0, 2.0, 4.0, 6.0),
-    miss_rate: float = 0.03,
-    progress: bool = True,
-) -> list[dict[str, Any]]:
-    """Quét mức nhiễu detector để đo độ bền của các khối phía sau.
-
-    Ý nghĩa thực tiễn: khi thay YOLO11n bằng một model yếu hơn (hoặc camera rung,
-    trời mưa), chất lượng bbox giảm - bảng này cho biết hệ thống chịu được tới
-    mức nào trước khi các chỉ số tụt dưới ngưỡng cam kết.
-    """
-    rows: list[dict[str, Any]] = []
-    for noise in noise_levels:
-        cfg = copy.deepcopy(base_cfg)
-        cfg.video.write_overlay = False
-        detector = ReplayDetector(detections, noise_px=noise, miss_rate=miss_rate, seed=17)
-        result = Pipeline(cfg, detector=detector, write_db=False).run(progress_every=0)
-
-        mapping, track_metrics = build_id_mapping(result.tracks, gt_points)
-        m = evaluate_conflicts(result.events, ground_truth, mapping, region=region)
-
-        row = {"noise_px": noise, **m.to_dict(), "idf1": track_metrics.idf1,
-               "n_events": len(result.events)}
+def run_stages(cfg: Config, case: SimCase, stages: list[AblationStage],
+               progress: bool = True) -> list[dict[str, Any]]:
+    rows = []
+    for st in stages:
+        rec = run_case(cfg, case, mutate=st.mutate)
+        row = _row(st, rec)
         rows.append(row)
         if progress:
-            print(
-                f"  noise={noise:4.1f}px  P={m.precision:.3f} R={m.recall:.3f} "
-                f"F1={m.f1:.3f} TTC-MAE={row['ttc_mae']} IDF1={track_metrics.idf1:.3f}",
-                flush=True,
-            )
+            p, r = row["precision"], row["recall"]
+            print(f"  [{st.key:14s}] P={p['value']} ({p['num']}/{p['den']})  "
+                  f"R={r['value']} ({r['num']}/{r['den']})  F1={row['f1']}  "
+                  f"phát ra={row['n_emitted']}", flush=True)
     return rows
 
 
-def save_report(
-    ablation: list[AblationResult],
-    noise_sweep: list[dict[str, Any]],
-    severity: list[dict[str, Any]],
-    path: str | Path,
-    extra: dict[str, Any] | None = None,
-) -> None:
-    """Ghi toàn bộ kết quả đánh giá ra JSON."""
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = {
-        "ablation": [
-            {
-                "key": r.key, "label": r.label, "description": r.description,
-                "n_events": r.n_events, "processing_fps": r.processing_fps,
-                "latency_ms": r.latency_ms, **r.metrics,
-            }
-            for r in ablation
-        ],
-        "noise_sweep": noise_sweep,
-        "severity_breakdown": severity,
-        **(extra or {}),
-    }
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+def run_noise_sweep(cfg: Config, case: SimCase,
+                    noise_levels: tuple[float, ...] = (0.0, 1.0, 2.0, 4.0, 6.0),
+                    miss_rate: float | None = None, progress: bool = True) -> list[dict]:
+    """Quét mức nhiễu bbox, mọi thứ khác giữ nguyên."""
+    rows = []
+    for noise in noise_levels:
+        rec = run_case(cfg, case, noise_px=noise, miss_rate=miss_rate)
+        m = rec["metrics"]
+        rows.append({
+            "noise_px": noise,
+            "precision": m["precision"], "recall": m["recall"], "f1": m["f1"],
+            "ttc_mae": m["ttc_mae"],
+            "pet_final_mae": (rec["pet_errors"].get("final") or {}).get("mae"),
+            "idf1": rec["tracking"]["idf1"],
+            "id_switches": rec["tracking"]["id_switches"],
+            "n_emitted": rec["reconciliation"]["rows"]["emitted"],
+        })
+        if progress:
+            print(f"  nhiễu={noise:4.1f}px  P={m['precision']['value']} R={m['recall']['value']} "
+                  f"F1={m['f1']} IDF1={rec['tracking']['idf1']}", flush=True)
+    return rows
 
 
-def to_markdown(ablation: list[AblationResult]) -> str:
-    """Kết xuất bảng ablation dạng Markdown để dán vào báo cáo."""
-    lines = [
-        "| Cấu hình | Precision | Recall | F1 | TTC MAE (s) | Số sự kiện | FPS (không ghi overlay) |",
-        "|---|---:|---:|---:|---:|---:|---:|",
-    ]
-    for r in ablation:
-        m = r.metrics
-        mae = m["ttc_mae"]
-        lines.append(
-            f"| {r.label} | {m['precision']:.3f} | {m['recall']:.3f} | {m['f1']:.3f} | "
-            f"{mae if mae is not None else '-'} | {r.n_events} | {r.processing_fps:.1f} |"
-        )
-    return "\n".join(lines)
+__all__ = ["CUMULATIVE", "LEAVE_ONE_OUT", "run_stages", "run_noise_sweep", "strip_private"]

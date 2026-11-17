@@ -19,9 +19,9 @@ from typing import Any
 
 import numpy as np
 
-from ..config import BehaviorConfig, Config
-from ..types import Track, TrackState, VehicleClass
-from .classifier import FEATURE_NAMES, extract_features
+from ..config import BehaviorConfig
+from ..types import Track, TrackState
+from .classifier import FEATURE_NAMES, FEATURE_VERSION, extract_features
 
 log = logging.getLogger(__name__)
 
@@ -104,43 +104,50 @@ def _tracks_from_simulation(vehicles: list) -> dict[int, tuple[Track, str]]:
 
 
 def build_dataset(
-    n_scenarios: int = 6, duration: float = 120.0, window: int = 15, seed0: int = 100
+    n_scenarios: int = 6, duration: float = 120.0, window: int = 15, seed0: int = 100,
+    pos_noise: float = 0.10, vel_noise: float = 0.25,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Sinh tập đặc trưng/nhãn từ nhiều kịch bản mô phỏng khác nhau.
 
-    Mỗi track đóng góp **nhiều mẫu** - trích đặc trưng ở các cửa sổ trượt khác
-    nhau dọc quỹ đạo - nên một kịch bản 120 s cho ra vài nghìn mẫu.
+    * **Nhãn** của mỗi đoạn quỹ đạo: bộ luật (phiên bản đặc trưng 2) chạy trên quỹ
+      đạo **sạch** của trình mô phỏng.
+    * **Đặc trưng**: tính trên cùng đoạn đó nhưng đã cộng nhiễu cỡ đầu ra của bộ
+      theo vết (vị trí ``pos_noise`` m, vận tốc ``vel_noise`` m/s). Bản cũ học trên
+      quỹ đạo sạch rồi đem áp lên quỹ đạo nhiễu - lệch miền, và là một nguyên nhân
+      gắn cờ gần như mọi xe.
     """
     from ..simulation.scenario import build_scenario, simulate
+    from .classifier import BehaviorClassifier
 
+    rules = BehaviorClassifier(BehaviorConfig(enabled=False))
+    rng = np.random.default_rng(seed0)
     features: list[list[float]] = []
     labels: list[str] = []
-
+    seg = max(window * 6, 90)          # đoạn ~3 s
     for k in range(n_scenarios):
         seed = seed0 + k
         vehicles = simulate(build_scenario(duration=duration, seed=seed), duration)
         tracks = _tracks_from_simulation(vehicles)
         log.info("Kịch bản seed=%d: %d track", seed, len(tracks))
-
         for track, _track_label in tracks.values():
-            n = len(track.history)
-            if n < window + 5:
-                continue
-            # Cửa sổ trượt: lấy mẫu mỗi 5 frame. Nhãn được tính LẠI cho từng
-            # cửa sổ để mô tả đúng đoạn quỹ đạo đang xét.
-            for end in range(window, n, 5):
-                sub = Track(track_id=track.track_id, cls=track.cls,
-                            history=track.history[:end], confirmed=True)
-                feats = extract_features(sub, window)
-
-                win = sub.history[-window:]
-                speeds = np.array([s.speed for s in win], dtype=float)
-                times = np.array([s.t for s in win], dtype=float)
-                headings = np.array([s.heading for s in win], dtype=float)
-
+            hist = track.history[::2]       # 60 Hz → 30 Hz như video
+            for start in range(0, max(1, len(hist) - seg), seg // 2):
+                part = hist[start:start + seg]
+                if len(part) < window + 10:
+                    continue
+                clean = Track(track_id=track.track_id, cls=track.cls, history=part, confirmed=True)
+                noisy = Track(track_id=track.track_id, cls=track.cls, confirmed=True)
+                for st in part:
+                    noisy.history.append(TrackState(
+                        frame_idx=st.frame_idx, t=st.t, bbox=st.bbox, anchor=st.anchor,
+                        ground=(st.ground[0] + rng.normal(0, pos_noise),
+                                st.ground[1] + rng.normal(0, pos_noise)),
+                        velocity=(st.velocity[0] + rng.normal(0, vel_noise),
+                                  st.velocity[1] + rng.normal(0, vel_noise)),
+                        score=1.0))
+                feats = extract_features(noisy, window)
                 features.append([feats[name] for name in FEATURE_NAMES])
-                labels.append(_label_window(speeds, times, headings))
-
+                labels.append(rules.classify(clean).label)
     return np.asarray(features, dtype=float), np.asarray(labels)
 
 
@@ -196,6 +203,7 @@ def train_from_simulation(
             "scaler": scaler,
             "features": FEATURE_NAMES,
             "sklearn_version": sklearn.__version__,
+            "feature_version": FEATURE_VERSION,
         },
         out,
     )

@@ -12,7 +12,8 @@
 | 1 | **Multi-view Traffic Intersection Dataset (MVTI)** | 2.441 ảnh giao lộ 1024×640 + annotation COCO có `object_id` | ~101 MB | Theo điều khoản công bố trên Kaggle của tác giả - dùng cho nghiên cứu/học thuật | **Dữ liệu thật chính.** Đo mAP detection, IDF1/MOTA tracking, FPS thực tế |
 | 2 | **UCSD Highway Traffic Database** | 254 clip .avi 320×240, 10 FPS, phân loại mật độ (light/medium/heavy) | ~32 MB | Học thuật, yêu cầu trích dẫn Chan & Vasconcelos (2005) | Kiểm thử độ bền detector ở độ phân giải thấp; tham chiếu phân loại mật độ |
 | 3 | **Trình mô phỏng giao lộ SafeRoad** (tự viết) | Video 1280×720 sinh theo tham số + ground truth giải tích | sinh tại chỗ | **MIT** - mã nguồn của nhóm | **Bộ đo chính.** Nguồn *duy nhất* có nhãn near-miss chuẩn ⇒ đo Precision/Recall/TTC-MAE |
-| 4 | **Video tự quay** (nhóm thực hiện) | Video giao lộ tại TP.HCM | theo thực tế | Do nhóm sở hữu; đã ẩn danh | Trình diễn trên bối cảnh giao thông Việt Nam |
+| 4 | **Video đại lộ có nhãn (Kaggle)** - `data/raw/own-footage/input-001.MOV` + `data/raw/mvti/merged_annotations.json` | Video 4K 741 s quay từ mái nhà (iPhone 13); nhãn CVAT bbox + track_id cho Car/People trên 300 s đầu (9.009 khung hình) | ~3,7 GB | Theo điều khoản trang Kaggle của bộ dữ liệu (đường dẫn: **cần bổ sung**) - dùng cho nghiên cứu | **Video thật thứ hai.** mAP/IDF1, cảnh báo so với tham chiếu, hiệu chuẩn từ vạch kẻ; 441 s không nhãn để chạy thử đầu-cuối |
+| 4b | **Video tự quay** (nhóm thực hiện, kế hoạch) | Video giao lộ tại TP.HCM | - | Do nhóm sở hữu; ẩn danh trước khi lưu | Hiệu chuẩn thực địa và gán nhãn xung đột của người |
 | 5 | **Trọng số YOLO11n (COCO)** | Model pretrained | 5.6 MB | AGPL-3.0 (Ultralytics) | Detector nền; xem cảnh báo giấy phép ở §4 |
 
 ---
@@ -127,3 +128,17 @@ con số duy nhất sẽ là gian dối:
 Trên dữ liệu thật, hệ thống chỉ báo cáo **thống kê mô tả** về near-miss (số lượng,
 phân bố TTC, phân loại), **không** báo cáo Precision/Recall - vì không có gì để
 đối chiếu.
+
+---
+
+## Bổ sung Chặng 1 - video đại lộ (Kaggle)
+
+* **Trước đây ghi nhầm** là "video tự quay của nhóm". Thực tế `input-001.MOV` và
+  `output.mp4` tải từ Kaggle; `merged_annotations.json` (nằm cạnh dữ liệu MVTI) là nhãn
+  của chính video này, không phải của MVTI.
+* Nhãn xuất từ CVAT theo đoạn 30 khung hình chồng 5 khung, `track_id` đánh lại mỗi
+  đoạn; `saferoad prepare-street` ghép lại thành quỹ đạo liên tục.
+* Lớp: `Car` (gồm cả xe tải nhẹ, van) và `People`. **Không có xe máy, xe đạp.**
+* Không đẩy video hay nhãn lên GitHub. Chỉ đưa đoạn trích lên bản demo khi giấy phép
+  của trang Kaggle cho phép phân phối lại.
+

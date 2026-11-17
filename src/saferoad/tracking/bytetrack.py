@@ -19,7 +19,7 @@ import math
 import numpy as np
 
 from ..config import TrackingConfig
-from ..types import Detection, Track, TrackState, VehicleClass, iou
+from ..types import Detection, Track, TrackState, iou
 from .kalman import KalmanBoxFilter, xyah_to_xyxy, xyxy_to_xyah
 
 

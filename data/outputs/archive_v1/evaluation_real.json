@@ -1,0 +1,130 @@
+{
+  "dataset": {
+    "name": "infrastructure-infrastructure-mscoco",
+    "n_frames": 2441,
+    "n_annotated_frames": 2439,
+    "n_tracks": 19,
+    "n_boxes": 14488,
+    "resolution": "1024x640",
+    "classes": {
+      "car": 10,
+      "truck": 7,
+      "bicycle": 2
+    },
+    "track_length_median": 646
+  },
+  "thresholds": {
+    "map_conf": 0.001,
+    "pipeline_conf": 0.15
+  },
+  "detector_backend": "yolo",
+  "detection": {
+    "mAP50": 0.2078,
+    "mAP50_95": 0.1392,
+    "precision50": 0.0683,
+    "recall50": 0.552,
+    "operating_conf": 0.15,
+    "precision50_op": 0.4677,
+    "recall50_op": 0.2771,
+    "n_pred": 131320,
+    "n_gt": 14488,
+    "per_class": {
+      "bicycle": {
+        "AP50": 0.0099,
+        "AP50_95": 0.0021,
+        "n_gt": 1503
+      },
+      "car": {
+        "AP50": 0.3381,
+        "AP50_95": 0.2372,
+        "n_gt": 7675
+      },
+      "motorcycle": {
+        "AP50": null,
+        "AP50_95": null,
+        "n_gt": 0
+      },
+      "pedestrian": {
+        "AP50": null,
+        "AP50_95": null,
+        "n_gt": 0
+      },
+      "truck": {
+        "AP50": 0.2754,
+        "AP50_95": 0.1781,
+        "n_gt": 5310
+      }
+    }
+  },
+  "tracking": {
+    "idf1": 0.2346,
+    "mota": 0.0607,
+    "id_switches": 42,
+    "n_gt_tracks": 19,
+    "n_pred_tracks": 46,
+    "mostly_tracked": 0,
+    "fragmentation": 3.471
+  },
+  "conflicts": {
+    "total": 1,
+    "severe_ttc_lt_1_5": 1,
+    "by_type": {
+      "crossing": 1
+    },
+    "by_level": {
+      "high": 1
+    },
+    "ttc": {
+      "min": 0.0,
+      "p25": 0.0,
+      "median": 0.0,
+      "p75": 0.0,
+      "max": 0.0
+    },
+    "pet": {
+      "min": 0.0,
+      "p25": 0.0,
+      "median": 0.0,
+      "p75": 0.0,
+      "max": 0.0
+    },
+    "risk_score": {
+      "min": 100.0,
+      "p25": 100.0,
+      "median": 100.0,
+      "p75": 100.0,
+      "max": 100.0
+    }
+  },
+  "runtime": {
+    "n_frames": 2441,
+    "duration_s": 81.37,
+    "fps_source": 30.0,
+    "processing_fps": 12.13,
+    "frame_latency_median_ms": 82.43,
+    "frame_latency_p95_ms": 93.43,
+    "wall_seconds": 207.41,
+    "total_events": 1,
+    "severe_events": 1,
+    "avg_risk_score": 100.0,
+    "n_tracks": 46,
+    "by_type": {
+      "crossing": 1
+    },
+    "latency_ms": {
+      "detection": 81.19,
+      "tracking": 0.33,
+      "trajectory": 0.23,
+      "conflict": 0.1
+    },
+    "total_latency_ms": 81.84,
+    "homography_error_m": 2.312938447200457e-15
+  },
+  "note": "Dataset thật có nhãn bbox và ID đối tượng nhưng KHÔNG có nhãn xung đột. Vì vậy mục 'conflicts' chỉ là thống kê mô tả; Precision/Recall của near-miss được đo riêng trên tập mô phỏng có ground truth.",
+  "environment": {
+    "python": "3.11.15",
+    "os": "Linux",
+    "numpy": "2.4.4",
+    "opencv": "4.13.0"
+  }
+}

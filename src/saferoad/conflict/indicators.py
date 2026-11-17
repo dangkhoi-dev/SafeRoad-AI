@@ -43,7 +43,7 @@ from __future__ import annotations
 import math
 
 from ..types import ConflictType, TrackState, VehicleClass
-from .geometry import NO_COLLISION, vehicle_gap, vehicle_ttc
+from .geometry import NO_COLLISION, vehicle_gap, vehicle_ttc  # noqa: F401 (tái xuất)
 
 
 def time_to_collision(
@@ -104,6 +104,24 @@ def conflict_point(
     return ((ax + avx * t_a, ay + avy * t_a), t_a, t_b)
 
 
+def _ray_intersection(
+    state_a: TrackState, state_b: TrackState
+) -> tuple[tuple[float, float], float, float] | None:
+    """Giao điểm hai đường thẳng quỹ đạo, cho phép thời gian âm (đã đi qua)."""
+    ax, ay = state_a.ground
+    bx, by = state_b.ground
+    avx, avy = state_a.velocity
+    bvx, bvy = state_b.velocity
+    det = avx * (-bvy) - avy * (-bvx)
+    if abs(det) < 1e-9:
+        return None
+    dx = bx - ax
+    dy = by - ay
+    t_a = (dx * (-bvy) - dy * (-bvx)) / det
+    t_b = (avx * dy - avy * dx) / det
+    return ((ax + avx * t_a, ay + avy * t_a), t_a, t_b)
+
+
 def post_encroachment_time(
     state_a: TrackState,
     state_b: TrackState,
@@ -112,33 +130,51 @@ def post_encroachment_time(
     max_horizon: float = 10.0,
     min_crossing_angle: float = 20.0,
     max_conflict_distance: float = 40.0,
+    max_passed: float = 3.0,
 ) -> tuple[float, tuple[float, float]] | None:
-    """PET (giây) và toạ độ điểm xung đột, hoặc ``None`` nếu không xác định.
+    """PET **ngoại suy** (giây) và toạ độ điểm xung đột, hoặc ``None``.
 
-    PET = ``|t_a - t_b|`` tại giao điểm quỹ đạo. Giá trị nhỏ nghĩa là hai đối
-    tượng đi qua cùng một điểm cách nhau rất ngắn - đúng định nghĩa "suýt va chạm".
+    Đây là PET *dự báo* từ vận tốc tức thời - dùng để mở episode và cảnh báo
+    sớm. PET dùng để chốt sự kiện là PET **đo** từ quỹ đạo đã ghi
+    (:func:`saferoad.conflict.encroachment.measure_pet`); hai con số được lưu
+    riêng trong ``ConflictEvent.pet_pred`` và ``ConflictEvent.pet_measured``.
 
-    Ta trừ đi thời gian mỗi xe cần để **giải phóng** điểm xung đột (chiều dài xe
-    chia cho tốc độ), vì PET đo từ lúc đuôi xe trước rời điểm đó.
+    Cùng định nghĩa vùng xung đột với PET đo
+    ----------------------------------------
+    PET = (lúc xe sau **vào** vùng xung đột) − (lúc xe trước **ra** khỏi vùng).
+    Vùng xung đột là phần giao của hai dải đường mà thân xe quét qua, nên với
+    góc cắt θ, xe trước ra khỏi vùng sau khi tâm xe qua giao điểm một quãng
+    ``L_trước/2 + (W_sau/2)/sin θ``, và xe sau vào vùng khi tâm còn cách giao
+    điểm ``L_sau/2 + (W_trước/2)/sin θ``. Bản cũ chỉ trừ ``L/v`` của xe trước,
+    tức đo một đại lượng khác hẳn với nhãn chuẩn - một nguồn của sai số PET lớn.
 
-    Hai điều kiện bảo vệ quan trọng
-    -------------------------------
-    * ``min_crossing_angle`` - PET chỉ có nghĩa với hai quỹ đạo **thực sự cắt
-      nhau**. Với hai xe đi gần song song (ví dụ xe máy vượt nhau cùng làn), giao
-      điểm của hai tia nằm rất xa và cực kỳ nhạy với nhiễu: lệch hướng 1° đã dời
-      giao điểm hàng chục mét, sinh ra một giá trị PET nhỏ hoàn toàn giả. Trường
-      hợp đó phải để TTC xử lý, không phải PET.
-    * ``max_conflict_distance`` - giao điểm nằm quá xa thì tình huống chưa xảy
-      ra, và ngoại suy tuyến tính tới đó không còn đáng tin.
+    Xe đã đi qua giao điểm
+    ----------------------
+    Bản cũ trả về ``None`` ngay khi một xe đã qua giao điểm (thời gian âm), nên
+    đúng tình huống điển hình của PET - "xe A vừa qua, 0,8 s sau xe B tới" - lại
+    bị bỏ mất đúng lúc xe B đang lao tới. Nay xe trước được phép đã qua giao
+    điểm tối đa ``max_passed`` giây; xe sau vẫn phải đang tiến tới.
+
+    Hai điều kiện bảo vệ
+    --------------------
+    * ``min_crossing_angle`` - hai xe gần song song (cùng làn, vượt nhau) có giao
+      điểm ở rất xa và cực nhạy với nhiễu hướng; trường hợp đó để TTC xử lý.
+    * ``max_conflict_distance`` - giao điểm quá xa thì ngoại suy không còn đáng tin.
     """
-    if approach_angle(state_a, state_b) < min_crossing_angle:
+    angle = approach_angle(state_a, state_b)
+    if angle < min_crossing_angle or angle > 180.0 - min_crossing_angle:
         return None
 
-    result = conflict_point(state_a, state_b)
+    result = _ray_intersection(state_a, state_b)
     if result is None:
         return None
-
     point, t_a, t_b = result
+
+    # Xe sau phải còn đang tiến tới; xe trước được phép vừa đi qua.
+    if max(t_a, t_b) < 0:
+        return None
+    if min(t_a, t_b) < -max_passed:
+        return None
     if t_a > max_horizon or t_b > max_horizon:
         return None
     if (
@@ -152,15 +188,21 @@ def post_encroachment_time(
     if speed_a < 1e-3 or speed_b < 1e-3:
         return None
 
-    # Thời gian chiếm dụng điểm xung đột = chiều dài xe / tốc độ.
-    occupancy_a = cls_a.footprint[0] / speed_a
-    occupancy_b = cls_b.footprint[0] / speed_b
+    sin_t = max(math.sin(math.radians(angle)), 0.2)
+    len_a, wid_a = cls_a.footprint
+    len_b, wid_b = cls_b.footprint
+    # Nửa chiều dài vùng xung đột dọc theo đường đi của từng xe.
+    half_a = 0.5 * len_a + 0.5 * wid_b / sin_t
+    half_b = 0.5 * len_b + 0.5 * wid_a / sin_t
 
-    gap = abs(t_a - t_b)
-    # Trừ đi phần chiếm dụng của xe tới trước - nếu âm nghĩa là hai xe chồng
-    # lấn thời gian tại điểm đó (PET = 0, cực kỳ nguy hiểm).
-    lead_occupancy = occupancy_a if t_a < t_b else occupancy_b
-    pet = max(0.0, gap - lead_occupancy)
+    if t_a <= t_b:
+        lead_exit = t_a + half_a / speed_a
+        follow_entry = t_b - half_b / speed_b
+    else:
+        lead_exit = t_b + half_b / speed_b
+        follow_entry = t_a - half_a / speed_a
+    # Âm nghĩa là hai xe sẽ cùng nằm trong vùng một lúc (PET = 0).
+    pet = max(0.0, follow_entry - lead_exit)
     return (pet, point)
 
 

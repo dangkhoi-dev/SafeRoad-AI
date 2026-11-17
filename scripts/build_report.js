@@ -29,6 +29,14 @@ function loadJson(p, fallback) {
   catch (e) { console.warn(`  ! không đọc được ${p} - dùng giá trị mặc định`); return fallback; }
 }
 const EV = loadJson('data/outputs/evaluation.json', null);
+if (EV && EV.version === 2) {
+  // Báo cáo v1 viết quanh cấu trúc kết quả cũ (một luồng chấm, PET ngoại suy). Từ
+  // Chặng 1, số liệu chính thức nằm ở báo cáo cải tiến; tệp .docx/.pdf v1 giữ
+  // nguyên làm lịch sử để hội đồng đối chiếu trước/sau.
+  console.log('evaluation.json là phiên bản 2 - báo cáo v1 giữ nguyên làm lịch sử.');
+  console.log('Sinh báo cáo hiện hành: node scripts/build_improvement_report.js');
+  process.exit(0);
+}
 const RS = loadJson('data/outputs/results.json', null);
 const REAL = loadJson('data/outputs/evaluation_real.json', null);
 const REAL_TILED = loadJson('data/outputs/evaluation_real_tiled.json', null);

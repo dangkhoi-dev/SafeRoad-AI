@@ -1,0 +1,17 @@
+.git
+**/__pycache__
+*.pyc
+build
+site
+notebooks
+tests
+data/raw
+data/processed
+data/jobs
+data/yolo_street
+data/outputs/*.mp4
+data/outputs/*.db
+data/outputs/*.db-wal
+data/outputs/*.db-shm
+data/samples/*.pkl
+data/samples/synthetic_intersection.mp4

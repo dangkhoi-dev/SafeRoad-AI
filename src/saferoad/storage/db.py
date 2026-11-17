@@ -113,6 +113,7 @@ class EventStore:
     def finish_session(self, total_frames: int) -> None:
         if self._session_id is None:
             return
+        self.flush_frame_stats()
         with self._conn() as con:
             con.execute(
                 "UPDATE sessions SET total_frames = ? WHERE id = ?",
@@ -146,16 +147,27 @@ class EventStore:
                 rows,
             )
 
+    #: Ghi thống kê khung hình theo lô. Bản cũ mở kết nối + commit SQLite cho
+    #: TỪNG khung hình - trên video thật 1080p việc này làm chậm cả pipeline.
+    FRAME_BATCH = 150
+
     def add_frame_stat(
         self, frame_idx: int, t: float, n_tracks: int, n_events: int, latency_ms: float
     ) -> None:
         if self._session_id is None:
             return
+        buf = self.__dict__.setdefault("_frame_buf", [])
+        buf.append((self._session_id, frame_idx, t, n_tracks, n_events, latency_ms))
+        if len(buf) >= self.FRAME_BATCH:
+            self.flush_frame_stats()
+
+    def flush_frame_stats(self) -> None:
+        buf = self.__dict__.get("_frame_buf") or []
+        if not buf:
+            return
         with self._conn() as con:
-            con.execute(
-                "INSERT OR REPLACE INTO frame_stats VALUES (?,?,?,?,?,?)",
-                (self._session_id, frame_idx, t, n_tracks, n_events, latency_ms),
-            )
+            con.executemany("INSERT OR REPLACE INTO frame_stats VALUES (?,?,?,?,?,?)", buf)
+        buf.clear()
 
     # ------------------------------------------------------------------ #
     def latest_session(self) -> dict[str, Any] | None:

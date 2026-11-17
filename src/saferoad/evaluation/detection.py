@@ -11,13 +11,12 @@ bằng phép nội suy 101 điểm trên đường cong Precision-Recall.
 
 from __future__ import annotations
 
-from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any
 
 import numpy as np
 
-from ..types import Detection, VehicleClass, iou
+from ..types import Detection
 
 
 @dataclass
@@ -40,6 +39,8 @@ class DetectionMetrics:
     recall50_op: float | None = None
     n_pred: int = 0
     n_gt: int = 0
+    #: Số hộp chuẩn bị bỏ qua vì nhỏ hơn ``min_area`` (0 nếu chấm toàn bộ).
+    n_gt_ignored: int = 0
 
     @property
     def map50(self) -> float:
@@ -64,6 +65,7 @@ class DetectionMetrics:
                             else round(self.recall50_op, 4)),
             "n_pred": self.n_pred,
             "n_gt": self.n_gt,
+            "n_gt_ignored": self.n_gt_ignored,
             "per_class": {
                 k: {
                     "AP50": round(self.ap50_per_class.get(k, float("nan")), 4),
@@ -94,17 +96,56 @@ def _average_precision(tp: np.ndarray, fp: np.ndarray, n_gt: int) -> float:
     return float(out.mean())
 
 
+def _iou_matrix(a: np.ndarray, b: np.ndarray) -> np.ndarray:
+    """IoU giữa mọi cặp hộp ``a`` (P, 4) và ``b`` (G, 4), dạng x1y1x2y2."""
+    if len(a) == 0 or len(b) == 0:
+        return np.zeros((len(a), len(b)))
+    ix1 = np.maximum(a[:, None, 0], b[None, :, 0])
+    iy1 = np.maximum(a[:, None, 1], b[None, :, 1])
+    ix2 = np.minimum(a[:, None, 2], b[None, :, 2])
+    iy2 = np.minimum(a[:, None, 3], b[None, :, 3])
+    inter = np.clip(ix2 - ix1, 0, None) * np.clip(iy2 - iy1, 0, None)
+    area_a = np.clip(a[:, 2] - a[:, 0], 0, None) * np.clip(a[:, 3] - a[:, 1], 0, None)
+    area_b = np.clip(b[:, 2] - b[:, 0], 0, None) * np.clip(b[:, 3] - b[:, 1], 0, None)
+    union = area_a[:, None] + area_b[None, :] - inter
+    with np.errstate(invalid="ignore", divide="ignore"):
+        return np.where(union > 0, inter / union, 0.0)
+
+
+def _greedy_tp(ious: np.ndarray, thr: float) -> np.ndarray:
+    """Ghép tham lam theo thứ tự điểm giảm dần (hàng đã sắp), một-một."""
+    n_p, n_g = ious.shape
+    tp = np.zeros(n_p, dtype=bool)
+    if n_g == 0:
+        return tp
+    matched = np.zeros(n_g, dtype=bool)
+    for i in range(n_p):
+        row = np.where(matched, -1.0, ious[i])
+        j = n_g - 1 - int(np.argmax(row[::-1]))      # hoà thì lấy hộp sau cùng
+        if row[j] >= thr:
+            matched[j] = True
+            tp[i] = True
+    return tp
+
+
 def evaluate_detection(
     predictions: dict[int, list[Detection]],
     ground_truth: dict[int, list[Detection]],
     iou_thresholds: tuple[float, ...] = tuple(np.arange(0.5, 1.0, 0.05)),
     operating_conf: float | None = None,
+    min_area: float = 0.0,
 ) -> DetectionMetrics:
     """So khớp dự đoán với nhãn chuẩn theo từng lớp và tính mAP.
 
-    Tham số:
-        predictions: ``{frame_idx: [Detection, ...]}`` do detector sinh.
-        ground_truth: ``{frame_idx: [Detection, ...]}`` nhãn chuẩn.
+    ``min_area`` > 0: hộp chuẩn nhỏ hơn ngưỡng (pixel²) thành vùng "bỏ qua"
+    theo quy ước COCO (iscrowd/ignore) - không tính là bỏ sót, và dự đoán khớp
+    với chúng không tính là báo nhầm. Dùng khi pipeline cố ý loại vật thể nhỏ
+    hơn ``detection.min_box_area``; con số trên toàn bộ nhãn vẫn được báo riêng.
+
+    Ghép theo đúng quy ước COCO: trong mỗi ảnh, dự đoán xét theo điểm giảm dần,
+    nhận hộp chuẩn chưa ghép có IoU lớn nhất (≥ ngưỡng). Ma trận IoU tính một lần
+    mỗi ảnh bằng numpy - bản trước gọi hàm IoU Python cho từng cặp, chạy hàng
+    chục phút trên video 1080p nhiều đối tượng.
     """
     metrics = DetectionMetrics()
     classes = {d.cls for dets in ground_truth.values() for d in dets}
@@ -117,44 +158,60 @@ def evaluate_detection(
     gt50_total = 0
     tp50_op = fp50_op = 0
 
+    def _big(b) -> bool:
+        return (b[2] - b[0]) * (b[3] - b[1]) >= min_area
+
+    if min_area > 0:
+        metrics.n_gt = sum(1 for v in ground_truth.values() for d in v if _big(d.bbox))
+        metrics.n_gt_ignored = sum(len(v) for v in ground_truth.values()) - metrics.n_gt
+
     for cls in sorted(classes, key=lambda c: c.value):
-        gt_by_frame = {
-            f: [d for d in dets if d.cls is cls] for f, dets in ground_truth.items()
-        }
-        n_gt = sum(len(v) for v in gt_by_frame.values())
+        n_gt = sum(1 for dets in ground_truth.values() for d in dets
+                   if d.cls is cls and _big(d.bbox))
         metrics.n_gt_per_class[cls.value] = n_gt
         if n_gt == 0:
             continue
 
-        # Gom mọi dự đoán của lớp này, sắp theo điểm tin cậy giảm dần.
-        preds: list[tuple[float, int, Detection]] = []
+        scores_all: list[np.ndarray] = []
+        tps_all: dict[float, list[np.ndarray]] = {float(t): [] for t in iou_thresholds}
+        ign_all: dict[float, list[np.ndarray]] = {float(t): [] for t in iou_thresholds}
         for f, dets in predictions.items():
-            for d in dets:
-                if d.cls is cls:
-                    preds.append((d.score, f, d))
-        preds.sort(key=lambda p: -p[0])
+            p = [d for d in dets if d.cls is cls]
+            if not p:
+                continue
+            sc = np.array([d.score for d in p], dtype=float)
+            order = np.argsort(-sc, kind="stable")
+            pb = np.array([p[i].bbox for i in order], dtype=float)
+            gts = [d.bbox for d in ground_truth.get(f, []) if d.cls is cls]
+            g = [b for b in gts if _big(b)]
+            small = [b for b in gts if not _big(b)]
+            ious = _iou_matrix(pb, np.array(g, dtype=float).reshape(-1, 4))
+            ious_s = (_iou_matrix(pb, np.array(small, dtype=float).reshape(-1, 4))
+                      if small else None)
+            scores_all.append(sc[order])
+            for thr in tps_all:
+                tp = _greedy_tp(ious, thr)
+                tps_all[thr].append(tp)
+                if ious_s is not None:
+                    ign_all[thr].append(~tp & (ious_s.max(axis=1) >= thr))
+                else:
+                    ign_all[thr].append(np.zeros(len(tp), dtype=bool))
+
+        if scores_all:
+            scores = np.concatenate(scores_all)
+            glob = np.argsort(-scores, kind="stable")
+            scores = scores[glob]
+        else:
+            scores = np.zeros(0)
+            glob = np.zeros(0, dtype=int)
 
         aps = []
-        for thr in iou_thresholds:
-            matched: dict[int, set[int]] = defaultdict(set)
-            tp = np.zeros(len(preds))
-            fp = np.zeros(len(preds))
-
-            for i, (_score, frame, det) in enumerate(preds):
-                gts = gt_by_frame.get(frame, [])
-                best_j, best_iou = -1, thr
-                for j, gt in enumerate(gts):
-                    if j in matched[frame]:
-                        continue
-                    v = iou(det.bbox, gt.bbox)
-                    if v >= best_iou:
-                        best_iou, best_j = v, j
-                if best_j >= 0:
-                    matched[frame].add(best_j)
-                    tp[i] = 1
-                else:
-                    fp[i] = 1
-
+        for thr, parts in tps_all.items():
+            tp = (np.concatenate(parts)[glob] if parts else np.zeros(0, dtype=bool)).astype(float)
+            keep = ~(np.concatenate(ign_all[thr])[glob] if parts else np.zeros(0, dtype=bool))
+            tp = tp[keep]
+            sc_thr = scores[keep]
+            fp = 1.0 - tp
             aps.append(_average_precision(tp, fp, n_gt))
             if abs(thr - 0.5) < 1e-6:
                 metrics.ap50_per_class[cls.value] = aps[-1]
@@ -162,10 +219,7 @@ def evaluate_detection(
                 fp50_total += int(fp.sum())
                 gt50_total += n_gt
                 if operating_conf is not None:
-                    # Dự đoán đã xếp theo điểm giảm dần và được ghép tham lam
-                    # theo đúng thứ tự đó, nên kết quả ghép của k dự đoán đầu
-                    # (điểm ≥ ngưỡng) trùng khít với việc chạy riêng tập con ấy.
-                    k = sum(1 for s, _f, _d in preds if s >= operating_conf)
+                    k = int((sc_thr >= operating_conf).sum())
                     tp50_op += int(tp[:k].sum())
                     fp50_op += int(fp[:k].sum())
 

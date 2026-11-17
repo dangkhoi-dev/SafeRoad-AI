@@ -81,6 +81,13 @@ class TrajectoryProcessor:
         self.smooth_window = homo_cfg.smooth_window
         self.min_states = track_cfg.min_states_for_velocity
         self.alpha = track_cfg.velocity_alpha
+        self.stationary_speed = getattr(track_cfg, "stationary_speed", 0.0)
+        self.stationary_window = getattr(track_cfg, "stationary_window_s", 2.0)
+        #: Hướng lần cuối còn chạy rõ ràng của từng track (radian).
+        self._moving_heading: dict[int, float] = {}
+        #: Trục di chuyển chủ đạo của cảnh (trung bình góc nhân đôi, có quên dần)
+        #: - dùng làm hướng thân xe cho xe đứng yên từ lúc xuất hiện.
+        self._axis = [0.0, 0.0, 0.0]   # Σcos2θ, Σsin2θ, Σw
         self._view_cache: dict[tuple[int, int], tuple[float, float]] = {}
 
     # ------------------------------------------------------------------ #
@@ -179,6 +186,57 @@ class TrajectoryProcessor:
 
         # Ghi lại vị trí đã làm mượt để quỹ đạo vẽ ra không răng cưa.
         last.ground = (float(smoothed[-1, 0]), float(smoothed[-1, 1]))
+
+        if self.stationary_speed > 0:
+            sp = last.speed
+            if sp > 2.0:
+                h = last.heading
+                self._moving_heading[track.track_id] = h
+                c, sn, w = self._axis
+                k = 0.999
+                self._axis = [k * c + math.cos(2 * h), k * sn + math.sin(2 * h), k * w + 1.0]
+            self._clamp_stationary(track)
+
+    def _clamp_stationary(self, track: Track) -> None:
+        """Đối tượng gần như không dịch chuyển trong cửa sổ dài ⇒ vận tốc ≈ 0.
+
+        Giữ hướng thân xe (để mô hình hình tròn vẫn đặt đúng trục xe) bằng cách
+        để lại một vector rất nhỏ cùng hướng với lần cuối xe còn chạy.
+        """
+        last = track.history[-1]
+        t_from = last.t - self.stationary_window
+        if track.history[0].t > t_from:
+            return                                  # chưa đủ dài để kết luận
+        old = None
+        for st in reversed(track.history):
+            if st.t <= t_from:
+                old = st
+                break
+        if old is None:
+            return
+        dt = last.t - old.t
+        if dt <= 0:
+            return
+        net = math.dist(last.ground, old.ground) / dt
+        if net >= self.stationary_speed:
+            return
+        eps = 1e-4
+        prev = track.history[-2].velocity if len(track.history) >= 2 else (0.0, 0.0)
+        if 0 < math.hypot(*prev) <= 2 * eps:
+            last.velocity = prev                   # đã kẹp từ frame trước
+            return
+        h = self._moving_heading.get(track.track_id)
+        if h is None:
+            # Xe đứng yên từ lúc xuất hiện: hướng vận tốc lúc này chỉ là nhiễu,
+            # lấy trục di chuyển chủ đạo của cảnh nếu nó đủ rõ.
+            c, sn, w = self._axis
+            noisy = math.atan2(last.velocity[1], last.velocity[0])
+            if w > 20 and math.hypot(c, sn) / w > 0.6:
+                axis = 0.5 * math.atan2(sn, c)
+                h = axis if math.cos(noisy - axis) >= 0 else axis + math.pi
+            else:
+                h = noisy
+        last.velocity = (math.cos(h) * eps, math.sin(h) * eps)
 
 
 def acceleration(track: Track, window: int = 10) -> float:

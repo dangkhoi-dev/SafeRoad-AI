@@ -1,0 +1,159 @@
+{
+  "video": "data/processed/street/street_labeled_0_300s.mp4",
+  "duration_s": 300.3,
+  "note": "Cảnh báo tham chiếu = tầng xung đột chạy trên quỹ đạo người gán nhãn. Không phải nhãn xung đột; dùng để thấy phần nào của số cảnh báo đến từ sai số hình học thay vì từ tình huống giao thông.",
+  "steps": [
+    {
+      "step": "A",
+      "label": "Toàn khung hình, cấu hình cũ",
+      "n_events": 1956,
+      "per_hour": 23448.6,
+      "by_contact": {
+        "near_miss": 1139,
+        "body_overlap": 541,
+        "collision_suspected": 276
+      },
+      "by_type": {
+        "turning": 435,
+        "rear_end": 264,
+        "lane_change": 270,
+        "head_on": 513,
+        "crossing": 258,
+        "pedestrian": 216
+      },
+      "by_pair": {
+        "car-car": 1740,
+        "car-pedestrian": 55,
+        "pedestrian-pedestrian": 161
+      },
+      "funnel": {
+        "episodes_opened": 10301,
+        "rejected_proximity_gate": 7370,
+        "emitted": 1956,
+        "rejected_too_short": 284,
+        "rejected_pet_measured_above_threshold": 281,
+        "merged_into_previous": 410
+      },
+      "seconds": 369.8
+    },
+    {
+      "step": "B",
+      "label": "+ bỏ cặp hai người đi bộ",
+      "n_events": 1794,
+      "per_hour": 21506.5,
+      "by_contact": {
+        "near_miss": 1061,
+        "body_overlap": 487,
+        "collision_suspected": 246
+      },
+      "by_type": {
+        "turning": 435,
+        "rear_end": 264,
+        "lane_change": 270,
+        "head_on": 512,
+        "crossing": 258,
+        "pedestrian": 55
+      },
+      "by_pair": {
+        "car-car": 1739,
+        "car-pedestrian": 55
+      },
+      "funnel": {
+        "episodes_opened": 9899,
+        "rejected_proximity_gate": 7248,
+        "emitted": 1794,
+        "rejected_too_short": 247,
+        "rejected_pet_measured_above_threshold": 226,
+        "merged_into_previous": 384
+      },
+      "seconds": 348.8
+    },
+    {
+      "step": "C",
+      "label": "+ chỉ xét mặt đường ≤ 65 m",
+      "n_events": 232,
+      "per_hour": 2781.2,
+      "by_contact": {
+        "collision_suspected": 31,
+        "near_miss": 143,
+        "body_overlap": 58
+      },
+      "by_type": {
+        "head_on": 82,
+        "lane_change": 35,
+        "crossing": 32,
+        "rear_end": 35,
+        "turning": 15,
+        "pedestrian": 33
+      },
+      "by_pair": {
+        "car-car": 199,
+        "car-pedestrian": 33
+      },
+      "funnel": {
+        "episodes_opened": 1157,
+        "rejected_proximity_gate": 782,
+        "rejected_too_short": 52,
+        "emitted": 232,
+        "merged_into_previous": 68,
+        "rejected_pet_measured_above_threshold": 23
+      },
+      "seconds": 123.9
+    },
+    {
+      "step": "D",
+      "label": "+ kẹp vận tốc xe đứng yên",
+      "n_events": 117,
+      "per_hour": 1402.6,
+      "by_contact": {
+        "body_overlap": 15,
+        "near_miss": 89,
+        "collision_suspected": 13
+      },
+      "by_type": {
+        "lane_change": 12,
+        "rear_end": 69,
+        "turning": 12,
+        "head_on": 7,
+        "crossing": 5,
+        "pedestrian": 12
+      },
+      "by_pair": {
+        "car-car": 105,
+        "car-pedestrian": 12
+      },
+      "funnel": {
+        "episodes_opened": 617,
+        "rejected_proximity_gate": 452,
+        "rejected_too_short": 18,
+        "emitted": 117,
+        "merged_into_previous": 12,
+        "rejected_pet_measured_above_threshold": 18
+      },
+      "seconds": 111.1
+    },
+    {
+      "step": "E",
+      "label": "+ chỉ lòng đường đã hiệu chuẩn (cấu hình dùng)",
+      "n_events": 2,
+      "per_hour": 24.0,
+      "by_contact": {
+        "near_miss": 2
+      },
+      "by_type": {
+        "rear_end": 2
+      },
+      "by_pair": {
+        "car-car": 2
+      },
+      "funnel": {
+        "episodes_opened": 79,
+        "rejected_proximity_gate": 72,
+        "emitted": 2,
+        "rejected_too_short": 2,
+        "rejected_pet_measured_above_threshold": 3
+      },
+      "seconds": 81.5
+    }
+  ]
+}

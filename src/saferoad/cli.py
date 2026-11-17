@@ -22,6 +22,8 @@ import pickle
 import sys
 from pathlib import Path
 
+import yaml
+
 from .config import Config
 from .utils.bundle import load_bundle
 
@@ -52,16 +54,23 @@ def cmd_simulate(args: argparse.Namespace) -> int:
     )
     print(f"      {len(vehicles)} phương tiện được lên lịch")
 
-    print("[2/4] Chạy vi mô phỏng (IDM + đèn tín hiệu + phanh tránh)...")
-    vehicles = simulate(vehicles, args.duration)
+    print("[2/4] Chạy vi mô phỏng (IDM + đèn tín hiệu + phanh tránh + va chạm có vật lý)...")
+    report: dict = {}
+    vehicles = simulate(vehicles, args.duration, report=report)
     print(f"      {len(vehicles)} phương tiện có quỹ đạo")
+    print("      Kiểm tra kịch bản: "
+          f"lên lịch {report['n_scheduled']}, vào được {report['n_spawned']}, "
+          f"bỏ ở điểm vào {report['n_dropped_at_entry']}, đi hết tuyến {report['n_completed_route']}, "
+          f"va chạm {report['n_crashes']} vụ, vượt đèn đỏ {report['n_runs_red']}")
 
-    print("[3/4] Tính nhãn chuẩn near-miss (oracle)...")
+    print("[3/4] Tính nhãn chuẩn (oracle): near-miss và va chạm, PET đo từ mốc vào/ra...")
     from .simulation.camera import COVERAGE
 
     gt = compute_ground_truth(vehicles, region=COVERAGE)
     severe = sum(1 for g in gt if g.ttc < 1.5)
-    print(f"      {len(gt)} near-miss, trong đó {severe} nghiêm trọng (TTC<1.5s)")
+    n_coll = sum(1 for g in gt if g.kind == "collision")
+    print(f"      {len(gt)} xung đột: {len(gt) - n_coll} near-miss + {n_coll} va chạm; "
+          f"{severe} có TTC<1.5s")
 
     print("[4/4] Kết xuất video...")
     video_path = out_dir / "synthetic_intersection.mp4"
@@ -79,6 +88,8 @@ def cmd_simulate(args: argparse.Namespace) -> int:
                 "id_map": id_map, "camera": renderer.camera, "fps": args.fps,
                 "duration": args.duration, "seed": args.seed,
                 "frame_size": (args.width, args.height),
+                "arrival_rate": args.arrival_rate, "scenario_report": report,
+                "pinhole": renderer.cam, "gt_version": 2,
             },
             fh,
         )
@@ -88,7 +99,12 @@ def cmd_simulate(args: argparse.Namespace) -> int:
         "ground_truth_bundle": str(bundle_path),
         "n_vehicles": len(vehicles),
         "n_ground_truth_conflicts": len(gt),
+        "n_ground_truth_near_miss": len(gt) - n_coll,
+        "n_ground_truth_collision": n_coll,
         "n_severe": severe,
+        "seed": args.seed,
+        "arrival_rate": args.arrival_rate,
+        "scenario_check": {k: v for k, v in report.items() if k != "crashes"},
         "duration_s": args.duration,
         "fps": args.fps,
     }
@@ -130,8 +146,12 @@ def cmd_run(args: argparse.Namespace) -> int:
         if args.replay_detections:
             from .detection.detector import ReplayDetector
 
+            dc = cfg.detection
             detector = ReplayDetector(
-                bundle["detections"], noise_px=args.noise_px, miss_rate=args.miss_rate
+                bundle["detections"],
+                noise_px=dc.replay_noise_px if args.noise_px is None else args.noise_px,
+                miss_rate=dc.replay_miss_rate if args.miss_rate is None else args.miss_rate,
+                seed=dc.replay_seed,
             )
             pipe = Pipeline(cfg, detector=detector)
         else:
@@ -145,6 +165,12 @@ def cmd_run(args: argparse.Namespace) -> int:
     out_dir = Path(cfg.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     Pipeline.export_json(result, out_dir / "results.json", cfg)
+    if args.review_csv:
+        from .evaluation.real_conflicts import export_system_candidates
+
+        n = export_system_candidates(args.review_csv, result.events, cfg.video.source,
+                                     result.fps_source)
+        print(f"  Danh sách rà soát ({n} cảnh báo): {args.review_csv}")
 
     summary = result.summary()
     print("\n" + "=" * 62)
@@ -172,104 +198,121 @@ def cmd_run(args: argparse.Namespace) -> int:
 
 # --------------------------------------------------------------------------- #
 def cmd_evaluate(args: argparse.Namespace) -> int:
-    """Chấm điểm hệ thống trên tập synthetic có ground truth."""
-    from .evaluation.ablation import run_ablation, run_noise_sweep, save_report, to_markdown
-    from .evaluation.metrics import (
-        CONTACT_BANDS,
-        build_gt_points,
-        build_id_mapping,
-        evaluate_conflicts,
-        severity_breakdown,
+    """Chấm điểm trên tập mô phỏng: kết quả chính + đối soát + ablation + quét nhiễu.
+
+    Kết quả chính và ``results.json`` cho dashboard lấy từ **cùng một lần chạy**,
+    nên số sự kiện trên dashboard và trong báo cáo luôn khớp nhau.
+    """
+    from .evaluation.ablation import CUMULATIVE, LEAVE_ONE_OUT, run_noise_sweep, run_stages
+    from .evaluation.experiment import (
+        case_from_bundle, file_hash, reproducibility, run_case, strip_private,
     )
-    from .detection.detector import ReplayDetector
     from .pipeline.runner import Pipeline
-    from .simulation.camera import COVERAGE
 
     bundle = load_bundle(args.ground_truth)
+    if bundle.get("gt_version", 1) < 2:
+        print("Bundle mô phỏng được tạo bằng phiên bản cũ (nhãn PET và va chạm theo định "
+              "nghĩa cũ). Chạy lại: saferoad simulate --duration 300 --seed 42",
+              file=sys.stderr)
+        return 2
+    case = case_from_bundle(bundle)
+    cfg = Config.load(args.config)
+    if args.noise_px is not None:
+        cfg.detection.replay_noise_px = args.noise_px
+    if args.miss_rate is not None:
+        cfg.detection.replay_miss_rate = args.miss_rate
 
-    cfg = Config.load(args.config) if args.config else Config()
-    cfg.video.source = args.source or str(
-        Path(args.ground_truth).parent / "synthetic_intersection.mp4"
-    )
-    cfg.homography.image_points = bundle["camera"].image_points
-    cfg.homography.world_points = bundle["camera"].world_points
-    cfg.video.write_overlay = False
+    gt = case.ground_truth
+    n_coll = sum(1 for g in gt if g.kind == "collision")
+    print(f"Nhãn chuẩn: {len(gt)} xung đột ({len(gt) - n_coll} near-miss, {n_coll} va chạm) "
+          f"trên {len(case.vehicles)} phương tiện, {case.duration:.0f} s\n")
 
-    gt = bundle["ground_truth"]
-    vehicles = bundle["vehicles"]
-    detections = bundle["detections"]
-    gt_points = build_gt_points(
-        detections, bundle["id_map"], vehicles, bundle["fps"],
-        min_box_area=cfg.detection.min_box_area,
-    )
-    n_eval_points = sum(len(v) for v in gt_points.values())
-    print(
-        f"Nhãn chuẩn: {len(gt)} near-miss trên {len(vehicles)} phương tiện\n"
-        f"Vùng đánh giá tracking: {n_eval_points} điểm-đối-tượng "
-        f"(bbox ≥ {cfg.detection.min_box_area:.0f} px²)\n"
-    )
+    print("── Kết quả chính (cấu hình đầy đủ) ─────────────────────────")
+    main = run_case(cfg, case, with_behavior=True)
+    m, rec = main["metrics"], main["reconciliation"]
+    for k, v in rec["rows"].items():
+        print(f"  {k:40s} {v}")
+    for k, ok in rec["checks"].items():
+        print(f"  [{'OK' if ok else 'LỆCH'}] {k}")
+    print(f"  Precision = {m['precision']['num']}/{m['precision']['den']} = {m['precision']['value']}")
+    print(f"  Recall    = {m['recall']['num']}/{m['recall']['den']} = {m['recall']['value']}")
 
-    print("── Bảng ablation ───────────────────────────────────────────")
-    ablation = run_ablation(
-        cfg, detections, gt, vehicles, gt_points, region=COVERAGE,
-        noise_px=args.noise_px, miss_rate=args.miss_rate,
-    )
+    if not args.no_export:
+        out_dir = Path(args.out).parent
+        cfg_export = Config.load(args.config)
+        Pipeline.export_json(main["_result"], out_dir / "results.json", cfg_export)
+        print(f"  → results.json cho dashboard ghi từ CHÍNH lần chạy này: {out_dir / 'results.json'}")
 
-    print("\n── Quét mức nhiễu detector ─────────────────────────────────")
-    sweep = run_noise_sweep(
-        cfg, detections, gt, vehicles, gt_points, region=COVERAGE,
-        miss_rate=args.miss_rate,
-    )
+    print("\n── Ablation cộng dồn (cùng mẫu) ─────────────────────────────")
+    cumulative = run_stages(cfg, case, CUMULATIVE)
+    print("\n── Ablation bỏ từng khối khỏi bản đầy đủ (cùng mẫu) ─────────")
+    loo = run_stages(cfg, case, LEAVE_ONE_OUT)
+    print("\n── Quét nhiễu detector ──────────────────────────────────────")
+    sweep = run_noise_sweep(cfg, case)
 
-    print("\n── Chi tiết theo mức nghiêm trọng (cấu hình đầy đủ) ────────")
-    detector = ReplayDetector(detections, noise_px=args.noise_px,
-                              miss_rate=args.miss_rate, seed=17)
-    result = Pipeline(cfg, detector=detector, write_db=False).run(progress_every=0)
-    mapping, track_metrics = build_id_mapping(result.tracks, gt_points)
-    severity = severity_breakdown(result.events, gt, mapping, region=COVERAGE)
-    for row in severity:
-        if row.get("recall") is not None:
-            print(f"  {row['band']:32s} n={row['n_gt']:3d}  Recall={row['recall']:.3f}")
-
-    print("\n── Tách các nhãn mà thân xe đã chồng lên nhau ──────────────")
-    contact = severity_breakdown(
-        result.events, gt, mapping, bands=CONTACT_BANDS, region=COVERAGE
-    )
-    for row in contact:
-        if row.get("recall") is not None:
-            print(f"  {row['band']:36s} n={row['n_gt']:3d}  Recall={row['recall']:.3f}")
-
-    final = evaluate_conflicts(result.events, gt, mapping, region=COVERAGE)
-    out = Path(args.out)
-    save_report(
-        ablation, sweep, severity, out,
-        extra={
-            "final": final.to_dict(),
-            "contact_breakdown": contact,
-            "tracking": track_metrics.to_dict(),
-            "runtime": result.summary(),
-            "setup": {
-                "n_ground_truth": len(gt),
-                "n_vehicles": len(vehicles),
-                "noise_px": args.noise_px,
-                "miss_rate": args.miss_rate,
-                "duration_s": bundle["duration"],
-                "seed": bundle["seed"],
-                "environment": _environment(),
-            },
+    payload = {
+        "version": 2,
+        "setup": {
+            "n_ground_truth": len(gt),
+            "n_ground_truth_near_miss": len(gt) - n_coll,
+            "n_ground_truth_collision": n_coll,
+            "n_vehicles": len(case.vehicles),
+            "duration_s": case.duration,
+            "seed": bundle["seed"],
+            "arrival_rate": bundle.get("arrival_rate"),
+            "noise_px": cfg.detection.replay_noise_px,
+            "miss_rate": cfg.detection.replay_miss_rate,
+            "replay_seed": cfg.detection.replay_seed,
+            "eval_region": list(case.region),
         },
-    )
-
-    print("\n" + to_markdown(ablation))
+        "scenario_check": {k: v for k, v in case.scenario_report.items() if k != "crashes"},
+        "main": strip_private(main),
+        "ablation": {"cumulative": cumulative, "leave_one_out": loo},
+        "noise_sweep": sweep,
+        "reproducibility": reproducibility(cfg, {
+            "bundle": str(args.ground_truth),
+            "bundle_sha256": file_hash(args.ground_truth),
+        }),
+    }
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(_json_safe(payload), ensure_ascii=False, indent=2),
+                   encoding="utf-8")
     print(f"\n✓ Báo cáo đánh giá: {out}")
-    print(
-        f"\nTỔNG KẾT: Precision={final.precision:.3f}  Recall={final.recall:.3f}  "
-        f"F1={final.f1:.3f}  TTC-MAE={final.ttc_mae:.3f}s  IDF1={track_metrics.idf1:.3f}"
-    )
+    print(f"\nTỔNG KẾT: Precision={m['precision']['value']}  Recall={m['recall']['value']}  "
+          f"F1={m['f1']}  TTC-MAE={m['ttc_mae']}s  "
+          f"PET đo MAE={(main['pet_errors'].get('measured') or {}).get('mae')}s  "
+          f"IDF1={main['tracking']['idf1']}")
+    return 0
+
+
+def cmd_evaluate_grid(args: argparse.Namespace) -> int:
+    """Lưới thực nghiệm mật độ × góc camera × điều kiện ánh sáng (đại diện)."""
+    from .evaluation.experiment import reproducibility
+    from .evaluation.grid import run_grid
+
+    cfg = Config.load(args.config)
+    print("Lưới: 3 mật độ × 3 camera × 3 hồ sơ detector, mỗi ô chạy bản đầy đủ, "
+          "baseline và bản PET cũ trên cùng kịch bản.\n")
+    grid = run_grid(cfg, duration=args.duration, seed=args.seed)
+    payload = {"version": 2, **grid, "reproducibility": reproducibility(cfg)}
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(_json_safe(payload), ensure_ascii=False, indent=2),
+                   encoding="utf-8")
+    print(f"\n✓ {out}")
     return 0
 
 
 # --------------------------------------------------------------------------- #
+class _IgnoreClientDisconnect(logging.Filter):
+    """Bỏ log khi phía trình duyệt tự đóng kết nối - không phải lỗi máy chủ."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        exc = record.exc_info[1] if record.exc_info else None
+        return not isinstance(exc, (ConnectionResetError, ConnectionAbortedError))
+
+
 def cmd_serve(args: argparse.Namespace) -> int:
     """Bật dashboard web."""
     import uvicorn
@@ -279,7 +322,11 @@ def cmd_serve(args: argparse.Namespace) -> int:
     cfg = Config.load(args.config) if args.config else Config()
     if args.results:
         cfg.output_dir = str(Path(args.results).parent)
-    app = create_app(cfg, results_path=args.results, video_path=args.video)
+    app = create_app(cfg, results_path=args.results, video_path=args.video,
+                     demo=args.demo, sample_video=args.sample_video)
+    # Trình duyệt hay huỷ ngang yêu cầu (tua video, tải lại trang). Trên Windows,
+    # vòng lặp Proactor ghi việc đó thành ERROR "WinError 10054" dù không có gì hỏng.
+    logging.getLogger("asyncio").addFilter(_IgnoreClientDisconnect())
     print(f"\n  Dashboard: http://{args.host}:{args.port}\n")
     uvicorn.run(app, host=args.host, port=args.port, log_level="warning")
     return 0
@@ -403,47 +450,59 @@ def _json_safe(obj):
 
 
 def cmd_evaluate_real(args: argparse.Namespace) -> int:
-    """Chấm điểm detection + tracking trên dữ liệu thật có nhãn."""
+    """Detection → tracking → cảnh báo trên CÙNG một video thật có nhãn bbox + ID.
+
+    Ba bảng trên cùng dữ liệu: mAP detection, IDF1/MOTA tracking, và cảnh báo
+    xung đột của pipeline so với cảnh báo tham chiếu chạy trên quỹ đạo người gán
+    nhãn. Ghi kèm danh sách ứng viên để người rà soát.
+    """
     from .detection.detector import build_detector
     from .evaluation.detection import evaluate_detection
+    from .evaluation.experiment import file_hash, reproducibility, strip_private
     from .evaluation.real import conflict_statistics, tracking_metrics_from_boxes
+    from .evaluation.real_conflicts import (
+        compare_to_reference, export_review_candidates, reference_events,
+    )
     from .pipeline.runner import Pipeline
+    from .types import Detection, VehicleClass
 
     bundle = load_bundle(args.ground_truth)
     seq = bundle["sequence"]
+    fps = float(bundle.get("fps", 30))
 
     cfg = Config.load(args.config) if args.config else Config()
     cfg.video.source = args.source
     cfg.video.write_overlay = not args.no_overlay
-    cfg.video.overlay_path = str(Path(args.out).parent / "overlay_real.mp4")
-    cfg.db_path = str(Path(args.out).parent / "saferoad_real.db")
+    out = Path(args.out)
+    tag = out.stem.replace("evaluation_", "")
+    cfg.video.overlay_path = str(out.parent / f"overlay_{tag}.mp4")
+    cfg.db_path = str(out.parent / f"saferoad_{tag}.db")
     if args.device:
         cfg.detection.device = args.device
     if args.weights:
         cfg.detection.weights = args.weights
     if args.max_frames:
         cfg.video.max_frames = args.max_frames
+    if args.start_frame:
+        cfg.video.start_frame = args.start_frame
     if getattr(args, "backend", None):
         cfg.detection.backend = args.backend
+    if args.imgsz:
+        cfg.detection.imgsz = args.imgsz
 
-    # mAP phải được tính trên detection ở ngưỡng tin cậy RẤT THẤP. Đây không
-    # phải tiểu tiết: mAP là diện tích dưới đường precision-recall, và chấm nó
-    # trên danh sách đã cắt ở ngưỡng vận hành (0,25) thì đường PR bị cụt ở giữa
-    # chừng - mAP thu được thấp hơn giá trị thật, và thấp theo cách không so
-    # sánh được với bất kỳ con số mAP nào khác trong tài liệu. Chuẩn COCO dùng
-    # 0,001. Ngược lại, pipeline (tracking, xung đột) phải chạy ở đúng ngưỡng
-    # vận hành, nếu không sẽ ngập detection rác.
-    #
-    # Chạy detector MỘT lần ở ngưỡng thấp rồi lọc lại cho pipeline - vừa đúng
-    # cả hai mục đích, vừa không phải chạy YOLO hai lượt trên cùng video.
     op_conf = cfg.detection.conf
     map_conf = min(args.map_conf, op_conf)
     cfg.detection.conf = map_conf
     print(f"Chạy pipeline trên dữ liệu thật: {cfg.video.source}")
     print(f"  Ngưỡng chấm mAP: {map_conf}  ·  ngưỡng vận hành pipeline: {op_conf}")
-    print(f"  Detector: {cfg.detection.backend}")
     detector = build_detector(cfg.detection)
 
+    # Lớp có trong dự đoán nhưng KHÔNG có trong bộ nhãn được gộp vào lớp cha
+    # tương ứng trước khi chấm (vd. bộ nhãn đại lộ chỉ có "Car" gồm cả xe tải nhẹ).
+    gt_classes = {d.cls for dets in seq.detections.values() for d in dets}
+    remap = {}
+    if VehicleClass.TRUCK not in gt_classes and VehicleClass.CAR in gt_classes:
+        remap[VehicleClass.TRUCK] = VehicleClass.CAR
     captured: dict[int, list] = {}
 
     class _Recording:
@@ -456,75 +515,160 @@ def cmd_evaluate_real(args: argparse.Namespace) -> int:
 
         def detect(self, frame, frame_idx=0):
             raw = self.inner.detect(frame, frame_idx)
-            # Chuẩn COCO chấm mAP với tối đa 100 detection mỗi ảnh. Giới hạn
-            # này cũng cần cho bộ nhớ: ở ngưỡng 0,001 với detector chia ô, một
-            # frame có thể trả về hàng nghìn hộp, nhân với vài nghìn frame là
-            # hàng triệu đối tượng phải giữ trong RAM.
-            captured[frame_idx] = sorted(
-                raw, key=lambda d: d.score, reverse=True
-            )[:MAX_DETS_PER_IMAGE]
+            top = sorted(raw, key=lambda d: d.score, reverse=True)[:MAX_DETS_PER_IMAGE]
+            captured[frame_idx] = [
+                Detection(bbox=d.bbox, score=d.score, cls=remap.get(d.cls, d.cls)) for d in top
+            ]
             return [d for d in raw if d.score >= op_conf]
 
-    result = Pipeline(cfg, detector=_Recording(detector), write_db=True).run()
+    result = Pipeline(cfg, detector=_Recording(detector), write_db=not args.no_db).run()
+    first = cfg.video.start_frame
+    last = first + result.n_frames
+    gt_dets = {f: d for f, d in seq.detections.items() if first <= f < last}
 
-    # --- Detection ---------------------------------------------------- #
-    gt_dets = {
-        f: d for f, d in seq.detections.items()
-        if not args.max_frames or f < args.max_frames
-    }
+    # --- 1. Detection ---------------------------------------------------- #
     det_metrics = evaluate_detection(captured, gt_dets, operating_conf=op_conf)
+    # Cùng dự đoán, bỏ qua hộp chuẩn nhỏ hơn min_box_area - vùng pipeline cố ý
+    # không xử lý (quá xa camera). Báo cả hai để không che con số khắt khe hơn.
+    det_metrics_big = evaluate_detection(captured, gt_dets, operating_conf=op_conf,
+                                         min_area=cfg.detection.min_box_area)
 
-    # --- Tracking ------------------------------------------------------ #
-    _mapping, track_metrics = tracking_metrics_from_boxes(result.tracks, seq)
+    # --- 2. Tracking ----------------------------------------------------- #
+    mapping, track_metrics = tracking_metrics_from_boxes(
+        result.tracks, seq, min_area=cfg.detection.min_box_area)
 
-    # --- Xung đột (chỉ thống kê mô tả) --------------------------------- #
-    conflicts = conflict_statistics(result.events)
+    # --- 3. Cảnh báo: hệ thống so với tham chiếu trên quỹ đạo người gán ---- #
+    cfg_ref = Config.load(args.config) if args.config else Config()
+    ref_events, ref_funnel, _ref_tracks = reference_events(cfg_ref, seq, fps)
+    ref_events = [e for e in ref_events if first / fps <= e.t < last / fps]
+    cmp_ = compare_to_reference(result.events, result.funnel, ref_events, mapping,
+                                result.duration)
+    review_path = out.parent / f"review_candidates_{tag}.csv"
+    n_review = export_review_candidates(
+        review_path, result.events, ref_events, cmp_["_detail"], mapping,
+        video=str(cfg.video.source), fps=fps)
+
+    speed = None
+    if cfg_ref.homography.image_points:
+        from .geometry.calibration import speed_check
+
+        speed = speed_check(seq, cfg_ref.homography, fps)
+    calib = None
+    if args.calibration_report and Path(args.calibration_report).exists():
+        calib = json.loads(Path(args.calibration_report).read_text(encoding="utf-8"))
+        calib = {k: calib[k] for k in ("source", "assumptions", "n_points", "fit",
+                                       "leave_one_out", "check") if k in calib}
 
     payload = {
-        "dataset": seq.summary(),
-        "thresholds": {"map_conf": map_conf, "pipeline_conf": op_conf},
+        "version": 2,
+        "dataset": {**seq.summary(), "frames_evaluated": [first, last],
+                    "stitch": bundle.get("stitch")},
+        "thresholds": {"map_conf": map_conf, "pipeline_conf": op_conf,
+                       "min_box_area": cfg.detection.min_box_area},
         "detector_backend": cfg.detection.backend,
+        "weights": cfg.detection.weights,
+        "class_remap_for_scoring": {k.value: v.value for k, v in remap.items()},
+        "calibration": calib,
+        "calibration_speed_check": speed,
         "detection": det_metrics.to_dict(),
+        "detection_min_area": det_metrics_big.to_dict(),
         "tracking": track_metrics.to_dict(),
-        "conflicts": conflicts,
+        "alerts": {
+            **strip_private(cmp_),
+            "reference_funnel": ref_funnel,
+            "system_statistics": conflict_statistics(result.events),
+            "review_candidates_csv": str(review_path),
+            "n_review_candidates": n_review,
+        },
         "runtime": result.summary(),
-        "environment": _environment(),
+        "reproducibility": reproducibility(cfg, {
+            "ground_truth": str(args.ground_truth),
+            "ground_truth_sha256": file_hash(args.ground_truth),
+            "weights_sha256": file_hash(cfg.detection.weights),
+        }),
         "note": (
-            "Dataset thật có nhãn bbox và ID đối tượng nhưng KHÔNG có nhãn xung đột. "
-            "Vì vậy mục 'conflicts' chỉ là thống kê mô tả; Precision/Recall của "
-            "near-miss được đo riêng trên tập mô phỏng có ground truth."
+            "Bộ dữ liệu có nhãn bbox + ID nhưng KHÔNG có nhãn xung đột. 'alerts' so "
+            "pipeline với cảnh báo tham chiếu (cùng thuật toán chạy trên quỹ đạo người "
+            "gán nhãn) - đo sai số do detection + tracking, không phải độ đúng tuyệt "
+            "đối. Độ đúng tuyệt đối cần nhãn người rà soát: xem review_candidates_*.csv "
+            "và lệnh 'saferoad review-score'."
         ),
     }
-    out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    # Lớp không có nhãn nào trong tập (vd. xe máy trong MVTI) có AP là NaN.
-    # NaN không phải JSON hợp lệ, nên ghi thành null cho mọi trình đọc JSON.
-    out.write_text(
-        json.dumps(_json_safe(payload), ensure_ascii=False, indent=2, allow_nan=False),
-        encoding="utf-8",
-    )
+    out.write_text(json.dumps(_json_safe(payload), ensure_ascii=False, indent=2,
+                              allow_nan=False), encoding="utf-8")
 
-    print("\n" + "=" * 62)
-    print("KẾT QUẢ TRÊN DỮ LIỆU THẬT")
-    print("=" * 62)
     d = det_metrics.to_dict()
-    print(f"  Detection mAP@0.5      : {d['mAP50']:.4f}   (poster đặt mục tiêu ≥ 0.70)")
-    print(f"  Detection mAP@0.5:0.95 : {d['mAP50_95']:.4f}")
-    print(f"  Precision/Recall@0.5 ở ngưỡng vận hành {op_conf}: "
-          f"{d['precision50_op']:.4f} / {d['recall50_op']:.4f}")
-    print(f"  Recall@0.5 tối đa (mọi dự đoán ≥ {map_conf}): {d['recall50']:.4f}")
-    for k, v in d["per_class"].items():
-        if v["n_gt"]:
-            print(f"      {k:12s} AP50={v['AP50']:.3f}  n_gt={v['n_gt']}")
-        else:
-            print(f"      {k:12s} (tập dữ liệu không có nhãn lớp này)")
     t = track_metrics.to_dict()
-    print(f"  Tracking IDF1          : {t['idf1']:.4f}   (poster đặt mục tiêu ≥ 0.70)")
-    print(f"  Tracking MOTA          : {t['mota']:.4f}   (poster đặt mục tiêu ≥ 0.60)")
-    print(f"  ID switch              : {t['id_switches']}")
-    print(f"  Tốc độ xử lý           : {result.processing_fps:.1f} FPS")
-    print(f"  Near-miss ghi nhận     : {conflicts.get('total', 0)}")
-    print(f"\n✓ Báo cáo: {out}")
+    m = cmp_["metrics_vs_reference"]
+    print("\n" + "=" * 62)
+    print("DETECTION → TRACKING → CẢNH BÁO (cùng một video)")
+    print("=" * 62)
+    print(f"  mAP@0.5 = {d['mAP50']:.4f} · mAP@0.5:0.95 = {d['mAP50_95']:.4f} · "
+          f"P/R@{op_conf} = {d['precision50_op']:.3f}/{d['recall50_op']:.3f}")
+    db = det_metrics_big.to_dict()
+    print(f"  (bỏ qua {db['n_gt_ignored']} hộp chuẩn < {cfg.detection.min_box_area:g} px²) "
+          f"mAP@0.5 = {db['mAP50']:.4f} · P/R@{op_conf} = "
+          f"{db['precision50_op']:.3f}/{db['recall50_op']:.3f}")
+    print(f"  IDF1 = {t['idf1']:.4f} · MOTA = {t['mota']:.4f} · ID switch = {t['id_switches']}")
+    print(f"  Cảnh báo hệ thống: {len(result.events)} · tham chiếu: {len(ref_events)}")
+    print(f"  So với tham chiếu: P = {m['precision']['num']}/{m['precision']['den']}, "
+          f"R = {m['recall']['num']}/{m['recall']['den']}")
+    ph = cmp_["reconciliation"]["per_hour"]
+    print(f"  Báo nhầm/giờ = {ph['false_alarms_per_hour']} · bỏ sót/giờ = {ph['misses_per_hour']}")
+    print(f"  Tốc độ: {result.processing_fps:.1f} FPS")
+    print(f"\n✓ {out}\n✓ Danh sách rà soát ({n_review} ứng viên): {review_path}")
+    return 0
+
+
+def cmd_prepare_street(args: argparse.Namespace) -> int:
+    """Nạp nhãn CVAT (đại lộ Kaggle), ghép quỹ đạo giữa các đoạn, lưu bundle."""
+    from .data.cvat_video import load_cvat_video
+
+    print(f"Nạp {args.annotations} ...")
+    seq, stats = load_cvat_video(args.annotations, name=args.name)
+    out = Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
+    bundle = out / f"{args.name}_groundtruth.pkl"
+    with open(bundle, "wb") as fh:
+        pickle.dump({"sequence": seq, "fps": args.fps, "view": args.name,
+                     "frame_size": (seq.width, seq.height), "stitch": stats}, fh)
+    info = {**seq.summary(), "stitch": stats}
+    (out / f"{args.name}_summary.json").write_text(
+        json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(json.dumps(info, ensure_ascii=False, indent=2))
+    print(f"\n✓ {bundle}")
+    return 0
+
+
+def cmd_calibrate(args: argparse.Namespace) -> int:
+    """Tính homography từ điểm mốc + báo cáo sai số (fit / leave-one-out / kiểm tra)."""
+    from .geometry.calibration import run_calibration
+
+    rep = run_calibration(args.points, args.frame, args.out, args.image)
+    print(json.dumps({k: rep[k] for k in ("n_points", "fit", "leave_one_out")}
+                     | ({"check": rep["check"]} if "check" in rep else {}),
+                     ensure_ascii=False, indent=2))
+    if rep.get("warning"):
+        print("CẢNH BÁO:", rep["warning"])
+    print("\nDán khối sau vào mục 'homography' của file cấu hình:")
+    print(yaml.safe_dump({"homography": rep["homography"]}, allow_unicode=True, sort_keys=False))
+    print(f"✓ {args.out}" + (f"\n✓ {args.image}" if args.image else ""))
+    return 0
+
+
+def cmd_review_score(args: argparse.Namespace) -> int:
+    """Chấm hệ thống theo nhãn người rà soát (kappa + P/R + báo nhầm/giờ)."""
+    from .evaluation.real_conflicts import score_reviewed
+
+    rep = score_reviewed(args.candidates, args.labels, args.duration, args.extra_missed)
+    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+    Path(args.out).write_text(json.dumps(rep, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(json.dumps(rep, ensure_ascii=False, indent=2))
+    if rep.get("kappa_ok") is False:
+        print("\nκ < 0,6: hai người hiểu protocol khác nhau - ngồi lại thống nhất rồi gán lại "
+              "(protocol §8), KHÔNG lấy trung bình.")
+    print(f"✓ {args.out}")
     return 0
 
 
@@ -559,22 +703,34 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--max-frames", type=int, default=0)
     r.add_argument("--no-overlay", action="store_true", help="Không xuất video overlay")
     r.add_argument("--anonymize", action="store_true", help="Bật ẩn danh")
+    r.add_argument("--review-csv", help="Ghi danh sách cảnh báo để người rà soát (CSV)")
     r.add_argument("--ground-truth", help="Bundle .pkl để lấy homography của camera mô phỏng")
     r.add_argument("--replay-detections", action="store_true",
                    help="Dùng bbox chuẩn thay vì chạy YOLO (chỉ cho video synthetic)")
-    r.add_argument("--noise-px", type=float, default=1.5)
-    r.add_argument("--miss-rate", type=float, default=0.03)
+    r.add_argument("--noise-px", type=float, default=None,
+                   help="Ghi đè detection.replay_noise_px trong cấu hình")
+    r.add_argument("--miss-rate", type=float, default=None,
+                   help="Ghi đè detection.replay_miss_rate trong cấu hình")
     r.set_defaults(func=cmd_run)
 
     # evaluate
     e = sub.add_parser("evaluate", help="Chấm điểm + ablation trên tập synthetic")
     e.add_argument("--ground-truth", default="data/samples/synthetic_groundtruth.pkl")
-    e.add_argument("--source", help="Video synthetic tương ứng")
-    e.add_argument("--config", help="File cấu hình YAML")
-    e.add_argument("--noise-px", type=float, default=1.5)
-    e.add_argument("--miss-rate", type=float, default=0.03)
+    e.add_argument("--config", default="configs/synthetic.yaml", help="File cấu hình YAML")
+    e.add_argument("--noise-px", type=float, default=None)
+    e.add_argument("--miss-rate", type=float, default=None)
+    e.add_argument("--no-export", action="store_true",
+                   help="Không ghi đè results.json của dashboard")
     e.add_argument("--out", default="data/outputs/evaluation.json")
     e.set_defaults(func=cmd_evaluate)
+
+    g = sub.add_parser("evaluate-grid",
+                       help="Lưới mật độ × góc camera × ánh sáng (đại diện), so baseline")
+    g.add_argument("--config", default="configs/synthetic.yaml")
+    g.add_argument("--duration", type=float, default=180.0)
+    g.add_argument("--seed", type=int, default=7)
+    g.add_argument("--out", default="data/outputs/evaluation_grid.json")
+    g.set_defaults(func=cmd_evaluate_grid)
 
     # serve
     v = sub.add_parser("serve", help="Bật dashboard web")
@@ -583,6 +739,9 @@ def build_parser() -> argparse.ArgumentParser:
     v.add_argument("--video", default="data/outputs/overlay.mp4")
     v.add_argument("--host", default="127.0.0.1")
     v.add_argument("--port", type=int, default=8000)
+    v.add_argument("--demo", action="store_true",
+                   help="Bật tải video lên và chạy pipeline thật trên máy chủ (bản demo)")
+    v.add_argument("--sample-video", help="Video mẫu cho nút 'Chạy video mẫu'")
     v.set_defaults(func=cmd_serve)
 
     # anonymize
@@ -624,8 +783,39 @@ def build_parser() -> argparse.ArgumentParser:
                     help="Ngưỡng tin cậy khi chấm mAP (chuẩn COCO là 0.001). "
                          "Pipeline vẫn chạy ở ngưỡng vận hành trong config.")
     er.add_argument("--no-overlay", action="store_true")
+    er.add_argument("--imgsz", type=int, default=0, help="Ghi đè detection.imgsz")
+    er.add_argument("--no-db", action="store_true", help="Không ghi SQLite (nhanh hơn khi chỉ chấm điểm)")
+    er.add_argument("--start-frame", type=int, default=0,
+                    help="Chỉ chấm từ khung hình này (vd. phần test sau fine-tune)")
+    er.add_argument("--calibration-report",
+                    help="JSON do 'saferoad calibrate' ghi, để đưa sai số hiệu chuẩn vào báo cáo")
     er.add_argument("--out", default="data/outputs/evaluation_real.json")
     er.set_defaults(func=cmd_evaluate_real)
+
+    ps = sub.add_parser("prepare-street",
+                        help="Nạp nhãn CVAT của video đại lộ (Kaggle), ghép quỹ đạo")
+    ps.add_argument("--annotations", default="data/raw/mvti/merged_annotations.json")
+    ps.add_argument("--name", default="street")
+    ps.add_argument("--fps", type=int, default=30)
+    ps.add_argument("--out", default="data/processed/street")
+    ps.set_defaults(func=cmd_prepare_street)
+
+    ca = sub.add_parser("calibrate", help="Tính homography từ điểm mốc + báo cáo sai số")
+    ca.add_argument("--points", required=True, help="YAML điểm mốc (xem geometry/calibration.py)")
+    ca.add_argument("--frame", help="Ảnh hoặc video để vẽ lưới mét kiểm tra")
+    ca.add_argument("--image", help="Ảnh lưới mét xuất ra")
+    ca.add_argument("--out", default="data/outputs/calibration.json")
+    ca.set_defaults(func=cmd_calibrate)
+
+    rs = sub.add_parser("review-score", help="Chấm theo nhãn người rà soát (kappa, P/R, báo nhầm/giờ)")
+    rs.add_argument("--candidates", required=True, help="review_candidates_*.csv")
+    rs.add_argument("--labels", nargs="+", required=True,
+                    help="CSV đã gán nhãn của từng người (cột candidate_id, label)")
+    rs.add_argument("--duration", type=float, required=True, help="Thời lượng video đã rà soát (giây)")
+    rs.add_argument("--extra-missed", type=int, default=0,
+                    help="Số xung đột người xem thấy nhưng không có trong danh sách ứng viên")
+    rs.add_argument("--out", default="data/outputs/review_score.json")
+    rs.set_defaults(func=cmd_review_score)
 
     return p
 

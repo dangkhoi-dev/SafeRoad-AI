@@ -128,6 +128,17 @@ canvas{display:block;width:100%;border-radius:8px;background:#0a0e14}
 
 .view{display:none}
 .view.on{display:block}
+.btn{background:var(--accent);color:#04121f;border:0;border-radius:8px;padding:8px 14px;
+  font-weight:600;cursor:pointer;font-size:13px}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:default}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:10px 0}
+.bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+.ok{color:#22c55e}.bad{color:#ef4444}.warnbox{border:1px solid #b45309;background:#1c1206;
+  color:#fbbf24;border-radius:8px;padding:8px 12px;font-size:12px;margin:8px 0}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
+select,input[type=text]{background:var(--panel);color:var(--text);border:1px solid var(--line);
+  border-radius:6px;padding:6px 8px;font-size:12.5px}
 .metrics-note{font-size:11px;color:var(--dim);margin-top:9px;line-height:1.5}
 progress{width:100%;height:5px;border:none;background:var(--panel-2);border-radius:3px}
 progress::-webkit-progress-bar{background:var(--panel-2);border-radius:3px}
@@ -149,9 +160,11 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
       <li data-view="analysis"><span class="ic">◫</span> Phân tích</li>
       <li data-view="behavior"><span class="ic">◈</span> Hành vi</li>
       <li data-view="eval"><span class="ic">✓</span> Đánh giá</li>
+      <li data-view="run" id="nav-run"><span class="ic">⏵</span> Chạy thử video</li>
+      <li data-view="review"><span class="ic">✎</span> Rà soát nhãn</li>
     </ul>
     <div class="sidebar-foot">
-      <div>SafeRoad AI v1.0</div>
+      <div>SafeRoad AI v2.0</div>
       <div id="foot-status">Đang tải…</div>
     </div>
   </aside>
@@ -171,10 +184,10 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
     <!-- ===================== TỔNG QUAN ===================== -->
     <section class="view on" id="view-overview">
       <div class="kpis">
-        <div class="kpi"><div class="lbl">Tổng near-miss</div>
+        <div class="kpi"><div class="lbl">Tổng sự kiện xung đột</div>
           <div class="val" id="kpi-total">-</div>
           <div class="sub" id="kpi-total-sub">trong toàn bộ phiên</div></div>
-        <div class="kpi k2"><div class="lbl">Near-miss nghiêm trọng</div>
+        <div class="kpi k2"><div class="lbl">Xung đột nghiêm trọng</div>
           <div class="val" id="kpi-severe">-</div>
           <div class="sub">TTC &lt; 1.5s</div></div>
         <div class="kpi k3"><div class="lbl">Risk Score trung bình</div>
@@ -187,7 +200,7 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
 
       <div class="grid g2">
         <div class="panel">
-          <h3>Near-miss theo thời gian <span class="hint">cột đỏ = nghiêm trọng</span></h3>
+          <h3>Xung đột theo thời gian <span class="hint">cột đỏ = nghiêm trọng</span></h3>
           <canvas id="c-timeline" height="200"></canvas>
         </div>
         <div class="panel">
@@ -199,7 +212,7 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
 
       <div class="grid g2">
         <div class="panel">
-          <h3>Near-miss gần nhất</h3>
+          <h3>Xung đột gần nhất</h3>
           <div class="scroll"><table>
             <thead><tr><th>Thời điểm</th><th>Đối tượng</th><th>Loại xung đột</th>
               <th class="num">TTC</th><th class="num">PET</th><th class="num">Risk</th></tr></thead>
@@ -329,9 +342,51 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
     <!-- ===================== ĐÁNH GIÁ ===================== -->
     <section class="view" id="view-eval">
       <div class="panel">
-        <h3>Kết quả đánh giá trên tập có ground truth</h3>
+        <h3>Kết quả đánh giá</h3>
         <div id="eval-body"><div class="empty">Chưa có kết quả.
           Chạy <code>saferoad evaluate</code>.</div></div>
+      </div>
+    </section>
+
+    <!-- ===================== CHẠY THỬ ===================== -->
+    <section class="view" id="view-run">
+      <div class="panel">
+        <h3>Chạy pipeline thật trên video của bạn
+          <span class="hint">YOLO11n → ByteTrack → quỹ đạo mặt đất → TTC/PET → Risk, chạy ngay trên máy chủ</span></h3>
+        <div id="run-disabled" class="warnbox" style="display:none">Bản này không bật chức năng chạy thử
+          (máy chủ cần chạy với <code>saferoad serve --demo</code>). Trang tĩnh trên Vercel chỉ hiển thị kết quả tính sẵn.</div>
+        <div id="run-form">
+          <div class="row"><input type="file" id="run-file" accept="video/*">
+            <select id="run-preset"></select>
+            <button class="btn" id="run-go">Tải lên và chạy</button>
+            <button class="btn ghost" id="run-sample" style="display:none">Chạy video mẫu</button></div>
+          <div class="metrics-note" id="run-limits"></div>
+          <div class="bar"><i id="run-bar"></i></div>
+          <div id="run-status" class="metrics-note">Chưa chạy.</div>
+          <div id="run-result"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== RÀ SOÁT ===================== -->
+    <section class="view" id="view-review">
+      <div class="panel">
+        <h3>Rà soát cảnh báo bằng người
+          <span class="hint">hai người gán nhãn độc lập → saferoad review-score tính kappa, Precision/Recall, báo nhầm/giờ</span></h3>
+        <div class="row"><select id="rv-set"></select>
+          <input type="text" id="rv-name" placeholder="Tên người rà soát (vd. khoi)">
+          <button class="btn" id="rv-save">Lưu nhãn</button>
+          <button class="btn ghost" id="rv-dl">Tải CSV</button>
+          <span id="rv-msg" class="metrics-note"></span></div>
+        <div class="video-wrap" id="rv-video" style="max-height:420px"></div>
+        <div class="scroll" style="max-height:420px"><table>
+          <thead><tr><th>ID</th><th>Nguồn</th><th class="num">t (s)</th><th>Cặp</th>
+            <th class="num">TTC</th><th class="num">PET</th><th>PET</th><th>Kết cục máy</th><th>Nhãn của bạn</th><th></th></tr></thead>
+          <tbody id="rv-body"></tbody></table></div>
+        <div class="metrics-note">Nhãn: <b>near_miss</b> = suýt va chạm thật ·
+          <b>collision</b> = va chạm · <b>normal</b> = giao thông bình thường (báo nhầm) ·
+          <b>overlap_artifact</b> = hai xe chồng nhau trên ảnh do che khuất/sai số, không phải sự cố ·
+          <b>unclear</b> = không rõ. Xem video ở tốc độ 0,25× quanh thời điểm, gán độc lập, không trao đổi trước khi xong.</div>
       </div>
     </section>
   </main>
@@ -348,8 +403,13 @@ const S = { data:null, events:[], filtered:[], filter:{kind:'', minRisk:0}, sele
  * không có máy chủ FastAPI phía sau. Mỗi endpoint /api/<tên> được thay bằng
  * tệp data/<tên>.json đã xuất sẵn, video bằng data/video.mp4. */
 const STATIC = !!window.SAFEROAD_STATIC;
+const FLAGS = window.SAFEROAD_FLAGS || {};
 function api(path){
-  if (!STATIC) return path;
+  if (!STATIC){
+    if (S.job && /^\/api\/(summary|events|riskmap|timeline|behaviors|video)/.test(path))
+      return path + (path.includes('?') ? '&' : '?') + 'job=' + S.job;
+    return path;
+  }
   const name = path.replace(/^\/api\//, '').split('?')[0];
   return name === 'video' ? 'data/video.mp4' : `data/${name}.json`;
 }
@@ -378,6 +438,8 @@ document.querySelectorAll('.nav li').forEach(li=>{
     if (v==='riskmap') drawRiskMap();
     if (v==='analysis'){ drawTTC(); drawRiskHist(); }
     if (v==='overview'){ drawTimeline(); drawTypes(); }
+    if (v==='run') initRun();
+    if (v==='review') initReview();
   };
 });
 
@@ -415,7 +477,9 @@ function render(){
   const s = S.data.sum.summary || {};
   $('site-name').textContent = S.data.sum.site || '';
   $('kpi-total').textContent = s.total_events ?? 0;
-  $('kpi-total-sub').textContent = `trong ${fmt(s.duration_s,0)}s video`;
+  const cc = {near_miss:0, body_overlap:0, collision_suspected:0};
+  (S.events||[]).forEach(e=>{ if(e.contact in cc) cc[e.contact]++; });
+  $('kpi-total-sub').textContent = `${cc.near_miss} near-miss · ${cc.body_overlap} chồng thân · ${cc.collision_suspected} nghi va chạm · ${fmt(s.duration_s,0)}s video`;
   $('kpi-severe').textContent = s.severe_events ?? 0;
   $('kpi-risk').textContent = fmt(s.avg_risk_score,1);
   const hs = (S.data.riskmap.hotspots)||[];
@@ -436,7 +500,7 @@ function fillRecent(){
       <td>${mmss(e.t)}</td>
       <td>${VI_CLASS[e.cls_a]||e.cls_a} ↔ ${VI_CLASS[e.cls_b]||e.cls_b}</td>
       <td><span class="chip">${VI_TYPE[e.conflict_type]||e.conflict_type}</span></td>
-      <td class="num">${fmt(e.ttc)}s</td>
+      <td class="num">${e.ttc===null?'-':fmt(e.ttc)+'s'}</td>
       <td class="num">${e.pet===null?'-':fmt(e.pet)+'s'}</td>
       <td class="num"><span class="badge b-${e.risk_level}">${fmt(e.risk_score,0)}</span></td>
     </tr>`).join('') || '<tr><td colspan="6" class="empty">Chưa có sự kiện</td></tr>';
@@ -485,7 +549,7 @@ function fillEvents(){
       <td>${e.event_id}</td><td>${mmss(e.t)}</td>
       <td>${VI_CLASS[e.cls_a]||e.cls_a} ↔ ${VI_CLASS[e.cls_b]||e.cls_b}</td>
       <td><span class="chip">${VI_TYPE[e.conflict_type]||e.conflict_type}</span></td>
-      <td class="num">${fmt(e.ttc)}s</td>
+      <td class="num">${e.ttc===null?'-':fmt(e.ttc)+'s'}</td>
       <td class="num">${e.pet===null?'-':fmt(e.pet)+'s'}</td>
       <td class="num">${fmt(e.risk_score,0)}</td>
       <td><span class="badge b-${e.risk_level}">${VI_LEVEL[e.risk_level]||e.risk_level}</span></td>
@@ -513,7 +577,7 @@ window.selectEvent = (id, jump)=>{
       <div class="row"><span>Thời điểm</span><b>${mmss(e.t)} (frame ${e.frame_idx})</b></div>
       <div class="row"><span>Đối tượng</span><b>#${e.track_a} ${VI_CLASS[e.cls_a]||''} ↔ #${e.track_b} ${VI_CLASS[e.cls_b]||''}</b></div>
       <div class="row"><span>Loại xung đột</span><b>${VI_TYPE[e.conflict_type]||e.conflict_type}</b></div>
-      <div class="row"><span>TTC / PET</span><b>${fmt(e.ttc)}s / ${e.pet===null?'-':fmt(e.pet)+'s'}</b></div>
+      <div class="row"><span>TTC / PET</span><b>${e.ttc===null?'-':fmt(e.ttc)+'s'} / ${e.pet===null?'-':fmt(e.pet)+'s'}</b></div>
       <div class="row"><span>Góc tiếp cận</span><b>${fmt(e.approach_angle,0)}°</b></div>
       <div class="row"><span>Tốc độ tiếp cận</span><b>${fmt(e.rel_speed,1)} m/s (~${fmt(e.rel_speed*3.6,0)} km/h)</b></div>
       <div class="row"><span>Khoảng cách gần nhất</span><b>${fmt(e.gap,1)} m</b></div>
@@ -730,55 +794,134 @@ function heat(v){
 }
 
 /* ------------------------------ Đánh giá ---------------------------- */
+const R = r => (r && r.den!==undefined) ? `${fmt(r.value,3)} <span style="color:var(--dim)">(${r.num}/${r.den})</span>` : (r===null||r===undefined?'-':fmt(r,3));
+const T = (head, rows) => `<table><thead><tr>${head.map(h=>`<th${h.startsWith('#')?' class="num"':''}>${h.replace(/^#/,'')}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
+const RC_VI={episodes_opened:'Episode được mở',rejected_proximity_gate:'  - loại: cổng khoảng cách',rejected_too_short:'  - loại: quá ngắn',
+  rejected_pet_measured_above_threshold:'  - loại: PET đo ≥ ngưỡng',rejected_no_peak:'  - loại: không có đỉnh',merged_into_previous:'  - gộp vào sự kiện trước',
+  emitted:'Sự kiện phát ra',exported_to_results:'Sự kiện trên dashboard (results.json)',ignored_outside_eval_region:'  - ngoài vùng đánh giá (bỏ qua)',
+  scored:'  - được chấm',scored_unmapped_track_fp:'      FP do track không ánh xạ',scored_mapped_fp:'      FP',scored_tp:'      TP',
+  gt_total:'Nhãn chuẩn',gt_matched_tp:'  - khớp (TP)',gt_missed_fn:'  - bỏ sót (FN)'};
 async function loadEval(){
   try{
     const d = await fetch(api('/api/evaluation')).then(r=>r.json());
     if(!d.available) return;
-    const f = d.final||{}, tr = d.tracking||{}, st = d.setup||{};
-    $('eval-body').innerHTML = `
-      <div class="kpis" style="margin-bottom:12px">
-        <div class="kpi"><div class="lbl">Precision</div><div class="val">${fmt(f.precision,3)}</div>
-          <div class="sub">TP=${f.tp} · FP=${f.fp}</div></div>
-        <div class="kpi k2"><div class="lbl">Recall</div><div class="val">${fmt(f.recall,3)}</div>
-          <div class="sub">FN=${f.fn}</div></div>
-        <div class="kpi k3"><div class="lbl">TTC MAE</div><div class="val">${fmt(f.ttc_mae,3)}s</div>
-          <div class="sub">trên ${f.n_matched_ttc} sự kiện khớp</div></div>
-        <div class="kpi k4"><div class="lbl">Tracking IDF1</div><div class="val">${fmt(tr.idf1,3)}</div>
-          <div class="sub">${tr.id_switches} ID switch</div></div>
-      </div>
-      <h3>Bảng ablation - đóng góp của từng khối</h3>
-      <table><thead><tr><th>Cấu hình</th><th class="num">Precision</th><th class="num">Recall</th>
-        <th class="num">F1</th><th class="num">TTC MAE</th><th class="num">Sự kiện</th></tr></thead>
-        <tbody>${(d.ablation||[]).map(r=>`<tr><td>${r.label}</td>
-          <td class="num">${fmt(r.precision,3)}</td><td class="num">${fmt(r.recall,3)}</td>
-          <td class="num">${fmt(r.f1,3)}</td><td class="num">${r.ttc_mae===null?'-':fmt(r.ttc_mae,3)+'s'}</td>
-          <td class="num">${r.n_events}</td></tr>`).join('')}</tbody></table>
-      <h3 style="margin-top:16px">Độ bền trước nhiễu detector</h3>
-      <table><thead><tr><th class="num">Nhiễu bbox (px)</th><th class="num">Precision</th>
-        <th class="num">Recall</th><th class="num">F1</th><th class="num">TTC MAE</th>
-        <th class="num">IDF1</th></tr></thead>
-        <tbody>${(d.noise_sweep||[]).map(r=>`<tr><td class="num">${fmt(r.noise_px,1)}</td>
-          <td class="num">${fmt(r.precision,3)}</td><td class="num">${fmt(r.recall,3)}</td>
-          <td class="num">${fmt(r.f1,3)}</td><td class="num">${r.ttc_mae===null?'-':fmt(r.ttc_mae,3)+'s'}</td>
-          <td class="num">${fmt(r.idf1,3)}</td></tr>`).join('')}</tbody></table>
-      <h3 style="margin-top:16px">Recall theo mức nghiêm trọng</h3>
-      <table><thead><tr><th>Dải TTC</th><th class="num">Số nhãn chuẩn</th>
-        <th class="num">Phát hiện được</th><th class="num">Recall</th></tr></thead>
-        <tbody>${(d.severity_breakdown||[]).filter(r=>r.n_gt>0).map(r=>`<tr><td>${r.band}</td>
-          <td class="num">${r.n_gt}</td><td class="num">${r.detected??'-'}</td>
-          <td class="num">${r.recall===null?'-':fmt(r.recall,3)}</td></tr>`).join('')}
-        ${(d.contact_breakdown||[]).length ? `<tr><td colspan="4" style="color:var(--muted);font-size:12px;padding-top:12px">
-          Tách riêng các nhãn mà hai thân xe đã chồng lên nhau (trình mô phỏng chưa có ràng buộc chống va chạm)</td></tr>` +
-          d.contact_breakdown.filter(r=>r.n_gt>0).map(r=>`<tr><td>${r.band}</td>
-          <td class="num">${r.n_gt}</td><td class="num">${r.detected??'-'}</td>
-          <td class="num">${r.recall===null?'-':fmt(r.recall,3)}</td></tr>`).join('') : ''}</tbody></table>
-      <div class="metrics-note">
-        Nhãn chuẩn sinh từ trình mô phỏng có ground truth giải tích
-        (${st.n_ground_truth} near-miss trên ${st.n_vehicles} phương tiện,
-        ${fmt(st.duration_s,0)}s, seed ${st.seed}). Detector mô phỏng nhiễu
-        ${fmt(st.noise_px,1)} px và tỉ lệ bỏ sót ${fmt(st.miss_rate*100,0)}%.
-      </div>`;
+    if(!d.main){ $('eval-body').innerHTML='<div class="empty">Kết quả đánh giá ở định dạng cũ - chạy lại <code>saferoad evaluate</code>.</div>'; return; }
+    const M=d.main, m=M.metrics, rc=M.reconciliation, st=d.setup||{}, pe=M.pet_errors||{}, cc=M.contact_confusion||{};
+    let h=`<div class="kpis" style="margin-bottom:12px">
+      <div class="kpi"><div class="lbl">Precision</div><div class="val">${fmt(m.precision.value,3)}</div><div class="sub">${m.precision.num}/${m.precision.den} cảnh báo được chấm</div></div>
+      <div class="kpi k2"><div class="lbl">Recall</div><div class="val">${fmt(m.recall.value,3)}</div><div class="sub">${m.recall.num}/${m.recall.den} nhãn chuẩn</div></div>
+      <div class="kpi k3"><div class="lbl">PET đo - MAE</div><div class="val">${fmt((pe.measured||{}).mae,3)}s</div><div class="sub">n=${(pe.measured||{}).n||0} · ngoại suy ${fmt((pe.predicted||{}).mae,3)}s</div></div>
+      <div class="kpi k4"><div class="lbl">Tracking IDF1</div><div class="val">${fmt(M.tracking.idf1,3)}</div><div class="sub">${M.tracking.id_switches} lần đổi ID</div></div></div>`;
+    h+=`<h3>1. Đối soát luồng sự kiện (mô phỏng ${fmt(st.duration_s,0)} s, seed ${st.seed})</h3>`+
+      T(['Bước','#Số lượng'], Object.entries(rc.rows).map(([k,v])=>`<tr><td>${RC_VI[k]||k}</td><td class="num">${v}</td></tr>`))+
+      `<div class="metrics-note">${Object.entries(rc.checks).map(([k,v])=>`<span class="${v?'ok':'bad'}">${v?'✓':'✗'} ${k}</span>`).join(' · ')}<br>
+      Báo nhầm ${rc.per_hour.false_alarms_per_hour}/giờ · bỏ sót ${rc.per_hour.misses_per_hour}/giờ (kịch bản mô phỏng rất dày đặc, không phải tần suất ngoài đời).</div>`;
+    h+=`<h3 style="margin-top:16px">2. Sai số PET - ngoại suy và đo từ mốc vào/ra vùng xung đột</h3>`+
+      T(['Cách tính','#n','#MAE (s)','#Trung vị','#P90','#Lệch TB','#Trong ±0,5 s','#Cùng phía ngưỡng 1,5 s'],
+        [['Ngoại suy (trước)','predicted'],['Đo từ quỹ đạo','measured'],['Dùng để chốt','final']].map(([n,k])=>{const x=pe[k]||{};
+        return `<tr><td>${n}</td><td class="num">${x.n??'-'}</td><td class="num">${fmt(x.mae,3)}</td><td class="num">${fmt(x.median_ae,3)}</td><td class="num">${fmt(x.p90_ae,3)}</td><td class="num">${fmt(x.bias,3)}</td><td class="num">${R(x.within_0_5s)}</td><td class="num">${R(x.threshold_agreement)}</td></tr>`;}));
+    h+=`<h3 style="margin-top:16px">3. Near-miss, chồng thân xe và va chạm</h3>`+
+      T(['Nhãn chuẩn \\ Hệ thống','#Suýt va chạm','#Chồng thân (sai số)','#Nghi va chạm'],
+        Object.entries(cc.matrix||{}).map(([k,row])=>`<tr><td>${{near_miss:'Near-miss',collision:'Va chạm',no_label:'Không có nhãn (báo nhầm)'}[k]||k}</td><td class="num">${row.near_miss}</td><td class="num">${row.body_overlap}</td><td class="num">${row.collision_suspected}</td></tr>`))+
+      `<div class="metrics-note">Recall near-miss ${R(M.by_kind.near_miss.recall)} · Recall va chạm ${R(M.by_kind.collision.recall)}</div>`;
+    const ab=(d.ablation||{});
+    const abRow=r=>`<tr><td>${r.label}</td><td class="num">${R(r.precision)}</td><td class="num">${R(r.recall)}</td><td class="num">${fmt(r.f1,3)}</td><td class="num">${r.ttc_mae===null?'-':fmt(r.ttc_mae,3)}</td><td class="num">${r.n_emitted}</td><td class="num">${r.n_ignored_outside}</td></tr>`;
+    h+=`<h3 style="margin-top:16px">4. Ablation bỏ từng khối (cùng mẫu, cùng seed)</h3>`+T(['Cấu hình','#Precision','#Recall','#F1','#TTC MAE','#Phát ra','#Ngoài vùng'],(ab.leave_one_out||[]).map(abRow));
+    h+=`<h3 style="margin-top:16px">5. Ablation cộng dồn từ baseline</h3>`+T(['Cấu hình','#Precision','#Recall','#F1','#TTC MAE','#Phát ra','#Ngoài vùng'],(ab.cumulative||[]).map(abRow));
+    if(d.grid&&d.grid.cells){
+      h+=`<h3 style="margin-top:16px">6. Lưới mật độ × camera × ánh sáng (đại diện bằng chất lượng detector)</h3>`+
+        T(['Mật độ','Camera','Ánh sáng','#Nhãn','#F1 đầy đủ','#F1 baseline','#F1 PET cũ','#Báo nhầm/giờ'],
+          d.grid.cells.map(c=>`<tr><td>${c.density}</td><td>${c.camera}</td><td>${c.light}</td><td class="num">${c.n_gt}</td><td class="num">${fmt(c.full.f1,3)}</td><td class="num">${fmt(c.baseline.f1,3)}</td><td class="num">${fmt(c.old_pet.f1,3)}</td><td class="num">${c.full.fa_per_hour}</td></tr>`));
+    }
+    const real=d.real||{};
+    const REAL_VI={street:'Đại lộ 0-300 s · YOLO11n gốc',street_pretrained_test:'Đại lộ, đoạn test 220-300 s · YOLO11n gốc',
+      street_finetuned_test:'Đại lộ, đoạn test 220-300 s · YOLO11n tinh chỉnh',mvti:'MVTI giao lộ · YOLO11n gốc'};
+    const realRows=Object.entries(real).map(([k,x])=>{const a=(x.alerts||{}).metrics_vs_reference||{};const ph=((x.alerts||{}).reconciliation||{}).per_hour||{};
+      return `<tr><td>${REAL_VI[k]||k}</td><td class="num">${fmt(x.detection.mAP50,3)}</td><td class="num">${x.detection_min_area?fmt(x.detection_min_area.mAP50,3):'-'}</td><td class="num">${fmt(x.tracking.idf1,3)}</td><td class="num">${x.tracking.id_switches}</td><td class="num">${(x.alerts||{}).n_reference??'-'}</td><td class="num">${R(a.precision)}</td><td class="num">${R(a.recall)}</td><td class="num">${ph.false_alarms_per_hour??'-'}</td><td class="num">${fmt(x.runtime.processing_fps,1)}</td></tr>`;});
+    if(realRows.length) h+=`<h3 style="margin-top:16px">7. Video thật: detection → tracking → cảnh báo trên cùng dữ liệu</h3>`+
+      T(['Bộ dữ liệu','#mAP@0,5','#mAP@0,5 (bỏ hộp < min_box_area)','#IDF1','#Đổi ID','#Cảnh báo tham chiếu','#P so tham chiếu','#R so tham chiếu','#Báo nhầm/giờ','#FPS'],realRows)+
+      `<div class="metrics-note">Tham chiếu = cùng thuật toán chạy trên quỹ đạo người gán nhãn (bbox + ID chuẩn): đo phần sai số do detection + tracking gây ra.
+      Độ đúng tuyệt đối cần nhãn người rà soát (tab Rà soát nhãn).</div>`;
+    const cal=d.calibration_street;
+    if(cal) h+=`<div class="metrics-note"><b>Hiệu chuẩn video đại lộ:</b> ${cal.n_points} điểm, sai số fit ${cal.fit.rmse_m} m, leave-one-out ${cal.leave_one_out.rmse_m} m (tối đa ${cal.leave_one_out.max_m} m). ${cal.source}</div>`;
+    h+=`<div class="metrics-note">Cấu hình ${d.reproducibility?d.reproducibility.config_sha256:''} · commit ${d.reproducibility?d.reproducibility.git_commit:''} · nhiễu detector ${fmt(st.noise_px,1)} px, bỏ sót ${fmt(st.miss_rate*100,0)}%, seed ${st.replay_seed}.</div>`;
+    $('eval-body').innerHTML=h;
   }catch(e){ console.warn('Chưa có kết quả đánh giá', e); }
+}
+
+/* ------------------------------ Chạy thử ----------------------------- */
+let RUN_INIT=false;
+async function initRun(){
+  if(RUN_INIT) return; RUN_INIT=true;
+  if(STATIC){ $('run-disabled').style.display='block'; $('run-form').style.display='none'; return; }
+  const p=await fetch('/api/presets').then(r=>r.json()).catch(()=>null);
+  if(!p||!p.demo){ $('run-disabled').style.display='block'; $('run-form').style.display='none'; return; }
+  $('run-preset').innerHTML=p.presets.map(x=>`<option value="${x.key}">${x.label}</option>`).join('');
+  $('run-limits').textContent=`Tối đa ${p.max_seconds} giây đầu của video được xử lý (máy chủ CPU). Video không hiệu chuẩn: TTC/PET dùng homography xấp xỉ. Preset đại lộ: cảnh báo chỉ tính trong vùng phân tích (khung vàng trên video), nơi homography đã được kiểm chứng; detector là YOLO11n tinh chỉnh cho camera này.`;
+  if(p.sample) $('run-sample').style.display='inline-block';
+  $('run-go').onclick=async()=>{
+    const f=$('run-file').files[0]; if(!f){ $('run-status').textContent='Chọn một file video trước.'; return; }
+    const fd=new FormData(); fd.append('file',f); fd.append('preset',$('run-preset').value);
+    $('run-status').textContent='Đang tải lên…';
+    const r=await fetch('/api/jobs',{method:'POST',body:fd}); const j=await r.json();
+    if(!r.ok){ $('run-status').textContent=j.detail||'Lỗi'; return; } poll(j.job_id);
+  };
+  $('run-sample').onclick=async()=>{
+    const fd=new FormData(); const r=await fetch('/api/jobs/sample',{method:'POST',body:fd}); const j=await r.json();
+    if(!r.ok){ $('run-status').textContent=j.detail||'Lỗi'; return; } poll(j.job_id);
+  };
+}
+async function poll(id){
+  const j=await fetch('/api/jobs/'+id).then(r=>r.json());
+  $('run-bar').style.width=(100*j.progress).toFixed(1)+'%';
+  $('run-status').textContent=`${j.message} · ${j.processed}/${j.total} khung hình · ${j.fps} FPS`+(j.error?` · ${j.error}`:'');
+  if(j.state==='done'){
+    S.job=id; const s=j.summary||{};
+    $('run-result').innerHTML=`<div class="metrics-note">Xong: ${s.n_frames} khung hình, ${s.n_tracks} đối tượng, <b>${s.total_events} cảnh báo</b>, ${s.processing_fps} FPS (detector ${s.detector}).
+      ${j.calibrated?'':'<br><span class="bad">Video chưa hiệu chuẩn: TTC/PET dùng homography xấp xỉ, chỉ mang tính tương đối.</span>'}
+      <br>Các tab Tổng quan, Camera, Near-miss, Risk Map, Rà soát nhãn giờ hiển thị kết quả của video này.</div>`;
+    load(); return;
+  }
+  if(j.state==='error') return;
+  setTimeout(()=>poll(id),1500);
+}
+
+/* ------------------------------ Rà soát ----------------------------- */
+let RV={rows:[],labels:{},set:''};
+async function initReview(){
+  const opts=[];
+  if(!STATIC){ const l=await fetch('/api/review').then(r=>r.json()).catch(()=>({datasets:[]})); (l.datasets||[]).forEach(n=>opts.push([n,'Ứng viên: '+n])); }
+  if(S.job) opts.unshift(['job','Video vừa chạy thử']);
+  if(!opts.length){ $('rv-body').innerHTML='<tr><td colspan="10" class="empty">Chưa có danh sách ứng viên. Chạy <code>saferoad evaluate-real</code> hoặc chạy thử một video.</td></tr>'; return; }
+  $('rv-set').innerHTML=opts.map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+  $('rv-set').onchange=()=>openSet($('rv-set').value); openSet(opts[0][0]);
+  $('rv-save').onclick=saveLabels; $('rv-dl').onclick=dlLabels;
+}
+async function openSet(name){
+  RV.set=name; RV.labels={};
+  const d=await fetch('/api/review/'+name+(name==='job'?'?job='+S.job:'')).then(r=>r.json());
+  RV.rows=d.rows||[];
+  $('rv-video').innerHTML=d.video?`<video id="rv-v" controls preload="metadata" src="${d.video}"></video>`:'<div class="video-empty">Video gốc không có trên máy chủ này - mở video bằng trình phát trên máy, tua tới cột t (s).</div>';
+  const L=['','near_miss','collision','normal','overlap_artifact','unclear'];
+  $('rv-body').innerHTML=RV.rows.map(r=>`<tr><td>${r.candidate_id}</td><td>${r.source}</td><td class="num">${fmt(r.t_s,2)}</td>
+    <td>${r.track_a||r.gt_object_a||''}-${r.track_b||r.gt_object_b||''}</td><td class="num">${r.ttc_s===''||r.ttc_s===null?'-':fmt(r.ttc_s,2)}</td>
+    <td class="num">${r.pet_s===''||r.pet_s===null?'-':fmt(r.pet_s,2)}</td><td>${r.pet_status||''}</td><td>${r.contact||''}</td>
+    <td><select data-c="${r.candidate_id}">${L.map(x=>`<option>${x}</option>`).join('')}</select></td>
+    <td><button class="btn ghost" data-t="${r.t_s}">Xem</button></td></tr>`).join('');
+  document.querySelectorAll('#rv-body select').forEach(el=>el.onchange=()=>{RV.labels[el.dataset.c]={label:el.value};});
+  document.querySelectorAll('#rv-body button').forEach(el=>el.onclick=()=>{const v=$('rv-v'); if(v){v.currentTime=Math.max(0,+el.dataset.t-3); v.playbackRate=0.25; v.play();}});
+}
+async function saveLabels(){
+  const name=$('rv-name').value.trim(); if(!name){ $('rv-msg').textContent='Nhập tên người rà soát.'; return; }
+  if(STATIC){ dlLabels(); return; }
+  const r=await fetch('/api/review/'+RV.set,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reviewer:name,labels:RV.labels})});
+  const j=await r.json(); $('rv-msg').textContent=r.ok?`Đã lưu ${j.n} nhãn → ${j.saved}`:(j.detail||'Lỗi');
+}
+function dlLabels(){
+  const name=$('rv-name').value.trim()||'reviewer';
+  const lines=['candidate_id,label,reviewer,note',...Object.entries(RV.labels).map(([k,v])=>`${k},${v.label},${name},`)];
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+lines.join('\n')],{type:'text/csv'}));
+  a.download=`labels_${RV.set}_${name}.csv`; a.click();
 }
 
 // Phiên chạy dùng hộp phát hiện dựng sẵn (ReplayDetector) thì FPS không gồm YOLO.

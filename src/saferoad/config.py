@@ -51,6 +51,14 @@ class DetectionConfig:
     #: Ngưỡng IoU khi gộp kết quả của các ô - hai ô kề nhau nhìn thấy cùng một
     #: vật trong vùng chồng lấn sẽ cho hai hộp gần trùng.
     tile_merge_iou: float = 0.55
+    #: Detector phát lại (chỉ dùng cho mô phỏng): độ lệch chuẩn nhiễu bbox (px),
+    #: tỉ lệ bỏ sót và seed. Đặt ở cấu hình thay vì rải trong mã để lệnh ``run``
+    #: và lệnh ``evaluate`` chắc chắn dùng cùng một chuỗi detection - trước đây
+    #: hai lệnh dùng hai seed khác nhau nên dashboard hiện 214 sự kiện còn báo
+    #: cáo đánh giá chấm 211.
+    replay_noise_px: float = 1.5
+    replay_miss_rate: float = 0.03
+    replay_seed: int = 17
 
 
 @dataclass
@@ -67,6 +75,14 @@ class TrackingConfig:
     velocity_alpha: float = 0.35
     #: Số mẫu tối thiểu trước khi tin vào vector vận tốc.
     min_states_for_velocity: int = 3
+    #: Kẹp vận tốc về 0 cho đối tượng đứng yên: nếu quãng dịch chuyển ròng trong
+    #: ``stationary_window_s`` giây chia cho thời gian đó nhỏ hơn
+    #: ``stationary_speed`` (m/s) thì coi là đứng yên (giữ nguyên hướng thân xe
+    #: lần cuối còn chạy). Ở xa camera, bbox của xe đỗ rung vài pixel = hơn một
+    #: mét, đủ để ước lượng ra vận tốc vài m/s và sinh cảnh báo giả giữa hai xe
+    #: đang đứng trong hàng chờ. 0 = tắt (mặc định, giữ nguyên benchmark mô phỏng).
+    stationary_speed: float = 0.0
+    stationary_window_s: float = 2.0
 
 
 @dataclass
@@ -108,6 +124,32 @@ class ConflictConfig:
     dedup_window: float = 3.0
     #: Giới hạn thời gian mô phỏng tiến để tìm điểm giao (giây).
     horizon: float = 6.0
+    #: --- PET đo từ quỹ đạo (xem saferoad.conflict.encroachment) ----------- #
+    #: Dùng PET đo được để CHỐT sự kiện. Tắt đi thì quay về chỉ dùng PET ngoại
+    #: suy - giữ lại để bảng ablation đo được đóng góp của bước này.
+    use_measured_pet: bool = True
+    #: Lấy lịch sử quỹ đạo từ bao nhiêu giây trước khi episode mở để đo PET.
+    pet_lookback_s: float = 4.0
+    #: Chờ tối đa bao lâu (giây) sau khi episode kết thúc để xe sau đi vào vùng
+    #: xung đột. Quá thời gian này thì chốt với PET ngoại suy.
+    pet_max_wait_s: float = 4.0
+    #: Góc cắt tối thiểu (độ) để PET có nghĩa; nhỏ hơn là song song/cùng làn.
+    pet_min_angle: float = 20.0
+    #: Bỏ qua cặp hai người đi bộ - cùng quy ước với nhãn chuẩn (protocol v2):
+    #: người đi bộ tự né nhau ở tốc độ thấp, mô hình hình tròn không tả được.
+    ignore_pedestrian_pairs: bool = True
+    #: Vùng phân tích - đa giác toạ độ pixel [[x, y], ...]. Chỉ xét đối tượng có
+    #: điểm neo (giữa cạnh đáy bbox) nằm trong vùng. Dùng để giới hạn phân tích
+    #: trong phần mặt đường mà homography còn đúng: ở xa camera, vài pixel sai
+    #: số bbox đã thành vài mét và xe ở làn kề trông như chồng lên nhau. Rỗng =
+    #: cả khung hình. Áp dụng như nhau cho hệ thống và cảnh báo tham chiếu.
+    analysis_region_px: list = field(default_factory=list)
+    #: Thời gian (giây) theo dõi thêm sau lúc gần nhất để đọc động học sau đó -
+    #: phân biệt va chạm thật (xe dừng) với chồng thân xe do sai số đo.
+    contact_settle_s: float = 2.0
+    #: Gom các khung hình của cùng một tình huống thành một sự kiện. Chỉ tắt
+    #: khi chạy ablation để đo đóng góp của bước gom.
+    episode_grouping: bool = True
     #: Ngưỡng góc (độ) phân loại kiểu xung đột.
     angle_rear_end: float = 30.0      # < 30°  ⇒ cùng hướng
     angle_crossing_min: float = 60.0  # 60-120° ⇒ cắt ngang
