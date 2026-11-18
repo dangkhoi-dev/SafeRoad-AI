@@ -224,9 +224,11 @@ thống nhất lại cách hiểu protocol rồi gán lại ([`docs/protocol_nea
 
 ## Demo
 
-* **Chạy thật (Hugging Face Spaces, Docker CPU):** tab *Chạy thử video* - tải video lên,
-  máy chủ chạy YOLO → ByteTrack → TTC/PET → Risk, xem tiến độ, video overlay, cảnh báo
-  và bảng đối soát của chính lần chạy đó. Đẩy lên Space: `python scripts/deploy_hf_space.py --space <tài_khoản>/saferoad-ai`.
+* **Chạy thật (Modal, CPU):** tab *Chạy thử video* - tải video lên, máy chủ chạy
+  YOLO → ByteTrack → TTC/PET → Risk, xem tiến độ, video overlay, cảnh báo và bảng đối
+  soát của chính lần chạy đó. Deploy: `modal deploy scripts/deploy_modal.py`. Cùng máy
+  chủ đó đóng gói bằng `Dockerfile` cho mọi nền tảng chạy container (Hugging Face Spaces
+  bản PRO: `scripts/deploy_hf_space.py`).
 * **Chạy tại máy:** `python -m saferoad serve --demo` → http://127.0.0.1:8000.
 * **Trang tĩnh (Vercel):** `node scripts/build_static_site.mjs` - chỉ hiển thị kết quả tính sẵn.
 
@@ -266,7 +268,7 @@ SafeRoad-AI/
 ├── configs/             # default · synthetic · mvti · street · calib_street
 ├── data/outputs/        # kết quả JSON (minh chứng số liệu), archive_v1/ = số liệu bản cũ
 ├── docs/                # báo cáo cải tiến, báo cáo v1, protocol v2, giấy phép dữ liệu
-├── scripts/             # báo cáo, README, xuất YOLO, deploy Hugging Face
+├── scripts/             # báo cáo, README, xuất YOLO, deploy Modal / Hugging Face
 ├── tests/               # pytest
 └── Dockerfile           # bản demo chạy thật
 ```

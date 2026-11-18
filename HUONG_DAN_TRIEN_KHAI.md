@@ -45,19 +45,21 @@ python -m saferoad serve --demo --sample-video data\samples\demo_sample.mp4
 Mở http://127.0.0.1:8000. Tab **Chạy thử video** chạy pipeline thật trên video tải lên;
 tab **Rà soát nhãn** dùng để hai người gán nhãn độc lập.
 
-## 4. Demo chạy thật trên Hugging Face Spaces
+## 4. Demo chạy thật trên Modal
 
-1. Tạo Space: https://huggingface.co/new-space → SDK **Docker** → **Blank** → **CPU basic** → Public.
-2. Tạo token quyền **Write**: https://huggingface.co/settings/tokens
-3. Cài Git LFS một lần: `git lfs install`
-4. Đẩy:
+Hugging Face chỉ cho chạy Space Docker với tài khoản PRO (từ 7/2026), nên bản demo
+đặt trên Modal: 30 USD credit/tháng, tự tắt khi không ai truy cập.
 
 ```powershell
-$env:HF_TOKEN = "hf_xxx"
-python scripts\deploy_hf_space.py --space <tên_tài_khoản_hf>/saferoad-ai
+pip install modal
+modal setup
+modal deploy scripts\deploy_modal.py
 ```
 
-Space tự dựng Docker trong 5-10 phút. Link demo: `https://huggingface.co/spaces/<tên_tài_khoản_hf>/saferoad-ai`.
+Lần đầu dựng image mất khoảng 5 phút; link in ra có dạng
+`https://<workspace>--saferoad-ai.modal.run`. Lần mở đầu tiên sau khi container đã tắt
+chờ khoảng 30 giây. Có PRO thì vẫn dùng được `python scripts\deploy_hf_space.py`.
+
 Video mẫu `data\samples\demo_sample.mp4` là 20 s cắt từ đoạn held-out (giây 222-242 của
 `street_heldout_300_741s.mp4`, chọn đoạn có xe đông để demo có cảnh báo); chỉ đẩy kèm khi
 giấy phép của bộ dữ liệu cho phép. Tạo lại:

@@ -259,7 +259,7 @@ if (HO) {
   const s = HO.summary;
   children.push(P(`441 giây cuối của video đại lộ không có nhãn và không được dùng cho hiệu chuẩn, chọn ngưỡng hay fine-tune. Chạy toàn bộ pipeline (YOLO11n tinh chỉnh ở mục 2.3, CPU) trên đoạn này: ${s.n_frames} khung hình, ${s.n_tracks} đối tượng, ${s.total_events} cảnh báo, tức ${n(s.total_events / (s.duration_s / 3600), 1)} cảnh báo/giờ; tốc độ trung vị ${n(s.processing_fps, 1)} FPS. Danh sách cảnh báo để người rà soát nằm ở data/outputs/review_candidates_street_heldout.csv.`));
 }
-children.push(P('Bản demo trực tuyến không còn là dashboard tính sẵn: tab "Chạy thử video" cho phép tải một đoạn video lên máy chủ (Hugging Face Spaces, CPU), máy chủ chạy YOLO → ByteTrack → quỹ đạo → TTC/PET → Risk và hiển thị tiến độ từng khung hình, video overlay, danh sách cảnh báo và bảng đối soát của chính lần chạy đó.'));
+children.push(P('Bản demo trực tuyến không còn là dashboard tính sẵn: tab "Chạy thử video" cho phép tải một đoạn video lên máy chủ (Modal, CPU), máy chủ chạy YOLO → ByteTrack → quỹ đạo → TTC/PET → Risk và hiển thị tiến độ từng khung hình, video overlay, danh sách cảnh báo và bảng đối soát của chính lần chạy đó.'));
 
 children.push(H2('2.6. Nhãn xung đột do người rà soát'));
 children.push(P('Công cụ đã sẵn sàng, nhưng tại thời điểm nộp chưa có nhãn của người - báo cáo không trình bày con số nào thay cho bước này. Quy trình (protocol mục 8):'));

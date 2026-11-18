@@ -877,13 +877,46 @@ async function poll(id){
   $('run-status').textContent=`${j.message} · ${j.processed}/${j.total} khung hình · ${j.fps} FPS`+(j.error?` · ${j.error}`:'');
   if(j.state==='done'){
     S.job=id; const s=j.summary||{};
-    $('run-result').innerHTML=`<div class="metrics-note">Xong: ${s.n_frames} khung hình, ${s.n_tracks} đối tượng, <b>${s.total_events} cảnh báo</b>, ${s.processing_fps} FPS (detector ${s.detector}).
-      ${j.calibrated?'':'<br><span class="bad">Video chưa hiệu chuẩn: TTC/PET dùng homography xấp xỉ, chỉ mang tính tương đối.</span>'}
-      <br>Các tab Tổng quan, Camera, Near-miss, Risk Map, Rà soát nhãn giờ hiển thị kết quả của video này.</div>`;
+    $('run-status').textContent=`Xong · ${j.processed}/${j.total} khung hình · ${j.fps} FPS`;
+    await showRunResult(id, j, s);
     load(); return;
   }
   if(j.state==='error') return;
   setTimeout(()=>poll(id),1500);
+}
+
+const CONTACT_VI={near_miss:'Near-miss',body_overlap:'Chồng thân xe',collision_suspected:'Nghi va chạm'};
+async function showRunResult(id, j, s){
+  const ev=(await fetch(`/api/events?job=${id}`).then(r=>r.json()).catch(()=>({events:[]}))).events||[];
+  const cc={near_miss:0,body_overlap:0,collision_suspected:0};
+  ev.forEach(e=>{ if(e.contact in cc) cc[e.contact]++; });
+  const fun=s.event_funnel||{};
+  const funRows=Object.entries(fun).filter(([k])=>RC_VI[k]).map(([k,v])=>`<tr><td>${RC_VI[k]}</td><td class="num">${v}</td></tr>`);
+  const rows=ev.slice().sort((a,b)=>a.t-b.t).map(e=>`<tr>
+      <td>${mmss(e.t)}</td>
+      <td>${VI_CLASS[e.cls_a]||e.cls_a} ↔ ${VI_CLASS[e.cls_b]||e.cls_b}</td>
+      <td><span class="chip">${VI_TYPE[e.conflict_type]||e.conflict_type}</span></td>
+      <td>${CONTACT_VI[e.contact]||e.contact||'-'}</td>
+      <td class="num">${e.ttc===null?'-':fmt(e.ttc)+'s'}</td>
+      <td class="num">${e.pet===null?'-':fmt(e.pet)+'s'}</td>
+      <td class="num"><span class="badge b-${e.risk_level}">${fmt(e.risk_score,0)}</span></td>
+      <td><button class="btn ghost" onclick="const v=$('run-v');v.currentTime=Math.max(0,${e.t}-1.5);v.play()">Xem</button></td>
+    </tr>`);
+  $('run-result').innerHTML=`
+    <div class="kpis" style="margin-top:12px">
+      <div class="kpi"><div class="lbl">Cảnh báo</div><div class="val">${s.total_events??ev.length}</div>
+        <div class="sub">${cc.near_miss} near-miss · ${cc.body_overlap} chồng thân · ${cc.collision_suspected} nghi va chạm</div></div>
+      <div class="kpi k2"><div class="lbl">Đối tượng theo vết</div><div class="val">${s.n_tracks??'-'}</div><div class="sub">${s.n_frames??'-'} khung hình</div></div>
+      <div class="kpi k3"><div class="lbl">Tốc độ xử lý</div><div class="val">${fmt(s.processing_fps,1)}</div><div class="sub">FPS trên CPU máy chủ</div></div>
+      <div class="kpi k4"><div class="lbl">Cấu hình</div><div class="val" style="font-size:16px">${j.preset_label||j.preset}</div>
+        <div class="sub">${j.calibrated?'Đã hiệu chuẩn':'<span class="bad">Chưa hiệu chuẩn - TTC/PET chỉ tương đối</span>'}</div></div>
+    </div>
+    <div class="video-wrap" style="margin-top:12px"><video id="run-v" controls autoplay muted playsinline src="/api/video?job=${id}"></video></div>
+    <div class="metrics-note">Khung vàng: vùng phân tích. Bấm "Xem" ở một cảnh báo để tua video tới lúc đó.</div>
+    <h3 style="margin-top:14px">Cảnh báo của lần chạy này</h3>
+    ${T(['Thời điểm','Đối tượng','Loại xung đột','Kết cục','#TTC','#PET','#Risk',''], rows.length?rows:['<tr><td colspan="8" class="empty">Không có cảnh báo trong vùng phân tích</td></tr>'])}
+    ${funRows.length?`<h3 style="margin-top:14px">Đối soát sự kiện của lần chạy này</h3>${T(['Bước','#Số lượng'],funRows)}`:''}
+    <div class="metrics-note">Các tab Tổng quan, Camera, Near-miss, Risk Map, Rà soát nhãn cũng đang hiển thị kết quả của video này.</div>`;
 }
 
 /* ------------------------------ Rà soát ----------------------------- */
