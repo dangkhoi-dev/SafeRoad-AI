@@ -155,7 +155,7 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
     <ul class="nav">
       <li class="active" data-view="overview"><span class="ic">▦</span> Tổng quan</li>
       <li data-view="camera"><span class="ic">▶</span> Camera</li>
-      <li data-view="events"><span class="ic">⚠</span> Near-miss</li>
+      <li data-view="events"><span class="ic">⚠</span> Sự kiện</li>
       <li data-view="riskmap"><span class="ic">◉</span> Risk Map</li>
       <li data-view="analysis"><span class="ic">◫</span> Phân tích</li>
       <li data-view="behavior"><span class="ic">◈</span> Hành vi</li>
@@ -253,9 +253,9 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
       <div class="filters" id="filters"></div>
       <div class="grid g2">
         <div class="panel">
-          <h3>Danh sách near-miss <span class="hint" id="ev-count"></span></h3>
+          <h3>Danh sách sự kiện xung đột <span class="hint" id="ev-count"></span></h3>
           <div class="scroll" style="max-height:520px"><table>
-            <thead><tr><th>ID</th><th>Thời điểm</th><th>Đối tượng</th><th>Loại</th>
+            <thead><tr><th>ID</th><th>Thời điểm</th><th>Đối tượng</th><th>Loại</th><th>Kết cục</th>
               <th class="num">TTC</th><th class="num">PET</th><th class="num">Risk</th>
               <th>Mức</th></tr></thead>
             <tbody id="tb-events"></tbody>
@@ -419,6 +419,7 @@ const VI_TYPE = {crossing:'Cắt ngang', turning:'Chuyển hướng', rear_end:'
 const VI_CLASS = {pedestrian:'Người đi bộ', bicycle:'Xe đạp', motorcycle:'Xe máy',
   car:'Ô tô', truck:'Xe tải/Bus'};
 const VI_LEVEL = {high:'Cao', medium:'Trung bình', low:'Thấp', none:'An toàn'};
+const CONTACT_VI = {near_miss:'Near-miss', body_overlap:'Chồng thân xe', collision_suspected:'Nghi va chạm'};
 const TYPE_COLOR = {crossing:'#f97316', turning:'#3b82f6', rear_end:'#22c55e',
   head_on:'#ef4444', lane_change:'#a855f7', pedestrian:'#eab308'};
 
@@ -549,11 +550,12 @@ function fillEvents(){
       <td>${e.event_id}</td><td>${mmss(e.t)}</td>
       <td>${VI_CLASS[e.cls_a]||e.cls_a} ↔ ${VI_CLASS[e.cls_b]||e.cls_b}</td>
       <td><span class="chip">${VI_TYPE[e.conflict_type]||e.conflict_type}</span></td>
+      <td>${CONTACT_VI[e.contact]||'-'}</td>
       <td class="num">${e.ttc===null?'-':fmt(e.ttc)+'s'}</td>
       <td class="num">${e.pet===null?'-':fmt(e.pet)+'s'}</td>
       <td class="num">${fmt(e.risk_score,0)}</td>
       <td><span class="badge b-${e.risk_level}">${VI_LEVEL[e.risk_level]||e.risk_level}</span></td>
-    </tr>`).join('') || '<tr><td colspan="8" class="empty">Không có sự kiện khớp bộ lọc</td></tr>';
+    </tr>`).join('') || '<tr><td colspan="9" class="empty">Không có sự kiện khớp bộ lọc</td></tr>';
 }
 
 window.selectEvent = (id, jump)=>{
@@ -857,16 +859,27 @@ async function initRun(){
   const p=await fetch('/api/presets').then(r=>r.json()).catch(()=>null);
   if(!p||!p.demo){ $('run-disabled').style.display='block'; $('run-form').style.display='none'; return; }
   $('run-preset').innerHTML=p.presets.map(x=>`<option value="${x.key}">${x.label}</option>`).join('');
-  $('run-limits').textContent=`Tối đa ${p.max_seconds} giây đầu của video được xử lý (máy chủ CPU). Video không hiệu chuẩn: TTC/PET dùng homography xấp xỉ. Preset đại lộ: cảnh báo chỉ tính trong vùng phân tích (khung vàng trên video), nơi homography đã được kiểm chứng; detector là YOLO11n tinh chỉnh cho camera này.`;
+  $('run-limits').textContent=`Tối đa ${p.max_seconds} giây đầu của video được xử lý (máy chủ CPU). Nên dùng đoạn ngắn dưới 20 MB: máy chủ đặt ở Mỹ nên tải lên có thể mất vài phút. Video không hiệu chuẩn: TTC/PET dùng homography xấp xỉ. Preset đại lộ: cảnh báo chỉ tính trong vùng phân tích (khung vàng trên video), nơi homography đã được kiểm chứng; detector là YOLO11n tinh chỉnh cho camera này.`;
   if(p.sample) $('run-sample').style.display='inline-block';
   $('run-go').onclick=async()=>{
     const f=$('run-file').files[0]; if(!f){ $('run-status').textContent='Chọn một file video trước.'; return; }
     const fd=new FormData(); fd.append('file',f); fd.append('preset',$('run-preset').value);
-    $('run-status').textContent='Đang tải lên…';
-    const r=await fetch('/api/jobs',{method:'POST',body:fd}); const j=await r.json();
-    if(!r.ok){ $('run-status').textContent=j.detail||'Lỗi'; return; } poll(j.job_id);
+    const mb=(f.size/1048576).toFixed(1);
+    $('run-result').innerHTML=''; $('run-bar').style.width='0%';
+    const {ok, j}=await new Promise(res=>{
+      const x=new XMLHttpRequest(); x.open('POST','/api/jobs');
+      x.upload.onprogress=e=>{ if(e.lengthComputable){ const p=100*e.loaded/e.total;
+        $('run-bar').style.width=p.toFixed(1)+'%';
+        $('run-status').textContent=`Đang tải video lên máy chủ: ${p.toFixed(0)}% của ${mb} MB`; } };
+      x.upload.onload=()=>{ $('run-status').textContent='Đã tải lên, máy chủ đang nhận video…'; };
+      x.onload=()=>{ let j={}; try{ j=JSON.parse(x.responseText); }catch(_){} res({ok:x.status<300, j}); };
+      x.onerror=()=>res({ok:false, j:{detail:'Mất kết nối khi tải lên - thử lại với đoạn video ngắn hơn.'}});
+      $('run-status').textContent=`Đang tải video lên máy chủ (${mb} MB)…`; x.send(fd);
+    });
+    if(!ok){ $('run-status').textContent=j.detail||'Lỗi'; return; } poll(j.job_id);
   };
   $('run-sample').onclick=async()=>{
+    $('run-result').innerHTML=''; $('run-bar').style.width='0%'; $('run-status').textContent='Đang khởi động…';
     const fd=new FormData(); const r=await fetch('/api/jobs/sample',{method:'POST',body:fd}); const j=await r.json();
     if(!r.ok){ $('run-status').textContent=j.detail||'Lỗi'; return; } poll(j.job_id);
   };
@@ -885,7 +898,6 @@ async function poll(id){
   setTimeout(()=>poll(id),1500);
 }
 
-const CONTACT_VI={near_miss:'Near-miss',body_overlap:'Chồng thân xe',collision_suspected:'Nghi va chạm'};
 async function showRunResult(id, j, s){
   const ev=(await fetch(`/api/events?job=${id}`).then(r=>r.json()).catch(()=>({events:[]}))).events||[];
   const cc={near_miss:0,body_overlap:0,collision_suspected:0};
@@ -912,7 +924,7 @@ async function showRunResult(id, j, s){
         <div class="sub">${j.calibrated?'Đã hiệu chuẩn':'<span class="bad">Chưa hiệu chuẩn - TTC/PET chỉ tương đối</span>'}</div></div>
     </div>
     <div class="video-wrap" style="margin-top:12px"><video id="run-v" controls autoplay muted playsinline src="/api/video?job=${id}"></video></div>
-    <div class="metrics-note">Khung vàng: vùng phân tích. Bấm "Xem" ở một cảnh báo để tua video tới lúc đó.</div>
+    <div class="metrics-note">${j.calibrated?'Khung vàng: vùng phân tích. ':''}Bấm "Xem" ở một cảnh báo để tua video tới lúc đó.</div>
     <h3 style="margin-top:14px">Cảnh báo của lần chạy này</h3>
     ${T(['Thời điểm','Đối tượng','Loại xung đột','Kết cục','#TTC','#PET','#Risk',''], rows.length?rows:['<tr><td colspan="8" class="empty">Không có cảnh báo trong vùng phân tích</td></tr>'])}
     ${funRows.length?`<h3 style="margin-top:14px">Đối soát sự kiện của lần chạy này</h3>${T(['Bước','#Số lượng'],funRows)}`:''}
