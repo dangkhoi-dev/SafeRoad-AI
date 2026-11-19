@@ -32,8 +32,9 @@ Phản hồi ba yêu cầu của hội đồng - chi tiết và minh chứng tro
 1. **Video thật và chất lượng phát hiện** - thêm video đại lộ thật có nhãn bbox + ID
    (ghép nhãn CVAT bị cắt đoạn), hiệu chuẩn camera có kiểm tra chéo
    (`saferoad calibrate`), bảng detection → tracking → cảnh báo trên cùng một video,
-   báo nhầm/bỏ sót theo giờ, công cụ rà soát nhãn của người + Cohen's kappa
-   (`saferoad review-score`), demo **chạy pipeline thật** trên video tải lên.
+   báo nhầm/bỏ sót theo giờ, tinh chỉnh YOLO11n theo từng camera với train/test chia
+   theo thời gian (đại lộ và MVTI), công cụ rà soát nhãn của người + Cohen's kappa
+   (`scripts/score_reviews.py`), demo **chạy pipeline thật** trên video tải lên.
 2. **PET và near-miss** - tách PET ngoại suy và PET đo từ mốc vào/ra vùng xung đột,
    lưu 4 mốc thời gian; xử lý quỹ đạo song song và xe đã qua giao điểm; phân loại
    near-miss / chồng thân xe / nghi va chạm; trình mô phỏng có vật lý va chạm. Mỗi lỗi
@@ -59,8 +60,8 @@ chạy lại được bằng các lệnh ở mục [Tái hiện](#tái-hiện).
 | Recall | 0,766 (49/64) |
 | F1 | 0,632 |
 | TTC MAE | 0,203 s |
-| PET đo - MAE | 0,035 s (n=30) |
-| PET ngoại suy - MAE | 0,136 s (n=35) |
+| PET đo - MAE | 0,031 s (n=30) |
+| PET ngoại suy - MAE | 0,131 s (n=35) |
 | Recall near-miss / va chạm | 0,759 (41/54) / 0,800 (8/10) |
 | Tracking IDF1 / MOTA / đổi ID | 0,983 / 0,965 / 142 |
 | Quỹ đạo bị gắn cờ hành vi | 0,478 (131/274) |
@@ -84,10 +85,14 @@ Ablation bỏ từng khối (cùng mẫu, cùng seed):
 
 | Dữ liệu / detector | mAP@0,5 | mAP@0,5 (bỏ hộp nhỏ) | Recall @ngưỡng chạy | IDF1 | Cảnh báo / tham chiếu | P so tham chiếu | R so tham chiếu | Báo nhầm/giờ | FPS |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Đại lộ (Kaggle), 300 s, YOLO11n gốc | 0,095 | 0,100 | 0,084 | 0,097 | 0 / 2 | - (0/0) | 0,000 (0/2) | 0,0 | 16,7 |
-| Đại lộ, test 220-300 s, YOLO11n gốc | 0,052 | 0,054 | 0,054 | 0,021 | 0 / 1 | - (0/0) | 0,000 (0/1) | 0,0 | 16,3 |
-| Đại lộ, test 220-300 s, YOLO11n tinh chỉnh | 0,202 | 0,219 | 0,453 | 0,223 | 2 / 1 | 0,500 (1/2) | 1,000 (1/1) | 44,8 | 14,3 |
-| MVTI, YOLO11n gốc | 0,208 | 0,209 | 0,278 | 0,235 | 1 / 0 | 0,000 (0/1) | - (0/0) | 44,2 | 17,1 |
+| Đại lộ (Kaggle), 300 s, YOLO11n gốc | 0,095 | 0,100 | 0,084 | 0,097 | 0 / 2 | - (0/0) | 0,000 (0/2) | 0,0 | 14,5 |
+| Đại lộ, test 220-300 s, YOLO11n gốc | 0,052 | 0,054 | 0,054 | 0,021 | 0 / 1 | - (0/0) | 0,000 (0/1) | 0,0 | 14,0 |
+| Đại lộ, test 220-300 s, YOLO11n tinh chỉnh | 0,202 | 0,219 | 0,453 | 0,223 | 2 / 1 | 0,500 (1/2) | 1,000 (1/1) | 44,8 | 12,8 |
+| MVTI, YOLO11n gốc | 0,208 | 0,209 | 0,278 | 0,235 | 1 / 0 | 0,000 (0/1) | - (0/0) | 44,2 | 12,8 |
+| MVTI, test 57-81 s, YOLO11n gốc | 0,196 | 0,199 | 0,273 | 0,072 | 0 / 0 | - (0/0) | - (0/0) | 0,0 | 14,5 |
+| MVTI, test 57-81 s, YOLO11n tinh chỉnh | 0,710 | 0,717 | 0,612 | 0,262 | 0 / 0 | - (0/0) | - (0/0) | 0,0 | 14,5 |
+
+MVTI chỉ có 19 phương tiện và phần lớn đứng trong khung suốt 81 s, nên trong đoạn test 14/17 xe đã gặp lúc huấn luyện (model có thể đã nhớ chúng). Chấm riêng 3 xe chỉ xuất hiện sau phần huấn luyện (500 hộp): mAP@0,5 0,322 (gốc) → 0,574 (tinh chỉnh).
 
 "Bỏ hộp nhỏ": hộp chuẩn nhỏ hơn `detection.min_box_area` (200 px² với đại lộ) được coi là vùng bỏ qua theo quy ước COCO, vì pipeline cố ý không xử lý vật thể xa như vậy. Người đi bộ trên video đại lộ có kích thước trung vị 8×23 px - ở đầu vào 640 px chỉ còn khoảng 3×8 px nên YOLO11n gần như không thấy.
 
@@ -192,6 +197,20 @@ python -m saferoad run --config configs/street.yaml --no-overlay \
 # MVTI
 python -m saferoad prepare-real --root data/raw/mvti --view Infrastructure
 python -m saferoad evaluate-real --config configs/mvti.yaml --no-db
+# Tinh chỉnh trên MVTI: train khung 0-1499, bỏ trống 1500-1699, test 1700-2440 (~30 phút CPU)
+python scripts/export_street_yolo.py --video data/processed/mvti/infrastructure.mp4 \
+    --ground-truth data/processed/mvti/infrastructure_groundtruth.pkl --out data/yolo_mvti \
+    --prefix mvti --train-end 1500 --test-start 1700 --train-step 5 --val-step 15
+python scripts/train_street_yolo.py --data data/yolo_mvti/data.yaml --epochs 15 --name mvti \
+    --out models/saferoad_mvti_yolo11n.pt --results-csv data/outputs/train_mvti_yolo11n_results.csv
+# Gốc / tinh chỉnh trên đúng đoạn test; --seen-before chấm thêm riêng xe chưa gặp lúc train
+python -m saferoad evaluate-real --config configs/mvti.yaml --weights models/yolo11n.pt --no-db --no-overlay \
+    --start-frame 1700 --seen-before 1500 --out data/outputs/evaluation_mvti_pretrained_test.json
+python -m saferoad evaluate-real --config configs/mvti.yaml --weights models/saferoad_mvti_yolo11n.pt --no-db --no-overlay \
+    --start-frame 1700 --seen-before 1500 --out data/outputs/evaluation_mvti_finetuned_test.json
+
+# Chấm nhãn người rà soát (sau khi có >= 2 file labels_<bộ>_<tên>.csv)
+python scripts/score_reviews.py --missed street_heldout=0
 
 # Cập nhật bảng số trong README và báo cáo cải tiến
 python scripts/build_readme_tables.py

@@ -30,9 +30,17 @@ const ST = J('data/outputs/evaluation_street.json');
 const STF = J('data/outputs/evaluation_street_finetuned_test.json');
 const STP = J('data/outputs/evaluation_street_pretrained_test.json');
 const MV = J('data/outputs/evaluation_real.json');
+const MTP = J('data/outputs/evaluation_mvti_pretrained_test.json');
+const MTF = J('data/outputs/evaluation_mvti_finetuned_test.json');
 const CAL = J('data/outputs/calibration_street.json');
 const HO = J('data/outputs/street_heldout/results.json');
 const SENS = J('data/outputs/street_reference_sensitivity.json');
+// Kết quả chấm theo nhãn người: data/outputs/review_score_<tập>.json (saferoad review-score).
+const REVIEWS = fs.readdirSync(path.join(ROOT, 'data', 'outputs'))
+  .filter((f) => /^review_score_.+\.json$/.test(f)).sort()
+  .map((f) => [f.replace(/^review_score_|\.json$/g, ''), J(path.join('data', 'outputs', f))]);
+const REVIEW_VI = { street_heldout: 'Đại lộ, 441 s chưa từng dùng', street: 'Đại lộ 0-300 s',
+  street_finetuned_test: 'Đại lộ, test 220-300 s', real: 'MVTI' };
 const V1 = J('data/outputs/archive_v1/evaluation.json');
 const V1R = J('data/outputs/archive_v1/results.json');
 const V1REAL = J('data/outputs/archive_v1/evaluation_real.json');
@@ -222,7 +230,8 @@ const alertRow = (name, x) => {
     ph.misses_per_hour == null ? '-' : n(ph.misses_per_hour, 1)];
 };
 const REALS = [['Đại lộ 0-300 s, YOLO11n gốc', ST], ['Đại lộ, test 220-300 s, YOLO11n gốc', STP],
-  ['Đại lộ, test 220-300 s, YOLO11n tinh chỉnh', STF], ['MVTI, YOLO11n gốc', MV]];
+  ['Đại lộ, test 220-300 s, YOLO11n tinh chỉnh', STF], ['MVTI 0-81 s, YOLO11n gốc', MV],
+  ['MVTI, test 57-81 s, YOLO11n gốc', MTP], ['MVTI, test 57-81 s, YOLO11n tinh chỉnh', MTF]];
 children.push(T(['Dữ liệu / detector', 'mAP@0,5', 'mAP@0,5 bỏ hộp nhỏ', 'P / R ở ngưỡng chạy', 'IDF1', 'MOTA', 'Đổi ID', 'FPS'],
   REALS.map(([k, x]) => detRow(k, x)).filter(Boolean), [2.6, 0.8, 1, 1.2, 0.7, 0.7, 0.7, 0.6]));
 children.push(Cap('Bảng 1a. Detection và tracking. "Bỏ hộp nhỏ": hộp chuẩn nhỏ hơn detection.min_box_area (200 px² với đại lộ) là vùng bỏ qua theo quy ước COCO, vì pipeline cố ý không xử lý vật thể xa như vậy; cột mAP@0,5 bên trái chấm trên toàn bộ nhãn.'));
@@ -236,6 +245,12 @@ if (ST) {
 if (V1REAL) children.push(P(`Đối chiếu bản cũ trên MVTI: mAP@0,5 = ${n(V1REAL.detection.mAP50)}, IDF1 = ${n(V1REAL.tracking.idf1)} - chính hai con số hội đồng nêu. Bản mới chấm tracking theo quy ước vùng bỏ qua của MOT (hộp chuẩn nhỏ hơn ngưỡng lọc của pipeline không tính vào mẫu số), và tách hẳn ảnh hưởng của detection lên cảnh báo như bảng trên.`));
 if (STF && STP) {
   children.push(P(`Tinh chỉnh YOLO11n trên phần đầu video đại lộ (0-210 s, mỗi 10 khung hình lấy 1 ảnh; 10 epoch trên CPU, scripts/train_street_yolo.py), kiểm tra trên 220-300 s chưa dùng để huấn luyện: mAP@0,5 từ ${n(STP.detection.mAP50)} lên ${n(STF.detection.mAP50)}, recall ở ngưỡng chạy từ ${n(STP.detection.recall50_op)} lên ${n(STF.detection.recall50_op)}, IDF1 từ ${n(STP.tracking.idf1)} lên ${n(STF.tracking.idf1)}. Trọng số dùng là epoch cuối, không chọn epoch theo đoạn kiểm tra. Chia theo thời gian (có khoảng trống 10 s) để tránh rò rỉ giữa hai khung hình liền nhau; tuy vậy đây vẫn là kiểm tra trong cùng một camera, đúng kịch bản triển khai thật (fine-tune theo từng camera), không phải khả năng tổng quát sang camera khác.`));
+}
+
+if (MTF && MTP) {
+  const up = MTP.detection_unseen_objects || {}, uf = MTF.detection_unseen_objects || {};
+  children.push(P(`Hai con số hội đồng nêu (mAP@0,5 ≈ 0,208, IDF1 ≈ 0,235) là của YOLO11n gốc trên MVTI. Làm tương tự trên chính MVTI: tinh chỉnh trên 0-50 s (khung 0-1499, mỗi 5 khung lấy 1 ảnh, 15 epoch), bỏ trống 50-57 s, kiểm tra trên 57-81 s (khung 1700-2440). Trên đoạn kiểm tra: mAP@0,5 từ ${n(MTP.detection.mAP50)} lên ${n(MTF.detection.mAP50)}, recall ở ngưỡng chạy từ ${n(MTP.detection.recall50_op)} lên ${n(MTF.detection.recall50_op)}, IDF1 từ ${n(MTP.tracking.idf1)} lên ${n(MTF.tracking.idf1)}. Như với đại lộ, trọng số dùng là epoch cuối; ảnh val lấy từ đoạn kiểm tra chỉ để theo dõi, không dùng để chọn epoch.`));
+  children.push(P(`Cần đọc con số này đúng phạm vi: MVTI chỉ có 19 phương tiện và phần lớn đứng trong khung suốt 81 giây, nên ${uf.n_test_tracks != null ? (uf.n_test_tracks - uf.n_unseen_tracks) + '/' + uf.n_test_tracks : 'phần lớn'} xe ở đoạn kiểm tra đã xuất hiện lúc huấn luyện - model có thể đã "nhớ" chúng. Vì vậy chấm thêm riêng ${uf.n_unseen_tracks ?? '-'} xe chỉ xuất hiện sau phần huấn luyện (${uf.n_gt ?? '-'} hộp; hộp của các xe đã gặp là vùng bỏ qua): mAP@0,5 từ ${n(up.mAP50)} lên ${n(uf.mAP50)}. Đây là mẫu nhỏ, nhưng là phép đo duy nhất trên MVTI không bị lẫn xe đã thấy.`));
 }
 
 children.push(H2('2.4. Vùng phân tích, xe đứng yên và cặp người đi bộ'));
@@ -262,7 +277,19 @@ if (HO) {
 children.push(P('Bản demo trực tuyến không còn là dashboard tính sẵn: tab "Chạy thử video" cho phép tải một đoạn video lên máy chủ (Modal, CPU), máy chủ chạy YOLO → ByteTrack → quỹ đạo → TTC/PET → Risk và hiển thị tiến độ từng khung hình, video overlay, danh sách cảnh báo và bảng đối soát của chính lần chạy đó.'));
 
 children.push(H2('2.6. Nhãn xung đột do người rà soát'));
-children.push(P('Công cụ đã sẵn sàng, nhưng tại thời điểm nộp chưa có nhãn của người - báo cáo không trình bày con số nào thay cho bước này. Quy trình (protocol mục 8):'));
+if (REVIEWS.length) {
+  children.push(P('Hai thành viên gán nhãn độc lập theo protocol mục 8. Precision và Recall dưới đây tính so với nhãn đồng thuận của người, không phải so với cảnh báo tham chiếu.'));
+  children.push(T(['Tập', 'Ứng viên', 'Người', 'Kappa (5 lớp / có-không)', 'Đồng thuận', 'P', 'R', 'Báo nhầm/giờ', 'Bỏ sót/giờ'],
+    REVIEWS.map(([k, x]) => [REVIEW_VI[k] || k, x.n_candidates, x.n_reviewers,
+      `${n(x.kappa_5class)} / ${n(x.kappa_conflict_vs_not)}`,
+      Object.entries(x.consensus_counts || {}).map(([a, b]) => `${a} ${b}`).join(', ') || '-',
+      r(x.precision), r(x.recall), n(x.false_alarms_per_hour, 1), n(x.misses_per_hour, 1)]),
+    [1.6, 0.7, 0.6, 1.2, 1.7, 1, 1, 0.8, 0.8]));
+  children.push(Cap('Bảng 1d. Cảnh báo so với nhãn xung đột do người rà soát (saferoad review-score). Ứng viên bất đồng hoặc "unclear" không vào mẫu số.'));
+  children.push(P('Quy trình đã dùng (protocol mục 8):'));
+} else {
+  children.push(P('Công cụ đã sẵn sàng, nhưng tại thời điểm nộp chưa có nhãn của người - báo cáo không trình bày con số nào thay cho bước này. Quy trình (protocol mục 8):'));
+}
 children.push(B('saferoad evaluate-real và saferoad run --review-csv sinh danh sách ứng viên: hợp của cảnh báo hệ thống và cảnh báo tham chiếu, kèm thời điểm và cặp đối tượng.'));
 children.push(B('Hai thành viên mở tab "Rà soát nhãn", xem lại từng đoạn ở tốc độ 0,25×, gán độc lập một trong năm nhãn: near_miss, collision, normal, overlap_artifact, unclear; xem thêm toàn bộ video để ghi các xung đột hệ thống bỏ sót.'));
 children.push(B('saferoad review-score tính Cohen\'s kappa (5 lớp và có/không xung đột); κ < 0,6 thì ngồi lại thống nhất cách hiểu rồi gán lại, không lấy trung bình. Nhãn đồng thuận cho Precision, Recall, báo nhầm/giờ và bỏ sót/giờ so với nhãn người.'));
@@ -359,10 +386,12 @@ children.push(P(`Về ID switch: chỉ số đếm mỗi lần một chiếc xe 
 children.push(H2('4.8. Log cấu hình tái hiện'));
 const RP = EV.reproducibility || {};
 children.push(P(`Mỗi tệp kết quả ghi kèm: lệnh đã chạy, commit Git, mã băm SHA-256 của toàn bộ cấu hình (${RP.config_sha256 || '-'}), toàn bộ cấu hình dạng JSON, mã băm của bundle dữ liệu, seed kịch bản (${SET.seed}) và seed detector (${SET.replay_seed}), phiên bản Python/NumPy/OpenCV/scikit-learn. Mỗi dòng ablation và mỗi ô lưới cũng ghi mã băm cấu hình của riêng nó.`));
+children.push(P(`Kiểm tra tái hiện: toàn bộ số liệu trong báo cáo được chạy lại từ đầu trên một bản clone sạch của commit ${RP.git_commit || '-'} trên GitHub, theo đúng các lệnh ở phụ lục (simulate → evaluate → evaluate-grid → bốn lần evaluate-real → chạy đầu-cuối đoạn chưa từng dùng). Mọi số đếm - sự kiện phát ra, TP/FP, mẫu số, ablation, quét nhiễu, lưới 27 ô, detection/tracking/cảnh báo trên video thật, danh sách ứng viên rà soát - trùng khớp với lần chạy trước. Khác biệt duy nhất là sai số PET: bộ nhãn mô phỏng dùng ở lần trước được sinh ra trước lần sửa cuối cùng của cách lấy mốc vào/ra vùng xung đột (điểm giữa hai mẫu kề biên), nên MAE của PET đo giảm từ 0,035 s xuống ${n((((EV.main || {}).pet_errors || {}).measured || {}).mae)} s; các bảng trong báo cáo dùng số của lần chạy lại.`));
+if (MTF) children.push(P(`Phần tinh chỉnh trên MVTI (mục 2.3) làm sau lần chạy lại này nên không nằm trong phép kiểm tra trên; hai tệp evaluation_mvti_*_test.json ghi commit ${(MTF.reproducibility || {}).git_commit || '-'} (hậu tố -dirty nghĩa là chạy trên commit đó cộng các thay đổi chưa commit của chính đợt này), trọng số tinh chỉnh lưu ở models/saferoad_mvti_yolo11n.pt.`));
 
 // ---------------------------- 5. Hạn chế -------------------------------- //
 children.push(H1('5. Hạn chế còn lại và việc tiếp theo'));
-children.push(B('Chưa có nhãn xung đột do người rà soát trên video thật: công cụ và danh sách ứng viên đã sẵn, cần hai thành viên gán nhãn độc lập (mục 2.6).'));
+if (!REVIEWS.length) children.push(B('Chưa có nhãn xung đột do người rà soát trên video thật: công cụ và danh sách ứng viên đã sẵn, cần hai thành viên gán nhãn độc lập (mục 2.6).'));
 children.push(B('Hiệu chuẩn video đại lộ là ước lượng từ vạch kẻ theo tiêu chuẩn, chưa đo thực địa, và chỉ phủ lòng đường bên trái - vùng phân tích vì vậy bị thu hẹp (mục 2.4). Cần quay video tại Việt Nam và đo thực địa điểm mốc.'));
 children.push(B('Trên video đại lộ, người đi bộ quá nhỏ cho YOLO ở đầu vào 640 px; cần chạy theo ô ở độ phân giải gốc (chậm hơn khoảng 6 lần trên CPU) hoặc camera gần hơn.'));
 children.push(B('Số cảnh báo tham chiếu trong vùng phân tích của video đại lộ rất ít (giao thông bình thường), nên Precision/Recall so với tham chiếu có mẫu số nhỏ; giá trị chính của video này là bảng detection/tracking và quy trình rà soát.'));
@@ -378,6 +407,7 @@ children.push(B('Dữ liệu: Multi-view Traffic Intersection Dataset (Møgelmos
 
 children.push(H1('Phụ lục - Lệnh tái hiện'));
 [
+  `git clone https://github.com/dangkhoi-dev/SafeRoad-AI.git && cd SafeRoad-AI && git checkout ${RP.git_commit || 'main'}`,
   'pip install -e ".[dev,docs]" && python scripts/download_assets.py',
   'pytest tests -q',
   'python -m saferoad simulate --duration 300 --seed 42',
@@ -393,6 +423,10 @@ children.push(H1('Phụ lục - Lệnh tái hiện'));
   'python -m saferoad evaluate-real --config configs/street.yaml --weights models/yolo11n.pt --start-frame 6600 --no-db --no-overlay --source data/processed/street/street_labeled_0_300s.mp4 --ground-truth data/processed/street/street_groundtruth.pkl --calibration-report data/outputs/calibration_street.json --out data/outputs/evaluation_street_pretrained_test.json',
   'python -m saferoad evaluate-real --config configs/street.yaml --weights models/saferoad_street_yolo11n.pt --start-frame 6600 --no-db --no-overlay --source data/processed/street/street_labeled_0_300s.mp4 --ground-truth data/processed/street/street_groundtruth.pkl --calibration-report data/outputs/calibration_street.json --out data/outputs/evaluation_street_finetuned_test.json',
   'python -m saferoad evaluate-real --config configs/mvti.yaml --no-db',
+  'python scripts/export_street_yolo.py --video data/processed/mvti/infrastructure.mp4 --ground-truth data/processed/mvti/infrastructure_groundtruth.pkl --out data/yolo_mvti --prefix mvti --train-end 1500 --test-start 1700 --train-step 5 --val-step 15',
+  'python scripts/train_street_yolo.py --data data/yolo_mvti/data.yaml --epochs 15 --name mvti --out models/saferoad_mvti_yolo11n.pt --results-csv data/outputs/train_mvti_yolo11n_results.csv',
+  'python -m saferoad evaluate-real --config configs/mvti.yaml --weights models/yolo11n.pt --no-db --no-overlay --start-frame 1700 --seen-before 1500 --out data/outputs/evaluation_mvti_pretrained_test.json',
+  'python -m saferoad evaluate-real --config configs/mvti.yaml --weights models/saferoad_mvti_yolo11n.pt --no-db --no-overlay --start-frame 1700 --seen-before 1500 --out data/outputs/evaluation_mvti_finetuned_test.json',
   'python -m saferoad run --config configs/street.yaml --no-overlay --source data/processed/street/street_heldout_300_741s.mp4 --output data/outputs/street_heldout --review-csv data/outputs/review_candidates_street_heldout.csv',
   'node scripts/build_improvement_report.js',
 ].forEach((c) => children.push(new Paragraph({ spacing: { after: 60 },

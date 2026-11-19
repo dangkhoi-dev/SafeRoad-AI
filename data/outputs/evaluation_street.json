@@ -40,7 +40,7 @@
     "assumptions": [
       "Bề rộng làn 3,5 m (làn đường đô thị phổ biến 3,25-3,75 m)",
       "Vạch đứt kiểu 1.5 (GOST R 51256): vạch 3 m, khe 9 m, chu kỳ 12 m - tỉ lệ vạch/chu kỳ đo trên ảnh ≈ 0,24 khớp tỉ lệ 1:3",
-      "Pha của vạch thứ hai so với vạch thứ nhất giải bằng bình phương tối thiểu: -5.208 m",
+      "Pha của vạch thứ hai so với vạch thứ nhất giải bằng bình phương tối thiểu: -5,208 m",
       "Mặt đường phẳng (homography một mặt phẳng)",
       "Sai số tỉ lệ tổng thể KHÔNG ảnh hưởng TTC và PET (cả quãng đường lẫn vận tốc cùng co giãn); ảnh hưởng ngưỡng khoảng cách và ngưỡng tốc độ tiếp cận"
     ],
@@ -192,29 +192,29 @@
     "system_statistics": {
       "total": 0
     },
-    "review_candidates_csv": "data/outputs/review_candidates_street.csv",
+    "review_candidates_csv": "/tmp/repro_out/review_candidates_street.csv",
     "n_review_candidates": 2
   },
   "runtime": {
     "n_frames": 9009,
     "duration_s": 300.3,
     "fps_source": 30.0,
-    "processing_fps": 16.7,
-    "frame_latency_median_ms": 59.88,
-    "frame_latency_p95_ms": 88.53,
-    "wall_seconds": 1299.97,
+    "processing_fps": 14.49,
+    "frame_latency_median_ms": 69.0,
+    "frame_latency_p95_ms": 91.89,
+    "wall_seconds": 1261.06,
     "total_events": 0,
     "severe_events": 0,
     "avg_risk_score": 0.0,
     "n_tracks": 291,
     "by_type": {},
     "latency_ms": {
-      "detection": 65.04,
-      "tracking": 0.65,
-      "trajectory": 0.53,
-      "conflict": 0.14
+      "detection": 70.78,
+      "tracking": 0.61,
+      "trajectory": 0.46,
+      "conflict": 0.12
     },
-    "total_latency_ms": 66.36,
+    "total_latency_ms": 71.97,
     "homography_error_m": 0.2295198291540146,
     "detector": "YoloDetector",
     "event_funnel": {
@@ -225,9 +225,9 @@
     }
   },
   "reproducibility": {
-    "command": "saferoad evaluate-real --config configs/street.yaml --weights models/yolo11n.pt --no-db --no-overlay --source data/processed/street/street_labeled_0_300s.mp4 --ground-truth data/processed/street/street_groundtruth.pkl --calibration-report data/outputs/calibration_street.json --out data/outputs/evaluation_street.json",
-    "git_commit": "5249dcc-dirty",
-    "config_sha256": "dadae2bb0b233438",
+    "command": "saferoad evaluate-real --config configs/street.yaml --weights models/yolo11n.pt --no-db --no-overlay --source data/processed/street/street_labeled_0_300s.mp4 --ground-truth data/processed/street/street_groundtruth.pkl --calibration-report data/outputs/calibration_street.json --out /tmp/repro_out/evaluation_street.json",
+    "git_commit": "476ab01",
+    "config_sha256": "378c37b3bb5559ed",
     "config": {
       "site": {
         "name": "Đại lộ nhiều làn - video Kaggle quay từ mái nhà (iPhone 13, 4K→1080p)",
@@ -247,7 +247,7 @@
         "resize_width": 0,
         "fps_override": 0.0,
         "write_overlay": false,
-        "overlay_path": "data/outputs/overlay_street.mp4"
+        "overlay_path": "/tmp/repro_out/overlay_street.mp4"
       },
       "detection": {
         "weights": "models/yolo11n.pt",
@@ -486,7 +486,7 @@
           0.95
         ]
       },
-      "db_path": "data/outputs/saferoad_street.db",
+      "db_path": "/tmp/repro_out/saferoad_street.db",
       "output_dir": "data/outputs"
     },
     "environment": {

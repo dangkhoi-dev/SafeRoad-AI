@@ -202,17 +202,17 @@
         "max": 100.0
       }
     },
-    "review_candidates_csv": "data/outputs/review_candidates_real.csv",
+    "review_candidates_csv": "/tmp/repro_out/review_candidates_real.csv",
     "n_review_candidates": 1
   },
   "runtime": {
     "n_frames": 2441,
     "duration_s": 81.37,
     "fps_source": 30.0,
-    "processing_fps": 17.08,
-    "frame_latency_median_ms": 58.54,
-    "frame_latency_p95_ms": 81.35,
-    "wall_seconds": 153.93,
+    "processing_fps": 12.82,
+    "frame_latency_median_ms": 78.03,
+    "frame_latency_p95_ms": 106.9,
+    "wall_seconds": 203.63,
     "total_events": 1,
     "severe_events": 1,
     "avg_risk_score": 100.0,
@@ -221,13 +221,13 @@
       "crossing": 1
     },
     "latency_ms": {
-      "detection": 57.67,
-      "tracking": 0.34,
-      "trajectory": 0.21,
-      "conflict": 0.09,
-      "overlay": 3.96
+      "detection": 76.87,
+      "tracking": 0.39,
+      "trajectory": 0.23,
+      "conflict": 0.1,
+      "overlay": 4.43
     },
-    "total_latency_ms": 62.27,
+    "total_latency_ms": 82.02,
     "homography_error_m": 2.312938447200457e-15,
     "detector": "YoloDetector",
     "event_funnel": {
@@ -236,9 +236,9 @@
     }
   },
   "reproducibility": {
-    "command": "saferoad evaluate-real --config configs/mvti.yaml --no-db",
-    "git_commit": "5249dcc-dirty",
-    "config_sha256": "4033db58803e1d13",
+    "command": "saferoad evaluate-real --config configs/mvti.yaml --no-db --out /tmp/repro_out/evaluation_real.json",
+    "git_commit": "476ab01",
+    "config_sha256": "d5a2f4fcea78b52f",
     "config": {
       "site": {
         "name": "Multi-view Traffic Intersection Dataset (camera hạ tầng)",
@@ -260,7 +260,7 @@
         "resize_width": 0,
         "fps_override": 0.0,
         "write_overlay": true,
-        "overlay_path": "data/outputs/overlay_real.mp4"
+        "overlay_path": "/tmp/repro_out/overlay_real.mp4"
       },
       "detection": {
         "weights": "models/yolo11n.pt",
@@ -352,7 +352,7 @@
           0.95
         ]
       },
-      "db_path": "data/outputs/saferoad_real.db",
+      "db_path": "/tmp/repro_out/saferoad_real.db",
       "output_dir": "data/outputs"
     },
     "environment": {

@@ -10,6 +10,12 @@ mAP bị thổi phồng. Mặc định: huấn luyện 0-210 s, bỏ trống 210
 
 Giữ nguyên chỉ số lớp COCO (person = 0, car = 2) với đủ 80 tên lớp, để model
 fine-tune dùng thẳng được trong pipeline mà không phải đổi ánh xạ lớp.
+
+Dùng được cho mọi bundle nhãn dạng MvtiSequence, ví dụ MVTI (camera hạ tầng):
+
+    python scripts/export_street_yolo.py --video data/processed/mvti/infrastructure.mp4 \
+        --ground-truth data/processed/mvti/infrastructure_groundtruth.pkl --out data/yolo_mvti \
+        --prefix mvti --train-end 1500 --test-start 1700 --train-step 5 --val-step 15
 """
 
 from __future__ import annotations
@@ -50,6 +56,7 @@ def main() -> int:
     ap.add_argument("--test-start", type=int, default=6600)
     ap.add_argument("--train-step", type=int, default=10)
     ap.add_argument("--val-step", type=int, default=30)
+    ap.add_argument("--prefix", default="street", help="tiền tố tên ảnh")
     args = ap.parse_args()
 
     seq = load_bundle(args.ground_truth)["sequence"]
@@ -73,7 +80,7 @@ def main() -> int:
         split = want.get(f)
         if split is not None:
             h, w = frame.shape[:2]
-            name = f"street_{f:06d}"
+            name = f"{args.prefix}_{f:06d}"
             cv2.imwrite(str(out / "images" / split / f"{name}.jpg"), frame,
                         [cv2.IMWRITE_JPEG_QUALITY, 92])
             lines = []

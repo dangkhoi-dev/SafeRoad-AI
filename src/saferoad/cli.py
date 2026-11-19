@@ -532,6 +532,27 @@ def cmd_evaluate_real(args: argparse.Namespace) -> int:
     # không xử lý (quá xa camera). Báo cả hai để không che con số khắt khe hơn.
     det_metrics_big = evaluate_detection(captured, gt_dets, operating_conf=op_conf,
                                          min_area=cfg.detection.min_box_area)
+    # Chỉ chấm trên đối tượng CHƯA xuất hiện trước khung --seen-before (tức là
+    # chưa có trong phần video dùng để fine-tune): hộp của đối tượng đã gặp là
+    # vùng bỏ qua. Trả lời câu hỏi "model học thuộc xe cũ hay nhận ra xe mới?".
+    det_unseen = None
+    if args.seen_before:
+        seen_boxes = {
+            (int(f), tuple(round(v, 1) for v in box))
+            for tr in seq.tracks.values() if min(tr.frames) < args.seen_before
+            for f, box in zip(tr.frames, tr.boxes)
+        }
+        n_unseen_tracks = sum(1 for tr in seq.tracks.values()
+                              if min(tr.frames) >= args.seen_before
+                              and any(first <= f < last for f in tr.frames))
+        det_unseen = evaluate_detection(
+            captured, gt_dets, operating_conf=op_conf, min_area=cfg.detection.min_box_area,
+            ignore_gt=lambda f, d: (int(f), tuple(round(v, 1) for v in d.bbox)) in seen_boxes,
+        ).to_dict()
+        det_unseen["seen_before_frame"] = args.seen_before
+        det_unseen["n_unseen_tracks"] = n_unseen_tracks
+        det_unseen["n_test_tracks"] = sum(1 for tr in seq.tracks.values()
+                                          if any(first <= f < last for f in tr.frames))
 
     # --- 2. Tracking ----------------------------------------------------- #
     mapping, track_metrics = tracking_metrics_from_boxes(
@@ -572,6 +593,7 @@ def cmd_evaluate_real(args: argparse.Namespace) -> int:
         "calibration_speed_check": speed,
         "detection": det_metrics.to_dict(),
         "detection_min_area": det_metrics_big.to_dict(),
+        **({"detection_unseen_objects": det_unseen} if det_unseen else {}),
         "tracking": track_metrics.to_dict(),
         "alerts": {
             **strip_private(cmp_),
@@ -785,6 +807,9 @@ def build_parser() -> argparse.ArgumentParser:
     er.add_argument("--no-overlay", action="store_true")
     er.add_argument("--imgsz", type=int, default=0, help="Ghi đè detection.imgsz")
     er.add_argument("--no-db", action="store_true", help="Không ghi SQLite (nhanh hơn khi chỉ chấm điểm)")
+    er.add_argument("--seen-before", type=int, default=0,
+                    help="Chấm thêm detection chỉ trên đối tượng xuất hiện lần đầu từ khung này "
+                         "(đối tượng đã có trong phần huấn luyện thành vùng bỏ qua)")
     er.add_argument("--start-frame", type=int, default=0,
                     help="Chỉ chấm từ khung hình này (vd. phần test sau fine-tune)")
     er.add_argument("--calibration-report",

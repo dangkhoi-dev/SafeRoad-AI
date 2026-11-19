@@ -16,6 +16,8 @@ models/*.pt
 models/*.onnx
 models/*.engine
 !models/.gitkeep
+# Trọng số đã tinh chỉnh là kết quả của dự án, giữ trong repo để chấm lại được
+!models/saferoad_*.pt
 
 # Dữ liệu — quá lớn cho git; xem README để biết cách lấy
 data/raw/**
@@ -52,3 +54,4 @@ data/outputs/**/*.db
 data/outputs/**/*.db-wal
 data/outputs/**/*.db-shm
 data/outputs/**/*.mp4
+data/yolo_mvti/

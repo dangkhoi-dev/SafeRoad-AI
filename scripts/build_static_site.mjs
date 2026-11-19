@@ -70,7 +70,9 @@ const real = {};
 for (const [k, p] of [['street', 'data/outputs/evaluation_street.json'],
                       ['street_pretrained_test', 'data/outputs/evaluation_street_pretrained_test.json'],
                       ['street_finetuned_test', 'data/outputs/evaluation_street_finetuned_test.json'],
-                      ['mvti', 'data/outputs/evaluation_real.json']]) {
+                      ['mvti', 'data/outputs/evaluation_real.json'],
+                      ['mvti_pretrained_test', 'data/outputs/evaluation_mvti_pretrained_test.json'],
+                      ['mvti_finetuned_test', 'data/outputs/evaluation_mvti_finetuned_test.json']]) {
   const v = opt(p);
   if (v) real[k] = v;
 }

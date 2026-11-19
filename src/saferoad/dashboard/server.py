@@ -204,6 +204,8 @@ def create_app(
                 ("street_pretrained_test", read("evaluation_street_pretrained_test.json")),
                 ("street_finetuned_test", read("evaluation_street_finetuned_test.json")),
                 ("mvti", read("evaluation_real.json")),
+                ("mvti_pretrained_test", read("evaluation_mvti_pretrained_test.json")),
+                ("mvti_finetuned_test", read("evaluation_mvti_finetuned_test.json")),
             ) if v is not None},
             "calibration_street": read("calibration_street.json"),
         })
@@ -267,8 +269,10 @@ def create_app(
     # ----------------------------- Rà soát nhãn ------------------------- #
     @app.get("/api/review")
     def api_review_list() -> JSONResponse:
+        # Bỏ các danh sách rỗng (đoạn video không có cảnh báo nào) - không có gì để gán.
         names = sorted(p.stem.replace("review_candidates_", "")
-                       for p in out_dir.glob("review_candidates_*.csv"))
+                       for p in out_dir.glob("review_candidates_*.csv")
+                       if len(p.read_text(encoding="utf-8-sig").strip().splitlines()) > 1)
         return JSONResponse({"datasets": names})
 
     @app.get("/api/review/{name}")

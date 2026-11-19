@@ -2,6 +2,12 @@
 
     python scripts/train_street_yolo.py            # CPU, khoảng 35 phút
 
+MVTI (camera hạ tầng), sau khi xuất bằng export_street_yolo.py:
+
+    python scripts/train_street_yolo.py --data data/yolo_mvti/data.yaml --epochs 15 \
+        --name mvti --out models/saferoad_mvti_yolo11n.pt \
+        --results-csv data/outputs/train_mvti_yolo11n_results.csv
+
 Cấu hình đã dùng cho models/saferoad_street_yolo11n.pt: 10 epoch, imgsz 640,
 batch 4, tắt mosaic (máy 8 GB RAM), seed 0, deterministic. Tập "val" của
 Ultralytics chính là các khung kiểm tra (≥ 6600) nên trọng số được lấy ở epoch
@@ -25,6 +31,8 @@ def main() -> None:
     ap.add_argument("--batch", type=int, default=4)
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--out", default="models/saferoad_street_yolo11n.pt")
+    ap.add_argument("--name", default="street", help="tên lần chạy trong runs/")
+    ap.add_argument("--results-csv", default="data/outputs/train_street_yolo11n_results.csv")
     args = ap.parse_args()
 
     from ultralytics import YOLO
@@ -32,13 +40,12 @@ def main() -> None:
     model = YOLO(str(ROOT / "models" / "yolo11n.pt"))
     model.train(data=args.data, imgsz=640, epochs=args.epochs, batch=args.batch,
                 workers=0, mosaic=0.0, close_mosaic=0, device=args.device,
-                project=str(ROOT / "runs"), name="street", exist_ok=True,
+                project=str(ROOT / "runs"), name=args.name, exist_ok=True,
                 patience=0, plots=False, seed=0, deterministic=True, amp=False,
                 cache=False)
-    run = ROOT / "runs" / "street"
+    run = ROOT / "runs" / args.name
     shutil.copy2(run / "weights" / "last.pt", ROOT / args.out)
-    shutil.copy2(run / "results.csv",
-                 ROOT / "data" / "outputs" / "train_street_yolo11n_results.csv")
+    shutil.copy2(run / "results.csv", ROOT / args.results_csv)
     print(f"✓ {args.out}")
 
 

@@ -99,6 +99,8 @@ tbody tr.sel{background:#1e2636}
   aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
 .video-wrap video{width:100%;height:100%;object-fit:contain;display:block}
 .video-empty{color:var(--dim);font-size:12px;text-align:center;padding:20px}
+.rv-mark{position:absolute;width:64px;height:64px;margin:-32px 0 0 -32px;border:3px solid #ffd400;
+  border-radius:50%;pointer-events:none;display:none;box-shadow:0 0 0 2px rgba(0,0,0,.55)}
 canvas{display:block;width:100%;border-radius:8px;background:#0a0e14}
 
 /* Thanh lọc */
@@ -372,16 +374,17 @@ progress::-webkit-progress-value{background:var(--accent);border-radius:3px}
     <section class="view" id="view-review">
       <div class="panel">
         <h3>Rà soát cảnh báo bằng người
-          <span class="hint">hai người gán nhãn độc lập → saferoad review-score tính kappa, Precision/Recall, báo nhầm/giờ</span></h3>
+          <span class="hint">hai người gán nhãn độc lập → scripts/score_reviews.py tính kappa, Precision/Recall, báo nhầm/giờ. Bấm Xem: video tua về trước 3 s, phát 0,25×, vòng vàng đánh dấu vị trí cặp cần xét</span></h3>
         <div class="row"><select id="rv-set"></select>
           <input type="text" id="rv-name" placeholder="Tên người rà soát (vd. khoi)">
           <button class="btn" id="rv-save">Lưu nhãn</button>
           <button class="btn ghost" id="rv-dl">Tải CSV</button>
+          <label class="metrics-note"><input type="checkbox" id="rv-blind" checked> Ẩn kết quả của máy khi gán (nên bật)</label>
           <span id="rv-msg" class="metrics-note"></span></div>
         <div class="video-wrap" id="rv-video" style="max-height:420px"></div>
         <div class="scroll" style="max-height:420px"><table>
-          <thead><tr><th>ID</th><th>Nguồn</th><th class="num">t (s)</th><th>Cặp</th>
-            <th class="num">TTC</th><th class="num">PET</th><th>PET</th><th>Kết cục máy</th><th>Nhãn của bạn</th><th></th></tr></thead>
+          <thead><tr><th>ID</th><th class="rv-m">Nguồn</th><th class="num">t (s)</th><th>Cặp</th>
+            <th class="num rv-m">TTC</th><th class="num rv-m">PET</th><th class="rv-m">PET</th><th class="rv-m">Kết cục máy</th><th>Nhãn của bạn</th><th></th></tr></thead>
           <tbody id="rv-body"></tbody></table></div>
         <div class="metrics-note">Nhãn: <b>near_miss</b> = suýt va chạm thật ·
           <b>collision</b> = va chạm · <b>normal</b> = giao thông bình thường (báo nhầm) ·
@@ -837,7 +840,8 @@ async function loadEval(){
     }
     const real=d.real||{};
     const REAL_VI={street:'Đại lộ 0-300 s · YOLO11n gốc',street_pretrained_test:'Đại lộ, đoạn test 220-300 s · YOLO11n gốc',
-      street_finetuned_test:'Đại lộ, đoạn test 220-300 s · YOLO11n tinh chỉnh',mvti:'MVTI giao lộ · YOLO11n gốc'};
+      street_finetuned_test:'Đại lộ, đoạn test 220-300 s · YOLO11n tinh chỉnh',mvti:'MVTI giao lộ · YOLO11n gốc',
+      mvti_pretrained_test:'MVTI, đoạn test 57-81 s · YOLO11n gốc',mvti_finetuned_test:'MVTI, đoạn test 57-81 s · YOLO11n tinh chỉnh'};
     const realRows=Object.entries(real).map(([k,x])=>{const a=(x.alerts||{}).metrics_vs_reference||{};const ph=((x.alerts||{}).reconciliation||{}).per_hour||{};
       return `<tr><td>${REAL_VI[k]||k}</td><td class="num">${fmt(x.detection.mAP50,3)}</td><td class="num">${x.detection_min_area?fmt(x.detection_min_area.mAP50,3):'-'}</td><td class="num">${fmt(x.tracking.idf1,3)}</td><td class="num">${x.tracking.id_switches}</td><td class="num">${(x.alerts||{}).n_reference??'-'}</td><td class="num">${R(a.precision)}</td><td class="num">${R(a.recall)}</td><td class="num">${ph.false_alarms_per_hour??'-'}</td><td class="num">${fmt(x.runtime.processing_fps,1)}</td></tr>`;});
     if(realRows.length) h+=`<h3 style="margin-top:16px">7. Video thật: detection → tracking → cảnh báo trên cùng dữ liệu</h3>`+
@@ -946,21 +950,42 @@ async function openSet(name){
   RV.set=name; RV.labels={};
   const d=await fetch('/api/review/'+name+(name==='job'?'?job='+S.job:'')).then(r=>r.json());
   RV.rows=d.rows||[];
-  $('rv-video').innerHTML=d.video?`<video id="rv-v" controls preload="metadata" src="${d.video}"></video>`:'<div class="video-empty">Video gốc không có trên máy chủ này - mở video bằng trình phát trên máy, tua tới cột t (s).</div>';
+  $('rv-video').innerHTML=d.video?`<video id="rv-v" controls preload="metadata" src="${d.video}"></video><div id="rv-mark" class="rv-mark"></div>`:'<div class="video-empty">Video gốc không có trên máy chủ này - mở video bằng trình phát trên máy, tua tới cột t (s).</div>';
   const L=['','near_miss','collision','normal','overlap_artifact','unclear'];
-  $('rv-body').innerHTML=RV.rows.map(r=>`<tr><td>${r.candidate_id}</td><td>${r.source}</td><td class="num">${fmt(r.t_s,2)}</td>
-    <td>${r.track_a||r.gt_object_a||''}-${r.track_b||r.gt_object_b||''}</td><td class="num">${r.ttc_s===''||r.ttc_s===null?'-':fmt(r.ttc_s,2)}</td>
-    <td class="num">${r.pet_s===''||r.pet_s===null?'-':fmt(r.pet_s,2)}</td><td>${r.pet_status||''}</td><td>${r.contact||''}</td>
+  $('rv-body').innerHTML=RV.rows.map((r,i)=>`<tr><td>${r.candidate_id}</td><td class="rv-m">${r.source}</td><td class="num">${fmt(r.t_s,2)}</td>
+    <td>${r.track_a||r.gt_object_a||''}-${r.track_b||r.gt_object_b||''}</td><td class="num rv-m">${r.ttc_s===''||r.ttc_s===null?'-':fmt(r.ttc_s,2)}</td>
+    <td class="num rv-m">${r.pet_s===''||r.pet_s===null?'-':fmt(r.pet_s,2)}</td><td class="rv-m">${r.pet_status||''}</td><td class="rv-m">${r.contact||''}</td>
     <td><select data-c="${r.candidate_id}">${L.map(x=>`<option>${x}</option>`).join('')}</select></td>
-    <td><button class="btn ghost" data-t="${r.t_s}">Xem</button></td></tr>`).join('');
+    <td><button class="btn ghost" data-i="${i}">Xem</button></td></tr>`).join('');
   document.querySelectorAll('#rv-body select').forEach(el=>el.onchange=()=>{RV.labels[el.dataset.c]={label:el.value};});
-  document.querySelectorAll('#rv-body button').forEach(el=>el.onclick=()=>{const v=$('rv-v'); if(v){v.currentTime=Math.max(0,+el.dataset.t-3); v.playbackRate=0.25; v.play();}});
+  const blind=()=>document.querySelectorAll('#view-review .rv-m').forEach(el=>el.style.display=$('rv-blind').checked?'none':'');
+  $('rv-blind').onchange=blind; blind();
+  RV.cur=null;
+  const v=$('rv-v'); if(v){ v.ontimeupdate=placeMark; v.onloadedmetadata=placeMark; }
+  document.querySelectorAll('#rv-body button').forEach(el=>el.onclick=()=>{
+    const r=RV.rows[+el.dataset.i], v=$('rv-v'); RV.cur=r;
+    document.querySelectorAll('#rv-body tr').forEach((tr,i)=>tr.style.background=i===+el.dataset.i?'rgba(255,212,0,.08)':'');
+    if(v){v.currentTime=Math.max(0,+r.t_s-3); v.playbackRate=0.25; v.play();}});
 }
+// Vòng vàng tại vị trí cặp đối tượng (px_x, px_y) trong khoảng clip của ứng viên đang xem.
+// Chỉ cho biết CẦN XÉT CẶP NÀO; kết luận của máy (TTC, PET, kết cục) vẫn ẩn khi bật chế độ mù.
+function placeMark(){
+  const v=$('rv-v'), m=$('rv-mark'), r=RV.cur; if(!v||!m) return;
+  const x=parseFloat(r&&r.px_x), y=parseFloat(r&&r.px_y);
+  const t0=r?(parseFloat(r.clip_start_s)||+r.t_s-3):0, t1=r?(parseFloat(r.clip_end_s)||+r.t_s+3):0;
+  if(!r||!isFinite(x)||!isFinite(y)||!v.videoWidth||v.currentTime<t0||v.currentTime>t1){ m.style.display='none'; return; }
+  const W=v.clientWidth, H=v.clientHeight, k=Math.min(W/v.videoWidth, H/v.videoHeight);
+  m.style.left=(v.offsetLeft+(W-v.videoWidth*k)/2+x*k)+'px';
+  m.style.top=(v.offsetTop+(H-v.videoHeight*k)/2+y*k)+'px';
+  m.style.display='block';
+}
+window.addEventListener('resize',placeMark);
 async function saveLabels(){
   const name=$('rv-name').value.trim(); if(!name){ $('rv-msg').textContent='Nhập tên người rà soát.'; return; }
   if(STATIC){ dlLabels(); return; }
   const r=await fetch('/api/review/'+RV.set,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reviewer:name,labels:RV.labels})});
-  const j=await r.json(); $('rv-msg').textContent=r.ok?`Đã lưu ${j.n} nhãn → ${j.saved}`:(j.detail||'Lỗi');
+  const j=await r.json(); const left=RV.rows.filter(x=>!(RV.labels[x.candidate_id]||{}).label).length;
+  $('rv-msg').textContent=r.ok?`Đã lưu ${j.n} nhãn → ${j.saved}`+(left?` · còn ${left} ứng viên chưa gán (lưu lại sẽ ghi đè cả file)`:''):(j.detail||'Lỗi');
 }
 function dlLabels(){
   const name=$('rv-name').value.trim()||'reviewer';

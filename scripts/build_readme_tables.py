@@ -74,7 +74,9 @@ def build() -> str:
     reals = [("Đại lộ (Kaggle), 300 s, YOLO11n gốc", load("evaluation_street.json")),
              ("Đại lộ, test 220-300 s, YOLO11n gốc", load("evaluation_street_pretrained_test.json")),
              ("Đại lộ, test 220-300 s, YOLO11n tinh chỉnh", load("evaluation_street_finetuned_test.json")),
-             ("MVTI, YOLO11n gốc", load("evaluation_real.json"))]
+             ("MVTI, YOLO11n gốc", load("evaluation_real.json")),
+             ("MVTI, test 57-81 s, YOLO11n gốc", load("evaluation_mvti_pretrained_test.json")),
+             ("MVTI, test 57-81 s, YOLO11n tinh chỉnh", load("evaluation_mvti_finetuned_test.json"))]
     reals = [(k, v) for k, v in reals if v and v.get("version") == 2]
     if reals:
         out += [
@@ -95,6 +97,15 @@ def build() -> str:
                 f"{r(a['metrics_vs_reference']['precision'])} | {r(a['metrics_vs_reference']['recall'])} | "
                 f"{n(ph['false_alarms_per_hour'], 1)} | {n(v['runtime']['processing_fps'], 1)} |")
         out.append("")
+        mp, mf = load("evaluation_mvti_pretrained_test.json"), load("evaluation_mvti_finetuned_test.json")
+        if mp and mf and mp.get("detection_unseen_objects") and mf.get("detection_unseen_objects"):
+            up, uf = mp["detection_unseen_objects"], mf["detection_unseen_objects"]
+            out.append(f"MVTI chỉ có 19 phương tiện và phần lớn đứng trong khung suốt 81 s, nên trong "
+                       f"đoạn test {uf['n_test_tracks'] - uf['n_unseen_tracks']}/{uf['n_test_tracks']} xe đã gặp lúc huấn luyện "
+                       f"(model có thể đã nhớ chúng). Chấm riêng {uf['n_unseen_tracks']} xe "
+                       f"chỉ xuất hiện sau phần huấn luyện ({uf['n_gt']} hộp): mAP@0,5 "
+                       f"{n(up['mAP50'])} (gốc) → {n(uf['mAP50'])} (tinh chỉnh).")
+            out.append("")
         out.append("\"Bỏ hộp nhỏ\": hộp chuẩn nhỏ hơn `detection.min_box_area` (200 px² với đại lộ) "
                    "được coi là vùng bỏ qua theo quy ước COCO, vì pipeline cố ý không xử lý vật thể "
                    "xa như vậy. Người đi bộ trên video đại lộ có kích thước trung vị 8×23 px - ở "
@@ -131,6 +142,22 @@ def build() -> str:
                    f"tinh chỉnh): {nev} cảnh báo trong {dur:.0f} s "
                    f"({n((nev / dur * 3600) if dur else 0, 1)}/giờ), {n(sm.get('processing_fps'), 1)} FPS; "
                    f"toàn bộ cảnh báo nằm trong `data/outputs/review_candidates_street_heldout.csv` để người rà soát.")
+        out.append("")
+    reviews = sorted(OUT.glob("review_score_*.json"))
+    if reviews:
+        out += [
+            "**Cảnh báo so với nhãn xung đột do người rà soát** (`saferoad review-score`):",
+            "",
+            "| Tập | Ứng viên | Kappa (5 lớp / có-không) | P | R | Báo nhầm/giờ | Bỏ sót/giờ |",
+            "|---|---:|---:|---:|---:|---:|---:|",
+        ]
+        for f in reviews:
+            x = json.loads(f.read_text(encoding="utf-8"))
+            name = f.stem.replace("review_score_", "")
+            out.append(f"| {name} | {x['n_candidates']} | {n(x.get('kappa_5class'))} / "
+                       f"{n(x.get('kappa_conflict_vs_not'))} | {r(x['precision'])} | "
+                       f"{r(x['recall'])} | {n(x.get('false_alarms_per_hour'), 1)} | "
+                       f"{n(x.get('misses_per_hour'), 1)} |")
         out.append("")
     cal = load("calibration_street.json")
     if cal:

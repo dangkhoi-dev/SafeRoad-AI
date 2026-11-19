@@ -151,3 +151,19 @@ class TestDetectionIgnoreSmall:
         pred = {0: [self._det((0, 0, 40, 40), 0.9), self._det((100, 100, 108, 108), 0.8)]}
         lenient = evaluate_detection(pred, gt, operating_conf=0.5, min_area=200)
         assert lenient.precision50 == pytest.approx(1.0)
+
+    def test_ignore_gt_scores_only_unseen_objects(self):
+        # Khung 0: xe đã gặp lúc train (bỏ qua) và xe mới.
+        seen, new = self._det((0, 0, 40, 40)), self._det((200, 200, 240, 240))
+        gt = {0: [seen, new]}
+        skip = lambda f, d: d.bbox == seen.bbox  # noqa: E731
+        hit_seen = evaluate_detection({0: [self._det((0, 0, 40, 40), 0.9)]}, gt,
+                                      operating_conf=0.5, ignore_gt=skip)
+        assert hit_seen.n_gt == 1 and hit_seen.n_gt_ignored == 1
+        assert hit_seen.recall50 == pytest.approx(0.0)
+        # Bắt cả hai: dự đoán rơi vào xe bị bỏ qua không tính là báo nhầm.
+        hit_both = evaluate_detection({0: [self._det((0, 0, 40, 40), 0.9),
+                                           self._det((200, 200, 240, 240), 0.8)]}, gt,
+                                      operating_conf=0.5, ignore_gt=skip)
+        assert hit_both.recall50 == pytest.approx(1.0)
+        assert hit_both.precision50 == pytest.approx(1.0)

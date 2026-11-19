@@ -12,7 +12,7 @@ bằng phép nội suy 101 điểm trên đường cong Precision-Recall.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 
@@ -134,6 +134,7 @@ def evaluate_detection(
     iou_thresholds: tuple[float, ...] = tuple(np.arange(0.5, 1.0, 0.05)),
     operating_conf: float | None = None,
     min_area: float = 0.0,
+    ignore_gt: Callable[[int, Detection], bool] | None = None,
 ) -> DetectionMetrics:
     """So khớp dự đoán với nhãn chuẩn theo từng lớp và tính mAP.
 
@@ -141,6 +142,9 @@ def evaluate_detection(
     theo quy ước COCO (iscrowd/ignore) - không tính là bỏ sót, và dự đoán khớp
     với chúng không tính là báo nhầm. Dùng khi pipeline cố ý loại vật thể nhỏ
     hơn ``detection.min_box_area``; con số trên toàn bộ nhãn vẫn được báo riêng.
+
+    ``ignore_gt(frame, det)`` → True: hộp chuẩn đó cũng thành vùng bỏ qua. Dùng
+    để chấm riêng trên những đối tượng chưa từng xuất hiện trong tập huấn luyện.
 
     Ghép theo đúng quy ước COCO: trong mỗi ảnh, dự đoán xét theo điểm giảm dần,
     nhận hộp chuẩn chưa ghép có IoU lớn nhất (≥ ngưỡng). Ma trận IoU tính một lần
@@ -161,13 +165,16 @@ def evaluate_detection(
     def _big(b) -> bool:
         return (b[2] - b[0]) * (b[3] - b[1]) >= min_area
 
-    if min_area > 0:
-        metrics.n_gt = sum(1 for v in ground_truth.values() for d in v if _big(d.bbox))
+    def _keep(f: int, d: Detection) -> bool:
+        return _big(d.bbox) and not (ignore_gt is not None and ignore_gt(f, d))
+
+    if min_area > 0 or ignore_gt is not None:
+        metrics.n_gt = sum(1 for f, v in ground_truth.items() for d in v if _keep(f, d))
         metrics.n_gt_ignored = sum(len(v) for v in ground_truth.values()) - metrics.n_gt
 
     for cls in sorted(classes, key=lambda c: c.value):
-        n_gt = sum(1 for dets in ground_truth.values() for d in dets
-                   if d.cls is cls and _big(d.bbox))
+        n_gt = sum(1 for f, dets in ground_truth.items() for d in dets
+                   if d.cls is cls and _keep(f, d))
         metrics.n_gt_per_class[cls.value] = n_gt
         if n_gt == 0:
             continue
@@ -182,9 +189,9 @@ def evaluate_detection(
             sc = np.array([d.score for d in p], dtype=float)
             order = np.argsort(-sc, kind="stable")
             pb = np.array([p[i].bbox for i in order], dtype=float)
-            gts = [d.bbox for d in ground_truth.get(f, []) if d.cls is cls]
-            g = [b for b in gts if _big(b)]
-            small = [b for b in gts if not _big(b)]
+            gts = [d for d in ground_truth.get(f, []) if d.cls is cls]
+            g = [d.bbox for d in gts if _keep(f, d)]
+            small = [d.bbox for d in gts if not _keep(f, d)]
             ious = _iou_matrix(pb, np.array(g, dtype=float).reshape(-1, 4))
             ious_s = (_iou_matrix(pb, np.array(small, dtype=float).reshape(-1, 4))
                       if small else None)

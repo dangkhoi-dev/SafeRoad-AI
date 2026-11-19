@@ -29,6 +29,10 @@ python -m saferoad evaluate-real --config configs\street.yaml --weights models\y
 python -m saferoad evaluate-real --config configs\street.yaml --weights models\saferoad_street_yolo11n.pt --start-frame 6600 --no-db --no-overlay --source data\processed\street\street_labeled_0_300s.mp4 --ground-truth data\processed\street\street_groundtruth.pkl --calibration-report data\outputs\calibration_street.json --out data\outputs\evaluation_street_finetuned_test.json
 python -m saferoad run --config configs\street.yaml --no-overlay --source data\processed\street\street_heldout_300_741s.mp4 --output data\outputs\street_heldout --review-csv data\outputs\review_candidates_street_heldout.csv
 python -m saferoad evaluate-real --config configs\mvti.yaml --no-db
+python scripts\export_street_yolo.py --video data\processed\mvti\infrastructure.mp4 --ground-truth data\processed\mvti\infrastructure_groundtruth.pkl --out data\yolo_mvti --prefix mvti --train-end 1500 --test-start 1700 --train-step 5 --val-step 15
+python scripts\train_street_yolo.py --data data\yolo_mvti\data.yaml --epochs 15 --name mvti --out models\saferoad_mvti_yolo11n.pt --results-csv data\outputs\train_mvti_yolo11n_results.csv
+python -m saferoad evaluate-real --config configs\mvti.yaml --weights models\yolo11n.pt --no-db --no-overlay --start-frame 1700 --seen-before 1500 --out data\outputs\evaluation_mvti_pretrained_test.json
+python -m saferoad evaluate-real --config configs\mvti.yaml --weights models\saferoad_mvti_yolo11n.pt --no-db --no-overlay --start-frame 1700 --seen-before 1500 --out data\outputs\evaluation_mvti_finetuned_test.json
 python scripts\build_readme_tables.py
 node scripts\build_improvement_report.js
 ```

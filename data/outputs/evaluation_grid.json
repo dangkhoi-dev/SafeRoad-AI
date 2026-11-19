@@ -2031,8 +2031,8 @@
     }
   },
   "reproducibility": {
-    "command": "saferoad evaluate-grid",
-    "git_commit": "5249dcc-dirty",
+    "command": "saferoad evaluate-grid --out /tmp/repro_out/evaluation_grid.json",
+    "git_commit": "476ab01",
     "config_sha256": "5de676d807f38fa5",
     "config": {
       "site": {
