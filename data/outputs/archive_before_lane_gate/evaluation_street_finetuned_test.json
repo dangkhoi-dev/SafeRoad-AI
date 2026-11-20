@@ -1,0 +1,529 @@
+{
+  "version": 2,
+  "dataset": {
+    "name": "street",
+    "n_frames": 9009,
+    "n_annotated_frames": 8989,
+    "n_tracks": 1880,
+    "n_boxes": 697433,
+    "resolution": "1920x1080",
+    "classes": {
+      "car": 742,
+      "pedestrian": 1138
+    },
+    "track_length_median": 135,
+    "frames_evaluated": [
+      6600,
+      9009
+    ],
+    "stitch": {
+      "n_chunks": 361,
+      "n_local_tracks": 28373,
+      "n_links": 26455,
+      "n_global_tracks": 1880,
+      "skipped_annotations": 0,
+      "min_iou": 0.3
+    }
+  },
+  "thresholds": {
+    "map_conf": 0.001,
+    "pipeline_conf": 0.2,
+    "min_box_area": 200.0
+  },
+  "detector_backend": "yolo",
+  "weights": "models/saferoad_street_yolo11n.pt",
+  "class_remap_for_scoring": {
+    "truck": "car"
+  },
+  "calibration": {
+    "source": "Ước lượng từ vạch kẻ đường trên khung hình 150 của video đại lộ (Kaggle), KHÔNG đo thực địa. 16 điểm = 2 đầu của 8 vạch đứt trên hai vạch phân làn kề nhau ở lòng đường bên trái; toạ độ pixel tinh chỉnh tự động theo tâm vạch sơn.",
+    "assumptions": [
+      "Bề rộng làn 3,5 m (làn đường đô thị phổ biến 3,25-3,75 m)",
+      "Vạch đứt kiểu 1.5 (GOST R 51256): vạch 3 m, khe 9 m, chu kỳ 12 m - tỉ lệ vạch/chu kỳ đo trên ảnh ≈ 0,24 khớp tỉ lệ 1:3",
+      "Pha của vạch thứ hai so với vạch thứ nhất giải bằng bình phương tối thiểu: -5,208 m",
+      "Mặt đường phẳng (homography một mặt phẳng)",
+      "Sai số tỉ lệ tổng thể KHÔNG ảnh hưởng TTC và PET (cả quãng đường lẫn vận tốc cùng co giãn); ảnh hưởng ngưỡng khoảng cách và ngưỡng tốc độ tiếp cận"
+    ],
+    "n_points": 16,
+    "fit": {
+      "n": 16,
+      "rmse_m": 0.306,
+      "mean_m": 0.23,
+      "max_m": 0.832
+    },
+    "leave_one_out": {
+      "n": 16,
+      "rmse_m": 0.74,
+      "mean_m": 0.557,
+      "max_m": 1.684
+    }
+  },
+  "calibration_speed_check": {
+    "n_cars": 260,
+    "median_kmh": 41.5,
+    "p25_kmh": 25.2,
+    "p75_kmh": 52.5,
+    "p90_kmh": 58.7
+  },
+  "detection": {
+    "mAP50": 0.2016,
+    "mAP50_95": 0.0665,
+    "precision50": 0.3622,
+    "recall50": 0.4283,
+    "operating_conf": 0.2,
+    "precision50_op": 0.516,
+    "recall50_op": 0.37,
+    "n_pred": 240900,
+    "n_gt": 203713,
+    "n_gt_ignored": 0,
+    "per_class": {
+      "car": {
+        "AP50": 0.3841,
+        "AP50_95": 0.1287,
+        "n_gt": 147675
+      },
+      "pedestrian": {
+        "AP50": 0.0191,
+        "AP50_95": 0.0043,
+        "n_gt": 56038
+      }
+    }
+  },
+  "detection_min_area": {
+    "mAP50": 0.2191,
+    "mAP50_95": 0.0714,
+    "precision50": 0.3614,
+    "recall50": 0.5241,
+    "operating_conf": 0.2,
+    "precision50_op": 0.5153,
+    "recall50_op": 0.4531,
+    "n_pred": 240900,
+    "n_gt": 165892,
+    "n_gt_ignored": 37821,
+    "per_class": {
+      "car": {
+        "AP50": 0.3981,
+        "AP50_95": 0.1341,
+        "n_gt": 141559
+      },
+      "pedestrian": {
+        "AP50": 0.0402,
+        "AP50_95": 0.0087,
+        "n_gt": 24333
+      }
+    }
+  },
+  "tracking": {
+    "idf1": 0.2234,
+    "mota": 0.1157,
+    "id_switches": 202,
+    "n_gt_tracks": 1229,
+    "n_pred_tracks": 212,
+    "mostly_tracked": 45,
+    "fragmentation": 2.074
+  },
+  "alerts": {
+    "metrics_vs_reference": {
+      "precision": {
+        "value": 0.5,
+        "num": 1,
+        "den": 2
+      },
+      "recall": {
+        "value": 1.0,
+        "num": 1,
+        "den": 1
+      },
+      "f1": 0.6667,
+      "ttc_mae": 1.313,
+      "ttc_mae_n": 1,
+      "time_mae": 0.935,
+      "type_accuracy": {
+        "value": 1.0,
+        "num": 1,
+        "den": 1
+      }
+    },
+    "reconciliation": {
+      "rows": {
+        "episodes_opened": 16,
+        "rejected_proximity_gate": 13,
+        "rejected_too_short": 1,
+        "merged_into_previous": 0,
+        "emitted": 2,
+        "exported_to_results": 2,
+        "ignored_outside_eval_region": 0,
+        "scored": 2,
+        "scored_unmapped_track_fp": 0,
+        "scored_mapped_fp": 1,
+        "scored_tp": 1,
+        "gt_total": 1,
+        "gt_matched_tp": 1,
+        "gt_missed_fn": 0
+      },
+      "checks": {
+        "opened = rejected + merged + emitted": true,
+        "emitted = exported": true,
+        "exported = ignored + scored": true,
+        "scored = TP + FP": true,
+        "gt = TP + FN": true
+      },
+      "all_checks_pass": true,
+      "per_hour": {
+        "false_alarms_per_hour": 44.8,
+        "misses_per_hour": 0.0,
+        "alerts_per_hour": 89.7,
+        "hours": 0.0223
+      }
+    },
+    "n_reference": 1,
+    "reference_contact": {
+      "near_miss": 1
+    },
+    "system_contact": {
+      "near_miss": 2
+    },
+    "reference_funnel": {
+      "episodes_opened": 79,
+      "rejected_proximity_gate": 72,
+      "emitted": 2,
+      "rejected_too_short": 2,
+      "rejected_pet_measured_above_threshold": 3
+    },
+    "system_statistics": {
+      "total": 2,
+      "severe_ttc_lt_1_5": 2,
+      "by_type": {
+        "rear_end": 2
+      },
+      "by_level": {
+        "low": 2
+      },
+      "ttc": {
+        "min": 1.155,
+        "p25": 1.173,
+        "median": 1.19,
+        "p75": 1.208,
+        "max": 1.225
+      },
+      "pet": null,
+      "risk_score": {
+        "min": 13.2,
+        "p25": 13.35,
+        "median": 13.5,
+        "p75": 13.65,
+        "max": 13.8
+      }
+    },
+    "review_candidates_csv": "/tmp/repro_out/review_candidates_street_finetuned_test.csv",
+    "n_review_candidates": 3
+  },
+  "runtime": {
+    "n_frames": 2409,
+    "duration_s": 80.3,
+    "fps_source": 30.0,
+    "processing_fps": 12.85,
+    "frame_latency_median_ms": 77.81,
+    "frame_latency_p95_ms": 102.47,
+    "wall_seconds": 371.18,
+    "total_events": 2,
+    "severe_events": 2,
+    "avg_risk_score": 13.5,
+    "n_tracks": 212,
+    "by_type": {
+      "rear_end": 2
+    },
+    "latency_ms": {
+      "detection": 74.37,
+      "tracking": 3.93,
+      "trajectory": 3.22,
+      "conflict": 0.4
+    },
+    "total_latency_ms": 81.91,
+    "homography_error_m": 0.2295198291540146,
+    "detector": "YoloDetector",
+    "event_funnel": {
+      "episodes_opened": 16,
+      "rejected_proximity_gate": 13,
+      "rejected_too_short": 1,
+      "emitted": 2
+    }
+  },
+  "reproducibility": {
+    "command": "saferoad evaluate-real --config configs/street.yaml --weights models/saferoad_street_yolo11n.pt --start-frame 6600 --no-db --no-overlay --source data/processed/street/street_labeled_0_300s.mp4 --ground-truth data/processed/street/street_groundtruth.pkl --calibration-report data/outputs/calibration_street.json --out /tmp/repro_out/evaluation_street_finetuned_test.json",
+    "git_commit": "476ab01",
+    "config_sha256": "b2b0fdfa005263bc",
+    "config": {
+      "site": {
+        "name": "Đại lộ nhiều làn - video Kaggle quay từ mái nhà (iPhone 13, 4K→1080p)",
+        "short_name": "Đại lộ (Kaggle)",
+        "camera_height_m": 20.0,
+        "approaches": [
+          "Chiều đi",
+          "Chiều về"
+        ],
+        "lanes": 4
+      },
+      "video": {
+        "source": "data/processed/street/street_labeled_0_300s.mp4",
+        "start_frame": 6600,
+        "max_frames": 0,
+        "stride": 1,
+        "resize_width": 0,
+        "fps_override": 0.0,
+        "write_overlay": false,
+        "overlay_path": "/tmp/repro_out/overlay_street_finetuned_test.mp4"
+      },
+      "detection": {
+        "weights": "models/saferoad_street_yolo11n.pt",
+        "imgsz": 640,
+        "conf": 0.001,
+        "iou": 0.45,
+        "device": "cpu",
+        "quantize": null,
+        "max_det": 300,
+        "min_box_area": 200.0,
+        "backend": "yolo",
+        "tile_rows": 2,
+        "tile_cols": 3,
+        "tile_overlap": 0.25,
+        "tile_full_frame": true,
+        "tile_merge_iou": 0.55,
+        "replay_noise_px": 1.5,
+        "replay_miss_rate": 0.03,
+        "replay_seed": 17
+      },
+      "tracking": {
+        "track_high_thresh": 0.5,
+        "track_low_thresh": 0.1,
+        "new_track_thresh": 0.55,
+        "match_thresh": 0.8,
+        "track_buffer": 30,
+        "min_hits": 3,
+        "velocity_alpha": 0.35,
+        "min_states_for_velocity": 3,
+        "stationary_speed": 1.0,
+        "stationary_window_s": 2.0
+      },
+      "homography": {
+        "image_points": [
+          [
+            860.4,
+            709.6
+          ],
+          [
+            869.9,
+            720.1
+          ],
+          [
+            904.6,
+            759.3
+          ],
+          [
+            916.6,
+            772.4
+          ],
+          [
+            957.3,
+            816.7
+          ],
+          [
+            973.0,
+            834.0
+          ],
+          [
+            1019.5,
+            885.6
+          ],
+          [
+            1037.1,
+            905.9
+          ],
+          [
+            1097.1,
+            971.9
+          ],
+          [
+            1122.0,
+            998.9
+          ],
+          [
+            880.3,
+            828.8
+          ],
+          [
+            887.2,
+            837.8
+          ],
+          [
+            928.5,
+            892.6
+          ],
+          [
+            945.1,
+            912.9
+          ],
+          [
+            997.9,
+            982.3
+          ],
+          [
+            1018.6,
+            1009.3
+          ]
+        ],
+        "world_points": [
+          [
+            0.0,
+            51.0
+          ],
+          [
+            0.0,
+            48.0
+          ],
+          [
+            0.0,
+            39.0
+          ],
+          [
+            0.0,
+            36.0
+          ],
+          [
+            0.0,
+            27.0
+          ],
+          [
+            0.0,
+            24.0
+          ],
+          [
+            0.0,
+            15.0
+          ],
+          [
+            0.0,
+            12.0
+          ],
+          [
+            0.0,
+            3.0
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            -3.5,
+            21.792
+          ],
+          [
+            -3.5,
+            18.792
+          ],
+          [
+            -3.5,
+            9.792
+          ],
+          [
+            -3.5,
+            6.792
+          ],
+          [
+            -3.5,
+            -2.208
+          ],
+          [
+            -3.5,
+            -5.208
+          ]
+        ],
+        "fallback_scale": 0.05,
+        "smooth_window": 5
+      },
+      "conflict": {
+        "ttc_threshold": 3.0,
+        "pet_threshold": 1.5,
+        "max_pair_distance": 30.0,
+        "min_rel_speed": 3.0,
+        "proximity_gate": 3.0,
+        "min_abs_speed": 0.8,
+        "dedup_window": 3.0,
+        "horizon": 6.0,
+        "use_measured_pet": true,
+        "pet_lookback_s": 4.0,
+        "pet_max_wait_s": 4.0,
+        "pet_min_angle": 20.0,
+        "ignore_pedestrian_pairs": true,
+        "analysis_region_px": [
+          [
+            623,
+            639
+          ],
+          [
+            920,
+            676
+          ],
+          [
+            1418,
+            1136
+          ],
+          [
+            798,
+            968
+          ]
+        ],
+        "contact_settle_s": 2.0,
+        "episode_grouping": true,
+        "angle_rear_end": 30.0,
+        "angle_crossing_min": 60.0,
+        "angle_crossing_max": 120.0,
+        "angle_head_on": 150.0
+      },
+      "risk": {
+        "w_ttc": 0.52,
+        "w_pet": 0.32,
+        "w_rel_speed": 0.072,
+        "w_type": 0.38,
+        "w_time": 0.14,
+        "bias": -2.69,
+        "grid_size": 2.0,
+        "kernel_radius": 6.0,
+        "decay_tau": 900.0,
+        "top_k_hotspots": 5
+      },
+      "behavior": {
+        "enabled": true,
+        "model_path": "models/behavior_clf.joblib",
+        "harsh_brake": -3.5,
+        "harsh_accel": 3.0,
+        "sharp_turn_rate": 45.0,
+        "window": 15
+      },
+      "privacy": {
+        "enabled": false,
+        "blur_faces": true,
+        "blur_plates": true,
+        "blur_kernel": 31,
+        "face_ratio": 0.28,
+        "plate_band": [
+          0.55,
+          0.95
+        ]
+      },
+      "db_path": "/tmp/repro_out/saferoad_street_finetuned_test.db",
+      "output_dir": "data/outputs"
+    },
+    "environment": {
+      "python": "3.13.18",
+      "os": "Linux",
+      "numpy": "2.5.3",
+      "opencv": "5.0.0",
+      "scikit_learn": "1.9.1"
+    },
+    "ground_truth": "data/processed/street/street_groundtruth.pkl",
+    "ground_truth_sha256": "af2fdfc0654f55c8",
+    "weights_sha256": "48a058b039590637"
+  },
+  "note": "Bộ dữ liệu có nhãn bbox + ID nhưng KHÔNG có nhãn xung đột. 'alerts' so pipeline với cảnh báo tham chiếu (cùng thuật toán chạy trên quỹ đạo người gán nhãn) - đo sai số do detection + tracking, không phải độ đúng tuyệt đối. Độ đúng tuyệt đối cần nhãn người rà soát: xem review_candidates_*.csv và lệnh 'saferoad review-score'."
+}

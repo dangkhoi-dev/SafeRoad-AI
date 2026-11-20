@@ -35,12 +35,24 @@ const MTF = J('data/outputs/evaluation_mvti_finetuned_test.json');
 const CAL = J('data/outputs/calibration_street.json');
 const HO = J('data/outputs/street_heldout/results.json');
 const SENS = J('data/outputs/street_reference_sensitivity.json');
+// Trước/sau cổng cùng làn (scripts/lane_gate_check.py).
+const LG = J('data/outputs/lane_gate_check.json');
+const LGH = LG ? LG.heldout : null;
 // Kết quả chấm theo nhãn người: data/outputs/review_score_<tập>.json (saferoad review-score).
 const REVIEWS = fs.readdirSync(path.join(ROOT, 'data', 'outputs'))
   .filter((f) => /^review_score_.+\.json$/.test(f)).sort()
   .map((f) => [f.replace(/^review_score_|\.json$/g, ''), J(path.join('data', 'outputs', f))]);
 const REVIEW_VI = { street_heldout: 'Đại lộ, 441 s chưa từng dùng', street: 'Đại lộ 0-300 s',
-  street_finetuned_test: 'Đại lộ, test 220-300 s', real: 'MVTI' };
+  street_finetuned_test: 'Đại lộ, test 220-300 s, YOLO tinh chỉnh',
+  street_pretrained_test: 'Đại lộ, test 220-300 s, YOLO gốc', real: 'MVTI 0-81 s' };
+const RV = Object.fromEntries(REVIEWS);
+const POS = ['near_miss', 'collision'];
+const nPos = (x) => Object.entries(x.consensus_counts || {}).filter(([a]) => POS.includes(a))
+  .reduce((t, [, b]) => t + b, 0);
+// Mọi cảnh báo tham chiếu (cùng luật TTC/PET chạy trên quỹ đạo người gán bbox) đều bị người đánh giá là không phải xung đột?
+const REF_ALL_NORMAL = REVIEWS.length > 0 && REVIEWS.some(([, x]) => (x.n_reference_alerts || 0) > 0)
+  && REVIEWS.every(([, x]) => (x.n_reference_conflicts_judged_normal || 0) === (x.n_reference_alerts || 0));
+const pct = (v) => (v == null ? '-' : `${Math.round(v * 100)}%`);
 const V1 = J('data/outputs/archive_v1/evaluation.json');
 const V1R = J('data/outputs/archive_v1/results.json');
 const V1REAL = J('data/outputs/archive_v1/evaluation_real.json');
@@ -153,8 +165,8 @@ children.push(P('Bảng dưới liệt kê từng yêu cầu của hội đồng
 const pYes = (x) => x ? 'có' : 'chưa có';
 children.push(T(['Yêu cầu', 'Đã làm', 'Minh chứng'], [
   ['1. Video thật, chất lượng phát hiện',
-    'Thêm bộ video đại lộ thật (Kaggle) có nhãn bbox + ID; ghép nhãn CVAT bị cắt đoạn; hiệu chuẩn camera có kiểm tra chéo; bảng detection → tracking → cảnh báo trên cùng video; báo nhầm/bỏ sót theo giờ; công cụ rà soát nhãn của người + kappa; demo chạy pipeline thật trên video tải lên',
-    'evaluation_street*.json, evaluation_real.json, calibration_street.json, street_reference_sensitivity.json, models/saferoad_street_yolo11n.pt, review_candidates_*.csv, tab "Chạy thử video" và "Rà soát nhãn"'],
+    'Thêm bộ video đại lộ thật (Kaggle) có nhãn bbox + ID; ghép nhãn CVAT bị cắt đoạn; hiệu chuẩn camera có kiểm tra chéo; bảng detection → tracking → cảnh báo trên cùng video; báo nhầm/bỏ sót theo giờ; công cụ rà soát nhãn của người + kappa; phân tích lỗi theo nhãn người và thêm cổng cùng làn; demo chạy pipeline thật trên video tải lên',
+    'evaluation_street*.json, evaluation_real.json, calibration_street.json, street_reference_sensitivity.json, lane_gate_check.json, models/saferoad_street_yolo11n.pt, review_candidates_*.csv, tab "Chạy thử video" và "Rà soát nhãn"'],
   ['2. Ý nghĩa PET và near-miss',
     'Tách PET ngoại suy và PET đo từ mốc vào/ra vùng xung đột, lưu 4 mốc thời gian; xử lý quỹ đạo song song và xe đã qua giao điểm; phân biệt near-miss / chồng thân xe do sai số / va chạm thật; trình mô phỏng có vật lý va chạm',
     'conflict/encroachment.py, tests/test_pet_and_contact.py (ca tái hiện từng lỗi), mục 3'],
@@ -272,27 +284,64 @@ if (SENS) {
 children.push(H2('2.5. Chạy thử đầu-cuối trên video chưa từng dùng'));
 if (HO) {
   const s = HO.summary;
-  children.push(P(`441 giây cuối của video đại lộ không có nhãn và không được dùng cho hiệu chuẩn, chọn ngưỡng hay fine-tune. Chạy toàn bộ pipeline (YOLO11n tinh chỉnh ở mục 2.3, CPU) trên đoạn này: ${s.n_frames} khung hình, ${s.n_tracks} đối tượng, ${s.total_events} cảnh báo, tức ${n(s.total_events / (s.duration_s / 3600), 1)} cảnh báo/giờ; tốc độ trung vị ${n(s.processing_fps, 1)} FPS. Danh sách cảnh báo để người rà soát nằm ở data/outputs/review_candidates_street_heldout.csv.`));
+  const pre = LGH ? `Bản trước cổng cùng làn phát ${LGH.alerts_before} cảnh báo (${n(LGH.false_alarms_per_hour_before, 1)} cảnh báo/giờ); danh sách để người rà soát nằm ở data/outputs/review_candidates_street_heldout.csv. Sau khi thêm cổng cùng làn (mục 2.7), bản hiện tại phát ` : 'Kết quả: ';
+  children.push(P(`441 giây cuối của video đại lộ không có nhãn và không được dùng cho hiệu chuẩn, chọn ngưỡng hay fine-tune. Chạy toàn bộ pipeline (YOLO11n tinh chỉnh ở mục 2.3, CPU) trên đoạn này: ${s.n_frames} khung hình, ${s.n_tracks} đối tượng, tốc độ trung vị ${n(s.processing_fps, 1)} FPS. ${pre}${s.total_events} cảnh báo, tức ${n(s.total_events / (s.duration_s / 3600), 1)} cảnh báo/giờ.`));
 }
 children.push(P('Bản demo trực tuyến không còn là dashboard tính sẵn: tab "Chạy thử video" cho phép tải một đoạn video lên máy chủ (Modal, CPU), máy chủ chạy YOLO → ByteTrack → quỹ đạo → TTC/PET → Risk và hiển thị tiến độ từng khung hình, video overlay, danh sách cảnh báo và bảng đối soát của chính lần chạy đó.'));
 
 children.push(H2('2.6. Nhãn xung đột do người rà soát'));
 if (REVIEWS.length) {
   children.push(P('Hai thành viên gán nhãn độc lập theo protocol mục 8. Precision và Recall dưới đây tính so với nhãn đồng thuận của người, không phải so với cảnh báo tham chiếu.'));
-  children.push(T(['Tập', 'Ứng viên', 'Người', 'Kappa (5 lớp / có-không)', 'Đồng thuận', 'P', 'R', 'Báo nhầm/giờ', 'Bỏ sót/giờ'],
-    REVIEWS.map(([k, x]) => [REVIEW_VI[k] || k, x.n_candidates, x.n_reviewers,
+  children.push(T(['Tập', 'Ứng viên', 'Trùng nhãn', 'Kappa (5 lớp / có-không)', 'Nhãn đồng thuận', 'P', 'R', 'Báo nhầm/giờ', 'Bỏ sót/giờ'],
+    REVIEWS.map(([k, x]) => [REVIEW_VI[k] || k, x.n_candidates, pct(x.raw_agreement),
       `${n(x.kappa_5class)} / ${n(x.kappa_conflict_vs_not)}`,
       Object.entries(x.consensus_counts || {}).map(([a, b]) => `${a} ${b}`).join(', ') || '-',
       r(x.precision), r(x.recall), n(x.false_alarms_per_hour, 1), n(x.misses_per_hour, 1)]),
-    [1.6, 0.7, 0.6, 1.2, 1.7, 1, 1, 0.8, 0.8]));
-  children.push(Cap('Bảng 1d. Cảnh báo so với nhãn xung đột do người rà soát (saferoad review-score). Ứng viên bất đồng hoặc "unclear" không vào mẫu số.'));
+    [1.7, 0.6, 0.8, 1.0, 1.3, 0.95, 0.85, 0.8, 0.8]));
+  children.push(Cap(`Bảng 1d. Cảnh báo so với nhãn xung đột do ${Math.max(...REVIEWS.map(([, x]) => x.n_reviewers))} người rà soát độc lập (scripts/score_reviews.py), gán trên các cảnh báo của bản trước cổng cùng làn (mục 2.7). Ứng viên bất đồng hoặc "unclear" không vào mẫu số. Kappa "-" là không xác định: cả hai người chỉ dùng một nhãn, khi đó đọc cột trùng nhãn. Bỏ sót/giờ "-" là tập chưa được xem lại toàn bộ video để đếm bỏ sót.`));
+  const H = RV.street_heldout;
+  if (H && H.precision && H.precision.den > 0) {
+    const fa = n(H.false_alarms_per_hour, 1);
+    if (H.precision.num === 0) {
+      children.push(P(`Kết quả chính: trên 441 s chưa từng dùng, cả ${H.precision.den} cảnh báo của bản trước cổng cùng làn đều được hai người đánh giá là giao thông bình thường, tức ${fa} báo nhầm/giờ ở bản đó; ${H.extra_missed ? `xem lại toàn bộ video, người rà soát ghi thêm ${H.extra_missed} xung đột thật mà hệ thống bỏ sót.` : (H.extra_missed === 0 ? 'hai người xem lại toàn bộ video và không thấy xung đột thật nào (không có phanh gấp, né hay suýt va), nên đoạn này không đo được Recall.' : 'chưa xem lại toàn bộ video để đếm bỏ sót.')}${REF_ALL_NORMAL ? ' Các cảnh báo tham chiếu - cùng luật TTC/PET chạy trên quỹ đạo người gán bbox - cũng đều bị đánh giá là bình thường.' : ''} Nghĩa là luật của bản đó bắt cả những cặp xe đi gần nhau trong dòng xe bình thường; các tỉ lệ so với tham chiếu ở Bảng 1b chỉ cho biết detection và tracking làm lệch kết quả bao nhiêu so với cùng một luật, không phải độ đúng. Nguyên nhân và cách sửa ở mục 2.7.`));
+    } else {
+      children.push(P(`Kết quả chính: trên 441 s chưa từng dùng, ${H.precision.num}/${H.precision.den} cảnh báo của hệ thống được hai người xác nhận là xung đột (${n(H.false_alarms_per_hour, 1)} báo nhầm/giờ); xem lại toàn bộ video, người rà soát ghi thêm ${H.extra_missed || 0} xung đột hệ thống bỏ sót (${n(H.misses_per_hour, 1)} bỏ sót/giờ).`));
+    }
+  }
   children.push(P('Quy trình đã dùng (protocol mục 8):'));
 } else {
   children.push(P('Công cụ đã sẵn sàng, nhưng tại thời điểm nộp chưa có nhãn của người - báo cáo không trình bày con số nào thay cho bước này. Quy trình (protocol mục 8):'));
 }
 children.push(B('saferoad evaluate-real và saferoad run --review-csv sinh danh sách ứng viên: hợp của cảnh báo hệ thống và cảnh báo tham chiếu, kèm thời điểm và cặp đối tượng.'));
 children.push(B('Hai thành viên mở tab "Rà soát nhãn", xem lại từng đoạn ở tốc độ 0,25×, gán độc lập một trong năm nhãn: near_miss, collision, normal, overlap_artifact, unclear; xem thêm toàn bộ video để ghi các xung đột hệ thống bỏ sót.'));
-children.push(B('saferoad review-score tính Cohen\'s kappa (5 lớp và có/không xung đột); κ < 0,6 thì ngồi lại thống nhất cách hiểu rồi gán lại, không lấy trung bình. Nhãn đồng thuận cho Precision, Recall, báo nhầm/giờ và bỏ sót/giờ so với nhãn người.'));
+children.push(B('scripts/score_reviews.py tính Cohen\'s kappa (5 lớp và có/không xung đột) và tỉ lệ trùng nhãn; κ < 0,6 thì ngồi lại thống nhất cách hiểu rồi gán lại, không lấy trung bình. Chỉ ứng viên hai người gán trùng nhau mới thành nhãn đồng thuận, dùng cho Precision, Recall, báo nhầm/giờ và bỏ sót/giờ.'));
+
+// 2.7. Phân tích lỗi theo nhãn người → cổng cùng làn (data/outputs/lane_gate_check.json).
+if (LGH) {
+  children.push(H2('2.7. Phân tích lỗi và cổng cùng làn'));
+  const nRm = LGH.events.filter((e) => e.after === 'removed').length;
+  const kept = LGH.events.filter((e) => e.after === 'kept');
+  children.push(P(`Để biết vì sao cả ${LGH.alerts_before} cảnh báo trên đoạn 441 s đều sai, nhóm chạy lại pipeline quanh từng cảnh báo và đo độ lệch ngang của cặp xe - khoảng cách vuông góc với hướng đi trung bình của hai xe - tại đúng khung hình cảnh báo (scripts/measure_lateral_offset.py). Kết quả ở Bảng 1e: hai xe lệch ngang ${n(LGH.lateral_m_min, 1)}-${n(LGH.lateral_m_max, 1)} m, tức là luôn ở hai làn khác nhau. ${LGH.events.filter((e) => e.approach_angle < 30).length}/${LGH.alerts_before} ca có góc tiếp cận dưới 30°: hai xe chạy cùng chiều ở làn kề, xe sau nhanh hơn và đang vượt. Luật cũ chỉ xét góc giữa hai vectơ vận tốc, nên góc gần 0° được xếp ngay là "đâm đuôi", và khoảng hở mặt-tới-mặt giữa hai thân xe ở hai làn (${n(Math.min(...LGH.events.map((e) => e.gap_m)), 1)}-${n(Math.max(...LGH.events.map((e) => e.gap_m)), 1)} m) đủ nhỏ để qua cổng khoảng cách 3 m, như thể hai xe sắp đâm vào nhau.`));
+  children.push(T(['Cảnh báo', 't (s)', 'Kiểu (bản cũ)', 'Góc', 'Lệch ngang (m)', 'Nhãn người', 'Sau cổng'],
+    LGH.events.map((e) => [e.event_id, n(e.t, 1), e.conflict_type, `${n(e.approach_angle, 0)}°`,
+      e.lateral_m == null ? '-' : n(e.lateral_m, 2), e.human_consensus === 'normal' ? 'bình thường' : (e.human_consensus || '-'),
+      e.after === 'kept' ? 'còn giữ' : 'bị loại']),
+    [1.1, 0.8, 1.2, 0.7, 1.1, 1.2, 1]));
+  children.push(Cap('Bảng 1e. Mười một cảnh báo của bản trước cổng trên đoạn 441 s chưa từng dùng (data/outputs/lane_gate_check.json).'));
+  children.push(Img('docs/assets/heldout_lane_gate.jpg', 560));
+  children.push(Cap('Hình 3. Khung hình của từng cảnh báo; vòng tròn là điểm giữa hai xe. Vàng: bị cổng cùng làn loại; cam: còn giữ.'));
+  children.push(P('Cách sửa - cổng cùng làn: với cặp có góc tiếp cận dưới 30° (đúng vùng góc của kiểu đâm đuôi), chỉ xét tiếp khi độ lệch ngang nhỏ hơn 1,75 m, tức nửa bề rộng làn 3,5 m đã giả định khi hiệu chuẩn camera (mục 2.2). Ngưỡng này không dò theo dữ liệu đánh giá; tại khung hình cảnh báo, cặp gần nhất vẫn lệch 2,2 m nên kết quả không phụ thuộc việc chọn sát biên. Cổng không áp dụng cho ca rẽ và tạt đầu (góc từ 30° trở lên), và cho cặp có một xe đang đổi hướng nhanh hơn 45°/s (cùng ngưỡng "rẽ gấp" của bộ phân loại kiểu xung đột): khi xe đang rẽ thì "cùng làn" không còn nghĩa, nên TTC và PET quyết định. Ngoại lệ rẽ gấp đến từ kiểm tra trên mô phỏng: phiên bản đầu của cổng, chưa có ngoại lệ này, làm mất xung đột thật ở lần quét nhiễu 0 px, và các ca bị mất đều có một xe đang rẽ gấp. Cổng chặn cặp trước khi mở episode nên bảng đối soát không đổi cấu trúc.'));
+  const sim = LG.simulation || {};
+  const simTxt = sim.with_gate && sim.without_gate
+    ? ` Trên mô phỏng có đáp án, bỏ cổng: Precision ${r(sim.without_gate.precision)}, Recall ${r(sim.without_gate.recall)}; có cổng: ${r(sim.with_gate.precision)}, ${r(sim.with_gate.recall)} (Bảng 4)${sim.with_gate.recall.num >= sim.without_gate.recall.num ? ' - cổng không làm mất xung đột thật nào ở đó' : ` - cổng làm mất ${sim.without_gate.recall.num - sim.with_gate.recall.num} xung đột thật`}${sim.with_gate.precision.den > sim.without_gate.precision.den ? `, đổi lại ${sim.with_gate.precision.den - sim.without_gate.precision.den} báo nhầm mới: một ca chuyển làn bị cổng chặn ở các khung đầu nên episode bắt đầu muộn hơn và không còn bị loại bởi PET đo. Nhóm ghi nhận đánh đổi này thay vì chỉnh thêm ngưỡng cho khớp mô phỏng` : ''}.` : '';
+  const sw = sim.noise_sweep || [];
+  const swOk = sw.length && sw.every((x) => x.with_gate.recall.num >= x.without_gate.recall.num);
+  const swTxt = sw.length ? ` Quét nhiễu ${sw.map((x) => n(x.noise_px, 1)).join('/')} px: Recall có cổng ${sw.map((x) => x.with_gate.recall.num).join('/')}, không cổng ${sw.map((x) => x.without_gate.recall.num).join('/')} trên ${sw[0].with_gate.recall.den} xung đột chuẩn${swOk ? ' - không mức nhiễu nào bị giảm Recall' : ''}; số cảnh báo được chấm có cổng ${sw.map((x) => x.with_gate.precision.den).join('/')}, không cổng ${sw.map((x) => x.without_gate.precision.den).join('/')}.` : '';
+  const gd = sim.grid;
+  const gdTxt = gd ? ` Trên lưới ${gd.n_cells} ô (mục 4.6, ${gd.n_gt} xung đột chuẩn), cổng đổi kết quả ở ${gd.cells_changed} ô: TP ${gd.tp_without_gate} → ${gd.tp_with_gate}, cảnh báo được chấm ${gd.scored_without_gate} → ${gd.scored_with_gate}${gd.tp_with_gate < gd.tp_without_gate ? ` - tức mất ${gd.tp_without_gate - gd.tp_with_gate} xung đột thật để bớt ${gd.scored_without_gate - gd.scored_with_gate - (gd.tp_without_gate - gd.tp_with_gate)} báo nhầm. Đây là cái giá thật của cổng và được báo nguyên trạng` : ''}.` : '';
+  children.push(P(`Kết quả trên đoạn 441 s: ${LGH.alerts_before} → ${LGH.alerts_after} cảnh báo, ${n(LGH.false_alarms_per_hour_before, 1)} → ${n(LGH.false_alarms_per_hour_after, 1)} báo nhầm/giờ. ${nRm} cảnh báo bị loại đều đã được hai người đánh giá là bình thường (không loại nhầm xung đột nào); ${kept.length} cảnh báo còn lại (${kept.map((e) => `${e.event_id}, ${e.conflict_type} ${n(e.approach_angle, 0)}°`).join('; ')}) cũng đã bị đánh giá là bình thường nên vẫn tính là báo nhầm. ${LGH.new_unreviewed.length ? `Có ${LGH.new_unreviewed.length} cảnh báo mới chưa được rà soát.` : 'Không xuất hiện cảnh báo mới nào, nên không cần rà soát lại.'}${simTxt}${swTxt}${gdTxt}`));
+  children.push(P(`Hai điều phải nói rõ. Thứ nhất, cổng được rút ra từ phân tích lỗi trên chính đoạn 441 s này, nên con số "${n(LGH.false_alarms_per_hour_after, 1)} báo nhầm/giờ" không còn là phép thử độc lập; nhóm báo cả số trước và sau, và giữ nguyên danh sách ứng viên cùng nhãn người của bản trước trong thư mục archive_before_lane_gate. Thứ hai, cả hai video thật có nhãn người đều là giao thông bình thường nên Precision trên video thật vẫn chưa có tử số dương và chưa đo được Recall. Việc tiếp theo là một đoạn video mới, tốt nhất là giao lộ ở Việt Nam có xe máy, để hai người gán nhãn độc lập rồi kiểm tra lại cả báo nhầm lẫn bỏ sót.`, { italics: true }));
+}
 
 // ---------------------------- 3. Yêu cầu 2 ------------------------------- //
 children.push(new Paragraph({ children: [new PageBreak()] }));
@@ -365,6 +414,12 @@ children.push(T(['Cấu hình', 'Precision', 'Recall', 'F1', 'TTC MAE (s)', 'Ph�
 children.push(Cap('Bảng 4. Mỗi dòng chỉ khác bản đầy đủ đúng một khối; cùng bbox gốc, cùng seed nhiễu, cùng vùng đánh giá, cùng hàm chấm.'));
 const mp = row('-measured_pet');
 if (mp.f1 !== undefined) children.push(P(`Đóng góp riêng của PET đo (so với hành vi PET của bản cũ): F1 ${n(mp.f1)} → ${n(row('full').f1)}, Precision ${r(mp.precision)} → ${r(row('full').precision)} với Recall không đổi - các episode chỉ dựa vào PET ngoại suy mà thực tế xe sau đã nhường bị loại.`));
+const lg = row('-lane_gate');
+if (lg.f1 !== undefined) {
+  const same = lg.recall.num === row('full').recall.num && lg.precision.den === row('full').precision.den;
+  const keepR = row('full').recall.num >= lg.recall.num;
+  children.push(P(`Cổng cùng làn (mục 2.7): bỏ cổng cho Precision ${r(lg.precision)}, Recall ${r(lg.recall)}; bản đầy đủ ${r(row('full').precision)}, ${r(row('full').recall)}. ${same ? 'Trên mẫu mô phỏng chính, cổng không đổi kết quả.' : `Trên mẫu mô phỏng chính, cổng ${keepR ? 'giữ nguyên Recall' : 'làm giảm Recall'} và ${row('full').precision.den >= lg.precision.den ? `thêm ${row('full').precision.den - lg.precision.den}` : `bớt ${lg.precision.den - row('full').precision.den}`} cảnh báo được chấm.`} Trên mô phỏng rất ít cặp xe song song ở làn kề lọt qua các cổng khác, nên tác dụng chính của cổng thấy trên video thật; điều cần kiểm trên mô phỏng là nó không làm mất xung đột thật.`));
+}
 children.push(H2('4.5. Ablation cộng dồn từ baseline'));
 children.push(T(['Cấu hình', 'Precision', 'Recall', 'F1', 'TTC MAE (s)', 'Phát ra', 'Ngoài vùng'], CUM.map(abRow), [2.6, 1.4, 1.4, 0.7, 0.9, 0.8, 0.9]));
 children.push(Cap('Bảng 5. Baseline: TTC < 3 s tính trên toạ độ ảnh, mỗi khung hình một cảnh báo (chống trùng 3 s), không PET, không cổng.'));
@@ -375,6 +430,10 @@ if (GRID) {
   children.push(T(['Mật độ', 'Camera', 'Ánh sáng', 'Nhãn', 'F1 đầy đủ', 'F1 baseline', 'F1 PET cũ', 'P đầy đủ', 'R đầy đủ'],
     GRID.cells.map((c) => [c.density, c.camera, c.light, c.n_gt, n(c.full.f1), n(c.baseline.f1), n(c.old_pet.f1), r(c.full.precision), r(c.full.recall)]),
     [0.7, 0.9, 1.2, 0.5, 0.8, 0.8, 0.8, 1.3, 1.3]));
+  const gridGate = (((GRID.reproducibility || {}).config || {}).conflict || {}).same_lane_gate;
+  const lgr = row('-lane_gate'), fr = row('full');
+  const noEffect = lgr.recall && lgr.recall.num === fr.recall.num && lgr.precision.den === fr.precision.den;
+  if (gridGate === undefined) children.push(P(`Lưới này được chạy trước khi thêm cổng cùng làn (mục 2.7)${noEffect ? '; trên mẫu mô phỏng chính, cổng không đổi Precision/Recall của bản đầy đủ (Bảng 4)' : ''}. Chạy lại bằng python -m saferoad evaluate-grid.`, { italics: true, size: 22 }));
   children.push(P('Giới hạn: "ánh sáng" ở đây là hồ sơ nhiễu/bỏ sót của detector, không phải ảnh ban đêm thật; ảnh hưởng thật của ánh sáng lên YOLO chỉ đo được trên video thật ban đêm. Mỗi ô có ít nhãn (mật độ thưa chỉ khoảng 15 xung đột) nên khoảng tin cậy rộng.', { italics: true, size: 22 }));
 }
 children.push(H2('4.7. Độ bền trước nhiễu detector'));
@@ -392,6 +451,7 @@ if (MTF) children.push(P(`Phần tinh chỉnh trên MVTI (mục 2.3) làm sau l�
 // ---------------------------- 5. Hạn chế -------------------------------- //
 children.push(H1('5. Hạn chế còn lại và việc tiếp theo'));
 if (!REVIEWS.length) children.push(B('Chưa có nhãn xung đột do người rà soát trên video thật: công cụ và danh sách ứng viên đã sẵn, cần hai thành viên gán nhãn độc lập (mục 2.6).'));
+else if (RV.street_heldout && RV.street_heldout.precision && RV.street_heldout.precision.num === 0 && RV.street_heldout.precision.den > 0) children.push(B(LGH ? `Hạn chế lớn nhất: theo nhãn người, mọi cảnh báo trên hai video thật đều là báo nhầm (mục 2.6). Cổng cùng làn giảm báo nhầm trên đoạn 441 s từ ${n(LGH.false_alarms_per_hour_before, 1)} xuống ${n(LGH.false_alarms_per_hour_after, 1)}/giờ, nhưng con số sau được đo trên chính đoạn dùng để phân tích lỗi (mục 2.7). Cần video mới có xung đột thật và nhãn người để kiểm tra độc lập và đo Recall; hướng cải tiến tiếp theo là thêm bằng chứng phản ứng né tránh (giảm tốc gấp, đổi hướng đột ngột) vào điều kiện near-miss.` : `Hạn chế lớn nhất: theo nhãn người, cảnh báo near-miss trên video đại lộ hiện đều là báo nhầm (${n(RV.street_heldout.false_alarms_per_hour, 1)}/giờ trên đoạn chưa từng dùng, mục 2.6). Luật TTC/PET cần thêm bằng chứng phản ứng né tránh, và cần video có xung đột thật để đo Recall.`));
 children.push(B('Hiệu chuẩn video đại lộ là ước lượng từ vạch kẻ theo tiêu chuẩn, chưa đo thực địa, và chỉ phủ lòng đường bên trái - vùng phân tích vì vậy bị thu hẹp (mục 2.4). Cần quay video tại Việt Nam và đo thực địa điểm mốc.'));
 children.push(B('Trên video đại lộ, người đi bộ quá nhỏ cho YOLO ở đầu vào 640 px; cần chạy theo ô ở độ phân giải gốc (chậm hơn khoảng 6 lần trên CPU) hoặc camera gần hơn.'));
 children.push(B('Số cảnh báo tham chiếu trong vùng phân tích của video đại lộ rất ít (giao thông bình thường), nên Precision/Recall so với tham chiếu có mẫu số nhỏ; giá trị chính của video này là bảng detection/tracking và quy trình rà soát.'));
@@ -428,6 +488,9 @@ children.push(H1('Phụ lục - Lệnh tái hiện'));
   'python -m saferoad evaluate-real --config configs/mvti.yaml --weights models/yolo11n.pt --no-db --no-overlay --start-frame 1700 --seen-before 1500 --out data/outputs/evaluation_mvti_pretrained_test.json',
   'python -m saferoad evaluate-real --config configs/mvti.yaml --weights models/saferoad_mvti_yolo11n.pt --no-db --no-overlay --start-frame 1700 --seen-before 1500 --out data/outputs/evaluation_mvti_finetuned_test.json',
   'python -m saferoad run --config configs/street.yaml --no-overlay --source data/processed/street/street_heldout_300_741s.mp4 --output data/outputs/street_heldout --review-csv data/outputs/review_candidates_street_heldout.csv',
+  'python scripts/score_reviews.py --missed street_heldout=0',
+  'python scripts/measure_lateral_offset.py --results data/outputs/archive_before_lane_gate/street_heldout_results.json --video data/processed/street/street_heldout_300_741s.mp4 --out data/outputs/lateral_offset_street_heldout.json',
+  'python scripts/lane_gate_check.py --figure',
   'node scripts/build_improvement_report.js',
 ].forEach((c) => children.push(new Paragraph({ spacing: { after: 60 },
   children: [new TextRun({ text: c, font: 'Consolas', size: 18 })] })));

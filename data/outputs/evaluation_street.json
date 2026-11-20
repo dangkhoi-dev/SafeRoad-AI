@@ -132,7 +132,7 @@
       "recall": {
         "value": 0.0,
         "num": 0,
-        "den": 2
+        "den": 1
       },
       "f1": 0.0,
       "ttc_mae": null,
@@ -146,10 +146,9 @@
     },
     "reconciliation": {
       "rows": {
-        "episodes_opened": 33,
-        "rejected_proximity_gate": 30,
-        "rejected_too_short": 2,
-        "rejected_pet_measured_above_threshold": 1,
+        "episodes_opened": 29,
+        "rejected_proximity_gate": 26,
+        "rejected_too_short": 3,
         "merged_into_previous": 0,
         "emitted": 0,
         "exported_to_results": 0,
@@ -158,9 +157,9 @@
         "scored_unmapped_track_fp": 0,
         "scored_mapped_fp": 0,
         "scored_tp": 0,
-        "gt_total": 2,
+        "gt_total": 1,
         "gt_matched_tp": 0,
-        "gt_missed_fn": 2
+        "gt_missed_fn": 1
       },
       "checks": {
         "opened = rejected + merged + emitted": true,
@@ -172,62 +171,61 @@
       "all_checks_pass": true,
       "per_hour": {
         "false_alarms_per_hour": 0.0,
-        "misses_per_hour": 24.0,
+        "misses_per_hour": 12.0,
         "alerts_per_hour": 0.0,
         "hours": 0.0834
       }
     },
-    "n_reference": 2,
+    "n_reference": 1,
     "reference_contact": {
-      "near_miss": 2
+      "near_miss": 1
     },
     "system_contact": {},
     "reference_funnel": {
-      "episodes_opened": 79,
-      "rejected_proximity_gate": 72,
-      "emitted": 2,
-      "rejected_too_short": 2,
+      "episodes_opened": 61,
+      "rejected_proximity_gate": 56,
+      "emitted": 1,
+      "rejected_too_short": 1,
       "rejected_pet_measured_above_threshold": 3
     },
     "system_statistics": {
       "total": 0
     },
-    "review_candidates_csv": "/tmp/repro_out/review_candidates_street.csv",
-    "n_review_candidates": 2
+    "review_candidates_csv": "data/outputs/reruns/review_candidates_street.csv",
+    "n_review_candidates": 1
   },
   "runtime": {
     "n_frames": 9009,
     "duration_s": 300.3,
     "fps_source": 30.0,
-    "processing_fps": 14.49,
-    "frame_latency_median_ms": 69.0,
-    "frame_latency_p95_ms": 91.89,
-    "wall_seconds": 1261.06,
+    "processing_fps": 15.32,
+    "frame_latency_median_ms": 65.26,
+    "frame_latency_p95_ms": 82.7,
+    "wall_seconds": 932.44,
     "total_events": 0,
     "severe_events": 0,
     "avg_risk_score": 0.0,
     "n_tracks": 291,
     "by_type": {},
     "latency_ms": {
-      "detection": 70.78,
-      "tracking": 0.61,
-      "trajectory": 0.46,
-      "conflict": 0.12
+      "detection": 63.97,
+      "tracking": 0.64,
+      "trajectory": 0.45,
+      "conflict": 0.11
     },
-    "total_latency_ms": 71.97,
+    "total_latency_ms": 65.17,
     "homography_error_m": 0.2295198291540146,
     "detector": "YoloDetector",
     "event_funnel": {
-      "episodes_opened": 33,
-      "rejected_proximity_gate": 30,
-      "rejected_too_short": 2,
-      "rejected_pet_measured_above_threshold": 1
+      "episodes_opened": 29,
+      "rejected_proximity_gate": 26,
+      "rejected_too_short": 3
     }
   },
   "reproducibility": {
-    "command": "saferoad evaluate-real --config configs/street.yaml --weights models/yolo11n.pt --no-db --no-overlay --source data/processed/street/street_labeled_0_300s.mp4 --ground-truth data/processed/street/street_groundtruth.pkl --calibration-report data/outputs/calibration_street.json --out /tmp/repro_out/evaluation_street.json",
-    "git_commit": "476ab01",
-    "config_sha256": "378c37b3bb5559ed",
+    "command": "saferoad evaluate-real --config configs/street.yaml --weights models/yolo11n.pt --no-db --no-overlay --source data/processed/street/street_labeled_0_300s.mp4 --ground-truth data/processed/street/street_groundtruth.pkl --calibration-report data/outputs/calibration_street.json --out /tmp/diag/v3/evaluation_street.json",
+    "git_commit": "5249dcc-dirty",
+    "config_sha256": "9604349a79485478",
     "config": {
       "site": {
         "name": "Đại lộ nhiều làn - video Kaggle quay từ mái nhà (iPhone 13, 4K→1080p)",
@@ -247,7 +245,7 @@
         "resize_width": 0,
         "fps_override": 0.0,
         "write_overlay": false,
-        "overlay_path": "/tmp/repro_out/overlay_street.mp4"
+        "overlay_path": "/tmp/diag/v3/overlay_street.mp4"
       },
       "detection": {
         "weights": "models/yolo11n.pt",
@@ -422,6 +420,8 @@
         "max_pair_distance": 30.0,
         "min_rel_speed": 3.0,
         "proximity_gate": 3.0,
+        "same_lane_gate": true,
+        "lateral_half_width_m": 1.75,
         "min_abs_speed": 0.8,
         "dedup_window": 3.0,
         "horizon": 6.0,
@@ -486,7 +486,7 @@
           0.95
         ]
       },
-      "db_path": "/tmp/repro_out/saferoad_street.db",
+      "db_path": "/tmp/diag/v3/saferoad_street.db",
       "output_dir": "data/outputs"
     },
     "environment": {

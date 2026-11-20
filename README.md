@@ -56,9 +56,9 @@ chạy lại được bằng các lệnh ở mục [Tái hiện](#tái-hiện).
 
 | Chỉ số | Kết quả (tử/mẫu) |
 |---|---:|
-| Precision | 0,538 (49/91) |
+| Precision | 0,533 (49/92) |
 | Recall | 0,766 (49/64) |
-| F1 | 0,632 |
+| F1 | 0,628 |
 | TTC MAE | 0,203 s |
 | PET đo - MAE | 0,031 s (n=30) |
 | PET ngoại suy - MAE | 0,131 s (n=35) |
@@ -66,31 +66,32 @@ chạy lại được bằng các lệnh ở mục [Tái hiện](#tái-hiện).
 | Tracking IDF1 / MOTA / đổi ID | 0,983 / 0,965 / 142 |
 | Quỹ đạo bị gắn cờ hành vi | 0,478 (131/274) |
 
-Đối soát: 133 sự kiện phát ra = 133 trên dashboard = 42 ngoài vùng đánh giá + 91 được chấm (49 TP + 42 FP). Đẳng thức tự kiểm: đều đúng.
+Đối soát: 133 sự kiện phát ra = 133 trên dashboard = 41 ngoài vùng đánh giá + 92 được chấm (49 TP + 43 FP). Đẳng thức tự kiểm: đều đúng.
 
 Ablation bỏ từng khối (cùng mẫu, cùng seed):
 
 | Cấu hình | Precision | Recall | F1 |
 |---|---:|---:|---:|
-| Bản đầy đủ | 0,538 (49/91) | 0,766 (49/64) | 0,632 |
+| Bản đầy đủ | 0,533 (49/92) | 0,766 (49/64) | 0,628 |
 | Bỏ homography | 0,091 (1/11) | 0,016 (1/64) | 0,027 |
-| Bỏ làm mượt quỹ đạo | 0,155 (49/316) | 0,766 (49/64) | 0,258 |
+| Bỏ làm mượt quỹ đạo | 0,156 (49/315) | 0,766 (49/64) | 0,259 |
 | Bỏ gom episode | 0,378 (14/37) | 0,219 (14/64) | 0,277 |
 | Bỏ cổng tốc độ tiếp cận | 0,331 (47/142) | 0,734 (47/64) | 0,456 |
 | Bỏ PET | 0,623 (38/61) | 0,594 (38/64) | 0,608 |
-| Bỏ PET đo (chỉ PET ngoại suy) | 0,485 (49/101) | 0,766 (49/64) | 0,594 |
+| Bỏ PET đo (chỉ PET ngoại suy) | 0,480 (49/102) | 0,766 (49/64) | 0,590 |
 | Bỏ cổng khoảng cách | 0,238 (56/235) | 0,875 (56/64) | 0,375 |
+| Bỏ cổng cùng làn | 0,538 (49/91) | 0,766 (49/64) | 0,632 |
 
 **Video thật - detection → tracking → cảnh báo trên cùng một video** (cảnh báo so với tham chiếu = cùng thuật toán chạy trên quỹ đạo người gán nhãn):
 
 | Dữ liệu / detector | mAP@0,5 | mAP@0,5 (bỏ hộp nhỏ) | Recall @ngưỡng chạy | IDF1 | Cảnh báo / tham chiếu | P so tham chiếu | R so tham chiếu | Báo nhầm/giờ | FPS |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Đại lộ (Kaggle), 300 s, YOLO11n gốc | 0,095 | 0,100 | 0,084 | 0,097 | 0 / 2 | - (0/0) | 0,000 (0/2) | 0,0 | 14,5 |
-| Đại lộ, test 220-300 s, YOLO11n gốc | 0,052 | 0,054 | 0,054 | 0,021 | 0 / 1 | - (0/0) | 0,000 (0/1) | 0,0 | 14,0 |
-| Đại lộ, test 220-300 s, YOLO11n tinh chỉnh | 0,202 | 0,219 | 0,453 | 0,223 | 2 / 1 | 0,500 (1/2) | 1,000 (1/1) | 44,8 | 12,8 |
-| MVTI, YOLO11n gốc | 0,208 | 0,209 | 0,278 | 0,235 | 1 / 0 | 0,000 (0/1) | - (0/0) | 44,2 | 12,8 |
-| MVTI, test 57-81 s, YOLO11n gốc | 0,196 | 0,199 | 0,273 | 0,072 | 0 / 0 | - (0/0) | - (0/0) | 0,0 | 14,5 |
-| MVTI, test 57-81 s, YOLO11n tinh chỉnh | 0,710 | 0,717 | 0,612 | 0,262 | 0 / 0 | - (0/0) | - (0/0) | 0,0 | 14,5 |
+| Đại lộ (Kaggle), 300 s, YOLO11n gốc | 0,095 | 0,100 | 0,084 | 0,097 | 0 / 1 | - (0/0) | 0,000 (0/1) | 0,0 | 15,3 |
+| Đại lộ, test 220-300 s, YOLO11n gốc | 0,052 | 0,054 | 0,054 | 0,021 | 0 / 0 | - (0/0) | - (0/0) | 0,0 | 15,3 |
+| Đại lộ, test 220-300 s, YOLO11n tinh chỉnh | 0,202 | 0,219 | 0,453 | 0,223 | 0 / 0 | - (0/0) | - (0/0) | 0,0 | 13,7 |
+| MVTI, YOLO11n gốc | 0,208 | 0,209 | 0,278 | 0,235 | 1 / 0 | 0,000 (0/1) | - (0/0) | 44,2 | 15,4 |
+| MVTI, test 57-81 s, YOLO11n gốc | 0,196 | 0,199 | 0,273 | 0,072 | 0 / 0 | - (0/0) | - (0/0) | 0,0 | 15,3 |
+| MVTI, test 57-81 s, YOLO11n tinh chỉnh | 0,710 | 0,717 | 0,612 | 0,262 | 0 / 0 | - (0/0) | - (0/0) | 0,0 | 15,2 |
 
 MVTI chỉ có 19 phương tiện và phần lớn đứng trong khung suốt 81 s, nên trong đoạn test 14/17 xe đã gặp lúc huấn luyện (model có thể đã nhớ chúng). Chấm riêng 3 xe chỉ xuất hiện sau phần huấn luyện (500 hộp): mAP@0,5 0,322 (gốc) → 0,574 (tinh chỉnh).
 
@@ -104,24 +105,36 @@ MVTI chỉ có 19 phương tiện và phần lớn đứng trong khung suốt 81
 | B | + bỏ cặp hai người đi bộ | 1794 | 21506,5 | 1061 / 487 / 246 |
 | C | + chỉ xét mặt đường ≤ 65 m | 232 | 2781,2 | 143 / 58 / 31 |
 | D | + kẹp vận tốc xe đứng yên | 117 | 1402,6 | 89 / 15 / 13 |
-| E | + chỉ lòng đường đã hiệu chuẩn (cấu hình dùng) | 2 | 24,0 | 2 / 0 / 0 |
+| E | + chỉ lòng đường đã hiệu chuẩn | 2 | 24,0 | 2 / 0 / 0 |
+| F | + cổng cùng làn (cấu hình dùng) | 1 | 12,0 | 1 / 0 / 0 |
 
 Phần lớn cảnh báo ở bước A-D là sai số hình học (xe đỗ ở xa có bbox rung hơn 1 m; lòng đường bên phải nằm ngoài vùng có điểm hiệu chuẩn), nên cảnh báo chỉ được phân tích trong lòng đường đã hiệu chuẩn (vàng):
 
 ![Vùng phân tích](docs/assets/street_analysis_region.jpg)
 
-**Chạy đầu-cuối trên đoạn chưa từng dùng** (đại lộ 300-741 s, không nhãn, detector tinh chỉnh): 11 cảnh báo trong 442 s (89,7/giờ), 14,0 FPS; toàn bộ cảnh báo nằm trong `data/outputs/review_candidates_street_heldout.csv` để người rà soát.
+**Chạy đầu-cuối trên đoạn chưa từng dùng** (đại lộ 300-741 s, không nhãn, detector tinh chỉnh, 14,9 FPS). Bản trước cổng cùng làn phát 11 cảnh báo (89,7/giờ), danh sách để người rà soát ở `data/outputs/review_candidates_street_heldout.csv`; bản hiện tại phát 2 cảnh báo trong 442 s (16,3/giờ).
+
+**Cảnh báo so với nhãn xung đột do người rà soát** (`scripts/score_reviews.py`; nhãn gán trên bản trước cổng cùng làn). Kappa "-" khi cả hai người chỉ dùng một nhãn (không xác định), khi đó đọc cột trùng nhãn; bỏ sót/giờ "-" là tập chưa được xem lại toàn bộ video:
+
+| Tập | Ứng viên | Trùng nhãn | Kappa (5 lớp / có-không) | P | R | Báo nhầm/giờ | Bỏ sót/giờ |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| real | 1 | 100% | - / - | 0,000 (0/1) | - (0/0) | 44,2 | - |
+| street | 2 | 100% | - / - | - (0/0) | - (0/0) | 0,0 | - |
+| street_finetuned_test | 3 | 100% | - / - | 0,000 (0/2) | - (0/0) | 89,7 | - |
+| street_heldout | 11 | 100% | - / - | 0,000 (0/11) | - (0/0) | 89,7 | 0,0 |
+| street_pretrained_test | 1 | 100% | - / - | - (0/0) | - (0/0) | 0,0 | - |
+
+Trên 441 s chưa từng dùng, cả 11 cảnh báo của bản trước cổng đều được người rà soát đánh giá là giao thông bình thường (89,7 báo nhầm/giờ); hai người xem lại toàn bộ video và không thấy xung đột thật nào, nên chưa đo được Recall.
+
+**Phân tích lỗi và cổng cùng làn** (`scripts/measure_lateral_offset.py`, `scripts/lane_gate_check.py`). Đo lại từng cảnh báo: tại khung hình cảnh báo, hai xe lệch ngang 2,2-7,6 m, tức là đi cùng chiều ở hai làn khác nhau; luật cũ chỉ xét góc giữa hai vectơ vận tốc nên gọi đó là đâm đuôi. Cổng mới: cặp có góc tiếp cận dưới 30° và không xe nào đang rẽ gấp (> 45°/s) chỉ được xét khi lệch ngang dưới 1,75 m (nửa làn 3,5 m đã giả định khi hiệu chuẩn, không dò). Kết quả trên đoạn này: 11 → 2 cảnh báo, 89,7 → 16,3 báo nhầm/giờ; 9 cảnh báo bị loại đều đã được người đánh giá là bình thường; 2 cảnh báo còn lại (lane_change 31°, turning 34°: góc tại đỉnh trên 30° nên cổng không áp dụng) cũng đã bị đánh giá là bình thường. Trên mô phỏng có đáp án, bỏ cổng này cho Precision 0,538 (49/91), Recall 0,766 (49/64); có cổng: 0,533 (49/92), 0,766 (49/64) - Recall không đổi, thêm 1 báo nhầm. Trên lưới 27 ô (1107 xung đột chuẩn): TP 816 → 814, cảnh báo được chấm 1732 → 1718. Vì cổng được rút ra từ chính đoạn 441 s này nên con số sau sửa không phải phép thử độc lập; cần một đoạn video mới có nhãn người.
+
+![Mười một cảnh báo trên đoạn chưa từng dùng](docs/assets/heldout_lane_gate.jpg)
 
 Hiệu chuẩn video đại lộ: 16 điểm mốc từ vạch kẻ, sai số fit 0,306 m, leave-one-out 0,740 m (tối đa 1,684 m) - ước lượng, chưa đo thực địa.
 
-<!-- AUTO:RESULTS:END -->
+Giới hạn còn lại được báo cáo nguyên trạng: hai video thật đã có nhãn người đều là giao thông bình thường, nên chưa đo được Recall trên video thật, và báo nhầm/giờ sau khi thêm cổng cùng làn mới được kiểm trên chính đoạn đã dùng để phân tích lỗi; hiệu chuẩn video đại lộ là ước lượng từ vạch kẻ đường chứ chưa đo thực địa và chỉ phủ lòng đường bên trái, nên cảnh báo chỉ được phân tích trong vùng đó; người đi bộ trên video đại lộ quá nhỏ cho YOLO ở 640 px; hai bộ video thật không có xe máy; mô phỏng dày đặc va chạm hơn thực tế; "ánh sáng" trong lưới thực nghiệm là hồ sơ chất lượng detector.
 
-Giới hạn còn lại được báo cáo nguyên trạng: chưa có nhãn xung đột do người rà soát
-trên video thật (công cụ đã sẵn sàng); hiệu chuẩn video đại lộ là ước lượng từ vạch
-kẻ đường chứ chưa đo thực địa và chỉ phủ lòng đường bên trái, nên cảnh báo chỉ được
-phân tích trong vùng đó; người đi bộ trên video đại lộ quá nhỏ cho YOLO ở 640 px; hai
-bộ video thật không có xe máy; mô phỏng dày đặc va chạm hơn thực tế; "ánh sáng" trong
-lưới thực nghiệm là hồ sơ chất lượng detector.
+<!-- AUTO:RESULTS:END -->
 
 ---
 
@@ -189,6 +202,7 @@ python -m saferoad evaluate-real --config configs/street.yaml --weights models/s
     --out data/outputs/evaluation_street_finetuned_test.json
 
 # Chạy đầu-cuối trên 441 s chưa từng dùng + xuất danh sách để người rà soát
+# (danh sách nào đã có nhãn người thì được giữ nguyên; bản chạy lại ghi vào data/outputs/reruns/)
 python -m saferoad run --config configs/street.yaml --no-overlay \
     --source data/processed/street/street_heldout_300_741s.mp4 \
     --output data/outputs/street_heldout \
@@ -211,6 +225,12 @@ python -m saferoad evaluate-real --config configs/mvti.yaml --weights models/saf
 
 # Chấm nhãn người rà soát (sau khi có >= 2 file labels_<bộ>_<tên>.csv)
 python scripts/score_reviews.py --missed street_heldout=0
+
+# Phân tích lỗi trên đoạn 441 s: đo độ lệch ngang từng cảnh báo của bản trước cổng cùng làn,
+# rồi so trước/sau (ghi data/outputs/lane_gate_check.json, ảnh docs/assets/heldout_lane_gate.jpg)
+python scripts/measure_lateral_offset.py --results data/outputs/archive_before_lane_gate/street_heldout_results.json \
+    --video data/processed/street/street_heldout_300_741s.mp4 --out data/outputs/lateral_offset_street_heldout.json
+python scripts/lane_gate_check.py --figure
 
 # Cập nhật bảng số trong README và báo cáo cải tiến
 python scripts/build_readme_tables.py

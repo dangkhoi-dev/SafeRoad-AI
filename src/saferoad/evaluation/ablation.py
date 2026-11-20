@@ -67,6 +67,10 @@ def _no_episode(cfg: Config) -> None:
     cfg.conflict.episode_grouping = False
 
 
+def _no_lane_gate(cfg: Config) -> None:
+    cfg.conflict.same_lane_gate = False
+
+
 def _chain(*fns):
     def run(cfg: Config) -> None:
         for fn in fns:
@@ -79,19 +83,22 @@ CUMULATIVE: list[AblationStage] = [
     AblationStage("baseline", "0. Baseline: TTC < 3 s trên toạ độ ảnh",
                   "Không homography, không làm mượt, không PET, không cổng, mỗi khung hình một cảnh báo (chống trùng 3 s)",
                   _chain(_no_homography, _no_smoothing, _no_pet, _no_proximity,
-                         _no_closing_speed, _no_episode)),
+                         _no_closing_speed, _no_episode, _no_lane_gate)),
     AblationStage("homography", "1. + Homography (mét)", "Quy đổi toạ độ ảnh sang mặt đất",
-                  _chain(_no_smoothing, _no_pet, _no_proximity, _no_closing_speed, _no_episode)),
+                  _chain(_no_smoothing, _no_pet, _no_proximity, _no_closing_speed, _no_episode,
+                         _no_lane_gate)),
     AblationStage("smoothing", "2. + Làm mượt quỹ đạo", "Làm mượt + vận tốc hồi quy",
-                  _chain(_no_pet, _no_proximity, _no_closing_speed, _no_episode)),
+                  _chain(_no_pet, _no_proximity, _no_closing_speed, _no_episode, _no_lane_gate)),
     AblationStage("episode", "3. + Gom episode", "Một tình huống → một sự kiện, gán nhãn tại đỉnh",
-                  _chain(_no_pet, _no_proximity, _no_closing_speed)),
+                  _chain(_no_pet, _no_proximity, _no_closing_speed, _no_lane_gate)),
     AblationStage("closing", "4. + Cổng tốc độ tiếp cận", "Loại bám đuôi cùng tốc độ",
-                  _chain(_no_pet, _no_proximity)),
+                  _chain(_no_pet, _no_proximity, _no_lane_gate)),
     AblationStage("pet", "5. + PET (ngoại suy + đo)", "Thêm tiêu chí PET",
-                  _no_proximity),
-    AblationStage("full", "6. + Cổng khoảng cách = bản đầy đủ", "Hai xe phải thực sự đến gần nhau",
-                  None),
+                  _chain(_no_proximity, _no_lane_gate)),
+    AblationStage("proximity", "6. + Cổng khoảng cách", "Hai xe phải thực sự đến gần nhau",
+                  _no_lane_gate),
+    AblationStage("full", "7. + Cổng cùng làn = bản đầy đủ",
+                  "Cặp đi gần song song phải lệch ngang dưới nửa làn mới tính", None),
 ]
 
 #: Bỏ đúng một khối khỏi bản đầy đủ.
@@ -104,6 +111,8 @@ LEAVE_ONE_OUT: list[AblationStage] = [
     AblationStage("-pet", "Bỏ PET", "Chỉ dùng TTC", _no_pet),
     AblationStage("-measured_pet", "Bỏ PET đo (chỉ PET ngoại suy)", "Hành vi PET của bản cũ", _no_measured_pet),
     AblationStage("-proximity", "Bỏ cổng khoảng cách", "Không đòi hai xe thực sự đến gần", _no_proximity),
+    AblationStage("-lane_gate", "Bỏ cổng cùng làn", "Xe song song ở làn kề vẫn được tính là đâm đuôi",
+                  _no_lane_gate),
 ]
 
 

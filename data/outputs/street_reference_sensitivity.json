@@ -34,7 +34,7 @@
         "rejected_pet_measured_above_threshold": 281,
         "merged_into_previous": 410
       },
-      "seconds": 369.8
+      "seconds": 199.5
     },
     {
       "step": "B",
@@ -66,7 +66,7 @@
         "rejected_pet_measured_above_threshold": 226,
         "merged_into_previous": 384
       },
-      "seconds": 348.8
+      "seconds": 193.7
     },
     {
       "step": "C",
@@ -98,7 +98,7 @@
         "merged_into_previous": 68,
         "rejected_pet_measured_above_threshold": 23
       },
-      "seconds": 123.9
+      "seconds": 62.0
     },
     {
       "step": "D",
@@ -130,11 +130,11 @@
         "merged_into_previous": 12,
         "rejected_pet_measured_above_threshold": 18
       },
-      "seconds": 111.1
+      "seconds": 56.3
     },
     {
       "step": "E",
-      "label": "+ chỉ lòng đường đã hiệu chuẩn (cấu hình dùng)",
+      "label": "+ chỉ lòng đường đã hiệu chuẩn",
       "n_events": 2,
       "per_hour": 24.0,
       "by_contact": {
@@ -153,7 +153,30 @@
         "rejected_too_short": 2,
         "rejected_pet_measured_above_threshold": 3
       },
-      "seconds": 81.5
+      "seconds": 42.7
+    },
+    {
+      "step": "F",
+      "label": "+ cổng cùng làn (cấu hình dùng)",
+      "n_events": 1,
+      "per_hour": 12.0,
+      "by_contact": {
+        "near_miss": 1
+      },
+      "by_type": {
+        "rear_end": 1
+      },
+      "by_pair": {
+        "car-car": 1
+      },
+      "funnel": {
+        "episodes_opened": 61,
+        "rejected_proximity_gate": 56,
+        "emitted": 1,
+        "rejected_too_short": 1,
+        "rejected_pet_measured_above_threshold": 3
+      },
+      "seconds": 41.1
     }
   ]
 }

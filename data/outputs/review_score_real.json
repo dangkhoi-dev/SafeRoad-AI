@@ -1,0 +1,38 @@
+{
+  "n_candidates": 1,
+  "n_reviewers": 2,
+  "n_labeled_by_each": [
+    1,
+    1
+  ],
+  "kappa_5class": null,
+  "kappa_conflict_vs_not": null,
+  "raw_agreement": 1.0,
+  "n_pairs_for_kappa": 1,
+  "kappa_ok": true,
+  "consensus_counts": {
+    "normal": 1
+  },
+  "precision": {
+    "value": 0.0,
+    "num": 0,
+    "den": 1
+  },
+  "recall": {
+    "value": null,
+    "num": 0,
+    "den": 0
+  },
+  "false_alarms_per_hour": 44.2,
+  "misses_per_hour": null,
+  "system_alerts_unlabeled_or_disputed": 0,
+  "n_system_alerts": 1,
+  "n_reference_conflicts_judged_normal": 0,
+  "n_reference_alerts": 0,
+  "extra_missed": null,
+  "duration_s": 81.37,
+  "reviewers": [
+    "hung",
+    "khoi"
+  ]
+}

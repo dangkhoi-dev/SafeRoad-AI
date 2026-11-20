@@ -961,7 +961,8 @@ async function openSet(name){
   const blind=()=>document.querySelectorAll('#view-review .rv-m').forEach(el=>el.style.display=$('rv-blind').checked?'none':'');
   $('rv-blind').onchange=blind; blind();
   RV.cur=null;
-  const v=$('rv-v'); if(v){ v.ontimeupdate=placeMark; v.onloadedmetadata=placeMark; }
+  const v=$('rv-v'); if(v){ v.ontimeupdate=placeMark; v.onloadedmetadata=placeMark;
+    v.onerror=()=>{ $('rv-video').innerHTML='<div class="video-empty">Trình duyệt không phát được video này (thường do codec mp4v của OpenCV).<br>Cài ffmpeg rồi tải lại trang để dashboard tự chuyển sang H.264, hoặc mở video gốc bằng VLC và tua tới cột t (s).</div>'; }; }
   document.querySelectorAll('#rv-body button').forEach(el=>el.onclick=()=>{
     const r=RV.rows[+el.dataset.i], v=$('rv-v'); RV.cur=r;
     document.querySelectorAll('#rv-body tr').forEach((tr,i)=>tr.style.background=i===+el.dataset.i?'rgba(255,212,0,.08)':'');

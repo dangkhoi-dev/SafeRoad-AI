@@ -33,16 +33,16 @@
   "main": {
     "metrics": {
       "precision": {
-        "value": 0.5385,
+        "value": 0.5326,
         "num": 49,
-        "den": 91
+        "den": 92
       },
       "recall": {
         "value": 0.7656,
         "num": 49,
         "den": 64
       },
-      "f1": 0.6323,
+      "f1": 0.6282,
       "ttc_mae": 0.2031,
       "ttc_mae_n": 38,
       "time_mae": 0.3718,
@@ -54,17 +54,17 @@
     },
     "reconciliation": {
       "rows": {
-        "episodes_opened": 795,
-        "rejected_proximity_gate": 626,
-        "rejected_pet_measured_above_threshold": 20,
+        "episodes_opened": 791,
+        "rejected_proximity_gate": 623,
+        "rejected_pet_measured_above_threshold": 19,
         "rejected_too_short": 15,
         "merged_into_previous": 1,
         "emitted": 133,
         "exported_to_results": 133,
-        "ignored_outside_eval_region": 42,
-        "scored": 91,
+        "ignored_outside_eval_region": 41,
+        "scored": 92,
         "scored_unmapped_track_fp": 0,
-        "scored_mapped_fp": 42,
+        "scored_mapped_fp": 43,
         "scored_tp": 49,
         "gt_total": 64,
         "gt_matched_tp": 49,
@@ -79,7 +79,7 @@
       },
       "all_checks_pass": true,
       "per_hour": {
-        "false_alarms_per_hour": 504.0,
+        "false_alarms_per_hour": 516.0,
         "misses_per_hour": 180.0,
         "alerts_per_hour": 1596.0,
         "hours": 0.0833
@@ -229,7 +229,7 @@
           "collision_suspected": 8
         },
         "no_label": {
-          "near_miss": 37,
+          "near_miss": 38,
           "body_overlap": 4,
           "collision_suspected": 1
         }
@@ -254,16 +254,16 @@
       "fragmentation": 1.522
     },
     "runtime": {
-      "processing_fps": 295.8,
-      "wall_seconds": 38.3,
-      "frame_latency_median_ms": 3.38
+      "processing_fps": 355.2,
+      "wall_seconds": 30.9,
+      "frame_latency_median_ms": 2.82
     },
     "detector": {
       "noise_px": 1.5,
       "miss_rate": 0.03,
       "seed": 17
     },
-    "config_sha256": "5e7621f09db0feb1",
+    "config_sha256": "2811334035a429af",
     "case": {
       "duration": 300.0,
       "seed": 42,
@@ -339,7 +339,7 @@
         },
         "false_alarms_per_hour": 912.0,
         "idf1": 0.0568,
-        "config_sha256": "c00e7d2b23bf722c",
+        "config_sha256": "46e08bf593c6d751",
         "checks_pass": true
       },
       {
@@ -374,7 +374,7 @@
         },
         "false_alarms_per_hour": 26316.0,
         "idf1": 0.9827,
-        "config_sha256": "629642f709803335",
+        "config_sha256": "bd794d96c6b82070",
         "checks_pass": true
       },
       {
@@ -409,7 +409,7 @@
         },
         "false_alarms_per_hour": 3804.0,
         "idf1": 0.9828,
-        "config_sha256": "5ceb04be7a35cc40",
+        "config_sha256": "f6ba40c98b713ecf",
         "checks_pass": true
       },
       {
@@ -444,7 +444,7 @@
         },
         "false_alarms_per_hour": 2376.0,
         "idf1": 0.9828,
-        "config_sha256": "7850bccb432123ee",
+        "config_sha256": "f9c2bea84c4bb378",
         "checks_pass": true
       },
       {
@@ -479,7 +479,7 @@
         },
         "false_alarms_per_hour": 1644.0,
         "idf1": 0.9828,
-        "config_sha256": "0a365c845da4f1f4",
+        "config_sha256": "678d83ae044e1777",
         "checks_pass": true
       },
       {
@@ -514,12 +514,12 @@
         },
         "false_alarms_per_hour": 2148.0,
         "idf1": 0.9828,
-        "config_sha256": "0ea497f6f54ab2be",
+        "config_sha256": "96a9d9715371c185",
         "checks_pass": true
       },
       {
-        "key": "full",
-        "label": "6. + Cổng khoảng cách = bản đầy đủ",
+        "key": "proximity",
+        "label": "6. + Cổng khoảng cách",
         "description": "Hai xe phải thực sự đến gần nhau",
         "precision": {
           "value": 0.5385,
@@ -549,31 +549,29 @@
         },
         "false_alarms_per_hour": 504.0,
         "idf1": 0.9828,
-        "config_sha256": "5e7621f09db0feb1",
+        "config_sha256": "7545ce39cf7151c7",
         "checks_pass": true
-      }
-    ],
-    "leave_one_out": [
+      },
       {
         "key": "full",
-        "label": "Bản đầy đủ",
-        "description": "Mọi khối",
+        "label": "7. + Cổng cùng làn = bản đầy đủ",
+        "description": "Cặp đi gần song song phải lệch ngang dưới nửa làn mới tính",
         "precision": {
-          "value": 0.5385,
+          "value": 0.5326,
           "num": 49,
-          "den": 91
+          "den": 92
         },
         "recall": {
           "value": 0.7656,
           "num": 49,
           "den": 64
         },
-        "f1": 0.6323,
+        "f1": 0.6282,
         "ttc_mae": 0.2031,
         "pet_final": 0.03,
         "n_emitted": 133,
-        "n_ignored_outside": 42,
-        "n_scored": 91,
+        "n_ignored_outside": 41,
+        "n_scored": 92,
         "near_miss_recall": {
           "value": 0.7593,
           "num": 41,
@@ -584,9 +582,46 @@
           "num": 8,
           "den": 10
         },
-        "false_alarms_per_hour": 504.0,
+        "false_alarms_per_hour": 516.0,
         "idf1": 0.9828,
-        "config_sha256": "5e7621f09db0feb1",
+        "config_sha256": "2811334035a429af",
+        "checks_pass": true
+      }
+    ],
+    "leave_one_out": [
+      {
+        "key": "full",
+        "label": "Bản đầy đủ",
+        "description": "Mọi khối",
+        "precision": {
+          "value": 0.5326,
+          "num": 49,
+          "den": 92
+        },
+        "recall": {
+          "value": 0.7656,
+          "num": 49,
+          "den": 64
+        },
+        "f1": 0.6282,
+        "ttc_mae": 0.2031,
+        "pet_final": 0.03,
+        "n_emitted": 133,
+        "n_ignored_outside": 41,
+        "n_scored": 92,
+        "near_miss_recall": {
+          "value": 0.7593,
+          "num": 41,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 516.0,
+        "idf1": 0.9828,
+        "config_sha256": "2811334035a429af",
         "checks_pass": true
       },
       {
@@ -621,7 +656,7 @@
         },
         "false_alarms_per_hour": 120.0,
         "idf1": 0.0568,
-        "config_sha256": "a0eed7807987042b",
+        "config_sha256": "d18b04c46fb5a767",
         "checks_pass": true
       },
       {
@@ -629,21 +664,21 @@
         "label": "Bỏ làm mượt quỹ đạo",
         "description": "Vận tốc từ hiệu vị trí, không EMA",
         "precision": {
-          "value": 0.1551,
+          "value": 0.1556,
           "num": 49,
-          "den": 316
+          "den": 315
         },
         "recall": {
           "value": 0.7656,
           "num": 49,
           "den": 64
         },
-        "f1": 0.2579,
+        "f1": 0.2586,
         "ttc_mae": 0.2677,
         "pet_final": 0.119,
-        "n_emitted": 536,
+        "n_emitted": 535,
         "n_ignored_outside": 220,
-        "n_scored": 316,
+        "n_scored": 315,
         "near_miss_recall": {
           "value": 0.7407,
           "num": 40,
@@ -654,9 +689,9 @@
           "num": 9,
           "den": 10
         },
-        "false_alarms_per_hour": 3204.0,
+        "false_alarms_per_hour": 3192.0,
         "idf1": 0.9827,
-        "config_sha256": "3015f51a9da2e70b",
+        "config_sha256": "5adc364fa00af90d",
         "checks_pass": true
       },
       {
@@ -675,7 +710,7 @@
         },
         "f1": 0.2773,
         "ttc_mae": 0.3315,
-        "pet_final": 0.331,
+        "pet_final": 0.245,
         "n_emitted": 71,
         "n_ignored_outside": 34,
         "n_scored": 37,
@@ -691,7 +726,7 @@
         },
         "false_alarms_per_hour": 276.0,
         "idf1": 0.9828,
-        "config_sha256": "f674da82233d12a2",
+        "config_sha256": "6eec3b5d8e428444",
         "checks_pass": true
       },
       {
@@ -711,8 +746,8 @@
         "f1": 0.4563,
         "ttc_mae": 0.1854,
         "pet_final": 0.028,
-        "n_emitted": 266,
-        "n_ignored_outside": 124,
+        "n_emitted": 260,
+        "n_ignored_outside": 118,
         "n_scored": 142,
         "near_miss_recall": {
           "value": 0.7222,
@@ -726,7 +761,7 @@
         },
         "false_alarms_per_hour": 1140.0,
         "idf1": 0.9828,
-        "config_sha256": "2d1c3cb07ce03f99",
+        "config_sha256": "341e880de680fd76",
         "checks_pass": true
       },
       {
@@ -746,8 +781,8 @@
         "f1": 0.608,
         "ttc_mae": 0.1924,
         "pet_final": 0.027,
-        "n_emitted": 100,
-        "n_ignored_outside": 39,
+        "n_emitted": 99,
+        "n_ignored_outside": 38,
         "n_scored": 61,
         "near_miss_recall": {
           "value": 0.5556,
@@ -761,7 +796,7 @@
         },
         "false_alarms_per_hour": 276.0,
         "idf1": 0.9828,
-        "config_sha256": "4ac2fde755d2e56a",
+        "config_sha256": "ad327da29b3694c7",
         "checks_pass": true
       },
       {
@@ -769,21 +804,21 @@
         "label": "Bỏ PET đo (chỉ PET ngoại suy)",
         "description": "Hành vi PET của bản cũ",
         "precision": {
-          "value": 0.4851,
+          "value": 0.4804,
           "num": 49,
-          "den": 101
+          "den": 102
         },
         "recall": {
           "value": 0.7656,
           "num": 49,
           "den": 64
         },
-        "f1": 0.5939,
+        "f1": 0.5904,
         "ttc_mae": 0.2031,
         "pet_final": 0.131,
         "n_emitted": 151,
-        "n_ignored_outside": 50,
-        "n_scored": 101,
+        "n_ignored_outside": 49,
+        "n_scored": 102,
         "near_miss_recall": {
           "value": 0.7593,
           "num": 41,
@@ -794,9 +829,9 @@
           "num": 8,
           "den": 10
         },
-        "false_alarms_per_hour": 624.0,
+        "false_alarms_per_hour": 636.0,
         "idf1": 0.9828,
-        "config_sha256": "c55244272f46c424",
+        "config_sha256": "89b853f571693cbe",
         "checks_pass": true
       },
       {
@@ -816,8 +851,8 @@
         "f1": 0.3746,
         "ttc_mae": 0.2905,
         "pet_final": 0.032,
-        "n_emitted": 318,
-        "n_ignored_outside": 83,
+        "n_emitted": 317,
+        "n_ignored_outside": 82,
         "n_scored": 235,
         "near_miss_recall": {
           "value": 0.8889,
@@ -831,7 +866,42 @@
         },
         "false_alarms_per_hour": 2148.0,
         "idf1": 0.9828,
-        "config_sha256": "0ea497f6f54ab2be",
+        "config_sha256": "3389b462c0239c17",
+        "checks_pass": true
+      },
+      {
+        "key": "-lane_gate",
+        "label": "Bỏ cổng cùng làn",
+        "description": "Xe song song ở làn kề vẫn được tính là đâm đuôi",
+        "precision": {
+          "value": 0.5385,
+          "num": 49,
+          "den": 91
+        },
+        "recall": {
+          "value": 0.7656,
+          "num": 49,
+          "den": 64
+        },
+        "f1": 0.6323,
+        "ttc_mae": 0.2031,
+        "pet_final": 0.03,
+        "n_emitted": 133,
+        "n_ignored_outside": 42,
+        "n_scored": 91,
+        "near_miss_recall": {
+          "value": 0.7593,
+          "num": 41,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 504.0,
+        "idf1": 0.9828,
+        "config_sha256": "7545ce39cf7151c7",
         "checks_pass": true
       }
     ]
@@ -840,21 +910,21 @@
     {
       "noise_px": 0.0,
       "precision": {
-        "value": 0.5556,
+        "value": 0.5696,
         "num": 45,
-        "den": 81
+        "den": 79
       },
       "recall": {
         "value": 0.7031,
         "num": 45,
         "den": 64
       },
-      "f1": 0.6207,
+      "f1": 0.6293,
       "ttc_mae": 0.2284,
       "pet_final_mae": 0.041,
       "idf1": 0.9824,
       "id_switches": 47,
-      "n_emitted": 109
+      "n_emitted": 106
     },
     {
       "noise_px": 1.0,
@@ -869,7 +939,7 @@
         "den": 64
       },
       "f1": 0.6225,
-      "ttc_mae": 0.1969,
+      "ttc_mae": 0.2046,
       "pet_final_mae": 0.03,
       "idf1": 0.9828,
       "id_switches": 96,
@@ -878,21 +948,21 @@
     {
       "noise_px": 2.0,
       "precision": {
-        "value": 0.5,
+        "value": 0.5053,
         "num": 48,
-        "den": 96
+        "den": 95
       },
       "recall": {
         "value": 0.75,
         "num": 48,
         "den": 64
       },
-      "f1": 0.6,
+      "f1": 0.6038,
       "ttc_mae": 0.2363,
       "pet_final_mae": 0.043,
       "idf1": 0.9827,
       "id_switches": 156,
-      "n_emitted": 147
+      "n_emitted": 144
     },
     {
       "noise_px": 4.0,
@@ -911,32 +981,32 @@
       "pet_final_mae": 0.067,
       "idf1": 0.9816,
       "id_switches": 348,
-      "n_emitted": 210
+      "n_emitted": 208
     },
     {
       "noise_px": 6.0,
       "precision": {
-        "value": 0.2242,
+        "value": 0.2252,
         "num": 50,
-        "den": 223
+        "den": 222
       },
       "recall": {
         "value": 0.7812,
         "num": 50,
         "den": 64
       },
-      "f1": 0.3484,
+      "f1": 0.3496,
       "ttc_mae": 0.2821,
       "pet_final_mae": 0.101,
       "idf1": 0.9763,
       "id_switches": 1088,
-      "n_emitted": 379
+      "n_emitted": 377
     }
   ],
   "reproducibility": {
-    "command": "saferoad evaluate --out /tmp/repro_out/evaluation.json",
-    "git_commit": "476ab01",
-    "config_sha256": "5de676d807f38fa5",
+    "command": "saferoad evaluate --out /tmp/diag/v3/evaluation.json",
+    "git_commit": "5249dcc-dirty",
+    "config_sha256": "836e8c1a564bd242",
     "config": {
       "site": {
         "name": "Giao lộ mô phỏng (benchmark có ground truth)",
@@ -1037,6 +1107,8 @@
         "max_pair_distance": 30.0,
         "min_rel_speed": 3.0,
         "proximity_gate": 3.0,
+        "same_lane_gate": true,
+        "lateral_half_width_m": 1.75,
         "min_abs_speed": 0.8,
         "dedup_window": 3.0,
         "horizon": 6.0,

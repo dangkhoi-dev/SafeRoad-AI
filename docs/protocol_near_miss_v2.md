@@ -152,6 +152,15 @@ Dựa trên góc θ giữa hai vector vận tốc tại thời điểm TTC nhỏ
 Xung đột có người đi bộ **luôn** được gán nhãn riêng bất kể hình học, vì đây là
 nhóm dễ tổn thương nhất và cần tách riêng trong mọi thống kê an toàn.
 
+**Cổng cùng làn** (thêm sau khi rà soát nhãn người trên video đại lộ): góc θ chỉ
+cho biết hai xe đi cùng hướng, không cho biết chúng có cùng làn hay không. Hai xe
+chạy song song ở làn kề có θ ≈ 0° và từng bị xếp là "đâm đuôi". Vì vậy cặp có
+θ < 30° chỉ được xét tiếp khi độ lệch ngang (khoảng cách vuông góc với hướng đi
+trung bình của hai xe) nhỏ hơn 1,75 m, tức nửa bề rộng làn 3,5 m dùng khi hiệu
+chuẩn (`conflict.same_lane_gate`, `conflict.lateral_half_width_m`). Cặp có góc
+lớn hơn, hoặc có một xe đang đổi hướng nhanh hơn 45°/s, không qua cổng này; với
+chúng, TTC và PET quyết định.
+
 ---
 
 ## 7. Gom sự kiện theo episode

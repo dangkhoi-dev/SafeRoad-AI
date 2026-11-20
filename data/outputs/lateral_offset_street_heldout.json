@@ -1,0 +1,104 @@
+{
+ "video": "data/processed/street/street_heldout_300_741s.mp4",
+ "events": [
+  {
+   "event_id": "CF00001",
+   "t": 91.868,
+   "frame_idx": 2756,
+   "conflict_type": "rear_end",
+   "approach_angle": 1.0,
+   "gap_m": 0.93,
+   "lateral_m": 2.2
+  },
+  {
+   "event_id": "CF00002",
+   "t": 96.968,
+   "frame_idx": 2909,
+   "conflict_type": "rear_end",
+   "approach_angle": 4.5,
+   "gap_m": 1.01,
+   "lateral_m": 3.43
+  },
+  {
+   "event_id": "CF00003",
+   "t": 228.836,
+   "frame_idx": 6865,
+   "conflict_type": "rear_end",
+   "approach_angle": 6.7,
+   "gap_m": 0.9,
+   "lateral_m": 2.76
+  },
+  {
+   "event_id": "CF00004",
+   "t": 233.536,
+   "frame_idx": 7006,
+   "conflict_type": "rear_end",
+   "approach_angle": 3.9,
+   "gap_m": 1.27,
+   "lateral_m": 2.99
+  },
+  {
+   "event_id": "CF00005",
+   "t": 237.003,
+   "frame_idx": 7110,
+   "conflict_type": "rear_end",
+   "approach_angle": 8.6,
+   "gap_m": 2.67,
+   "lateral_m": 3.66
+  },
+  {
+   "event_id": "CF00006",
+   "t": 238.569,
+   "frame_idx": 7157,
+   "conflict_type": "rear_end",
+   "approach_angle": 3.5,
+   "gap_m": 1.5,
+   "lateral_m": 2.93
+  },
+  {
+   "event_id": "CF00007",
+   "t": 321.303,
+   "frame_idx": 9639,
+   "conflict_type": "rear_end",
+   "approach_angle": 16.6,
+   "gap_m": 2.53,
+   "lateral_m": 7.61
+  },
+  {
+   "event_id": "CF00008",
+   "t": 338.104,
+   "frame_idx": 10143,
+   "conflict_type": "rear_end",
+   "approach_angle": 5.9,
+   "gap_m": 2.89,
+   "lateral_m": 5.58
+  },
+  {
+   "event_id": "CF00009",
+   "t": 342.104,
+   "frame_idx": 10263,
+   "conflict_type": "lane_change",
+   "approach_angle": 31.0,
+   "gap_m": 0.7,
+   "lateral_m": 2.94
+  },
+  {
+   "event_id": "CF00010",
+   "t": 347.47,
+   "frame_idx": 10424,
+   "conflict_type": "turning",
+   "approach_angle": 34.0,
+   "gap_m": 1.55,
+   "lateral_m": 2.65
+  },
+  {
+   "event_id": "CF00011",
+   "t": 432.471,
+   "frame_idx": 12974,
+   "conflict_type": "rear_end",
+   "approach_angle": 3.6,
+   "gap_m": 2.23,
+   "lateral_m": 2.22
+  }
+ ]
+}

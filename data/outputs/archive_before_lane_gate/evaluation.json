@@ -1,0 +1,1100 @@
+{
+  "version": 2,
+  "setup": {
+    "n_ground_truth": 64,
+    "n_ground_truth_near_miss": 54,
+    "n_ground_truth_collision": 10,
+    "n_vehicles": 285,
+    "duration_s": 300.0,
+    "seed": 42,
+    "arrival_rate": 1.1,
+    "noise_px": 1.5,
+    "miss_rate": 0.03,
+    "replay_seed": 17,
+    "eval_region": [
+      -14.5,
+      18.0,
+      14.5,
+      48.0
+    ]
+  },
+  "scenario_check": {
+    "n_scheduled": 359,
+    "n_spawned": 285,
+    "n_dropped_at_entry": 55,
+    "n_with_trajectory": 285,
+    "n_completed_route": 222,
+    "n_still_on_road_at_end": 18,
+    "n_crashes": 23,
+    "n_vehicles_in_crash": 47,
+    "n_runs_red": 28,
+    "n_turning": 88
+  },
+  "main": {
+    "metrics": {
+      "precision": {
+        "value": 0.5385,
+        "num": 49,
+        "den": 91
+      },
+      "recall": {
+        "value": 0.7656,
+        "num": 49,
+        "den": 64
+      },
+      "f1": 0.6323,
+      "ttc_mae": 0.2031,
+      "ttc_mae_n": 38,
+      "time_mae": 0.3718,
+      "type_accuracy": {
+        "value": 0.5918,
+        "num": 29,
+        "den": 49
+      }
+    },
+    "reconciliation": {
+      "rows": {
+        "episodes_opened": 795,
+        "rejected_proximity_gate": 626,
+        "rejected_pet_measured_above_threshold": 20,
+        "rejected_too_short": 15,
+        "merged_into_previous": 1,
+        "emitted": 133,
+        "exported_to_results": 133,
+        "ignored_outside_eval_region": 42,
+        "scored": 91,
+        "scored_unmapped_track_fp": 0,
+        "scored_mapped_fp": 42,
+        "scored_tp": 49,
+        "gt_total": 64,
+        "gt_matched_tp": 49,
+        "gt_missed_fn": 15
+      },
+      "checks": {
+        "opened = rejected + merged + emitted": true,
+        "emitted = exported": true,
+        "exported = ignored + scored": true,
+        "scored = TP + FP": true,
+        "gt = TP + FN": true
+      },
+      "all_checks_pass": true,
+      "per_hour": {
+        "false_alarms_per_hour": 504.0,
+        "misses_per_hour": 180.0,
+        "alerts_per_hour": 1596.0,
+        "hours": 0.0833
+      }
+    },
+    "by_kind": {
+      "near_miss": {
+        "recall": {
+          "value": 0.7593,
+          "num": 41,
+          "den": 54
+        }
+      },
+      "collision": {
+        "recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        }
+      }
+    },
+    "ttc_bands": [
+      {
+        "band": "Rất nghiêm trọng (TTC < 1,0 s)",
+        "recall": {
+          "value": 0.8462,
+          "num": 22,
+          "den": 26
+        },
+        "ttc_mae": 0.243
+      },
+      {
+        "band": "Nghiêm trọng (1,0-1,5 s)",
+        "recall": {
+          "value": 0.6364,
+          "num": 7,
+          "den": 11
+        },
+        "ttc_mae": 0.306
+      },
+      {
+        "band": "Trung bình (1,5-2,5 s)",
+        "recall": {
+          "value": 0.4,
+          "num": 2,
+          "den": 5
+        },
+        "ttc_mae": 0.227
+      },
+      {
+        "band": "Nhẹ (2,5-3,0 s)",
+        "recall": {
+          "value": null,
+          "num": 0,
+          "den": 0
+        },
+        "ttc_mae": null
+      },
+      {
+        "band": "Chỉ thoả PET (TTC ≥ 3,0 s)",
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 2
+        },
+        "ttc_mae": null
+      }
+    ],
+    "pet_errors": {
+      "predicted": {
+        "n": 35,
+        "mae": 0.131,
+        "median_ae": 0.0,
+        "p90_ae": 0.312,
+        "bias": -0.124,
+        "within_0_5s": {
+          "value": 0.9429,
+          "num": 33,
+          "den": 35
+        },
+        "threshold_agreement": {
+          "value": 1.0,
+          "num": 35,
+          "den": 35
+        }
+      },
+      "measured": {
+        "n": 30,
+        "mae": 0.031,
+        "median_ae": 0.0,
+        "p90_ae": 0.069,
+        "bias": -0.022,
+        "within_0_5s": {
+          "value": 1.0,
+          "num": 30,
+          "den": 30
+        },
+        "threshold_agreement": {
+          "value": 1.0,
+          "num": 30,
+          "den": 30
+        }
+      },
+      "final": {
+        "n": 31,
+        "mae": 0.03,
+        "median_ae": 0.0,
+        "p90_ae": 0.067,
+        "bias": -0.021,
+        "within_0_5s": {
+          "value": 1.0,
+          "num": 31,
+          "den": 31
+        },
+        "threshold_agreement": {
+          "value": 1.0,
+          "num": 31,
+          "den": 31
+        }
+      },
+      "status_pred_matched": {
+        "contact": 10,
+        "parallel": 10,
+        "no_zone": 8,
+        "measured": 14,
+        "simultaneous": 6,
+        "incomplete": 1
+      },
+      "status_gt_matched": {
+        "contact": 8,
+        "measured": 18,
+        "no_zone": 9,
+        "simultaneous": 9,
+        "parallel": 5
+      }
+    },
+    "contact_confusion": {
+      "matrix": {
+        "near_miss": {
+          "near_miss": 29,
+          "body_overlap": 9,
+          "collision_suspected": 3
+        },
+        "collision": {
+          "near_miss": 0,
+          "body_overlap": 0,
+          "collision_suspected": 8
+        },
+        "no_label": {
+          "near_miss": 37,
+          "body_overlap": 4,
+          "collision_suspected": 1
+        }
+      },
+      "missed_by_kind": {
+        "near_miss": 13,
+        "collision": 2
+      },
+      "classes": [
+        "near_miss",
+        "body_overlap",
+        "collision_suspected"
+      ]
+    },
+    "tracking": {
+      "idf1": 0.9828,
+      "mota": 0.9651,
+      "id_switches": 142,
+      "n_gt_tracks": 272,
+      "n_pred_tracks": 274,
+      "mostly_tracked": 272,
+      "fragmentation": 1.522
+    },
+    "runtime": {
+      "processing_fps": 295.8,
+      "wall_seconds": 38.3,
+      "frame_latency_median_ms": 3.38
+    },
+    "detector": {
+      "noise_px": 1.5,
+      "miss_rate": 0.03,
+      "seed": 17
+    },
+    "config_sha256": "5e7621f09db0feb1",
+    "case": {
+      "duration": 300.0,
+      "seed": 42,
+      "arrival_rate": 1.1,
+      "camera": "cao_18m",
+      "fps": 30
+    },
+    "behavior": {
+      "flagged_tracks": {
+        "value": 0.4781,
+        "num": 131,
+        "den": 274
+      },
+      "truth_flagged_vehicles": {
+        "value": 0.4281,
+        "num": 122,
+        "den": 285
+      },
+      "risky_precision": {
+        "value": 0.7176,
+        "num": 94,
+        "den": 131
+      },
+      "risky_recall": {
+        "value": 0.8246,
+        "num": 94,
+        "den": 114
+      },
+      "label_agreement": {
+        "value": 0.6825,
+        "num": 187,
+        "den": 274
+      },
+      "forced_brake_detected": {
+        "value": 0.5294,
+        "num": 9,
+        "den": 17
+      },
+      "ml_layer": "off"
+    }
+  },
+  "ablation": {
+    "cumulative": [
+      {
+        "key": "baseline",
+        "label": "0. Baseline: TTC < 3 s trên toạ độ ảnh",
+        "description": "Không homography, không làm mượt, không PET, không cổng, mỗi khung hình một cảnh báo (chống trùng 3 s)",
+        "precision": {
+          "value": 0.038,
+          "num": 3,
+          "den": 79
+        },
+        "recall": {
+          "value": 0.0469,
+          "num": 3,
+          "den": 64
+        },
+        "f1": 0.042,
+        "ttc_mae": 0.934,
+        "pet_final": 0.0,
+        "n_emitted": 416,
+        "n_ignored_outside": 337,
+        "n_scored": 79,
+        "near_miss_recall": {
+          "value": 0.037,
+          "num": 2,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.1,
+          "num": 1,
+          "den": 10
+        },
+        "false_alarms_per_hour": 912.0,
+        "idf1": 0.0568,
+        "config_sha256": "c00e7d2b23bf722c",
+        "checks_pass": true
+      },
+      {
+        "key": "homography",
+        "label": "1. + Homography (mét)",
+        "description": "Quy đổi toạ độ ảnh sang mặt đất",
+        "precision": {
+          "value": 0.0223,
+          "num": 50,
+          "den": 2243
+        },
+        "recall": {
+          "value": 0.7812,
+          "num": 50,
+          "den": 64
+        },
+        "f1": 0.0434,
+        "ttc_mae": 0.8613,
+        "pet_final": 0.646,
+        "n_emitted": 3193,
+        "n_ignored_outside": 950,
+        "n_scored": 2243,
+        "near_miss_recall": {
+          "value": 0.7593,
+          "num": 41,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.9,
+          "num": 9,
+          "den": 10
+        },
+        "false_alarms_per_hour": 26316.0,
+        "idf1": 0.9827,
+        "config_sha256": "629642f709803335",
+        "checks_pass": true
+      },
+      {
+        "key": "smoothing",
+        "label": "2. + Làm mượt quỹ đạo",
+        "description": "Làm mượt + vận tốc hồi quy",
+        "precision": {
+          "value": 0.107,
+          "num": 38,
+          "den": 355
+        },
+        "recall": {
+          "value": 0.5938,
+          "num": 38,
+          "den": 64
+        },
+        "f1": 0.1813,
+        "ttc_mae": 0.7598,
+        "pet_final": 0.472,
+        "n_emitted": 626,
+        "n_ignored_outside": 271,
+        "n_scored": 355,
+        "near_miss_recall": {
+          "value": 0.5556,
+          "num": 30,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 3804.0,
+        "idf1": 0.9828,
+        "config_sha256": "5ceb04be7a35cc40",
+        "checks_pass": true
+      },
+      {
+        "key": "episode",
+        "label": "3. + Gom episode",
+        "description": "Một tình huống → một sự kiện, gán nhãn tại đỉnh",
+        "precision": {
+          "value": 0.1784,
+          "num": 43,
+          "den": 241
+        },
+        "recall": {
+          "value": 0.6719,
+          "num": 43,
+          "den": 64
+        },
+        "f1": 0.2819,
+        "ttc_mae": 0.2354,
+        "pet_final": 0.025,
+        "n_emitted": 402,
+        "n_ignored_outside": 161,
+        "n_scored": 241,
+        "near_miss_recall": {
+          "value": 0.6481,
+          "num": 35,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 2376.0,
+        "idf1": 0.9828,
+        "config_sha256": "7850bccb432123ee",
+        "checks_pass": true
+      },
+      {
+        "key": "closing",
+        "label": "4. + Cổng tốc độ tiếp cận",
+        "description": "Loại bám đuôi cùng tốc độ",
+        "precision": {
+          "value": 0.2554,
+          "num": 47,
+          "den": 184
+        },
+        "recall": {
+          "value": 0.7344,
+          "num": 47,
+          "den": 64
+        },
+        "f1": 0.379,
+        "ttc_mae": 0.2476,
+        "pet_final": 0.027,
+        "n_emitted": 261,
+        "n_ignored_outside": 77,
+        "n_scored": 184,
+        "near_miss_recall": {
+          "value": 0.7222,
+          "num": 39,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 1644.0,
+        "idf1": 0.9828,
+        "config_sha256": "0a365c845da4f1f4",
+        "checks_pass": true
+      },
+      {
+        "key": "pet",
+        "label": "5. + PET (ngoại suy + đo)",
+        "description": "Thêm tiêu chí PET",
+        "precision": {
+          "value": 0.2383,
+          "num": 56,
+          "den": 235
+        },
+        "recall": {
+          "value": 0.875,
+          "num": 56,
+          "den": 64
+        },
+        "f1": 0.3746,
+        "ttc_mae": 0.2905,
+        "pet_final": 0.032,
+        "n_emitted": 318,
+        "n_ignored_outside": 83,
+        "n_scored": 235,
+        "near_miss_recall": {
+          "value": 0.8889,
+          "num": 48,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 2148.0,
+        "idf1": 0.9828,
+        "config_sha256": "0ea497f6f54ab2be",
+        "checks_pass": true
+      },
+      {
+        "key": "full",
+        "label": "6. + Cổng khoảng cách = bản đầy đủ",
+        "description": "Hai xe phải thực sự đến gần nhau",
+        "precision": {
+          "value": 0.5385,
+          "num": 49,
+          "den": 91
+        },
+        "recall": {
+          "value": 0.7656,
+          "num": 49,
+          "den": 64
+        },
+        "f1": 0.6323,
+        "ttc_mae": 0.2031,
+        "pet_final": 0.03,
+        "n_emitted": 133,
+        "n_ignored_outside": 42,
+        "n_scored": 91,
+        "near_miss_recall": {
+          "value": 0.7593,
+          "num": 41,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 504.0,
+        "idf1": 0.9828,
+        "config_sha256": "5e7621f09db0feb1",
+        "checks_pass": true
+      }
+    ],
+    "leave_one_out": [
+      {
+        "key": "full",
+        "label": "Bản đầy đủ",
+        "description": "Mọi khối",
+        "precision": {
+          "value": 0.5385,
+          "num": 49,
+          "den": 91
+        },
+        "recall": {
+          "value": 0.7656,
+          "num": 49,
+          "den": 64
+        },
+        "f1": 0.6323,
+        "ttc_mae": 0.2031,
+        "pet_final": 0.03,
+        "n_emitted": 133,
+        "n_ignored_outside": 42,
+        "n_scored": 91,
+        "near_miss_recall": {
+          "value": 0.7593,
+          "num": 41,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 504.0,
+        "idf1": 0.9828,
+        "config_sha256": "5e7621f09db0feb1",
+        "checks_pass": true
+      },
+      {
+        "key": "-homography",
+        "label": "Bỏ homography",
+        "description": "TTC/khoảng cách tính trên tỉ lệ phẳng",
+        "precision": {
+          "value": 0.0909,
+          "num": 1,
+          "den": 11
+        },
+        "recall": {
+          "value": 0.0156,
+          "num": 1,
+          "den": 64
+        },
+        "f1": 0.0266,
+        "ttc_mae": 0.039,
+        "pet_final": null,
+        "n_emitted": 37,
+        "n_ignored_outside": 26,
+        "n_scored": 11,
+        "near_miss_recall": {
+          "value": 0.0185,
+          "num": 1,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 10
+        },
+        "false_alarms_per_hour": 120.0,
+        "idf1": 0.0568,
+        "config_sha256": "a0eed7807987042b",
+        "checks_pass": true
+      },
+      {
+        "key": "-smoothing",
+        "label": "Bỏ làm mượt quỹ đạo",
+        "description": "Vận tốc từ hiệu vị trí, không EMA",
+        "precision": {
+          "value": 0.1551,
+          "num": 49,
+          "den": 316
+        },
+        "recall": {
+          "value": 0.7656,
+          "num": 49,
+          "den": 64
+        },
+        "f1": 0.2579,
+        "ttc_mae": 0.2677,
+        "pet_final": 0.119,
+        "n_emitted": 536,
+        "n_ignored_outside": 220,
+        "n_scored": 316,
+        "near_miss_recall": {
+          "value": 0.7407,
+          "num": 40,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.9,
+          "num": 9,
+          "den": 10
+        },
+        "false_alarms_per_hour": 3204.0,
+        "idf1": 0.9827,
+        "config_sha256": "3015f51a9da2e70b",
+        "checks_pass": true
+      },
+      {
+        "key": "-episode",
+        "label": "Bỏ gom episode",
+        "description": "Mỗi khung hình thoả ngưỡng một cảnh báo",
+        "precision": {
+          "value": 0.3784,
+          "num": 14,
+          "den": 37
+        },
+        "recall": {
+          "value": 0.2188,
+          "num": 14,
+          "den": 64
+        },
+        "f1": 0.2773,
+        "ttc_mae": 0.3315,
+        "pet_final": 0.331,
+        "n_emitted": 71,
+        "n_ignored_outside": 34,
+        "n_scored": 37,
+        "near_miss_recall": {
+          "value": 0.2407,
+          "num": 13,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.1,
+          "num": 1,
+          "den": 10
+        },
+        "false_alarms_per_hour": 276.0,
+        "idf1": 0.9828,
+        "config_sha256": "f674da82233d12a2",
+        "checks_pass": true
+      },
+      {
+        "key": "-closing",
+        "label": "Bỏ cổng tốc độ tiếp cận",
+        "description": "Chấp nhận cả cặp bám đuôi cùng tốc độ",
+        "precision": {
+          "value": 0.331,
+          "num": 47,
+          "den": 142
+        },
+        "recall": {
+          "value": 0.7344,
+          "num": 47,
+          "den": 64
+        },
+        "f1": 0.4563,
+        "ttc_mae": 0.1854,
+        "pet_final": 0.028,
+        "n_emitted": 266,
+        "n_ignored_outside": 124,
+        "n_scored": 142,
+        "near_miss_recall": {
+          "value": 0.7222,
+          "num": 39,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 1140.0,
+        "idf1": 0.9828,
+        "config_sha256": "2d1c3cb07ce03f99",
+        "checks_pass": true
+      },
+      {
+        "key": "-pet",
+        "label": "Bỏ PET",
+        "description": "Chỉ dùng TTC",
+        "precision": {
+          "value": 0.623,
+          "num": 38,
+          "den": 61
+        },
+        "recall": {
+          "value": 0.5938,
+          "num": 38,
+          "den": 64
+        },
+        "f1": 0.608,
+        "ttc_mae": 0.1924,
+        "pet_final": 0.027,
+        "n_emitted": 100,
+        "n_ignored_outside": 39,
+        "n_scored": 61,
+        "near_miss_recall": {
+          "value": 0.5556,
+          "num": 30,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 276.0,
+        "idf1": 0.9828,
+        "config_sha256": "4ac2fde755d2e56a",
+        "checks_pass": true
+      },
+      {
+        "key": "-measured_pet",
+        "label": "Bỏ PET đo (chỉ PET ngoại suy)",
+        "description": "Hành vi PET của bản cũ",
+        "precision": {
+          "value": 0.4851,
+          "num": 49,
+          "den": 101
+        },
+        "recall": {
+          "value": 0.7656,
+          "num": 49,
+          "den": 64
+        },
+        "f1": 0.5939,
+        "ttc_mae": 0.2031,
+        "pet_final": 0.131,
+        "n_emitted": 151,
+        "n_ignored_outside": 50,
+        "n_scored": 101,
+        "near_miss_recall": {
+          "value": 0.7593,
+          "num": 41,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 624.0,
+        "idf1": 0.9828,
+        "config_sha256": "c55244272f46c424",
+        "checks_pass": true
+      },
+      {
+        "key": "-proximity",
+        "label": "Bỏ cổng khoảng cách",
+        "description": "Không đòi hai xe thực sự đến gần",
+        "precision": {
+          "value": 0.2383,
+          "num": 56,
+          "den": 235
+        },
+        "recall": {
+          "value": 0.875,
+          "num": 56,
+          "den": 64
+        },
+        "f1": 0.3746,
+        "ttc_mae": 0.2905,
+        "pet_final": 0.032,
+        "n_emitted": 318,
+        "n_ignored_outside": 83,
+        "n_scored": 235,
+        "near_miss_recall": {
+          "value": 0.8889,
+          "num": 48,
+          "den": 54
+        },
+        "collision_recall": {
+          "value": 0.8,
+          "num": 8,
+          "den": 10
+        },
+        "false_alarms_per_hour": 2148.0,
+        "idf1": 0.9828,
+        "config_sha256": "0ea497f6f54ab2be",
+        "checks_pass": true
+      }
+    ]
+  },
+  "noise_sweep": [
+    {
+      "noise_px": 0.0,
+      "precision": {
+        "value": 0.5556,
+        "num": 45,
+        "den": 81
+      },
+      "recall": {
+        "value": 0.7031,
+        "num": 45,
+        "den": 64
+      },
+      "f1": 0.6207,
+      "ttc_mae": 0.2284,
+      "pet_final_mae": 0.041,
+      "idf1": 0.9824,
+      "id_switches": 47,
+      "n_emitted": 109
+    },
+    {
+      "noise_px": 1.0,
+      "precision": {
+        "value": 0.5402,
+        "num": 47,
+        "den": 87
+      },
+      "recall": {
+        "value": 0.7344,
+        "num": 47,
+        "den": 64
+      },
+      "f1": 0.6225,
+      "ttc_mae": 0.1969,
+      "pet_final_mae": 0.03,
+      "idf1": 0.9828,
+      "id_switches": 96,
+      "n_emitted": 125
+    },
+    {
+      "noise_px": 2.0,
+      "precision": {
+        "value": 0.5,
+        "num": 48,
+        "den": 96
+      },
+      "recall": {
+        "value": 0.75,
+        "num": 48,
+        "den": 64
+      },
+      "f1": 0.6,
+      "ttc_mae": 0.2363,
+      "pet_final_mae": 0.043,
+      "idf1": 0.9827,
+      "id_switches": 156,
+      "n_emitted": 147
+    },
+    {
+      "noise_px": 4.0,
+      "precision": {
+        "value": 0.381,
+        "num": 48,
+        "den": 126
+      },
+      "recall": {
+        "value": 0.75,
+        "num": 48,
+        "den": 64
+      },
+      "f1": 0.5053,
+      "ttc_mae": 0.2629,
+      "pet_final_mae": 0.067,
+      "idf1": 0.9816,
+      "id_switches": 348,
+      "n_emitted": 210
+    },
+    {
+      "noise_px": 6.0,
+      "precision": {
+        "value": 0.2242,
+        "num": 50,
+        "den": 223
+      },
+      "recall": {
+        "value": 0.7812,
+        "num": 50,
+        "den": 64
+      },
+      "f1": 0.3484,
+      "ttc_mae": 0.2821,
+      "pet_final_mae": 0.101,
+      "idf1": 0.9763,
+      "id_switches": 1088,
+      "n_emitted": 379
+    }
+  ],
+  "reproducibility": {
+    "command": "saferoad evaluate --out /tmp/repro_out/evaluation.json",
+    "git_commit": "476ab01",
+    "config_sha256": "5de676d807f38fa5",
+    "config": {
+      "site": {
+        "name": "Giao lộ mô phỏng (benchmark có ground truth)",
+        "short_name": "Synthetic",
+        "camera_height_m": 12.0,
+        "approaches": [
+          "Hướng 1",
+          "Hướng 2",
+          "Hướng 3",
+          "Hướng 4"
+        ],
+        "lanes": 3
+      },
+      "video": {
+        "source": "data/samples/synthetic_intersection.mp4",
+        "start_frame": 0,
+        "max_frames": 0,
+        "stride": 1,
+        "resize_width": 0,
+        "fps_override": 0.0,
+        "write_overlay": true,
+        "overlay_path": "data/outputs/overlay.mp4"
+      },
+      "detection": {
+        "weights": "models/yolo11n.pt",
+        "imgsz": 640,
+        "conf": 0.25,
+        "iou": 0.45,
+        "device": "cpu",
+        "quantize": null,
+        "max_det": 300,
+        "min_box_area": 150.0,
+        "backend": "yolo",
+        "tile_rows": 2,
+        "tile_cols": 3,
+        "tile_overlap": 0.25,
+        "tile_full_frame": true,
+        "tile_merge_iou": 0.55,
+        "replay_noise_px": 1.5,
+        "replay_miss_rate": 0.03,
+        "replay_seed": 17
+      },
+      "tracking": {
+        "track_high_thresh": 0.5,
+        "track_low_thresh": 0.1,
+        "new_track_thresh": 0.55,
+        "match_thresh": 0.8,
+        "track_buffer": 30,
+        "min_hits": 3,
+        "velocity_alpha": 0.35,
+        "min_states_for_velocity": 3,
+        "stationary_speed": 0.0,
+        "stationary_window_s": 2.0
+      },
+      "homography": {
+        "image_points": [
+          [
+            91.2530032408265,
+            748.4688796881617
+          ],
+          [
+            1188.7469967591735,
+            748.4688796881617
+          ],
+          [
+            916.9693809228736,
+            306.5257863904819
+          ],
+          [
+            363.03061907712635,
+            306.5257863904819
+          ]
+        ],
+        "world_points": [
+          [
+            -12.0,
+            16.0
+          ],
+          [
+            12.0,
+            16.0
+          ],
+          [
+            12.0,
+            44.0
+          ],
+          [
+            -12.0,
+            44.0
+          ]
+        ],
+        "fallback_scale": 0.05,
+        "smooth_window": 5
+      },
+      "conflict": {
+        "ttc_threshold": 3.0,
+        "pet_threshold": 1.5,
+        "max_pair_distance": 30.0,
+        "min_rel_speed": 3.0,
+        "proximity_gate": 3.0,
+        "min_abs_speed": 0.8,
+        "dedup_window": 3.0,
+        "horizon": 6.0,
+        "use_measured_pet": true,
+        "pet_lookback_s": 4.0,
+        "pet_max_wait_s": 4.0,
+        "pet_min_angle": 20.0,
+        "ignore_pedestrian_pairs": true,
+        "analysis_region_px": [],
+        "contact_settle_s": 2.0,
+        "episode_grouping": true,
+        "angle_rear_end": 30.0,
+        "angle_crossing_min": 60.0,
+        "angle_crossing_max": 120.0,
+        "angle_head_on": 150.0
+      },
+      "risk": {
+        "w_ttc": 0.52,
+        "w_pet": 0.32,
+        "w_rel_speed": 0.072,
+        "w_type": 0.38,
+        "w_time": 0.14,
+        "bias": -2.69,
+        "grid_size": 2.0,
+        "kernel_radius": 6.0,
+        "decay_tau": 900.0,
+        "top_k_hotspots": 5
+      },
+      "behavior": {
+        "enabled": true,
+        "model_path": "models/behavior_clf.joblib",
+        "harsh_brake": -3.5,
+        "harsh_accel": 3.0,
+        "sharp_turn_rate": 45.0,
+        "window": 15
+      },
+      "privacy": {
+        "enabled": false,
+        "blur_faces": true,
+        "blur_plates": true,
+        "blur_kernel": 31,
+        "face_ratio": 0.28,
+        "plate_band": [
+          0.55,
+          0.95
+        ]
+      },
+      "db_path": "data/outputs/saferoad.db",
+      "output_dir": "data/outputs"
+    },
+    "environment": {
+      "python": "3.13.18",
+      "os": "Linux",
+      "numpy": "2.5.3",
+      "opencv": "5.0.0",
+      "scikit_learn": "1.9.1"
+    },
+    "bundle": "data/samples/synthetic_groundtruth.pkl",
+    "bundle_sha256": "19bbe7ca9321ba2c"
+  }
+}

@@ -27,7 +27,7 @@
         "idf1": 0.9829,
         "n_emitted": 52,
         "checks_pass": true,
-        "config_sha256": "5e7621f09db0feb1"
+        "config_sha256": "2811334035a429af"
       },
       "baseline": {
         "precision": {
@@ -47,7 +47,7 @@
         "idf1": 0.0419,
         "n_emitted": 152,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -67,7 +67,7 @@
         "idf1": 0.9829,
         "n_emitted": 56,
         "checks_pass": true,
-        "config_sha256": "c55244272f46c424"
+        "config_sha256": "89b853f571693cbe"
       }
     },
     {
@@ -94,9 +94,9 @@
         "fa_per_hour": 420.0,
         "miss_per_hour": 80.0,
         "idf1": 0.9444,
-        "n_emitted": 49,
+        "n_emitted": 48,
         "checks_pass": true,
-        "config_sha256": "5e7621f09db0feb1"
+        "config_sha256": "2811334035a429af"
       },
       "baseline": {
         "precision": {
@@ -116,7 +116,7 @@
         "idf1": 0.0393,
         "n_emitted": 224,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -134,9 +134,9 @@
         "fa_per_hour": 520.0,
         "miss_per_hour": 80.0,
         "idf1": 0.9444,
-        "n_emitted": 56,
+        "n_emitted": 55,
         "checks_pass": true,
-        "config_sha256": "c55244272f46c424"
+        "config_sha256": "89b853f571693cbe"
       }
     },
     {
@@ -165,7 +165,7 @@
         "idf1": 0.8502,
         "n_emitted": 50,
         "checks_pass": true,
-        "config_sha256": "5e7621f09db0feb1"
+        "config_sha256": "2811334035a429af"
       },
       "baseline": {
         "precision": {
@@ -185,7 +185,7 @@
         "idf1": 0.0372,
         "n_emitted": 261,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -205,7 +205,7 @@
         "idf1": 0.8502,
         "n_emitted": 60,
         "checks_pass": true,
-        "config_sha256": "c55244272f46c424"
+        "config_sha256": "89b853f571693cbe"
       }
     },
     {
@@ -232,9 +232,9 @@
         "fa_per_hour": 360.0,
         "miss_per_hour": 80.0,
         "idf1": 0.9826,
-        "n_emitted": 43,
+        "n_emitted": 41,
         "checks_pass": true,
-        "config_sha256": "6deff09c4ebef796"
+        "config_sha256": "353e06c861fb38ff"
       },
       "baseline": {
         "precision": {
@@ -254,7 +254,7 @@
         "idf1": 0.024,
         "n_emitted": 107,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -272,9 +272,9 @@
         "fa_per_hour": 460.0,
         "miss_per_hour": 60.0,
         "idf1": 0.9826,
-        "n_emitted": 50,
+        "n_emitted": 48,
         "checks_pass": true,
-        "config_sha256": "90259ba88e630ebe"
+        "config_sha256": "3f1632e5d6605762"
       }
     },
     {
@@ -301,9 +301,9 @@
         "fa_per_hour": 320.0,
         "miss_per_hour": 120.0,
         "idf1": 0.9436,
-        "n_emitted": 42,
+        "n_emitted": 41,
         "checks_pass": true,
-        "config_sha256": "6deff09c4ebef796"
+        "config_sha256": "353e06c861fb38ff"
       },
       "baseline": {
         "precision": {
@@ -323,7 +323,7 @@
         "idf1": 0.0231,
         "n_emitted": 161,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -341,9 +341,9 @@
         "fa_per_hour": 420.0,
         "miss_per_hour": 100.0,
         "idf1": 0.9436,
-        "n_emitted": 48,
+        "n_emitted": 47,
         "checks_pass": true,
-        "config_sha256": "90259ba88e630ebe"
+        "config_sha256": "3f1632e5d6605762"
       }
     },
     {
@@ -372,7 +372,7 @@
         "idf1": 0.8507,
         "n_emitted": 48,
         "checks_pass": true,
-        "config_sha256": "6deff09c4ebef796"
+        "config_sha256": "353e06c861fb38ff"
       },
       "baseline": {
         "precision": {
@@ -392,7 +392,7 @@
         "idf1": 0.0217,
         "n_emitted": 174,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -412,7 +412,7 @@
         "idf1": 0.8507,
         "n_emitted": 54,
         "checks_pass": true,
-        "config_sha256": "90259ba88e630ebe"
+        "config_sha256": "3f1632e5d6605762"
       }
     },
     {
@@ -425,23 +425,23 @@
       "n_gt": 15,
       "full": {
         "precision": {
-          "value": 0.3939,
-          "num": 13,
-          "den": 33
+          "value": 0.3871,
+          "num": 12,
+          "den": 31
         },
         "recall": {
-          "value": 0.8667,
-          "num": 13,
+          "value": 0.8,
+          "num": 12,
           "den": 15
         },
-        "f1": 0.5416,
-        "ttc_mae": 0.4794,
-        "fa_per_hour": 400.0,
-        "miss_per_hour": 40.0,
+        "f1": 0.5217,
+        "ttc_mae": 0.5239,
+        "fa_per_hour": 380.0,
+        "miss_per_hour": 60.0,
         "idf1": 0.9831,
-        "n_emitted": 60,
+        "n_emitted": 57,
         "checks_pass": true,
-        "config_sha256": "d01a54cbda5090bc"
+        "config_sha256": "724b6c8c3c18e1d7"
       },
       "baseline": {
         "precision": {
@@ -461,27 +461,27 @@
         "idf1": 0.0156,
         "n_emitted": 85,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.3684,
-          "num": 14,
-          "den": 38
+          "value": 0.3611,
+          "num": 13,
+          "den": 36
         },
         "recall": {
-          "value": 0.9333,
-          "num": 14,
+          "value": 0.8667,
+          "num": 13,
           "den": 15
         },
-        "f1": 0.5283,
-        "ttc_mae": 0.4794,
-        "fa_per_hour": 480.0,
-        "miss_per_hour": 20.0,
+        "f1": 0.5098,
+        "ttc_mae": 0.5239,
+        "fa_per_hour": 460.0,
+        "miss_per_hour": 40.0,
         "idf1": 0.9831,
-        "n_emitted": 67,
+        "n_emitted": 64,
         "checks_pass": true,
-        "config_sha256": "4dbecff9d3661be1"
+        "config_sha256": "f21acbd6f8f2cde1"
       }
     },
     {
@@ -510,7 +510,7 @@
         "idf1": 0.9446,
         "n_emitted": 57,
         "checks_pass": true,
-        "config_sha256": "d01a54cbda5090bc"
+        "config_sha256": "724b6c8c3c18e1d7"
       },
       "baseline": {
         "precision": {
@@ -530,7 +530,7 @@
         "idf1": 0.0148,
         "n_emitted": 140,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -550,7 +550,7 @@
         "idf1": 0.9446,
         "n_emitted": 63,
         "checks_pass": true,
-        "config_sha256": "4dbecff9d3661be1"
+        "config_sha256": "f21acbd6f8f2cde1"
       }
     },
     {
@@ -563,23 +563,23 @@
       "n_gt": 15,
       "full": {
         "precision": {
-          "value": 0.3462,
+          "value": 0.375,
           "num": 9,
-          "den": 26
+          "den": 24
         },
         "recall": {
           "value": 0.6,
           "num": 9,
           "den": 15
         },
-        "f1": 0.4391,
+        "f1": 0.4615,
         "ttc_mae": 0.4147,
-        "fa_per_hour": 340.0,
+        "fa_per_hour": 300.0,
         "miss_per_hour": 120.0,
         "idf1": 0.8526,
-        "n_emitted": 46,
+        "n_emitted": 44,
         "checks_pass": true,
-        "config_sha256": "d01a54cbda5090bc"
+        "config_sha256": "724b6c8c3c18e1d7"
       },
       "baseline": {
         "precision": {
@@ -599,27 +599,27 @@
         "idf1": 0.0142,
         "n_emitted": 173,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.2857,
+          "value": 0.303,
           "num": 10,
-          "den": 35
+          "den": 33
         },
         "recall": {
           "value": 0.6667,
           "num": 10,
           "den": 15
         },
-        "f1": 0.4,
+        "f1": 0.4166,
         "ttc_mae": 0.4147,
-        "fa_per_hour": 500.0,
+        "fa_per_hour": 460.0,
         "miss_per_hour": 100.0,
         "idf1": 0.8526,
-        "n_emitted": 55,
+        "n_emitted": 53,
         "checks_pass": true,
-        "config_sha256": "4dbecff9d3661be1"
+        "config_sha256": "f21acbd6f8f2cde1"
       }
     },
     {
@@ -632,23 +632,23 @@
       "n_gt": 47,
       "full": {
         "precision": {
-          "value": 0.4444,
+          "value": 0.4557,
           "num": 36,
-          "den": 81
+          "den": 79
         },
         "recall": {
           "value": 0.766,
           "num": 36,
           "den": 47
         },
-        "f1": 0.5625,
-        "ttc_mae": 0.2994,
-        "fa_per_hour": 900.0,
+        "f1": 0.5714,
+        "ttc_mae": 0.3197,
+        "fa_per_hour": 860.0,
         "miss_per_hour": 220.0,
         "idf1": 0.9827,
-        "n_emitted": 104,
+        "n_emitted": 101,
         "checks_pass": true,
-        "config_sha256": "5e7621f09db0feb1"
+        "config_sha256": "2811334035a429af"
       },
       "baseline": {
         "precision": {
@@ -668,27 +668,27 @@
         "idf1": 0.0605,
         "n_emitted": 281,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.3776,
+          "value": 0.3854,
           "num": 37,
-          "den": 98
+          "den": 96
         },
         "recall": {
           "value": 0.7872,
           "num": 37,
           "den": 47
         },
-        "f1": 0.5104,
-        "ttc_mae": 0.2994,
-        "fa_per_hour": 1220.0,
+        "f1": 0.5175,
+        "ttc_mae": 0.3197,
+        "fa_per_hour": 1180.0,
         "miss_per_hour": 200.0,
         "idf1": 0.9827,
-        "n_emitted": 126,
+        "n_emitted": 123,
         "checks_pass": true,
-        "config_sha256": "c55244272f46c424"
+        "config_sha256": "89b853f571693cbe"
       }
     },
     {
@@ -701,23 +701,23 @@
       "n_gt": 47,
       "full": {
         "precision": {
-          "value": 0.4557,
+          "value": 0.4615,
           "num": 36,
-          "den": 79
+          "den": 78
         },
         "recall": {
           "value": 0.766,
           "num": 36,
           "den": 47
         },
-        "f1": 0.5714,
+        "f1": 0.576,
         "ttc_mae": 0.27,
-        "fa_per_hour": 860.0,
+        "fa_per_hour": 840.0,
         "miss_per_hour": 220.0,
         "idf1": 0.9428,
-        "n_emitted": 117,
+        "n_emitted": 115,
         "checks_pass": true,
-        "config_sha256": "5e7621f09db0feb1"
+        "config_sha256": "2811334035a429af"
       },
       "baseline": {
         "precision": {
@@ -737,27 +737,27 @@
         "idf1": 0.0586,
         "n_emitted": 367,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.3776,
+          "value": 0.3814,
           "num": 37,
-          "den": 98
+          "den": 97
         },
         "recall": {
           "value": 0.7872,
           "num": 37,
           "den": 47
         },
-        "f1": 0.5104,
+        "f1": 0.5138,
         "ttc_mae": 0.27,
-        "fa_per_hour": 1220.0,
+        "fa_per_hour": 1200.0,
         "miss_per_hour": 200.0,
         "idf1": 0.9428,
-        "n_emitted": 143,
+        "n_emitted": 141,
         "checks_pass": true,
-        "config_sha256": "c55244272f46c424"
+        "config_sha256": "89b853f571693cbe"
       }
     },
     {
@@ -780,13 +780,13 @@
           "den": 47
         },
         "f1": 0.5669,
-        "ttc_mae": 0.2954,
+        "ttc_mae": 0.318,
         "fa_per_hour": 880.0,
         "miss_per_hour": 220.0,
         "idf1": 0.848,
         "n_emitted": 112,
         "checks_pass": true,
-        "config_sha256": "5e7621f09db0feb1"
+        "config_sha256": "2811334035a429af"
       },
       "baseline": {
         "precision": {
@@ -806,27 +806,27 @@
         "idf1": 0.0532,
         "n_emitted": 424,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.3663,
+          "value": 0.37,
           "num": 37,
-          "den": 101
+          "den": 100
         },
         "recall": {
           "value": 0.7872,
           "num": 37,
           "den": 47
         },
-        "f1": 0.5,
-        "ttc_mae": 0.2954,
-        "fa_per_hour": 1280.0,
+        "f1": 0.5034,
+        "ttc_mae": 0.318,
+        "fa_per_hour": 1260.0,
         "miss_per_hour": 200.0,
         "idf1": 0.848,
-        "n_emitted": 145,
+        "n_emitted": 144,
         "checks_pass": true,
-        "config_sha256": "c55244272f46c424"
+        "config_sha256": "89b853f571693cbe"
       }
     },
     {
@@ -839,23 +839,23 @@
       "n_gt": 47,
       "full": {
         "precision": {
-          "value": 0.527,
+          "value": 0.5342,
           "num": 39,
-          "den": 74
+          "den": 73
         },
         "recall": {
           "value": 0.8298,
           "num": 39,
           "den": 47
         },
-        "f1": 0.6446,
+        "f1": 0.65,
         "ttc_mae": 0.3021,
-        "fa_per_hour": 700.0,
+        "fa_per_hour": 680.0,
         "miss_per_hour": 160.0,
         "idf1": 0.982,
-        "n_emitted": 93,
+        "n_emitted": 92,
         "checks_pass": true,
-        "config_sha256": "6deff09c4ebef796"
+        "config_sha256": "353e06c861fb38ff"
       },
       "baseline": {
         "precision": {
@@ -875,27 +875,27 @@
         "idf1": 0.0454,
         "n_emitted": 185,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.4483,
+          "value": 0.4535,
           "num": 39,
-          "den": 87
+          "den": 86
         },
         "recall": {
           "value": 0.8298,
           "num": 39,
           "den": 47
         },
-        "f1": 0.5821,
+        "f1": 0.5865,
         "ttc_mae": 0.3021,
-        "fa_per_hour": 960.0,
+        "fa_per_hour": 940.0,
         "miss_per_hour": 160.0,
         "idf1": 0.982,
-        "n_emitted": 110,
+        "n_emitted": 109,
         "checks_pass": true,
-        "config_sha256": "90259ba88e630ebe"
+        "config_sha256": "3f1632e5d6605762"
       }
     },
     {
@@ -908,23 +908,23 @@
       "n_gt": 47,
       "full": {
         "precision": {
-          "value": 0.4928,
+          "value": 0.5,
           "num": 34,
-          "den": 69
+          "den": 68
         },
         "recall": {
           "value": 0.7234,
           "num": 34,
           "den": 47
         },
-        "f1": 0.5862,
-        "ttc_mae": 0.333,
-        "fa_per_hour": 700.0,
+        "f1": 0.5913,
+        "ttc_mae": 0.3435,
+        "fa_per_hour": 680.0,
         "miss_per_hour": 260.0,
         "idf1": 0.9416,
-        "n_emitted": 96,
+        "n_emitted": 95,
         "checks_pass": true,
-        "config_sha256": "6deff09c4ebef796"
+        "config_sha256": "353e06c861fb38ff"
       },
       "baseline": {
         "precision": {
@@ -944,27 +944,27 @@
         "idf1": 0.0439,
         "n_emitted": 256,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.382,
+          "value": 0.3864,
           "num": 34,
-          "den": 89
+          "den": 88
         },
         "recall": {
           "value": 0.7234,
           "num": 34,
           "den": 47
         },
-        "f1": 0.5,
-        "ttc_mae": 0.333,
-        "fa_per_hour": 1100.0,
+        "f1": 0.5037,
+        "ttc_mae": 0.3435,
+        "fa_per_hour": 1080.0,
         "miss_per_hour": 260.0,
         "idf1": 0.9416,
-        "n_emitted": 119,
+        "n_emitted": 118,
         "checks_pass": true,
-        "config_sha256": "90259ba88e630ebe"
+        "config_sha256": "3f1632e5d6605762"
       }
     },
     {
@@ -993,7 +993,7 @@
         "idf1": 0.8458,
         "n_emitted": 99,
         "checks_pass": true,
-        "config_sha256": "6deff09c4ebef796"
+        "config_sha256": "353e06c861fb38ff"
       },
       "baseline": {
         "precision": {
@@ -1013,7 +1013,7 @@
         "idf1": 0.04,
         "n_emitted": 299,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -1033,7 +1033,7 @@
         "idf1": 0.8458,
         "n_emitted": 126,
         "checks_pass": true,
-        "config_sha256": "90259ba88e630ebe"
+        "config_sha256": "3f1632e5d6605762"
       }
     },
     {
@@ -1062,7 +1062,7 @@
         "idf1": 0.9829,
         "n_emitted": 116,
         "checks_pass": true,
-        "config_sha256": "d01a54cbda5090bc"
+        "config_sha256": "724b6c8c3c18e1d7"
       },
       "baseline": {
         "precision": {
@@ -1082,27 +1082,27 @@
         "idf1": 0.0297,
         "n_emitted": 163,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.3939,
+          "value": 0.39,
           "num": 39,
-          "den": 99
+          "den": 100
         },
         "recall": {
           "value": 0.8298,
           "num": 39,
           "den": 47
         },
-        "f1": 0.5342,
+        "f1": 0.5306,
         "ttc_mae": 0.2305,
-        "fa_per_hour": 1200.0,
+        "fa_per_hour": 1220.0,
         "miss_per_hour": 160.0,
         "idf1": 0.9829,
-        "n_emitted": 141,
+        "n_emitted": 142,
         "checks_pass": true,
-        "config_sha256": "4dbecff9d3661be1"
+        "config_sha256": "f21acbd6f8f2cde1"
       }
     },
     {
@@ -1131,7 +1131,7 @@
         "idf1": 0.9443,
         "n_emitted": 107,
         "checks_pass": true,
-        "config_sha256": "d01a54cbda5090bc"
+        "config_sha256": "724b6c8c3c18e1d7"
       },
       "baseline": {
         "precision": {
@@ -1151,7 +1151,7 @@
         "idf1": 0.0283,
         "n_emitted": 239,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -1171,7 +1171,7 @@
         "idf1": 0.9443,
         "n_emitted": 133,
         "checks_pass": true,
-        "config_sha256": "4dbecff9d3661be1"
+        "config_sha256": "f21acbd6f8f2cde1"
       }
     },
     {
@@ -1194,13 +1194,13 @@
           "den": 47
         },
         "f1": 0.5951,
-        "ttc_mae": 0.308,
+        "ttc_mae": 0.297,
         "fa_per_hour": 760.0,
         "miss_per_hour": 220.0,
         "idf1": 0.8524,
-        "n_emitted": 113,
+        "n_emitted": 110,
         "checks_pass": true,
-        "config_sha256": "d01a54cbda5090bc"
+        "config_sha256": "724b6c8c3c18e1d7"
       },
       "baseline": {
         "precision": {
@@ -1220,7 +1220,7 @@
         "idf1": 0.0262,
         "n_emitted": 295,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -1234,13 +1234,13 @@
           "den": 47
         },
         "f1": 0.5211,
-        "ttc_mae": 0.308,
+        "ttc_mae": 0.297,
         "fa_per_hour": 1160.0,
         "miss_per_hour": 200.0,
         "idf1": 0.8524,
-        "n_emitted": 141,
+        "n_emitted": 139,
         "checks_pass": true,
-        "config_sha256": "4dbecff9d3661be1"
+        "config_sha256": "f21acbd6f8f2cde1"
       }
     },
     {
@@ -1267,9 +1267,9 @@
         "fa_per_hour": 860.0,
         "miss_per_hour": 420.0,
         "idf1": 0.9826,
-        "n_emitted": 132,
+        "n_emitted": 131,
         "checks_pass": true,
-        "config_sha256": "5e7621f09db0feb1"
+        "config_sha256": "2811334035a429af"
       },
       "baseline": {
         "precision": {
@@ -1289,7 +1289,7 @@
         "idf1": 0.0656,
         "n_emitted": 368,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -1307,9 +1307,9 @@
         "fa_per_hour": 1180.0,
         "miss_per_hour": 400.0,
         "idf1": 0.9826,
-        "n_emitted": 149,
+        "n_emitted": 148,
         "checks_pass": true,
-        "config_sha256": "c55244272f46c424"
+        "config_sha256": "89b853f571693cbe"
       }
     },
     {
@@ -1322,23 +1322,23 @@
       "n_gt": 61,
       "full": {
         "precision": {
-          "value": 0.5057,
-          "num": 44,
-          "den": 87
+          "value": 0.5,
+          "num": 43,
+          "den": 86
         },
         "recall": {
-          "value": 0.7213,
-          "num": 44,
+          "value": 0.7049,
+          "num": 43,
           "den": 61
         },
-        "f1": 0.5946,
-        "ttc_mae": 0.2651,
+        "f1": 0.585,
+        "ttc_mae": 0.2699,
         "fa_per_hour": 860.0,
-        "miss_per_hour": 340.0,
+        "miss_per_hour": 360.0,
         "idf1": 0.9432,
-        "n_emitted": 155,
+        "n_emitted": 153,
         "checks_pass": true,
-        "config_sha256": "5e7621f09db0feb1"
+        "config_sha256": "2811334035a429af"
       },
       "baseline": {
         "precision": {
@@ -1358,27 +1358,27 @@
         "idf1": 0.0648,
         "n_emitted": 515,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.4314,
-          "num": 44,
-          "den": 102
+          "value": 0.4257,
+          "num": 43,
+          "den": 101
         },
         "recall": {
-          "value": 0.7213,
-          "num": 44,
+          "value": 0.7049,
+          "num": 43,
           "den": 61
         },
-        "f1": 0.5399,
-        "ttc_mae": 0.2651,
+        "f1": 0.5308,
+        "ttc_mae": 0.2699,
         "fa_per_hour": 1160.0,
-        "miss_per_hour": 340.0,
+        "miss_per_hour": 360.0,
         "idf1": 0.9432,
-        "n_emitted": 177,
+        "n_emitted": 175,
         "checks_pass": true,
-        "config_sha256": "c55244272f46c424"
+        "config_sha256": "89b853f571693cbe"
       }
     },
     {
@@ -1405,9 +1405,9 @@
         "fa_per_hour": 840.0,
         "miss_per_hour": 360.0,
         "idf1": 0.8494,
-        "n_emitted": 172,
+        "n_emitted": 171,
         "checks_pass": true,
-        "config_sha256": "5e7621f09db0feb1"
+        "config_sha256": "2811334035a429af"
       },
       "baseline": {
         "precision": {
@@ -1427,7 +1427,7 @@
         "idf1": 0.0609,
         "n_emitted": 583,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -1445,9 +1445,9 @@
         "fa_per_hour": 1220.0,
         "miss_per_hour": 340.0,
         "idf1": 0.8494,
-        "n_emitted": 197,
+        "n_emitted": 196,
         "checks_pass": true,
-        "config_sha256": "c55244272f46c424"
+        "config_sha256": "89b853f571693cbe"
       }
     },
     {
@@ -1460,23 +1460,23 @@
       "n_gt": 61,
       "full": {
         "precision": {
-          "value": 0.5714,
-          "num": 48,
-          "den": 84
+          "value": 0.5663,
+          "num": 47,
+          "den": 83
         },
         "recall": {
-          "value": 0.7869,
-          "num": 48,
+          "value": 0.7705,
+          "num": 47,
           "den": 61
         },
-        "f1": 0.6621,
-        "ttc_mae": 0.3444,
+        "f1": 0.6528,
+        "ttc_mae": 0.3499,
         "fa_per_hour": 720.0,
-        "miss_per_hour": 260.0,
+        "miss_per_hour": 280.0,
         "idf1": 0.9821,
-        "n_emitted": 136,
+        "n_emitted": 134,
         "checks_pass": true,
-        "config_sha256": "6deff09c4ebef796"
+        "config_sha256": "353e06c861fb38ff"
       },
       "baseline": {
         "precision": {
@@ -1496,27 +1496,27 @@
         "idf1": 0.0395,
         "n_emitted": 279,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.5104,
-          "num": 49,
-          "den": 96
+          "value": 0.5053,
+          "num": 48,
+          "den": 95
         },
         "recall": {
-          "value": 0.8033,
-          "num": 49,
+          "value": 0.7869,
+          "num": 48,
           "den": 61
         },
-        "f1": 0.6242,
-        "ttc_mae": 0.3444,
+        "f1": 0.6154,
+        "ttc_mae": 0.3499,
         "fa_per_hour": 940.0,
-        "miss_per_hour": 240.0,
+        "miss_per_hour": 260.0,
         "idf1": 0.9821,
-        "n_emitted": 149,
+        "n_emitted": 147,
         "checks_pass": true,
-        "config_sha256": "90259ba88e630ebe"
+        "config_sha256": "3f1632e5d6605762"
       }
     },
     {
@@ -1543,9 +1543,9 @@
         "fa_per_hour": 840.0,
         "miss_per_hour": 380.0,
         "idf1": 0.9425,
-        "n_emitted": 151,
+        "n_emitted": 150,
         "checks_pass": true,
-        "config_sha256": "6deff09c4ebef796"
+        "config_sha256": "353e06c861fb38ff"
       },
       "baseline": {
         "precision": {
@@ -1565,7 +1565,7 @@
         "idf1": 0.0387,
         "n_emitted": 386,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
@@ -1583,9 +1583,9 @@
         "fa_per_hour": 1220.0,
         "miss_per_hour": 360.0,
         "idf1": 0.9425,
-        "n_emitted": 172,
+        "n_emitted": 171,
         "checks_pass": true,
-        "config_sha256": "90259ba88e630ebe"
+        "config_sha256": "3f1632e5d6605762"
       }
     },
     {
@@ -1598,23 +1598,23 @@
       "n_gt": 61,
       "full": {
         "precision": {
-          "value": 0.4667,
+          "value": 0.4719,
           "num": 42,
-          "den": 90
+          "den": 89
         },
         "recall": {
           "value": 0.6885,
           "num": 42,
           "den": 61
         },
-        "f1": 0.5563,
+        "f1": 0.56,
         "ttc_mae": 0.2394,
-        "fa_per_hour": 960.0,
+        "fa_per_hour": 940.0,
         "miss_per_hour": 380.0,
         "idf1": 0.8485,
-        "n_emitted": 159,
+        "n_emitted": 156,
         "checks_pass": true,
-        "config_sha256": "6deff09c4ebef796"
+        "config_sha256": "353e06c861fb38ff"
       },
       "baseline": {
         "precision": {
@@ -1634,27 +1634,27 @@
         "idf1": 0.0358,
         "n_emitted": 420,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.4158,
+          "value": 0.42,
           "num": 42,
-          "den": 101
+          "den": 100
         },
         "recall": {
           "value": 0.6885,
           "num": 42,
           "den": 61
         },
-        "f1": 0.5185,
+        "f1": 0.5217,
         "ttc_mae": 0.2394,
-        "fa_per_hour": 1180.0,
+        "fa_per_hour": 1160.0,
         "miss_per_hour": 380.0,
         "idf1": 0.8485,
-        "n_emitted": 175,
+        "n_emitted": 172,
         "checks_pass": true,
-        "config_sha256": "90259ba88e630ebe"
+        "config_sha256": "3f1632e5d6605762"
       }
     },
     {
@@ -1681,9 +1681,9 @@
         "fa_per_hour": 860.0,
         "miss_per_hour": 280.0,
         "idf1": 0.9828,
-        "n_emitted": 175,
+        "n_emitted": 174,
         "checks_pass": true,
-        "config_sha256": "d01a54cbda5090bc"
+        "config_sha256": "724b6c8c3c18e1d7"
       },
       "baseline": {
         "precision": {
@@ -1703,27 +1703,27 @@
         "idf1": 0.0368,
         "n_emitted": 203,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.4434,
+          "value": 0.4476,
           "num": 47,
-          "den": 106
+          "den": 105
         },
         "recall": {
           "value": 0.7705,
           "num": 47,
           "den": 61
         },
-        "f1": 0.5629,
+        "f1": 0.5663,
         "ttc_mae": 0.3243,
-        "fa_per_hour": 1180.0,
+        "fa_per_hour": 1160.0,
         "miss_per_hour": 280.0,
         "idf1": 0.9828,
-        "n_emitted": 198,
+        "n_emitted": 194,
         "checks_pass": true,
-        "config_sha256": "4dbecff9d3661be1"
+        "config_sha256": "f21acbd6f8f2cde1"
       }
     },
     {
@@ -1736,23 +1736,23 @@
       "n_gt": 61,
       "full": {
         "precision": {
-          "value": 0.5056,
+          "value": 0.5114,
           "num": 45,
-          "den": 89
+          "den": 88
         },
         "recall": {
           "value": 0.7377,
           "num": 45,
           "den": 61
         },
-        "f1": 0.6,
+        "f1": 0.6041,
         "ttc_mae": 0.3465,
-        "fa_per_hour": 880.0,
+        "fa_per_hour": 860.0,
         "miss_per_hour": 320.0,
         "idf1": 0.9439,
-        "n_emitted": 181,
+        "n_emitted": 180,
         "checks_pass": true,
-        "config_sha256": "d01a54cbda5090bc"
+        "config_sha256": "724b6c8c3c18e1d7"
       },
       "baseline": {
         "precision": {
@@ -1772,27 +1772,27 @@
         "idf1": 0.0357,
         "n_emitted": 282,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.4018,
+          "value": 0.4054,
           "num": 45,
-          "den": 112
+          "den": 111
         },
         "recall": {
           "value": 0.7377,
           "num": 45,
           "den": 61
         },
-        "f1": 0.5202,
+        "f1": 0.5233,
         "ttc_mae": 0.3465,
-        "fa_per_hour": 1340.0,
+        "fa_per_hour": 1320.0,
         "miss_per_hour": 320.0,
         "idf1": 0.9439,
-        "n_emitted": 220,
+        "n_emitted": 218,
         "checks_pass": true,
-        "config_sha256": "4dbecff9d3661be1"
+        "config_sha256": "f21acbd6f8f2cde1"
       }
     },
     {
@@ -1805,23 +1805,23 @@
       "n_gt": 61,
       "full": {
         "precision": {
-          "value": 0.5114,
-          "num": 45,
-          "den": 88
+          "value": 0.5287,
+          "num": 46,
+          "den": 87
         },
         "recall": {
-          "value": 0.7377,
-          "num": 45,
+          "value": 0.7541,
+          "num": 46,
           "den": 61
         },
-        "f1": 0.6041,
+        "f1": 0.6216,
         "ttc_mae": 0.2302,
-        "fa_per_hour": 860.0,
-        "miss_per_hour": 320.0,
+        "fa_per_hour": 820.0,
+        "miss_per_hour": 300.0,
         "idf1": 0.8518,
-        "n_emitted": 186,
+        "n_emitted": 183,
         "checks_pass": true,
-        "config_sha256": "d01a54cbda5090bc"
+        "config_sha256": "724b6c8c3c18e1d7"
       },
       "baseline": {
         "precision": {
@@ -1841,27 +1841,27 @@
         "idf1": 0.0318,
         "n_emitted": 346,
         "checks_pass": true,
-        "config_sha256": "c00e7d2b23bf722c"
+        "config_sha256": "46e08bf593c6d751"
       },
       "old_pet": {
         "precision": {
-          "value": 0.4455,
-          "num": 45,
-          "den": 101
+          "value": 0.46,
+          "num": 46,
+          "den": 100
         },
         "recall": {
-          "value": 0.7377,
-          "num": 45,
+          "value": 0.7541,
+          "num": 46,
           "den": 61
         },
-        "f1": 0.5555,
+        "f1": 0.5714,
         "ttc_mae": 0.2302,
-        "fa_per_hour": 1120.0,
-        "miss_per_hour": 320.0,
+        "fa_per_hour": 1080.0,
+        "miss_per_hour": 300.0,
         "idf1": 0.8518,
-        "n_emitted": 212,
+        "n_emitted": 208,
         "checks_pass": true,
-        "config_sha256": "4dbecff9d3661be1"
+        "config_sha256": "f21acbd6f8f2cde1"
       }
     }
   ],
@@ -2031,9 +2031,9 @@
     }
   },
   "reproducibility": {
-    "command": "saferoad evaluate-grid --out /tmp/repro_out/evaluation_grid.json",
-    "git_commit": "476ab01",
-    "config_sha256": "5de676d807f38fa5",
+    "command": "saferoad evaluate-grid --out /tmp/diag/v3/evaluation_grid.json",
+    "git_commit": "5249dcc-dirty",
+    "config_sha256": "836e8c1a564bd242",
     "config": {
       "site": {
         "name": "Giao lộ mô phỏng (benchmark có ground truth)",
@@ -2134,6 +2134,8 @@
         "max_pair_distance": 30.0,
         "min_rel_speed": 3.0,
         "proximity_gate": 3.0,
+        "same_lane_gate": true,
+        "lateral_half_width_m": 1.75,
         "min_abs_speed": 0.8,
         "dedup_window": 3.0,
         "horizon": 6.0,

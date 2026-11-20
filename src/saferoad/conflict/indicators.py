@@ -229,6 +229,30 @@ def approach_angle(state_a: TrackState, state_b: TrackState) -> float:
     return math.degrees(math.acos(max(-1.0, min(1.0, cos_theta))))
 
 
+#: Tốc độ đổi hướng (°/s) coi là đang rẽ gấp - dùng chung cho phân loại kiểu xung
+#: đột và cổng cùng làn.
+SHARP_TURN_RATE = 45.0
+
+
+def lateral_offset(state_a: TrackState, state_b: TrackState) -> float:
+    """Khoảng cách (m) giữa hai xe, đo vuông góc với hướng di chuyển trung bình.
+
+    Dùng để phân biệt hai xe **cùng làn** với hai xe chạy song song ở làn kề.
+    Hai xe song song ở làn kề có góc tiếp cận ≈ 0° nhưng lệch ngang khoảng
+    một bề rộng làn; nếu chỉ dùng góc thì chúng bị gán nhầm là đâm đuôi.
+    Khi không xác định được hướng (cả hai gần đứng yên) lấy |Δx| làm xấp xỉ.
+    """
+    dx = state_b.ground[0] - state_a.ground[0]
+    dy = state_b.ground[1] - state_a.ground[1]
+    ux = state_a.velocity[0] + state_b.velocity[0]
+    uy = state_a.velocity[1] + state_b.velocity[1]
+    norm = math.hypot(ux, uy)
+    if norm < 1e-3:
+        return abs(dx)
+    # Thành phần vuông góc của vectơ (dx, dy) so với hướng u.
+    return abs(ux * dy - uy * dx) / norm
+
+
 def surface_gap(
     state_a: TrackState, state_b: TrackState, cls_a: VehicleClass, cls_b: VehicleClass
 ) -> float:
@@ -250,7 +274,7 @@ def classify_conflict(
     angle_crossing_min: float = 60.0,
     angle_crossing_max: float = 120.0,
     angle_head_on: float = 150.0,
-    sharp_turn_rate: float = 45.0,
+    sharp_turn_rate: float = SHARP_TURN_RATE,
 ) -> ConflictType:
     """Phân loại kiểu xung đột dựa trên góc tiếp cận và hành vi rẽ.
 

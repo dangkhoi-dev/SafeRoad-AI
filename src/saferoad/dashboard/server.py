@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import json
 import logging
+import shutil
+import subprocess
 import threading
 from pathlib import Path
 from typing import Any
@@ -83,6 +85,49 @@ class DataSource:
             detail="Chưa có dữ liệu. Chạy 'saferoad run' trước khi mở dashboard.",
         )
 
+
+
+# MPEG-4 Part 2 (mp4v - codec mặc định của cv2.VideoWriter) và MJPEG: Chrome/Edge
+# không phát được trong thẻ <video>. Video MVTI do prepare-real ghi ra thuộc loại này.
+_NOT_BROWSER = {"mp4v", "fmp4", "xvid", "divx", "dx50", "mpg4", "mjpg"}
+_web_lock = threading.Lock()
+
+
+def browser_video(vid: Path) -> Path:
+    """Bản H.264 của video gốc để trình duyệt phát được, tạo một lần cạnh file gốc.
+
+    Không ghi đè video gốc: pipeline đọc khung hình từ file gốc, chuyển mã có
+    mất mát sẽ làm số đo lệch đi. Bản ``<tên>_web.mp4`` chỉ dùng để xem. Giữ đủ
+    khung hình và nhịp 30 fps nên cột t (s) trong danh sách rà soát vẫn khớp;
+    khung khoá mỗi 1 s để tua chính xác. Không có ffmpeg thì trả lại file gốc.
+    """
+    web = vid.with_name(vid.stem + "_web.mp4")
+    if web.exists() and web.stat().st_mtime >= vid.stat().st_mtime:
+        return web
+    import cv2
+
+    cap = cv2.VideoCapture(str(vid))
+    tag = int(cap.get(cv2.CAP_PROP_FOURCC))
+    cap.release()
+    codec = "".join(chr((tag >> 8 * i) & 0xFF) for i in range(4)).lower()
+    ff = shutil.which("ffmpeg")
+    if codec not in _NOT_BROWSER or ff is None:
+        if ff is None and codec in _NOT_BROWSER:
+            log.warning("Video %s dùng codec %s, trình duyệt không phát được; cài ffmpeg để "
+                        "dashboard tự chuyển sang H.264, hoặc mở bằng VLC.", vid, codec)
+        return vid
+    with _web_lock:
+        if web.exists():
+            return web
+        tmp = web.with_name(web.stem + ".part.mp4")
+        log.info("Chuyển %s (%s) sang H.264 để xem trên trình duyệt...", vid.name, codec)
+        subprocess.run([ff, "-v", "error", "-y", "-i", str(vid), "-an", "-c:v", "libx264",
+                        "-preset", "veryfast", "-crf", "23", "-g", "30", "-pix_fmt", "yuv420p",
+                        "-movflags", "+faststart", str(tmp)], check=False, timeout=900)
+        if tmp.exists() and tmp.stat().st_size > 0:
+            tmp.replace(web)
+            return web
+    return vid
 
 def create_app(
     cfg: Config,
@@ -291,8 +336,13 @@ def create_app(
         with open(path, newline="", encoding="utf-8-sig") as fh:
             rows = list(csv.DictReader(fh))
         vid = rows[0].get("video") if rows else ""
-        return JSONResponse({"rows": rows,
-                             "video": f"/api/review/{name}/video" if vid and Path(vid).exists() else ""})
+        url = ""
+        if vid and Path(vid).exists():
+            # Gắn phiên bản theo file thật sẽ phát: trình duyệt từng lưu đệm bản mp4v
+            # không phát được thì đổi URL là bỏ qua bản đệm cũ.
+            st = browser_video(Path(vid)).stat()
+            url = f"/api/review/{name}/video?v={int(st.st_mtime)}-{st.st_size}"
+        return JSONResponse({"rows": rows, "video": url})
 
     @app.get("/api/review/{name}/video")
     def api_review_video(name: str):
@@ -304,7 +354,8 @@ def create_app(
         vid = Path(first["video"]) if first and first.get("video") else None
         if vid is None or not vid.exists():
             raise HTTPException(status_code=404, detail="Video gốc không có trên máy chủ này")
-        return FileResponse(vid, media_type="video/mp4")
+        return FileResponse(browser_video(vid), media_type="video/mp4",
+                            headers={"Cache-Control": "no-cache"})
 
     @app.post("/api/review/{name}")
     async def api_review_save(name: str, payload: dict) -> JSONResponse:

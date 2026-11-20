@@ -55,6 +55,8 @@ from .encroachment import (
     measure_pet,
 )
 from .indicators import (
+    SHARP_TURN_RATE,
+    lateral_offset,
     NO_COLLISION,
     approach_angle,
     classify_conflict,
@@ -200,6 +202,18 @@ class ConflictDetector:
                 if math.dist(st_a.ground, st_b.ground) > cfg.max_pair_distance:
                     continue
                 if max(st_a.speed, st_b.speed) < cfg.min_abs_speed:
+                    continue
+                if (cfg.same_lane_gate
+                        and approach_angle(st_a, st_b) < cfg.angle_rear_end
+                        and max(abs(turn_rate.get(tr_a.track_id, 0.0)),
+                                abs(turn_rate.get(tr_b.track_id, 0.0))) <= SHARP_TURN_RATE
+                        and lateral_offset(st_a, st_b) >= cfg.lateral_half_width_m):
+                    # Hai xe đi gần song song nhưng khác làn: không phải đâm đuôi.
+                    # Xe đang rẽ gấp thì "cùng làn" không còn nghĩa (giống thứ tự ưu
+                    # tiên của classify_conflict) - để TTC/PET quyết định.
+                    # Chặn trước khi mở episode nên không đếm vào funnel (funnel chỉ
+                    # đếm episode, và đối soát "opened = rejected + merged + emitted"
+                    # phải giữ nguyên).
                     continue
 
                 key = pair_key(tr_a.track_id, tr_b.track_id)

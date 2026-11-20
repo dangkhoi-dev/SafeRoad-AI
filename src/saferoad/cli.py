@@ -116,6 +116,23 @@ def cmd_simulate(args: argparse.Namespace) -> int:
 
 
 # --------------------------------------------------------------------------- #
+def _review_target(path) -> Path:
+    """Không ghi đè danh sách ứng viên đã được người gán nhãn.
+
+    Nhãn ``labels_<tập>_<người>.csv`` tham chiếu ``candidate_id`` của đúng danh
+    sách cũ; chạy lại (ví dụ sau khi đổi luật) mà ghi đè thì nhãn lệch hàng. Khi đã
+    có nhãn, danh sách mới được ghi vào thư mục con ``reruns/``.
+    """
+    path = Path(path)
+    tag = path.stem[len("review_candidates_"):] if path.stem.startswith("review_candidates_") else ""
+    if tag and path.exists() and any(path.parent.glob(f"labels_{tag}_*.csv")):
+        new = path.parent / "reruns" / path.name
+        new.parent.mkdir(parents=True, exist_ok=True)
+        print(f"  {path.name} đã có nhãn người rà soát - giữ nguyên, ghi danh sách mới vào {new}")
+        return new
+    return path
+
+
 def cmd_run(args: argparse.Namespace) -> int:
     """Chạy pipeline end-to-end trên một video."""
     from .pipeline.runner import Pipeline
@@ -168,9 +185,10 @@ def cmd_run(args: argparse.Namespace) -> int:
     if args.review_csv:
         from .evaluation.real_conflicts import export_system_candidates
 
-        n = export_system_candidates(args.review_csv, result.events, cfg.video.source,
+        review_csv = _review_target(args.review_csv)
+        n = export_system_candidates(review_csv, result.events, cfg.video.source,
                                      result.fps_source)
-        print(f"  Danh sách rà soát ({n} cảnh báo): {args.review_csv}")
+        print(f"  Danh sách rà soát ({n} cảnh báo): {review_csv}")
 
     summary = result.summary()
     print("\n" + "=" * 62)
@@ -564,7 +582,7 @@ def cmd_evaluate_real(args: argparse.Namespace) -> int:
     ref_events = [e for e in ref_events if first / fps <= e.t < last / fps]
     cmp_ = compare_to_reference(result.events, result.funnel, ref_events, mapping,
                                 result.duration)
-    review_path = out.parent / f"review_candidates_{tag}.csv"
+    review_path = _review_target(out.parent / f"review_candidates_{tag}.csv")
     n_review = export_review_candidates(
         review_path, result.events, ref_events, cmp_["_detail"], mapping,
         video=str(cfg.video.source), fps=fps)

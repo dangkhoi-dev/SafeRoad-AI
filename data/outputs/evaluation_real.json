@@ -174,8 +174,8 @@
       "body_overlap": 1
     },
     "reference_funnel": {
-      "episodes_opened": 3,
-      "rejected_proximity_gate": 3
+      "episodes_opened": 2,
+      "rejected_proximity_gate": 2
     },
     "system_statistics": {
       "total": 1,
@@ -202,17 +202,17 @@
         "max": 100.0
       }
     },
-    "review_candidates_csv": "/tmp/repro_out/review_candidates_real.csv",
+    "review_candidates_csv": "data/outputs/reruns/review_candidates_real.csv",
     "n_review_candidates": 1
   },
   "runtime": {
     "n_frames": 2441,
     "duration_s": 81.37,
     "fps_source": 30.0,
-    "processing_fps": 12.82,
-    "frame_latency_median_ms": 78.03,
-    "frame_latency_p95_ms": 106.9,
-    "wall_seconds": 203.63,
+    "processing_fps": 15.39,
+    "frame_latency_median_ms": 64.98,
+    "frame_latency_p95_ms": 82.14,
+    "wall_seconds": 158.01,
     "total_events": 1,
     "severe_events": 1,
     "avg_risk_score": 100.0,
@@ -221,13 +221,12 @@
       "crossing": 1
     },
     "latency_ms": {
-      "detection": 76.87,
-      "tracking": 0.39,
-      "trajectory": 0.23,
-      "conflict": 0.1,
-      "overlay": 4.43
+      "detection": 63.28,
+      "tracking": 0.34,
+      "trajectory": 0.2,
+      "conflict": 0.08
     },
-    "total_latency_ms": 82.02,
+    "total_latency_ms": 63.9,
     "homography_error_m": 2.312938447200457e-15,
     "detector": "YoloDetector",
     "event_funnel": {
@@ -236,9 +235,9 @@
     }
   },
   "reproducibility": {
-    "command": "saferoad evaluate-real --config configs/mvti.yaml --no-db --out /tmp/repro_out/evaluation_real.json",
-    "git_commit": "476ab01",
-    "config_sha256": "d5a2f4fcea78b52f",
+    "command": "saferoad evaluate-real --config configs/mvti.yaml --no-db --no-overlay --out /tmp/diag/v3/evaluation_real.json",
+    "git_commit": "5249dcc-dirty",
+    "config_sha256": "6f6686b6826590e7",
     "config": {
       "site": {
         "name": "Multi-view Traffic Intersection Dataset (camera hạ tầng)",
@@ -259,8 +258,8 @@
         "stride": 1,
         "resize_width": 0,
         "fps_override": 0.0,
-        "write_overlay": true,
-        "overlay_path": "/tmp/repro_out/overlay_real.mp4"
+        "write_overlay": false,
+        "overlay_path": "/tmp/diag/v3/overlay_real.mp4"
       },
       "detection": {
         "weights": "models/yolo11n.pt",
@@ -305,6 +304,8 @@
         "max_pair_distance": 30.0,
         "min_rel_speed": 3.0,
         "proximity_gate": 3.0,
+        "same_lane_gate": true,
+        "lateral_half_width_m": 1.75,
         "min_abs_speed": 0.8,
         "dedup_window": 3.0,
         "horizon": 6.0,
@@ -352,7 +353,7 @@
           0.95
         ]
       },
-      "db_path": "/tmp/repro_out/saferoad_real.db",
+      "db_path": "/tmp/diag/v3/saferoad_real.db",
       "output_dir": "data/outputs"
     },
     "environment": {

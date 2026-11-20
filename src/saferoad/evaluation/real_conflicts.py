@@ -208,7 +208,12 @@ def _read_labels(path: str | Path) -> dict[str, str]:
 
 
 def cohen_kappa(a: list[str], b: list[str]) -> float | None:
-    """Cohen's kappa cho hai người gán nhãn trên cùng tập phần tử."""
+    """Cohen's kappa cho hai người gán nhãn trên cùng tập phần tử.
+
+    Trả ``None`` khi kappa không xác định: cả hai người chỉ dùng đúng một nhãn
+    giống nhau (đồng thuận ngẫu nhiên kỳ vọng = 1, mẫu số bằng 0). Khi đó đọc
+    tỉ lệ đồng thuận thô (``raw_agreement``) thay cho kappa.
+    """
     n = len(a)
     if n == 0:
         return None
@@ -216,14 +221,19 @@ def cohen_kappa(a: list[str], b: list[str]) -> float | None:
     po = sum(1 for x, y in zip(a, b) if x == y) / n
     ca, cb = Counter(a), Counter(b)
     pe = sum((ca[c] / n) * (cb[c] / n) for c in cats)
-    return 1.0 if pe >= 1.0 else (po - pe) / (1.0 - pe)
+    return None if pe >= 1.0 else (po - pe) / (1.0 - pe)
+
+
+def raw_agreement(a: list[str], b: list[str]) -> float | None:
+    """Tỉ lệ phần tử hai người gán trùng nhãn."""
+    return None if not a else sum(1 for x, y in zip(a, b) if x == y) / len(a)
 
 
 def score_reviewed(
     candidates_csv: str | Path,
     label_files: list[str | Path],
     duration_s: float,
-    extra_missed: int = 0,
+    extra_missed: int | None = 0,
 ) -> dict[str, Any]:
     """Chấm hệ thống theo nhãn người rà soát.
 
@@ -240,7 +250,7 @@ def score_reviewed(
         cands = {r["candidate_id"]: r for r in csv.DictReader(fh)}
     labels = [_read_labels(p) for p in label_files]
 
-    kappa = kappa_bin = None
+    kappa = kappa_bin = agree = None
     n_pair = 0
     if len(labels) >= 2:
         common = [c for c in cands if c in labels[0] and c in labels[1]
@@ -250,6 +260,15 @@ def score_reviewed(
         b = [labels[1][c] for c in common]
         kappa = cohen_kappa(a, b)
         kappa_bin = cohen_kappa([str(x in POSITIVE) for x in a], [str(x in POSITIVE) for x in b])
+        agree = raw_agreement(a, b)
+    # Protocol mục 8: kappa >= 0,6. Kappa không xác định chỉ xảy ra khi hai người
+    # cùng dùng một nhãn duy nhất, tức là trùng nhau hoàn toàn - không cần gán lại.
+    if kappa is not None:
+        kappa_ok = kappa >= 0.6
+    elif agree is not None:
+        kappa_ok = agree == 1.0
+    else:
+        kappa_ok = None
 
     consensus: dict[str, str] = {}
     for cid in cands:
@@ -263,7 +282,7 @@ def score_reviewed(
     fp = len(sys_lab) - tp
     pos = [c for c, lab in consensus.items() if lab in POSITIVE]
     hit = sum(1 for c in pos if cands[c].get("source") in ("system", "both"))
-    fn = len(pos) - hit + int(extra_missed)
+    fn = len(pos) - hit + int(extra_missed or 0)
     hours = duration_s / 3600.0 if duration_s else float("nan")
     return {
         "n_candidates": len(cands),
@@ -271,14 +290,25 @@ def score_reviewed(
         "n_labeled_by_each": [len(lab) for lab in labels],
         "kappa_5class": None if kappa is None else round(kappa, 3),
         "kappa_conflict_vs_not": None if kappa_bin is None else round(kappa_bin, 3),
+        "raw_agreement": None if agree is None else round(agree, 3),
         "n_pairs_for_kappa": n_pair,
-        "kappa_ok": None if kappa is None else kappa >= 0.6,
+        "kappa_ok": kappa_ok,
         "consensus_counts": dict(Counter(consensus.values())),
         "precision": ratio(tp, tp + fp),
         "recall": ratio(hit, hit + fn),
         "false_alarms_per_hour": round(fp / hours, 1) if hours == hours else None,
-        "misses_per_hour": round(fn / hours, 1) if hours == hours else None,
+        # None khi chưa ai xem lại toàn bộ video để đếm bỏ sót: không ghi 0 thay cho "chưa đếm".
+        "misses_per_hour": (round(fn / hours, 1) if hours == hours else None)
+        if extra_missed is not None else None,
         "system_alerts_unlabeled_or_disputed": len(sys_ids) - len(sys_lab),
+        "n_system_alerts": len(sys_ids),
+        "n_reference_conflicts_judged_normal": sum(
+            1 for c, r in cands.items() if r.get("source") in ("reference", "both")
+            and consensus.get(c) not in (None, *POSITIVE)),
+        "n_reference_alerts": sum(1 for r in cands.values()
+                                  if r.get("source") in ("reference", "both")),
+        "extra_missed": None if extra_missed is None else int(extra_missed),
+        "duration_s": duration_s,
     }
 
 

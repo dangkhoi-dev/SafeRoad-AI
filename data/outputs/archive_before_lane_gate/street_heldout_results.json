@@ -1,0 +1,7983 @@
+{
+  "summary": {
+    "n_frames": 13246,
+    "duration_s": 441.54,
+    "fps_source": 30.0,
+    "processing_fps": 13.96,
+    "frame_latency_median_ms": 71.61,
+    "frame_latency_p95_ms": 173.69,
+    "wall_seconds": 2407.63,
+    "total_events": 11,
+    "severe_events": 5,
+    "avg_risk_score": 19.9,
+    "n_tracks": 850,
+    "by_type": {
+      "rear_end": 9,
+      "lane_change": 1,
+      "turning": 1
+    },
+    "latency_ms": {
+      "detection": 81.34,
+      "tracking": 4.12,
+      "trajectory": 3.54,
+      "conflict": 0.49
+    },
+    "total_latency_ms": 89.49,
+    "homography_error_m": 0.2295198291540146,
+    "detector": "YoloDetector",
+    "event_funnel": {
+      "episodes_opened": 122,
+      "rejected_too_short": 10,
+      "rejected_proximity_gate": 93,
+      "emitted": 11,
+      "rejected_pet_measured_above_threshold": 8
+    }
+  },
+  "site": "Đại lộ nhiều làn - video Kaggle quay từ mái nhà (iPhone 13, 4K→1080p)",
+  "events": [
+    {
+      "event_id": "CF00001",
+      "frame_idx": 2756,
+      "t": 91.868,
+      "track_a": 165,
+      "track_b": 213,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 1.823,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 12.1,
+      "risk_level": "low",
+      "location": [
+        -7.186747736918139,
+        43.75424200187042
+      ],
+      "location_px": [
+        715.5189060441674,
+        720.4150317461649
+      ],
+      "approach_angle": 1.0,
+      "rel_speed": 4.52,
+      "gap": 0.93,
+      "reasons": [
+        "Khoảng cách giữa hai phương tiện chỉ 0.9 m",
+        "TTC chỉ còn 1.82s - thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Ô tô và Ô tô (góc tiếp cận 1°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.285,
+        "pet": 0.0,
+        "rel_speed": 0.325,
+        "type": 0.094,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.985
+      },
+      "pet_pred": null,
+      "pet_measured": null,
+      "pet_status": "no_zone",
+      "pet_source": "",
+      "pet_times": {
+        "a_in": null,
+        "a_out": null,
+        "b_in": null,
+        "b_out": null
+      },
+      "contact": "near_miss"
+    },
+    {
+      "event_id": "CF00002",
+      "frame_idx": 2909,
+      "t": 96.968,
+      "track_a": 218,
+      "track_b": 220,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 1.469,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 13.5,
+      "risk_level": "low",
+      "location": [
+        -7.144696027949076,
+        24.3024902962673
+      ],
+      "location_px": [
+        767.7175668495966,
+        802.9057356262895
+      ],
+      "approach_angle": 4.5,
+      "rel_speed": 5.29,
+      "gap": 1.01,
+      "reasons": [
+        "Khoảng cách giữa hai phương tiện chỉ 1.0 m",
+        "Tốc độ tiếp cận cao 5.3 m/s (~19 km/h)",
+        "TTC chỉ còn 1.47s - thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Ô tô và Ô tô (góc tiếp cận 4°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.354,
+        "pet": 0.0,
+        "rel_speed": 0.381,
+        "type": 0.094,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.861
+      },
+      "pet_pred": null,
+      "pet_measured": null,
+      "pet_status": "parallel",
+      "pet_source": "",
+      "pet_times": {
+        "a_in": null,
+        "a_out": null,
+        "b_in": null,
+        "b_out": null
+      },
+      "contact": "near_miss"
+    },
+    {
+      "event_id": "CF00003",
+      "frame_idx": 6865,
+      "t": 228.836,
+      "track_a": 556,
+      "track_b": 564,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 0.751,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 16.9,
+      "risk_level": "low",
+      "location": [
+        -6.785575289905183,
+        27.291122523157476
+      ],
+      "location_px": [
+        767.3721520654638,
+        790.2708636022898
+      ],
+      "approach_angle": 6.7,
+      "rel_speed": 4.34,
+      "gap": 0.9,
+      "reasons": [
+        "TTC chỉ còn 0.75s - thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.9 m",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Ô tô và Ô tô (góc tiếp cận 7°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.692,
+        "pet": 0.0,
+        "rel_speed": 0.312,
+        "type": 0.094,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.591
+      },
+      "pet_pred": null,
+      "pet_measured": null,
+      "pet_status": "no_zone",
+      "pet_source": "",
+      "pet_times": {
+        "a_in": null,
+        "a_out": null,
+        "b_in": null,
+        "b_out": null
+      },
+      "contact": "near_miss"
+    },
+    {
+      "event_id": "CF00004",
+      "frame_idx": 7006,
+      "t": 233.536,
+      "track_a": 565,
+      "track_b": 580,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 1.758,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 13.3,
+      "risk_level": "low",
+      "location": [
+        0.23001168176253028,
+        41.52563746038368
+      ],
+      "location_px": [
+        901.352968611327,
+        758.953391124619
+      ],
+      "approach_angle": 3.9,
+      "rel_speed": 5.91,
+      "gap": 1.27,
+      "reasons": [
+        "Khoảng cách giữa hai phương tiện chỉ 1.3 m",
+        "Tốc độ tiếp cận cao 5.9 m/s (~21 km/h)",
+        "TTC chỉ còn 1.76s - thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Ô tô và Ô tô (góc tiếp cận 4°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.296,
+        "pet": 0.0,
+        "rel_speed": 0.426,
+        "type": 0.094,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.875
+      },
+      "pet_pred": null,
+      "pet_measured": null,
+      "pet_status": "no_zone",
+      "pet_source": "",
+      "pet_times": {
+        "a_in": null,
+        "a_out": null,
+        "b_in": null,
+        "b_out": null
+      },
+      "contact": "near_miss"
+    },
+    {
+      "event_id": "CF00005",
+      "frame_idx": 7110,
+      "t": 237.003,
+      "track_a": 605,
+      "track_b": 614,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 1.08,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 14.7,
+      "risk_level": "low",
+      "location": [
+        -3.336821493790228,
+        59.167774464642946
+      ],
+      "location_px": [
+        761.0393660921657,
+        677.9527959444429
+      ],
+      "approach_angle": 8.6,
+      "rel_speed": 5.0,
+      "gap": 2.67,
+      "reasons": [
+        "TTC chỉ còn 1.08s - thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Ô tô và Ô tô (góc tiếp cận 9°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.481,
+        "pet": 0.0,
+        "rel_speed": 0.36,
+        "type": 0.094,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.754
+      },
+      "pet_pred": null,
+      "pet_measured": null,
+      "pet_status": "no_zone",
+      "pet_source": "",
+      "pet_times": {
+        "a_in": null,
+        "a_out": null,
+        "b_in": null,
+        "b_out": null
+      },
+      "contact": "near_miss"
+    },
+    {
+      "event_id": "CF00006",
+      "frame_idx": 7157,
+      "t": 238.569,
+      "track_a": 609,
+      "track_b": 614,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 1.707,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 16.3,
+      "risk_level": "low",
+      "location": [
+        0.12211792889532413,
+        54.91635076168106
+      ],
+      "location_px": [
+        851.0280932735175,
+        704.6860351762206
+      ],
+      "approach_angle": 3.5,
+      "rel_speed": 9.08,
+      "gap": 1.5,
+      "reasons": [
+        "Tốc độ tiếp cận cao 9.1 m/s (~33 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.5 m",
+        "TTC chỉ còn 1.71s - thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Ô tô và Ô tô (góc tiếp cận 4°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.305,
+        "pet": 0.0,
+        "rel_speed": 0.654,
+        "type": 0.094,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.638
+      },
+      "pet_pred": null,
+      "pet_measured": null,
+      "pet_status": "no_zone",
+      "pet_source": "",
+      "pet_times": {
+        "a_in": null,
+        "a_out": null,
+        "b_in": null,
+        "b_out": null
+      },
+      "contact": "near_miss"
+    },
+    {
+      "event_id": "CF00007",
+      "frame_idx": 9639,
+      "t": 321.303,
+      "track_a": 763,
+      "track_b": 786,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 2.054,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 11.7,
+      "risk_level": "low",
+      "location": [
+        -2.915217231882545,
+        53.08465815070887
+      ],
+      "location_px": [
+        786.8363871538688,
+        700.1827378231144
+      ],
+      "approach_angle": 16.6,
+      "rel_speed": 4.5,
+      "gap": 2.53,
+      "reasons": [
+        "TTC chỉ còn 2.05s - thời gian tới va chạm đáng chú ý (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Ô tô và Ô tô (góc tiếp cận 17°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.253,
+        "pet": 0.0,
+        "rel_speed": 0.324,
+        "type": 0.094,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -2.019
+      },
+      "pet_pred": null,
+      "pet_measured": null,
+      "pet_status": "no_zone",
+      "pet_source": "",
+      "pet_times": {
+        "a_in": null,
+        "a_out": null,
+        "b_in": null,
+        "b_out": null
+      },
+      "contact": "near_miss"
+    },
+    {
+      "event_id": "CF00008",
+      "frame_idx": 10143,
+      "t": 338.104,
+      "track_a": 820,
+      "track_b": 834,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 2.206,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 10.5,
+      "risk_level": "low",
+      "location": [
+        -3.6518751725826686,
+        15.700702216307016
+      ],
+      "location_px": [
+        900.5465094427709,
+        870.8150960224859
+      ],
+      "approach_angle": 5.9,
+      "rel_speed": 3.03,
+      "gap": 2.89,
+      "reasons": [
+        "TTC chỉ còn 2.21s - thời gian tới va chạm đáng chú ý (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Ô tô và Ô tô (góc tiếp cận 6°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.236,
+        "pet": 0.0,
+        "rel_speed": 0.218,
+        "type": 0.094,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -2.142
+      },
+      "pet_pred": null,
+      "pet_measured": null,
+      "pet_status": "no_zone",
+      "pet_source": "",
+      "pet_times": {
+        "a_in": null,
+        "a_out": null,
+        "b_in": null,
+        "b_out": null
+      },
+      "contact": "near_miss"
+    },
+    {
+      "event_id": "CF00009",
+      "frame_idx": 10263,
+      "t": 342.104,
+      "track_a": 867,
+      "track_b": 872,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 0.166,
+      "pet": null,
+      "conflict_type": "lane_change",
+      "risk_score": 69.0,
+      "risk_level": "medium",
+      "location": [
+        -1.574883288101293,
+        53.975969114435145
+      ],
+      "location_px": [
+        771.2710978321049,
+        677.7760692730963
+      ],
+      "approach_angle": 31.0,
+      "rel_speed": 10.75,
+      "gap": 0.7,
+      "reasons": [
+        "TTC chỉ còn 0.17s - thời gian tới va chạm rất gấp (ngưỡng cảnh báo 3.0s)",
+        "Tốc độ tiếp cận cao 10.8 m/s (~39 km/h)",
+        "Khoảng cách giữa hai phương tiện chỉ 0.7 m",
+        "Kiểu xung đột: Chuyển làn giữa Ô tô và Ô tô (góc tiếp cận 31°)"
+      ],
+      "severity_terms": {
+        "ttc": 2.6,
+        "pet": 0.0,
+        "rel_speed": 0.774,
+        "type": 0.115,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": 0.799
+      },
+      "pet_pred": 0.0,
+      "pet_measured": null,
+      "pet_status": "no_zone",
+      "pet_source": "",
+      "pet_times": {
+        "a_in": null,
+        "a_out": null,
+        "b_in": null,
+        "b_out": null
+      },
+      "contact": "near_miss"
+    },
+    {
+      "event_id": "CF00010",
+      "frame_idx": 10424,
+      "t": 347.47,
+      "track_a": 854,
+      "track_b": 860,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": null,
+      "pet": 0.617,
+      "conflict_type": "turning",
+      "risk_score": 24.3,
+      "risk_level": "low",
+      "location": [
+        -1.3759752806378978,
+        0.08500407212187167
+      ],
+      "location_px": [
+        1156.8026541809677,
+        1040.2866804942319
+      ],
+      "approach_angle": 34.0,
+      "rel_speed": 12.33,
+      "gap": 1.55,
+      "reasons": [
+        "Tốc độ tiếp cận cao 12.3 m/s (~44 km/h)",
+        "PET 0.62s - hai đối tượng đi qua cùng một điểm cách nhau quá ngắn (ngưỡng 1.5s)",
+        "Khoảng cách giữa hai phương tiện chỉ 1.6 m",
+        "Kiểu xung đột: Chuyển hướng giữa Ô tô và Ô tô (góc tiếp cận 34°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.0,
+        "pet": 0.519,
+        "rel_speed": 0.888,
+        "type": 0.146,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.137
+      },
+      "pet_pred": 0.177,
+      "pet_measured": 0.617,
+      "pet_status": "measured",
+      "pet_source": "measured",
+      "pet_times": {
+        "a_in": 347.054,
+        "a_out": 347.537,
+        "b_in": 348.154,
+        "b_out": 348.437,
+        "first": "a"
+      },
+      "contact": "near_miss"
+    },
+    {
+      "event_id": "CF00011",
+      "frame_idx": 12974,
+      "t": 432.471,
+      "track_a": 1024,
+      "track_b": 1029,
+      "cls_a": "car",
+      "cls_b": "car",
+      "ttc": 1.137,
+      "pet": null,
+      "conflict_type": "rear_end",
+      "risk_score": 17.1,
+      "risk_level": "low",
+      "location": [
+        -8.044371562680908,
+        44.8814795430281
+      ],
+      "location_px": [
+        692.4964290360854,
+        712.0461715810297
+      ],
+      "approach_angle": 3.6,
+      "rel_speed": 7.81,
+      "gap": 2.23,
+      "reasons": [
+        "Tốc độ tiếp cận cao 7.8 m/s (~28 km/h)",
+        "TTC chỉ còn 1.14s - thời gian tới va chạm gấp (ngưỡng cảnh báo 3.0s)",
+        "Kiểu xung đột: Tạt đầu/đâm đuôi giữa Ô tô và Ô tô (góc tiếp cận 4°)"
+      ],
+      "severity_terms": {
+        "ttc": 0.457,
+        "pet": 0.0,
+        "rel_speed": 0.562,
+        "type": 0.094,
+        "time": 0.0,
+        "bias": -2.69,
+        "z": -1.576
+      },
+      "pet_pred": null,
+      "pet_measured": null,
+      "pet_status": "parallel",
+      "pet_source": "",
+      "pet_times": {
+        "a_in": null,
+        "a_out": null,
+        "b_in": null,
+        "b_out": null
+      },
+      "contact": "near_miss"
+    }
+  ],
+  "behaviors": [
+    {
+      "track_id": 14,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 4,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 13,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 7,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 16,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 17,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 6,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 9,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 2,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 5,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 15,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 19,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 18,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 8,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 20,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 23,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 24,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 27,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 28,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 30,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 31,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 32,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 35,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 36,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 37,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 38,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 40,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 41,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 43,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 48,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 49,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 50,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 51,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 52,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 53,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 56,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 57,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 58,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 60,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 61,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 62,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 63,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 65,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 66,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 68,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 70,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 71,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 72,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 73,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 74,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 75,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 76,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 78,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 79,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 80,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 81,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 82,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 84,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 85,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 86,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 87,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 88,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 89,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 90,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 93,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 96,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 97,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 98,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 99,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 100,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 101,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 102,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 104,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 105,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 106,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 107,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 108,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 109,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 111,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 114,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 115,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 116,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 118,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 119,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 120,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 122,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 123,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 125,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 124,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 126,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 127,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 128,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 132,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 133,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 134,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 136,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 137,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 139,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 140,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 141,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 142,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 143,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 145,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 146,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 147,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 148,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 149,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 150,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 151,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 152,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 154,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 155,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 156,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 158,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 159,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 160,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 161,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 164,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 165,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 166,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 168,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 169,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 170,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 171,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 172,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 173,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 174,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 176,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 177,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 178,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 181,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 182,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 183,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 184,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 187,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 188,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 190,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 191,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 192,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 194,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 193,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 195,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 196,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 197,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 198,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 199,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 201,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 203,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 204,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 206,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 207,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 209,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 210,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 213,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 214,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 216,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 217,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 218,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 219,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 220,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 222,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 223,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 224,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 225,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 227,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 230,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 231,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 233,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 236,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 237,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 238,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 239,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 242,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 243,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 245,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 248,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 249,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 250,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 253,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 254,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 255,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 256,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 257,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 259,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 258,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 260,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 261,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 265,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 266,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 267,
+      "label": "doi_huong_gap",
+      "label_vi": "Đổi hướng gấp / lách ẩu",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 268,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 269,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 271,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 272,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 274,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 275,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 276,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 277,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 278,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 279,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 283,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 285,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 286,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 287,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 290,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 291,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 292,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 293,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 294,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 295,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 297,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 299,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 302,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 305,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 306,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 308,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 307,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 309,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 310,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 312,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 313,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 316,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 315,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 317,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 319,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 321,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 322,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 323,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 324,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 327,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 329,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 330,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 331,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 332,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 333,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 334,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 335,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 336,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 337,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 338,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 340,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 341,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 343,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 344,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 345,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 346,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 349,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 350,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 351,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 352,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 355,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 356,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 359,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 360,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 362,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 365,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 366,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 367,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 368,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 369,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 371,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 372,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 373,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 375,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 376,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 377,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 378,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 380,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 381,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 382,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 383,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 384,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 385,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 387,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 388,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 389,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 392,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 393,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 394,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 395,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 396,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 398,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 399,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 400,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 402,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 403,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 404,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 405,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 406,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 407,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 408,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 409,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 410,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 411,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 412,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 413,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 414,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 415,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 416,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 418,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 419,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 0.869,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 420,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 422,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 423,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 424,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 426,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 428,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 429,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.996,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 430,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 431,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 432,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 433,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 434,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 435,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 436,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 437,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 438,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 439,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 440,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 441,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 443,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 444,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 445,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 446,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 447,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 448,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 449,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 450,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 452,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 454,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 455,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 456,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 457,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 459,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 460,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 462,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 463,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 464,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 465,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 467,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 469,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 472,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 474,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 473,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 475,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 476,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 478,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 479,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 481,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 483,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 484,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 485,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 488,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 489,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 490,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 491,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 494,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 498,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 500,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 501,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 502,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 503,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 504,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 505,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 506,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 509,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 511,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 513,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 514,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 515,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 516,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 518,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 519,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 521,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 523,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 524,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 525,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 526,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 529,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 530,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 531,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 533,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 535,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 538,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 540,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 542,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 543,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 550,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 552,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 553,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 556,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 557,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 559,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 560,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 562,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 563,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 564,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 566,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 565,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 568,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 570,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 571,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 572,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 574,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 575,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 576,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 577,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 579,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 580,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 582,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 583,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 584,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 585,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 587,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 588,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 594,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 595,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 596,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 597,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 599,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 600,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 601,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 602,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 603,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 605,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 607,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 609,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 610,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 611,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 612,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 614,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 616,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.991,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 617,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 621,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 622,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 624,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 626,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 628,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 629,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 630,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 632,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 633,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 635,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 636,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 637,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 638,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 639,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 640,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 641,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 642,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 644,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 645,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 646,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 647,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 648,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 649,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 651,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 652,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 654,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 655,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 656,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 657,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 658,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 659,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 660,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 661,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 664,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 666,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 667,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 669,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 670,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 671,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 672,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 673,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 675,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 676,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 677,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 678,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 679,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 681,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 684,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 685,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 689,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 690,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 691,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 693,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 694,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 695,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 696,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 697,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 699,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 700,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 702,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 703,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 0.857,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 704,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 705,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 707,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 709,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 710,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 712,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 714,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 715,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 716,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 717,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 720,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 721,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 723,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 724,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 725,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 726,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 729,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 731,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 732,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 733,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 734,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 0.948,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 735,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 736,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 737,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 738,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 739,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 741,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 742,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 744,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 746,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 747,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 749,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 750,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 751,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 752,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 753,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 754,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 756,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 0.903,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 757,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 758,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 759,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 760,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 761,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 762,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 763,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 765,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 764,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 766,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 769,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 770,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 771,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 772,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 773,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 774,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 777,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 779,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 781,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 780,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 782,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 784,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 786,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 787,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 788,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 789,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 790,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 791,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 792,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 793,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 795,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 796,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 797,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 798,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 799,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 800,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 801,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 803,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 804,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 805,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 808,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 809,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 810,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 811,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 0.9,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 813,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 816,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 817,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 818,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 0.872,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 820,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 821,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 822,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 823,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 824,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 826,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 828,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 827,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 831,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 833,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 834,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 835,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 838,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 840,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 842,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 843,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 844,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 845,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 846,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 848,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 849,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 850,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 854,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 855,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 857,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 858,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 859,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 860,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 862,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 865,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 867,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 868,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 869,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 871,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 872,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 873,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 874,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 875,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 878,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 879,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 881,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 885,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 884,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 887,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 888,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 889,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 891,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 892,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 893,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 895,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 896,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 897,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 898,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 899,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 900,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 903,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 904,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 905,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 906,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 907,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 908,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 909,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 910,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 911,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 912,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 913,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 914,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 915,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 916,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 918,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 920,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 921,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 922,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 923,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 924,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 925,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 926,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 927,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 928,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 929,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 933,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 934,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 935,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 937,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 938,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 0.853,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 940,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 939,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 945,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 946,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 947,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 948,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 949,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 950,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 951,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 953,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 954,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 955,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 956,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 957,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 958,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 959,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 960,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 961,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 962,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 963,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 964,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 966,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 967,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 968,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 970,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 971,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 972,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 973,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 974,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 975,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 976,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 977,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 978,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 979,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 980,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 981,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 982,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 983,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 984,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 986,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 987,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 988,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 989,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 992,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 993,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 994,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 995,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 996,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 997,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 998,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 999,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1000,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1001,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1002,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1003,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1004,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1006,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1008,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1009,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1011,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1013,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1014,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1016,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1018,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1020,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1021,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1022,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1024,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1025,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1026,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1027,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1028,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1029,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1030,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1031,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1032,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1033,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1034,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1036,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1037,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1039,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1040,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1042,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1043,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1044,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1045,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1047,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1048,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1049,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1050,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1051,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1054,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1055,
+      "label": "phanh_gap",
+      "label_vi": "Phanh gấp",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    },
+    {
+      "track_id": 1056,
+      "label": "tang_toc_dot_ngot",
+      "label_vi": "Tăng tốc đột ngột",
+      "confidence": 1.0,
+      "source": "rule",
+      "risky": true
+    }
+  ],
+  "risk_map": {
+    "bounds": {
+      "x_min": -70.06898498535156,
+      "y_min": -60.57704544067383,
+      "x_max": 54.515079498291016,
+      "y_max": 181.56396484375
+    },
+    "grid_size": 2.0,
+    "nx": 63,
+    "ny": 122,
+    "cells": [
+      {
+        "x": -1.07,
+        "y": 54.42,
+        "v": 1.0
+      },
+      {
+        "x": -1.07,
+        "y": 56.42,
+        "v": 0.8314
+      },
+      {
+        "x": -3.07,
+        "y": 54.42,
+        "v": 0.821
+      },
+      {
+        "x": 0.93,
+        "y": 54.42,
+        "v": 0.821
+      },
+      {
+        "x": -1.07,
+        "y": 52.42,
+        "v": 0.8143
+      },
+      {
+        "x": -3.07,
+        "y": 56.42,
+        "v": 0.6958
+      },
+      {
+        "x": -3.07,
+        "y": 52.42,
+        "v": 0.6744
+      },
+      {
+        "x": 0.93,
+        "y": 56.42,
+        "v": 0.6732
+      },
+      {
+        "x": 0.93,
+        "y": 52.42,
+        "v": 0.6644
+      },
+      {
+        "x": -1.07,
+        "y": 58.42,
+        "v": 0.4862
+      },
+      {
+        "x": -5.07,
+        "y": 54.42,
+        "v": 0.4549
+      },
+      {
+        "x": 2.93,
+        "y": 54.42,
+        "v": 0.4548
+      },
+      {
+        "x": -1.07,
+        "y": 50.42,
+        "v": 0.4443
+      },
+      {
+        "x": -3.07,
+        "y": 58.42,
+        "v": 0.4313
+      },
+      {
+        "x": -5.07,
+        "y": 56.42,
+        "v": 0.3949
+      },
+      {
+        "x": -3.07,
+        "y": 50.42,
+        "v": 0.3889
+      },
+      {
+        "x": -5.07,
+        "y": 52.42,
+        "v": 0.3778
+      },
+      {
+        "x": 0.93,
+        "y": 58.42,
+        "v": 0.3761
+      },
+      {
+        "x": 2.93,
+        "y": 56.42,
+        "v": 0.3694
+      },
+      {
+        "x": 2.93,
+        "y": 52.42,
+        "v": 0.3665
+      },
+      {
+        "x": 0.93,
+        "y": 50.42,
+        "v": 0.3517
+      },
+      {
+        "x": -7.07,
+        "y": 44.42,
+        "v": 0.3042
+      },
+      {
+        "x": -1.07,
+        "y": 0.42,
+        "v": 0.2649
+      },
+      {
+        "x": -5.07,
+        "y": 58.42,
+        "v": 0.2621
+      },
+      {
+        "x": -5.07,
+        "y": 44.42,
+        "v": 0.2574
+      },
+      {
+        "x": -7.07,
+        "y": 26.42,
+        "v": 0.2507
+      },
+      {
+        "x": -7.07,
+        "y": 46.42,
+        "v": 0.2505
+      },
+      {
+        "x": -5.07,
+        "y": 50.42,
+        "v": 0.2476
+      },
+      {
+        "x": -9.07,
+        "y": 44.42,
+        "v": 0.2436
+      },
+      {
+        "x": -7.07,
+        "y": 42.42,
+        "v": 0.2436
+      },
+      {
+        "x": -7.07,
+        "y": 24.42,
+        "v": 0.2407
+      },
+      {
+        "x": -5.07,
+        "y": 46.42,
+        "v": 0.2156
+      },
+      {
+        "x": -5.07,
+        "y": 42.42,
+        "v": 0.2123
+      },
+      {
+        "x": -3.07,
+        "y": 0.42,
+        "v": 0.2121
+      },
+      {
+        "x": -1.07,
+        "y": 2.42,
+        "v": 0.2121
+      },
+      {
+        "x": 0.93,
+        "y": 0.42,
+        "v": 0.2121
+      },
+      {
+        "x": -1.07,
+        "y": -1.58,
+        "v": 0.2121
+      },
+      {
+        "x": -1.07,
+        "y": 60.42,
+        "v": 0.2092
+      },
+      {
+        "x": -3.07,
+        "y": 60.42,
+        "v": 0.2033
+      },
+      {
+        "x": -9.07,
+        "y": 26.42,
+        "v": 0.2008
+      },
+      {
+        "x": -5.07,
+        "y": 26.42,
+        "v": 0.2008
+      },
+      {
+        "x": 2.93,
+        "y": 58.42,
+        "v": 0.1997
+      },
+      {
+        "x": -3.07,
+        "y": 48.42,
+        "v": 0.1993
+      },
+      {
+        "x": -9.07,
+        "y": 46.42,
+        "v": 0.1973
+      },
+      {
+        "x": -9.07,
+        "y": 42.42,
+        "v": 0.1951
+      },
+      {
+        "x": -9.07,
+        "y": 24.42,
+        "v": 0.1928
+      },
+      {
+        "x": -5.07,
+        "y": 24.42,
+        "v": 0.1928
+      },
+      {
+        "x": 2.93,
+        "y": 50.42,
+        "v": 0.1917
+      },
+      {
+        "x": -1.07,
+        "y": 48.42,
+        "v": 0.1898
+      },
+      {
+        "x": -5.07,
+        "y": 48.42,
+        "v": 0.1878
+      },
+      {
+        "x": -7.07,
+        "y": 28.42,
+        "v": 0.1751
+      },
+      {
+        "x": 0.93,
+        "y": 2.42,
+        "v": 0.1699
+      },
+      {
+        "x": -3.07,
+        "y": 2.42,
+        "v": 0.1699
+      },
+      {
+        "x": 0.93,
+        "y": -1.58,
+        "v": 0.1699
+      },
+      {
+        "x": -3.07,
+        "y": -1.58,
+        "v": 0.1699
+      },
+      {
+        "x": -3.07,
+        "y": 44.42,
+        "v": 0.1671
+      },
+      {
+        "x": -7.07,
+        "y": 54.42,
+        "v": 0.166
+      },
+      {
+        "x": 4.93,
+        "y": 54.42,
+        "v": 0.1659
+      },
+      {
+        "x": -7.07,
+        "y": 22.42,
+        "v": 0.1619
+      },
+      {
+        "x": -7.07,
+        "y": 48.42,
+        "v": 0.1597
+      },
+      {
+        "x": -3.07,
+        "y": 42.42,
+        "v": 0.1527
+      },
+      {
+        "x": 0.93,
+        "y": 60.42,
+        "v": 0.149
+      },
+      {
+        "x": -7.07,
+        "y": 56.42,
+        "v": 0.1486
+      },
+      {
+        "x": 0.93,
+        "y": 48.42,
+        "v": 0.1406
+      },
+      {
+        "x": -5.07,
+        "y": 28.42,
+        "v": 0.1402
+      },
+      {
+        "x": -9.07,
+        "y": 28.42,
+        "v": 0.1402
+      },
+      {
+        "x": -7.07,
+        "y": 52.42,
+        "v": 0.1399
+      },
+      {
+        "x": -3.07,
+        "y": 46.42,
+        "v": 0.1385
+      },
+      {
+        "x": -5.07,
+        "y": 22.42,
+        "v": 0.1369
+      },
+      {
+        "x": -5.07,
+        "y": 60.42,
+        "v": 0.1354
+      },
+      {
+        "x": -1.07,
+        "y": 42.42,
+        "v": 0.1353
+      },
+      {
+        "x": 4.93,
+        "y": 56.42,
+        "v": 0.1329
+      },
+      {
+        "x": 4.93,
+        "y": 52.42,
+        "v": 0.1329
+      },
+      {
+        "x": 0.93,
+        "y": 42.42,
+        "v": 0.1278
+      },
+      {
+        "x": -9.07,
+        "y": 22.42,
+        "v": 0.1267
+      },
+      {
+        "x": -7.07,
+        "y": 40.42,
+        "v": 0.1251
+      },
+      {
+        "x": -11.07,
+        "y": 44.42,
+        "v": 0.1251
+      },
+      {
+        "x": -7.07,
+        "y": 50.42,
+        "v": 0.1236
+      },
+      {
+        "x": -1.07,
+        "y": 44.42,
+        "v": 0.1231
+      },
+      {
+        "x": -5.07,
+        "y": 40.42,
+        "v": 0.114
+      },
+      {
+        "x": -3.07,
+        "y": 16.42,
+        "v": 0.1133
+      },
+      {
+        "x": -1.07,
+        "y": -3.58,
+        "v": 0.1089
+      },
+      {
+        "x": 2.93,
+        "y": 0.42,
+        "v": 0.1089
+      },
+      {
+        "x": -5.07,
+        "y": 0.42,
+        "v": 0.1089
+      },
+      {
+        "x": -1.07,
+        "y": 4.42,
+        "v": 0.1089
+      },
+      {
+        "x": -9.07,
+        "y": 48.42,
+        "v": 0.107
+      },
+      {
+        "x": -7.07,
+        "y": 58.42,
+        "v": 0.1068
+      },
+      {
+        "x": -11.07,
+        "y": 26.42,
+        "v": 0.1031
+      },
+      {
+        "x": -3.07,
+        "y": 26.42,
+        "v": 0.1031
+      },
+      {
+        "x": 2.93,
+        "y": 42.42,
+        "v": 0.1023
+      },
+      {
+        "x": 0.93,
+        "y": 44.42,
+        "v": 0.1023
+      },
+      {
+        "x": 0.93,
+        "y": 40.42,
+        "v": 0.1023
+      },
+      {
+        "x": -9.07,
+        "y": 40.42,
+        "v": 0.1001
+      },
+      {
+        "x": -11.07,
+        "y": 46.42,
+        "v": 0.1001
+      },
+      {
+        "x": -11.07,
+        "y": 42.42,
+        "v": 0.1001
+      },
+      {
+        "x": -3.07,
+        "y": 24.42,
+        "v": 0.099
+      },
+      {
+        "x": -11.07,
+        "y": 24.42,
+        "v": 0.099
+      },
+      {
+        "x": -1.07,
+        "y": 40.42,
+        "v": 0.0988
+      },
+      {
+        "x": -3.07,
+        "y": 18.42,
+        "v": 0.0969
+      },
+      {
+        "x": -3.07,
+        "y": 40.42,
+        "v": 0.0935
+      },
+      {
+        "x": -5.07,
+        "y": 20.42,
+        "v": 0.0915
+      },
+      {
+        "x": -1.07,
+        "y": 16.42,
+        "v": 0.0907
+      },
+      {
+        "x": -3.07,
+        "y": 14.42,
+        "v": 0.0907
+      },
+      {
+        "x": -5.07,
+        "y": 16.42,
+        "v": 0.0907
+      },
+      {
+        "x": -1.07,
+        "y": 46.42,
+        "v": 0.0885
+      },
+      {
+        "x": -5.07,
+        "y": 2.42,
+        "v": 0.0872
+      },
+      {
+        "x": 2.93,
+        "y": 2.42,
+        "v": 0.0872
+      },
+      {
+        "x": -3.07,
+        "y": 4.42,
+        "v": 0.0872
+      },
+      {
+        "x": -5.07,
+        "y": -1.58,
+        "v": 0.0872
+      },
+      {
+        "x": 0.93,
+        "y": 4.42,
+        "v": 0.0872
+      },
+      {
+        "x": 0.93,
+        "y": -3.58,
+        "v": 0.0872
+      },
+      {
+        "x": 2.93,
+        "y": -1.58,
+        "v": 0.0872
+      },
+      {
+        "x": -3.07,
+        "y": -3.58,
+        "v": 0.0872
+      },
+      {
+        "x": -7.07,
+        "y": 20.42,
+        "v": 0.0868
+      },
+      {
+        "x": -5.07,
+        "y": 18.42,
+        "v": 0.0847
+      },
+      {
+        "x": 2.93,
+        "y": 44.42,
+        "v": 0.0819
+      },
+      {
+        "x": 2.93,
+        "y": 40.42,
+        "v": 0.0819
+      },
+      {
+        "x": -7.07,
+        "y": 30.42,
+        "v": 0.0815
+      },
+      {
+        "x": 2.93,
+        "y": 48.42,
+        "v": 0.0794
+      },
+      {
+        "x": -3.07,
+        "y": 22.42,
+        "v": 0.0793
+      },
+      {
+        "x": -1.07,
+        "y": 18.42,
+        "v": 0.0747
+      },
+      {
+        "x": -3.07,
+        "y": 20.42,
+        "v": 0.0744
+      },
+      {
+        "x": 2.93,
+        "y": 60.42,
+        "v": 0.074
+      },
+      {
+        "x": -1.07,
+        "y": 14.42,
+        "v": 0.0726
+      },
+      {
+        "x": -5.07,
+        "y": 14.42,
+        "v": 0.0726
+      },
+      {
+        "x": -3.07,
+        "y": 28.42,
+        "v": 0.072
+      },
+      {
+        "x": -11.07,
+        "y": 28.42,
+        "v": 0.072
+      },
+      {
+        "x": 4.93,
+        "y": 58.42,
+        "v": 0.0682
+      },
+      {
+        "x": 4.93,
+        "y": 50.42,
+        "v": 0.0682
+      },
+      {
+        "x": -9.07,
+        "y": 30.42,
+        "v": 0.0652
+      },
+      {
+        "x": -5.07,
+        "y": 30.42,
+        "v": 0.0652
+      },
+      {
+        "x": -11.07,
+        "y": 22.42,
+        "v": 0.064
+      },
+      {
+        "x": -9.07,
+        "y": 20.42,
+        "v": 0.0605
+      },
+      {
+        "x": -7.07,
+        "y": 60.42,
+        "v": 0.0604
+      },
+      {
+        "x": 0.93,
+        "y": 46.42,
+        "v": 0.0594
+      },
+      {
+        "x": -3.07,
+        "y": 62.42,
+        "v": 0.0583
+      },
+      {
+        "x": 4.93,
+        "y": 42.42,
+        "v": 0.0525
+      },
+      {
+        "x": 0.93,
+        "y": 38.42,
+        "v": 0.0525
+      },
+      {
+        "x": -7.07,
+        "y": 18.42,
+        "v": 0.0524
+      },
+      {
+        "x": -11.07,
+        "y": 48.42,
+        "v": 0.0514
+      },
+      {
+        "x": -11.07,
+        "y": 40.42,
+        "v": 0.0514
+      },
+      {
+        "x": -1.07,
+        "y": 38.42,
+        "v": 0.0476
+      },
+      {
+        "x": -1.07,
+        "y": 62.42,
+        "v": 0.0467
+      },
+      {
+        "x": -5.07,
+        "y": 62.42,
+        "v": 0.0467
+      },
+      {
+        "x": -3.07,
+        "y": 12.42,
+        "v": 0.0466
+      },
+      {
+        "x": 0.93,
+        "y": 16.42,
+        "v": 0.0466
+      },
+      {
+        "x": -7.07,
+        "y": 16.42,
+        "v": 0.0466
+      },
+      {
+        "x": -1.07,
+        "y": 20.42,
+        "v": 0.0465
+      },
+      {
+        "x": -9.07,
+        "y": 50.42,
+        "v": 0.0464
+      },
+      {
+        "x": -5.07,
+        "y": -3.58,
+        "v": 0.0448
+      },
+      {
+        "x": -5.07,
+        "y": 4.42,
+        "v": 0.0448
+      },
+      {
+        "x": 2.93,
+        "y": -3.58,
+        "v": 0.0448
+      },
+      {
+        "x": 2.93,
+        "y": 4.42,
+        "v": 0.0448
+      },
+      {
+        "x": 2.93,
+        "y": 46.42,
+        "v": 0.0443
+      },
+      {
+        "x": 4.93,
+        "y": 44.42,
+        "v": 0.0421
+      },
+      {
+        "x": 4.93,
+        "y": 40.42,
+        "v": 0.0421
+      },
+      {
+        "x": 2.93,
+        "y": 38.42,
+        "v": 0.0421
+      },
+      {
+        "x": -13.07,
+        "y": 44.42,
+        "v": 0.0412
+      },
+      {
+        "x": -7.07,
+        "y": 38.42,
+        "v": 0.0412
+      },
+      {
+        "x": -5.07,
+        "y": 38.42,
+        "v": 0.0401
+      },
+      {
+        "x": -3.07,
+        "y": 38.42,
+        "v": 0.0385
+      },
+      {
+        "x": -7.07,
+        "y": 14.42,
+        "v": 0.0373
+      },
+      {
+        "x": -1.07,
+        "y": 12.42,
+        "v": 0.0373
+      },
+      {
+        "x": 0.93,
+        "y": 18.42,
+        "v": 0.0373
+      },
+      {
+        "x": 0.93,
+        "y": 14.42,
+        "v": 0.0373
+      },
+      {
+        "x": -5.07,
+        "y": 12.42,
+        "v": 0.0373
+      },
+      {
+        "x": -1.07,
+        "y": 6.42,
+        "v": 0.0359
+      },
+      {
+        "x": -1.07,
+        "y": -5.58,
+        "v": 0.0359
+      },
+      {
+        "x": -7.07,
+        "y": 0.42,
+        "v": 0.0359
+      },
+      {
+        "x": 4.93,
+        "y": 0.42,
+        "v": 0.0359
+      },
+      {
+        "x": -13.07,
+        "y": 26.42,
+        "v": 0.0339
+      },
+      {
+        "x": -1.07,
+        "y": 26.42,
+        "v": 0.0339
+      },
+      {
+        "x": -11.07,
+        "y": 30.42,
+        "v": 0.0335
+      },
+      {
+        "x": -3.07,
+        "y": 30.42,
+        "v": 0.0335
+      },
+      {
+        "x": -1.07,
+        "y": 22.42,
+        "v": 0.0333
+      },
+      {
+        "x": -13.07,
+        "y": 46.42,
+        "v": 0.033
+      },
+      {
+        "x": -9.07,
+        "y": 38.42,
+        "v": 0.033
+      },
+      {
+        "x": -13.07,
+        "y": 42.42,
+        "v": 0.033
+      },
+      {
+        "x": -1.07,
+        "y": 24.42,
+        "v": 0.0326
+      },
+      {
+        "x": -13.07,
+        "y": 24.42,
+        "v": 0.0326
+      },
+      {
+        "x": 4.93,
+        "y": 48.42,
+        "v": 0.0296
+      },
+      {
+        "x": 4.93,
+        "y": -1.58,
+        "v": 0.0287
+      },
+      {
+        "x": 0.93,
+        "y": -5.58,
+        "v": 0.0287
+      },
+      {
+        "x": 4.93,
+        "y": 2.42,
+        "v": 0.0287
+      },
+      {
+        "x": -7.07,
+        "y": -1.58,
+        "v": 0.0287
+      },
+      {
+        "x": 0.93,
+        "y": 6.42,
+        "v": 0.0287
+      },
+      {
+        "x": -7.07,
+        "y": 2.42,
+        "v": 0.0287
+      },
+      {
+        "x": -3.07,
+        "y": 6.42,
+        "v": 0.0287
+      },
+      {
+        "x": -3.07,
+        "y": -5.58,
+        "v": 0.0287
+      },
+      {
+        "x": -11.07,
+        "y": 20.42,
+        "v": 0.0278
+      },
+      {
+        "x": -9.07,
+        "y": 18.42,
+        "v": 0.0244
+      },
+      {
+        "x": 0.93,
+        "y": 62.42,
+        "v": 0.024
+      },
+      {
+        "x": -7.07,
+        "y": 62.42,
+        "v": 0.024
+      },
+      {
+        "x": -13.07,
+        "y": 28.42,
+        "v": 0.0237
+      },
+      {
+        "x": -1.07,
+        "y": 28.42,
+        "v": 0.0237
+      },
+      {
+        "x": 4.93,
+        "y": 60.42,
+        "v": 0.0225
+      },
+      {
+        "x": -9.07,
+        "y": 56.42,
+        "v": 0.0223
+      },
+      {
+        "x": -7.07,
+        "y": 32.42,
+        "v": 0.0219
+      },
+      {
+        "x": 4.93,
+        "y": 38.42,
+        "v": 0.0216
+      },
+      {
+        "x": 4.93,
+        "y": 46.42,
+        "v": 0.0216
+      },
+      {
+        "x": -9.07,
+        "y": 58.42,
+        "v": 0.0215
+      },
+      {
+        "x": -9.07,
+        "y": 54.42,
+        "v": 0.0213
+      },
+      {
+        "x": 6.93,
+        "y": 54.42,
+        "v": 0.0213
+      },
+      {
+        "x": -13.07,
+        "y": 22.42,
+        "v": 0.0211
+      }
+    ],
+    "hotspots": [
+      {
+        "rank": 1,
+        "x": -1.07,
+        "y": 54.42,
+        "score": 100.0,
+        "event_count": 4,
+        "label": ""
+      },
+      {
+        "rank": 2,
+        "x": -7.07,
+        "y": 44.42,
+        "score": 30.4,
+        "event_count": 2,
+        "label": ""
+      },
+      {
+        "rank": 3,
+        "x": -1.07,
+        "y": 0.42,
+        "score": 26.5,
+        "event_count": 1,
+        "label": ""
+      },
+      {
+        "rank": 4,
+        "x": -7.07,
+        "y": 26.42,
+        "score": 25.1,
+        "event_count": 2,
+        "label": ""
+      },
+      {
+        "rank": 5,
+        "x": 0.93,
+        "y": 42.42,
+        "score": 12.8,
+        "event_count": 1,
+        "label": ""
+      }
+    ]
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 9.2,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 18.4,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 27.6,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 36.8,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 46.0,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 55.2,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 64.4,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 73.6,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 82.8,
+      "count": 1,
+      "severe": 0
+    },
+    {
+      "t": 92.0,
+      "count": 1,
+      "severe": 1
+    },
+    {
+      "t": 101.2,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 110.4,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 119.6,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 128.8,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 138.0,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 147.2,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 156.4,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 165.6,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 174.8,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 184.0,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 193.2,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 202.4,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 211.6,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 220.8,
+      "count": 1,
+      "severe": 1
+    },
+    {
+      "t": 230.0,
+      "count": 3,
+      "severe": 1
+    },
+    {
+      "t": 239.2,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 248.4,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 257.6,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 266.8,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 276.0,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 285.2,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 294.4,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 303.6,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 312.8,
+      "count": 1,
+      "severe": 0
+    },
+    {
+      "t": 322.0,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 331.2,
+      "count": 1,
+      "severe": 0
+    },
+    {
+      "t": 340.4,
+      "count": 2,
+      "severe": 1
+    },
+    {
+      "t": 349.6,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 358.7,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 367.9,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 377.1,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 386.3,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 395.5,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 404.7,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 413.9,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 423.1,
+      "count": 0,
+      "severe": 0
+    },
+    {
+      "t": 432.3,
+      "count": 1,
+      "severe": 1
+    }
+  ]
+}

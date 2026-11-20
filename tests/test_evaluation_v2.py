@@ -121,6 +121,29 @@ class TestReview:
         assert cohen_kappa(["a", "b", "a"], ["a", "b", "a"]) == pytest.approx(1.0)
         assert cohen_kappa(["a", "a", "b", "b"], ["a", "b", "a", "b"]) == pytest.approx(0.0)
 
+    def test_kappa_undefined_when_both_use_one_label(self, tmp_path):
+        # Cả hai cùng gán "normal" cho mọi ứng viên: kappa không xác định, không phải 1.
+        assert cohen_kappa(["normal"] * 5, ["normal"] * 5) is None
+        cands = tmp_path / "c.csv"
+        with open(cands, "w", newline="", encoding="utf-8-sig") as fh:
+            w = csv.DictWriter(fh, fieldnames=["candidate_id", "source", "t_s"])
+            w.writeheader()
+            for cid, src in (("C1", "system"), ("C2", "both"), ("C3", "reference")):
+                w.writerow({"candidate_id": cid, "source": src, "t_s": 1})
+        for name in ("a", "b"):
+            with open(tmp_path / f"{name}.csv", "w", newline="", encoding="utf-8-sig") as fh:
+                w = csv.writer(fh)
+                w.writerow(["candidate_id", "label"])
+                for cid in ("C1", "C2", "C3"):
+                    w.writerow([cid, "normal"])
+        rep = score_reviewed(cands, [tmp_path / "a.csv", tmp_path / "b.csv"], 1800.0, 1)
+        assert rep["kappa_5class"] is None and rep["raw_agreement"] == 1.0
+        assert rep["kappa_ok"] is True
+        assert rep["precision"]["num"] == 0 and rep["precision"]["den"] == 2
+        assert rep["false_alarms_per_hour"] == 4.0
+        assert rep["recall"] == {"value": 0.0, "num": 0, "den": 1}
+        assert rep["n_reference_conflicts_judged_normal"] == 2
+
     def test_score_reviewed(self, tmp_path):
         cands = tmp_path / "c.csv"
         with open(cands, "w", newline="", encoding="utf-8-sig") as fh:

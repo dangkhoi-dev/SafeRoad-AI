@@ -134,37 +134,102 @@ def build() -> str:
         out.append("")
 
     ho = load("street_heldout/results.json")
+    lg = load("lane_gate_check.json")
     if ho:
         sm = ho.get("summary", {})
         dur = sm.get("duration_s") or 0
         nev = sm.get("total_events", len(ho.get("events", [])))
+        hb = (lg or {}).get("heldout")
+        before = (f"Bản trước cổng cùng làn phát {hb['alerts_before']} cảnh báo "
+                  f"({n(hb['false_alarms_per_hour_before'], 1)}/giờ), danh sách để người rà soát ở "
+                  "`data/outputs/review_candidates_street_heldout.csv`; " if hb else "")
         out.append(f"**Chạy đầu-cuối trên đoạn chưa từng dùng** (đại lộ 300-741 s, không nhãn, detector "
-                   f"tinh chỉnh): {nev} cảnh báo trong {dur:.0f} s "
-                   f"({n((nev / dur * 3600) if dur else 0, 1)}/giờ), {n(sm.get('processing_fps'), 1)} FPS; "
-                   f"toàn bộ cảnh báo nằm trong `data/outputs/review_candidates_street_heldout.csv` để người rà soát.")
+                   f"tinh chỉnh, {n(sm.get('processing_fps'), 1)} FPS). {before}bản hiện tại phát {nev} cảnh báo "
+                   f"trong {dur:.0f} s ({n((nev / dur * 3600) if dur else 0, 1)}/giờ).")
         out.append("")
     reviews = sorted(OUT.glob("review_score_*.json"))
     if reviews:
         out += [
-            "**Cảnh báo so với nhãn xung đột do người rà soát** (`saferoad review-score`):",
+            "**Cảnh báo so với nhãn xung đột do người rà soát** (`scripts/score_reviews.py`; nhãn gán "
+            "trên bản trước cổng cùng làn). "
+            "Kappa \"-\" khi cả hai người chỉ dùng một nhãn (không xác định), khi đó đọc cột trùng nhãn; "
+            "bỏ sót/giờ \"-\" là tập chưa được xem lại toàn bộ video:",
             "",
-            "| Tập | Ứng viên | Kappa (5 lớp / có-không) | P | R | Báo nhầm/giờ | Bỏ sót/giờ |",
-            "|---|---:|---:|---:|---:|---:|---:|",
+            "| Tập | Ứng viên | Trùng nhãn | Kappa (5 lớp / có-không) | P | R | Báo nhầm/giờ | Bỏ sót/giờ |",
+            "|---|---:|---:|---:|---:|---:|---:|---:|",
         ]
         for f in reviews:
             x = json.loads(f.read_text(encoding="utf-8"))
             name = f.stem.replace("review_score_", "")
-            out.append(f"| {name} | {x['n_candidates']} | {n(x.get('kappa_5class'))} / "
+            ag = x.get("raw_agreement")
+            out.append(f"| {name} | {x['n_candidates']} | {'-' if ag is None else f'{ag:.0%}'} | "
+                       f"{n(x.get('kappa_5class'))} / "
                        f"{n(x.get('kappa_conflict_vs_not'))} | {r(x['precision'])} | "
                        f"{r(x['recall'])} | {n(x.get('false_alarms_per_hour'), 1)} | "
                        f"{n(x.get('misses_per_hour'), 1)} |")
         out.append("")
+        h = load("review_score_street_heldout.json")
+        if h and h["precision"]["den"] and h["precision"]["num"] == 0:
+            out.append(f"Trên 441 s chưa từng dùng, cả {h['precision']['den']} cảnh báo của bản trước cổng đều được "
+                       f"người rà soát đánh giá là giao thông bình thường ({n(h['false_alarms_per_hour'], 1)} "
+                       f"báo nhầm/giờ); " + ("hai người xem lại toàn bộ video và không thấy xung đột thật nào, nên chưa đo được "
+                       "Recall." if h.get("extra_missed") == 0 else "chưa xem lại toàn bộ video để đếm bỏ sót."
+                       if h.get("extra_missed") is None else f"người xem ghi thêm {h.get('extra_missed')} "
+                       "xung đột bị bỏ sót."))
+            out.append("")
+        hb = (lg or {}).get("heldout")
+        sim = (lg or {}).get("simulation") or {}
+        if hb:
+            par = sum(1 for e in hb["events"] if e["after"] == "removed")
+            kept = [e for e in hb["events"] if e["after"] == "kept"]
+            kept_txt = ", ".join(f"{e['conflict_type']} {e['approach_angle']:.0f}°" for e in kept)
+            simtxt = ""
+            if sim.get("with_gate") and sim.get("without_gate"):
+                w, o = sim["with_gate"], sim["without_gate"]
+                simtxt = (f" Trên mô phỏng có đáp án, bỏ cổng này cho Precision {r(o['precision'])}, Recall "
+                          f"{r(o['recall'])}; có cổng: {r(w['precision'])}, {r(w['recall'])}" +
+                          (" - Recall không đổi" if w["recall"]["num"] >= o["recall"]["num"] else " - Recall giảm") +
+                          (f", thêm {w['precision']['den'] - o['precision']['den']} báo nhầm."
+                           if w["precision"]["den"] > o["precision"]["den"] else "."))
+                gd = sim.get("grid")
+                if gd:
+                    simtxt += (f" Trên lưới {gd['n_cells']} ô ({gd['n_gt']} xung đột chuẩn): TP "
+                               f"{gd['tp_without_gate']} → {gd['tp_with_gate']}, cảnh báo được chấm "
+                               f"{gd['scored_without_gate']} → {gd['scored_with_gate']}.")
+            out.append(f"**Phân tích lỗi và cổng cùng làn** (`scripts/measure_lateral_offset.py`, "
+                       f"`scripts/lane_gate_check.py`). Đo lại từng cảnh báo: tại khung hình cảnh báo, hai xe lệch "
+                       f"ngang {n(hb['lateral_m_min'], 1)}-{n(hb['lateral_m_max'], 1)} m, tức là đi cùng chiều ở "
+                       "hai làn khác nhau; "
+                       "luật cũ chỉ xét góc giữa hai vectơ vận tốc nên gọi đó là đâm đuôi. Cổng mới: cặp có góc "
+                       "tiếp cận dưới 30° và không xe nào đang rẽ gấp (> 45°/s) chỉ được xét khi lệch ngang dưới "
+                       f"1,75 m (nửa làn 3,5 m đã giả định khi hiệu chuẩn, không dò). Kết quả trên đoạn này: {hb['alerts_before']} → {hb['alerts_after']} "
+                       f"cảnh báo, {n(hb['false_alarms_per_hour_before'], 1)} → "
+                       f"{n(hb['false_alarms_per_hour_after'], 1)} báo nhầm/giờ; {par} cảnh báo bị loại đều đã "
+                       f"được người đánh giá là bình thường; {len(kept)} cảnh báo còn lại ({kept_txt}: góc tại đỉnh "
+                       "trên 30° nên cổng không áp dụng) cũng đã bị đánh giá là bình thường." + simtxt + " Vì cổng được rút ra từ chính đoạn 441 s "
+                       "này nên con số sau sửa không phải phép thử độc lập; cần một đoạn video mới có nhãn người.")
+            out.append("")
+            out.append("![Mười một cảnh báo trên đoạn chưa từng dùng](docs/assets/heldout_lane_gate.jpg)")
+            out.append("")
     cal = load("calibration_street.json")
     if cal:
         out.append(f"Hiệu chuẩn video đại lộ: {cal['n_points']} điểm mốc từ vạch kẻ, sai số fit "
                    f"{n(cal['fit']['rmse_m'])} m, leave-one-out {n(cal['leave_one_out']['rmse_m'])} m "
                    f"(tối đa {n(cal['leave_one_out']['max_m'])} m) - ước lượng, chưa đo thực địa.")
         out.append("")
+    h = load("review_score_street_heldout.json")
+    first = ("chưa có nhãn xung đột do người rà soát trên video thật (công cụ đã sẵn sàng)" if h is None else
+             "hai video thật đã có nhãn người đều là giao thông bình thường, nên chưa đo được Recall trên "
+             "video thật, và báo nhầm/giờ sau khi thêm cổng cùng làn mới được kiểm trên chính đoạn đã dùng "
+             "để phân tích lỗi" if h["precision"]["den"] and h["precision"]["num"] == 0
+             and not h.get("extra_missed") else
+             "nhãn người rà soát mới có trên ít tình huống, khoảng tin cậy còn rộng")
+    out.append(f"Giới hạn còn lại được báo cáo nguyên trạng: {first}; hiệu chuẩn video đại lộ là ước lượng "
+               "từ vạch kẻ đường chứ chưa đo thực địa và chỉ phủ lòng đường bên trái, nên cảnh báo chỉ được "
+               "phân tích trong vùng đó; người đi bộ trên video đại lộ quá nhỏ cho YOLO ở 640 px; hai bộ video "
+               "thật không có xe máy; mô phỏng dày đặc va chạm hơn thực tế; \"ánh sáng\" trong lưới thực "
+               "nghiệm là hồ sơ chất lượng detector.")
+    out.append("")
     return "\n".join(out)
 
 

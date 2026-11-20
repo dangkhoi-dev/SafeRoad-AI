@@ -7,7 +7,8 @@ gom theo tập; tập nào có từ hai người trở lên thì chấm bằng `
 (kappa, nhãn đồng thuận, Precision/Recall, báo nhầm/bỏ sót mỗi giờ) và ghi
 data/outputs/review_score_<tập>.json. Thời lượng video lấy từ chính file kết quả
 đã sinh ra danh sách ứng viên. `--missed tập=số` là số xung đột người xem thấy
-trong video nhưng KHÔNG có trong danh sách (bỏ sót), mặc định 0.
+trong video nhưng KHÔNG có trong danh sách (bỏ sót), sau khi hai người xem lại
+toàn bộ video. Tập không có `--missed` thì để trống bỏ sót/giờ (chưa đếm), không ghi 0.
 """
 
 from __future__ import annotations
@@ -73,15 +74,17 @@ def main() -> int:
             print(f"- {name}: không tìm được thời lượng video - bỏ qua")
             continue
         rep = score_reviewed(OUT / f"review_candidates_{name}.csv", files, dur,
-                             missed.get(name, 0))
+                             missed.get(name))
         rep["reviewers"] = people
         (OUT / f"review_score_{name}.json").write_text(
             json.dumps(rep, ensure_ascii=False, indent=2), encoding="utf-8")
-        k = rep.get("kappa_conflict_vs_not")
+        k, ag = rep.get("kappa_5class"), rep.get("raw_agreement")
+        kap = (f"κ = {k}" if k is not None else
+               "κ không xác định (cả hai chỉ dùng một nhãn)" if ag is not None else "κ = -")
         warn = "  ⚠ κ < 0,6: ngồi lại thống nhất cách hiểu rồi gán lại" if rep.get("kappa_ok") is False else ""
         print(f"- {name}: {len(files)} người ({', '.join(people)}), {rep['n_candidates']} ứng viên, "
-              f"κ = {k if k is not None else '-'}, P = {_frac(rep['precision'])}, R = {_frac(rep['recall'])}, "
-              f"bỏ sót thêm = {missed.get(name, 0)}{warn}")
+              f"trùng nhãn {'-' if ag is None else f'{ag:.0%}'}, {kap}, P = {_frac(rep['precision'])}, "
+              f"R = {_frac(rep['recall'])}, bỏ sót thêm = {missed.get(name, 'chưa đếm')}{warn}")
         done += 1
 
     if done and not args.no_rebuild:

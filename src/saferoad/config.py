@@ -117,6 +117,16 @@ class ConflictConfig:
     #: nhận là near-miss. Chỉ dựa vào TTC là chưa đủ - TTC là một *phép ngoại
     #: suy*, còn đây là kiểm chứng rằng hai xe đã thật sự đến sát nhau.
     proximity_gate: float = 3.0
+    #: Cổng cùng làn: với cặp đi gần song song (góc tiếp cận dưới
+    #: ``angle_rear_end``, đúng vùng góc của kiểu đâm đuôi), chỉ tính là xung đột
+    #: khi lệch ngang nhỏ hơn ``lateral_half_width_m``. Hai xe song song ở làn kề
+    #: có góc ≈ 0° nhưng lệch ngang khoảng một làn - trước đây bị gọi là đâm đuôi.
+    #: Ca rẽ / tạt đầu (góc lớn hơn, hoặc một xe đang đổi hướng nhanh hơn 45°/s)
+    #: không qua cổng này vì "cùng làn" không còn
+    #: nghĩa; chúng vẫn do TTC/PET quyết định. Nửa bề rộng làn 3,5 m là giá trị đã
+    #: giả định khi hiệu chuẩn homography, không dò theo dữ liệu đánh giá.
+    same_lane_gate: bool = True
+    lateral_half_width_m: float = 1.75
     #: Tốc độ tối thiểu của ít nhất một đối tượng (m/s) - lọc xe đang dừng.
     min_abs_speed: float = 0.8
     #: Khoảng thời gian tối thiểu giữa hai lần ghi cùng một cặp (giây) -

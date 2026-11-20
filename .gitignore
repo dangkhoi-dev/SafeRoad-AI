@@ -55,3 +55,4 @@ data/outputs/**/*.db-wal
 data/outputs/**/*.db-shm
 data/outputs/**/*.mp4
 data/yolo_mvti/
+data/outputs/reruns/

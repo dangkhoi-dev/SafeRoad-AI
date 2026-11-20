@@ -199,43 +199,43 @@
     "reference_contact": {},
     "system_contact": {},
     "reference_funnel": {
-      "episodes_opened": 3,
-      "rejected_proximity_gate": 3
+      "episodes_opened": 2,
+      "rejected_proximity_gate": 2
     },
     "system_statistics": {
       "total": 0
     },
-    "review_candidates_csv": "data/outputs/review_candidates_mvti_finetuned_test.csv",
+    "review_candidates_csv": "data/outputs/reruns/review_candidates_mvti_finetuned_test.csv",
     "n_review_candidates": 0
   },
   "runtime": {
     "n_frames": 741,
     "duration_s": 24.7,
     "fps_source": 30.0,
-    "processing_fps": 14.52,
-    "frame_latency_median_ms": 68.87,
-    "frame_latency_p95_ms": 89.06,
-    "wall_seconds": 54.6,
+    "processing_fps": 15.2,
+    "frame_latency_median_ms": 65.78,
+    "frame_latency_p95_ms": 81.93,
+    "wall_seconds": 49.51,
     "total_events": 0,
     "severe_events": 0,
     "avg_risk_score": 0.0,
     "n_tracks": 22,
     "by_type": {},
     "latency_ms": {
-      "detection": 71.66,
-      "tracking": 0.57,
-      "trajectory": 0.38,
-      "conflict": 0.16
+      "detection": 64.92,
+      "tracking": 0.53,
+      "trajectory": 0.36,
+      "conflict": 0.15
     },
-    "total_latency_ms": 72.77,
+    "total_latency_ms": 65.97,
     "homography_error_m": 2.312938447200457e-15,
     "detector": "YoloDetector",
     "event_funnel": {}
   },
   "reproducibility": {
-    "command": "saferoad evaluate-real --config configs/mvti.yaml --weights models/saferoad_mvti_yolo11n.pt --no-db --no-overlay --start-frame 1700 --seen-before 1500 --out data/outputs/evaluation_mvti_finetuned_test.json",
-    "git_commit": "476ab01-dirty",
-    "config_sha256": "0497f667c14535fe",
+    "command": "saferoad evaluate-real --config configs/mvti.yaml --weights models/saferoad_mvti_yolo11n.pt --no-db --no-overlay --start-frame 1700 --seen-before 1500 --out /tmp/diag/v3/evaluation_mvti_finetuned_test.json",
+    "git_commit": "5249dcc-dirty",
+    "config_sha256": "dfe1d33810a3d538",
     "config": {
       "site": {
         "name": "Multi-view Traffic Intersection Dataset (camera hạ tầng)",
@@ -257,7 +257,7 @@
         "resize_width": 0,
         "fps_override": 0.0,
         "write_overlay": false,
-        "overlay_path": "data/outputs/overlay_mvti_finetuned_test.mp4"
+        "overlay_path": "/tmp/diag/v3/overlay_mvti_finetuned_test.mp4"
       },
       "detection": {
         "weights": "models/saferoad_mvti_yolo11n.pt",
@@ -302,6 +302,8 @@
         "max_pair_distance": 30.0,
         "min_rel_speed": 3.0,
         "proximity_gate": 3.0,
+        "same_lane_gate": true,
+        "lateral_half_width_m": 1.75,
         "min_abs_speed": 0.8,
         "dedup_window": 3.0,
         "horizon": 6.0,
@@ -349,7 +351,7 @@
           0.95
         ]
       },
-      "db_path": "data/outputs/saferoad_mvti_finetuned_test.db",
+      "db_path": "/tmp/diag/v3/saferoad_mvti_finetuned_test.db",
       "output_dir": "data/outputs"
     },
     "environment": {

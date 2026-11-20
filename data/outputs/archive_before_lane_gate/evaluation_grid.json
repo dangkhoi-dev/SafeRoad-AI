@@ -1,0 +1,2195 @@
+{
+  "version": 2,
+  "cells": [
+    {
+      "density": "thua",
+      "arrival_rate": 0.6,
+      "camera": "cao_18m",
+      "light": "ngay",
+      "noise_px": 1.5,
+      "miss_rate": 0.03,
+      "n_gt": 15,
+      "full": {
+        "precision": {
+          "value": 0.3824,
+          "num": 13,
+          "den": 34
+        },
+        "recall": {
+          "value": 0.8667,
+          "num": 13,
+          "den": 15
+        },
+        "f1": 0.5307,
+        "ttc_mae": 0.4088,
+        "fa_per_hour": 420.0,
+        "miss_per_hour": 40.0,
+        "idf1": 0.9829,
+        "n_emitted": 52,
+        "checks_pass": true,
+        "config_sha256": "5e7621f09db0feb1"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 31
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 15
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 620.0,
+        "miss_per_hour": 300.0,
+        "idf1": 0.0419,
+        "n_emitted": 152,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.3514,
+          "num": 13,
+          "den": 37
+        },
+        "recall": {
+          "value": 0.8667,
+          "num": 13,
+          "den": 15
+        },
+        "f1": 0.5001,
+        "ttc_mae": 0.4088,
+        "fa_per_hour": 480.0,
+        "miss_per_hour": 40.0,
+        "idf1": 0.9829,
+        "n_emitted": 56,
+        "checks_pass": true,
+        "config_sha256": "c55244272f46c424"
+      }
+    },
+    {
+      "density": "thua",
+      "arrival_rate": 0.6,
+      "camera": "cao_18m",
+      "light": "chang_vang",
+      "noise_px": 3.0,
+      "miss_rate": 0.1,
+      "n_gt": 15,
+      "full": {
+        "precision": {
+          "value": 0.3438,
+          "num": 11,
+          "den": 32
+        },
+        "recall": {
+          "value": 0.7333,
+          "num": 11,
+          "den": 15
+        },
+        "f1": 0.4681,
+        "ttc_mae": 0.4864,
+        "fa_per_hour": 420.0,
+        "miss_per_hour": 80.0,
+        "idf1": 0.9444,
+        "n_emitted": 49,
+        "checks_pass": true,
+        "config_sha256": "5e7621f09db0feb1"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 44
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 15
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 880.0,
+        "miss_per_hour": 300.0,
+        "idf1": 0.0393,
+        "n_emitted": 224,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.2973,
+          "num": 11,
+          "den": 37
+        },
+        "recall": {
+          "value": 0.7333,
+          "num": 11,
+          "den": 15
+        },
+        "f1": 0.4231,
+        "ttc_mae": 0.4864,
+        "fa_per_hour": 520.0,
+        "miss_per_hour": 80.0,
+        "idf1": 0.9444,
+        "n_emitted": 56,
+        "checks_pass": true,
+        "config_sha256": "c55244272f46c424"
+      }
+    },
+    {
+      "density": "thua",
+      "arrival_rate": 0.6,
+      "camera": "cao_18m",
+      "light": "dem_mua",
+      "noise_px": 5.0,
+      "miss_rate": 0.25,
+      "n_gt": 15,
+      "full": {
+        "precision": {
+          "value": 0.3548,
+          "num": 11,
+          "den": 31
+        },
+        "recall": {
+          "value": 0.7333,
+          "num": 11,
+          "den": 15
+        },
+        "f1": 0.4782,
+        "ttc_mae": 0.6821,
+        "fa_per_hour": 400.0,
+        "miss_per_hour": 80.0,
+        "idf1": 0.8502,
+        "n_emitted": 50,
+        "checks_pass": true,
+        "config_sha256": "5e7621f09db0feb1"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 42
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 15
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 840.0,
+        "miss_per_hour": 300.0,
+        "idf1": 0.0372,
+        "n_emitted": 261,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.2821,
+          "num": 11,
+          "den": 39
+        },
+        "recall": {
+          "value": 0.7333,
+          "num": 11,
+          "den": 15
+        },
+        "f1": 0.4075,
+        "ttc_mae": 0.6821,
+        "fa_per_hour": 560.0,
+        "miss_per_hour": 80.0,
+        "idf1": 0.8502,
+        "n_emitted": 60,
+        "checks_pass": true,
+        "config_sha256": "c55244272f46c424"
+      }
+    },
+    {
+      "density": "thua",
+      "arrival_rate": 0.6,
+      "camera": "thap_10m",
+      "light": "ngay",
+      "noise_px": 1.5,
+      "miss_rate": 0.03,
+      "n_gt": 15,
+      "full": {
+        "precision": {
+          "value": 0.3793,
+          "num": 11,
+          "den": 29
+        },
+        "recall": {
+          "value": 0.7333,
+          "num": 11,
+          "den": 15
+        },
+        "f1": 0.5,
+        "ttc_mae": 0.3574,
+        "fa_per_hour": 360.0,
+        "miss_per_hour": 80.0,
+        "idf1": 0.9826,
+        "n_emitted": 43,
+        "checks_pass": true,
+        "config_sha256": "6deff09c4ebef796"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 21
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 15
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 420.0,
+        "miss_per_hour": 300.0,
+        "idf1": 0.024,
+        "n_emitted": 107,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.3429,
+          "num": 12,
+          "den": 35
+        },
+        "recall": {
+          "value": 0.8,
+          "num": 12,
+          "den": 15
+        },
+        "f1": 0.48,
+        "ttc_mae": 0.3574,
+        "fa_per_hour": 460.0,
+        "miss_per_hour": 60.0,
+        "idf1": 0.9826,
+        "n_emitted": 50,
+        "checks_pass": true,
+        "config_sha256": "90259ba88e630ebe"
+      }
+    },
+    {
+      "density": "thua",
+      "arrival_rate": 0.6,
+      "camera": "thap_10m",
+      "light": "chang_vang",
+      "noise_px": 3.0,
+      "miss_rate": 0.1,
+      "n_gt": 15,
+      "full": {
+        "precision": {
+          "value": 0.36,
+          "num": 9,
+          "den": 25
+        },
+        "recall": {
+          "value": 0.6,
+          "num": 9,
+          "den": 15
+        },
+        "f1": 0.45,
+        "ttc_mae": 0.4657,
+        "fa_per_hour": 320.0,
+        "miss_per_hour": 120.0,
+        "idf1": 0.9436,
+        "n_emitted": 42,
+        "checks_pass": true,
+        "config_sha256": "6deff09c4ebef796"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 22
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 15
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 440.0,
+        "miss_per_hour": 300.0,
+        "idf1": 0.0231,
+        "n_emitted": 161,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.3226,
+          "num": 10,
+          "den": 31
+        },
+        "recall": {
+          "value": 0.6667,
+          "num": 10,
+          "den": 15
+        },
+        "f1": 0.4348,
+        "ttc_mae": 0.4657,
+        "fa_per_hour": 420.0,
+        "miss_per_hour": 100.0,
+        "idf1": 0.9436,
+        "n_emitted": 48,
+        "checks_pass": true,
+        "config_sha256": "90259ba88e630ebe"
+      }
+    },
+    {
+      "density": "thua",
+      "arrival_rate": 0.6,
+      "camera": "thap_10m",
+      "light": "dem_mua",
+      "noise_px": 5.0,
+      "miss_rate": 0.25,
+      "n_gt": 15,
+      "full": {
+        "precision": {
+          "value": 0.2581,
+          "num": 8,
+          "den": 31
+        },
+        "recall": {
+          "value": 0.5333,
+          "num": 8,
+          "den": 15
+        },
+        "f1": 0.3479,
+        "ttc_mae": 0.4602,
+        "fa_per_hour": 460.0,
+        "miss_per_hour": 140.0,
+        "idf1": 0.8507,
+        "n_emitted": 48,
+        "checks_pass": true,
+        "config_sha256": "6deff09c4ebef796"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 26
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 15
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 520.0,
+        "miss_per_hour": 300.0,
+        "idf1": 0.0217,
+        "n_emitted": 174,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.2286,
+          "num": 8,
+          "den": 35
+        },
+        "recall": {
+          "value": 0.5333,
+          "num": 8,
+          "den": 15
+        },
+        "f1": 0.32,
+        "ttc_mae": 0.4602,
+        "fa_per_hour": 540.0,
+        "miss_per_hour": 140.0,
+        "idf1": 0.8507,
+        "n_emitted": 54,
+        "checks_pass": true,
+        "config_sha256": "90259ba88e630ebe"
+      }
+    },
+    {
+      "density": "thua",
+      "arrival_rate": 0.6,
+      "camera": "xien_45",
+      "light": "ngay",
+      "noise_px": 1.5,
+      "miss_rate": 0.03,
+      "n_gt": 15,
+      "full": {
+        "precision": {
+          "value": 0.3939,
+          "num": 13,
+          "den": 33
+        },
+        "recall": {
+          "value": 0.8667,
+          "num": 13,
+          "den": 15
+        },
+        "f1": 0.5416,
+        "ttc_mae": 0.4794,
+        "fa_per_hour": 400.0,
+        "miss_per_hour": 40.0,
+        "idf1": 0.9831,
+        "n_emitted": 60,
+        "checks_pass": true,
+        "config_sha256": "d01a54cbda5090bc"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 8
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 15
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 160.0,
+        "miss_per_hour": 300.0,
+        "idf1": 0.0156,
+        "n_emitted": 85,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.3684,
+          "num": 14,
+          "den": 38
+        },
+        "recall": {
+          "value": 0.9333,
+          "num": 14,
+          "den": 15
+        },
+        "f1": 0.5283,
+        "ttc_mae": 0.4794,
+        "fa_per_hour": 480.0,
+        "miss_per_hour": 20.0,
+        "idf1": 0.9831,
+        "n_emitted": 67,
+        "checks_pass": true,
+        "config_sha256": "4dbecff9d3661be1"
+      }
+    },
+    {
+      "density": "thua",
+      "arrival_rate": 0.6,
+      "camera": "xien_45",
+      "light": "chang_vang",
+      "noise_px": 3.0,
+      "miss_rate": 0.1,
+      "n_gt": 15,
+      "full": {
+        "precision": {
+          "value": 0.3333,
+          "num": 11,
+          "den": 33
+        },
+        "recall": {
+          "value": 0.7333,
+          "num": 11,
+          "den": 15
+        },
+        "f1": 0.4583,
+        "ttc_mae": 0.2941,
+        "fa_per_hour": 440.0,
+        "miss_per_hour": 80.0,
+        "idf1": 0.9446,
+        "n_emitted": 57,
+        "checks_pass": true,
+        "config_sha256": "d01a54cbda5090bc"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 12
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 15
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 240.0,
+        "miss_per_hour": 300.0,
+        "idf1": 0.0148,
+        "n_emitted": 140,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.3243,
+          "num": 12,
+          "den": 37
+        },
+        "recall": {
+          "value": 0.8,
+          "num": 12,
+          "den": 15
+        },
+        "f1": 0.4615,
+        "ttc_mae": 0.2941,
+        "fa_per_hour": 500.0,
+        "miss_per_hour": 60.0,
+        "idf1": 0.9446,
+        "n_emitted": 63,
+        "checks_pass": true,
+        "config_sha256": "4dbecff9d3661be1"
+      }
+    },
+    {
+      "density": "thua",
+      "arrival_rate": 0.6,
+      "camera": "xien_45",
+      "light": "dem_mua",
+      "noise_px": 5.0,
+      "miss_rate": 0.25,
+      "n_gt": 15,
+      "full": {
+        "precision": {
+          "value": 0.3462,
+          "num": 9,
+          "den": 26
+        },
+        "recall": {
+          "value": 0.6,
+          "num": 9,
+          "den": 15
+        },
+        "f1": 0.4391,
+        "ttc_mae": 0.4147,
+        "fa_per_hour": 340.0,
+        "miss_per_hour": 120.0,
+        "idf1": 0.8526,
+        "n_emitted": 46,
+        "checks_pass": true,
+        "config_sha256": "d01a54cbda5090bc"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0833,
+          "num": 1,
+          "den": 12
+        },
+        "recall": {
+          "value": 0.0667,
+          "num": 1,
+          "den": 15
+        },
+        "f1": 0.0741,
+        "ttc_mae": 0.229,
+        "fa_per_hour": 220.0,
+        "miss_per_hour": 280.0,
+        "idf1": 0.0142,
+        "n_emitted": 173,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.2857,
+          "num": 10,
+          "den": 35
+        },
+        "recall": {
+          "value": 0.6667,
+          "num": 10,
+          "den": 15
+        },
+        "f1": 0.4,
+        "ttc_mae": 0.4147,
+        "fa_per_hour": 500.0,
+        "miss_per_hour": 100.0,
+        "idf1": 0.8526,
+        "n_emitted": 55,
+        "checks_pass": true,
+        "config_sha256": "4dbecff9d3661be1"
+      }
+    },
+    {
+      "density": "vua",
+      "arrival_rate": 1.1,
+      "camera": "cao_18m",
+      "light": "ngay",
+      "noise_px": 1.5,
+      "miss_rate": 0.03,
+      "n_gt": 47,
+      "full": {
+        "precision": {
+          "value": 0.4444,
+          "num": 36,
+          "den": 81
+        },
+        "recall": {
+          "value": 0.766,
+          "num": 36,
+          "den": 47
+        },
+        "f1": 0.5625,
+        "ttc_mae": 0.2994,
+        "fa_per_hour": 900.0,
+        "miss_per_hour": 220.0,
+        "idf1": 0.9827,
+        "n_emitted": 104,
+        "checks_pass": true,
+        "config_sha256": "5e7621f09db0feb1"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0118,
+          "num": 1,
+          "den": 85
+        },
+        "recall": {
+          "value": 0.0213,
+          "num": 1,
+          "den": 47
+        },
+        "f1": 0.0152,
+        "ttc_mae": 1.016,
+        "fa_per_hour": 1680.0,
+        "miss_per_hour": 920.0,
+        "idf1": 0.0605,
+        "n_emitted": 281,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.3776,
+          "num": 37,
+          "den": 98
+        },
+        "recall": {
+          "value": 0.7872,
+          "num": 37,
+          "den": 47
+        },
+        "f1": 0.5104,
+        "ttc_mae": 0.2994,
+        "fa_per_hour": 1220.0,
+        "miss_per_hour": 200.0,
+        "idf1": 0.9827,
+        "n_emitted": 126,
+        "checks_pass": true,
+        "config_sha256": "c55244272f46c424"
+      }
+    },
+    {
+      "density": "vua",
+      "arrival_rate": 1.1,
+      "camera": "cao_18m",
+      "light": "chang_vang",
+      "noise_px": 3.0,
+      "miss_rate": 0.1,
+      "n_gt": 47,
+      "full": {
+        "precision": {
+          "value": 0.4557,
+          "num": 36,
+          "den": 79
+        },
+        "recall": {
+          "value": 0.766,
+          "num": 36,
+          "den": 47
+        },
+        "f1": 0.5714,
+        "ttc_mae": 0.27,
+        "fa_per_hour": 860.0,
+        "miss_per_hour": 220.0,
+        "idf1": 0.9428,
+        "n_emitted": 117,
+        "checks_pass": true,
+        "config_sha256": "5e7621f09db0feb1"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0106,
+          "num": 1,
+          "den": 94
+        },
+        "recall": {
+          "value": 0.0213,
+          "num": 1,
+          "den": 47
+        },
+        "f1": 0.0142,
+        "ttc_mae": 0.117,
+        "fa_per_hour": 1860.0,
+        "miss_per_hour": 920.0,
+        "idf1": 0.0586,
+        "n_emitted": 367,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.3776,
+          "num": 37,
+          "den": 98
+        },
+        "recall": {
+          "value": 0.7872,
+          "num": 37,
+          "den": 47
+        },
+        "f1": 0.5104,
+        "ttc_mae": 0.27,
+        "fa_per_hour": 1220.0,
+        "miss_per_hour": 200.0,
+        "idf1": 0.9428,
+        "n_emitted": 143,
+        "checks_pass": true,
+        "config_sha256": "c55244272f46c424"
+      }
+    },
+    {
+      "density": "vua",
+      "arrival_rate": 1.1,
+      "camera": "cao_18m",
+      "light": "dem_mua",
+      "noise_px": 5.0,
+      "miss_rate": 0.25,
+      "n_gt": 47,
+      "full": {
+        "precision": {
+          "value": 0.45,
+          "num": 36,
+          "den": 80
+        },
+        "recall": {
+          "value": 0.766,
+          "num": 36,
+          "den": 47
+        },
+        "f1": 0.5669,
+        "ttc_mae": 0.2954,
+        "fa_per_hour": 880.0,
+        "miss_per_hour": 220.0,
+        "idf1": 0.848,
+        "n_emitted": 112,
+        "checks_pass": true,
+        "config_sha256": "5e7621f09db0feb1"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 96
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 47
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 1920.0,
+        "miss_per_hour": 940.0,
+        "idf1": 0.0532,
+        "n_emitted": 424,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.3663,
+          "num": 37,
+          "den": 101
+        },
+        "recall": {
+          "value": 0.7872,
+          "num": 37,
+          "den": 47
+        },
+        "f1": 0.5,
+        "ttc_mae": 0.2954,
+        "fa_per_hour": 1280.0,
+        "miss_per_hour": 200.0,
+        "idf1": 0.848,
+        "n_emitted": 145,
+        "checks_pass": true,
+        "config_sha256": "c55244272f46c424"
+      }
+    },
+    {
+      "density": "vua",
+      "arrival_rate": 1.1,
+      "camera": "thap_10m",
+      "light": "ngay",
+      "noise_px": 1.5,
+      "miss_rate": 0.03,
+      "n_gt": 47,
+      "full": {
+        "precision": {
+          "value": 0.527,
+          "num": 39,
+          "den": 74
+        },
+        "recall": {
+          "value": 0.8298,
+          "num": 39,
+          "den": 47
+        },
+        "f1": 0.6446,
+        "ttc_mae": 0.3021,
+        "fa_per_hour": 700.0,
+        "miss_per_hour": 160.0,
+        "idf1": 0.982,
+        "n_emitted": 93,
+        "checks_pass": true,
+        "config_sha256": "6deff09c4ebef796"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 46
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 47
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 920.0,
+        "miss_per_hour": 940.0,
+        "idf1": 0.0454,
+        "n_emitted": 185,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.4483,
+          "num": 39,
+          "den": 87
+        },
+        "recall": {
+          "value": 0.8298,
+          "num": 39,
+          "den": 47
+        },
+        "f1": 0.5821,
+        "ttc_mae": 0.3021,
+        "fa_per_hour": 960.0,
+        "miss_per_hour": 160.0,
+        "idf1": 0.982,
+        "n_emitted": 110,
+        "checks_pass": true,
+        "config_sha256": "90259ba88e630ebe"
+      }
+    },
+    {
+      "density": "vua",
+      "arrival_rate": 1.1,
+      "camera": "thap_10m",
+      "light": "chang_vang",
+      "noise_px": 3.0,
+      "miss_rate": 0.1,
+      "n_gt": 47,
+      "full": {
+        "precision": {
+          "value": 0.4928,
+          "num": 34,
+          "den": 69
+        },
+        "recall": {
+          "value": 0.7234,
+          "num": 34,
+          "den": 47
+        },
+        "f1": 0.5862,
+        "ttc_mae": 0.333,
+        "fa_per_hour": 700.0,
+        "miss_per_hour": 260.0,
+        "idf1": 0.9416,
+        "n_emitted": 96,
+        "checks_pass": true,
+        "config_sha256": "6deff09c4ebef796"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 55
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 47
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 1100.0,
+        "miss_per_hour": 940.0,
+        "idf1": 0.0439,
+        "n_emitted": 256,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.382,
+          "num": 34,
+          "den": 89
+        },
+        "recall": {
+          "value": 0.7234,
+          "num": 34,
+          "den": 47
+        },
+        "f1": 0.5,
+        "ttc_mae": 0.333,
+        "fa_per_hour": 1100.0,
+        "miss_per_hour": 260.0,
+        "idf1": 0.9416,
+        "n_emitted": 119,
+        "checks_pass": true,
+        "config_sha256": "90259ba88e630ebe"
+      }
+    },
+    {
+      "density": "vua",
+      "arrival_rate": 1.1,
+      "camera": "thap_10m",
+      "light": "dem_mua",
+      "noise_px": 5.0,
+      "miss_rate": 0.25,
+      "n_gt": 47,
+      "full": {
+        "precision": {
+          "value": 0.4571,
+          "num": 32,
+          "den": 70
+        },
+        "recall": {
+          "value": 0.6809,
+          "num": 32,
+          "den": 47
+        },
+        "f1": 0.547,
+        "ttc_mae": 0.2909,
+        "fa_per_hour": 760.0,
+        "miss_per_hour": 300.0,
+        "idf1": 0.8458,
+        "n_emitted": 99,
+        "checks_pass": true,
+        "config_sha256": "6deff09c4ebef796"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 68
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 47
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 1360.0,
+        "miss_per_hour": 940.0,
+        "idf1": 0.04,
+        "n_emitted": 299,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.3736,
+          "num": 34,
+          "den": 91
+        },
+        "recall": {
+          "value": 0.7234,
+          "num": 34,
+          "den": 47
+        },
+        "f1": 0.4927,
+        "ttc_mae": 0.2909,
+        "fa_per_hour": 1140.0,
+        "miss_per_hour": 260.0,
+        "idf1": 0.8458,
+        "n_emitted": 126,
+        "checks_pass": true,
+        "config_sha256": "90259ba88e630ebe"
+      }
+    },
+    {
+      "density": "vua",
+      "arrival_rate": 1.1,
+      "camera": "xien_45",
+      "light": "ngay",
+      "noise_px": 1.5,
+      "miss_rate": 0.03,
+      "n_gt": 47,
+      "full": {
+        "precision": {
+          "value": 0.4868,
+          "num": 37,
+          "den": 76
+        },
+        "recall": {
+          "value": 0.7872,
+          "num": 37,
+          "den": 47
+        },
+        "f1": 0.6016,
+        "ttc_mae": 0.2305,
+        "fa_per_hour": 780.0,
+        "miss_per_hour": 200.0,
+        "idf1": 0.9829,
+        "n_emitted": 116,
+        "checks_pass": true,
+        "config_sha256": "d01a54cbda5090bc"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 36
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 47
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 720.0,
+        "miss_per_hour": 940.0,
+        "idf1": 0.0297,
+        "n_emitted": 163,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.3939,
+          "num": 39,
+          "den": 99
+        },
+        "recall": {
+          "value": 0.8298,
+          "num": 39,
+          "den": 47
+        },
+        "f1": 0.5342,
+        "ttc_mae": 0.2305,
+        "fa_per_hour": 1200.0,
+        "miss_per_hour": 160.0,
+        "idf1": 0.9829,
+        "n_emitted": 141,
+        "checks_pass": true,
+        "config_sha256": "4dbecff9d3661be1"
+      }
+    },
+    {
+      "density": "vua",
+      "arrival_rate": 1.1,
+      "camera": "xien_45",
+      "light": "chang_vang",
+      "noise_px": 3.0,
+      "miss_rate": 0.1,
+      "n_gt": 47,
+      "full": {
+        "precision": {
+          "value": 0.5067,
+          "num": 38,
+          "den": 75
+        },
+        "recall": {
+          "value": 0.8085,
+          "num": 38,
+          "den": 47
+        },
+        "f1": 0.623,
+        "ttc_mae": 0.2663,
+        "fa_per_hour": 740.0,
+        "miss_per_hour": 180.0,
+        "idf1": 0.9443,
+        "n_emitted": 107,
+        "checks_pass": true,
+        "config_sha256": "d01a54cbda5090bc"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 32
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 47
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 640.0,
+        "miss_per_hour": 940.0,
+        "idf1": 0.0283,
+        "n_emitted": 239,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.4167,
+          "num": 40,
+          "den": 96
+        },
+        "recall": {
+          "value": 0.8511,
+          "num": 40,
+          "den": 47
+        },
+        "f1": 0.5595,
+        "ttc_mae": 0.2663,
+        "fa_per_hour": 1120.0,
+        "miss_per_hour": 140.0,
+        "idf1": 0.9443,
+        "n_emitted": 133,
+        "checks_pass": true,
+        "config_sha256": "4dbecff9d3661be1"
+      }
+    },
+    {
+      "density": "vua",
+      "arrival_rate": 1.1,
+      "camera": "xien_45",
+      "light": "dem_mua",
+      "noise_px": 5.0,
+      "miss_rate": 0.25,
+      "n_gt": 47,
+      "full": {
+        "precision": {
+          "value": 0.4865,
+          "num": 36,
+          "den": 74
+        },
+        "recall": {
+          "value": 0.766,
+          "num": 36,
+          "den": 47
+        },
+        "f1": 0.5951,
+        "ttc_mae": 0.308,
+        "fa_per_hour": 760.0,
+        "miss_per_hour": 220.0,
+        "idf1": 0.8524,
+        "n_emitted": 113,
+        "checks_pass": true,
+        "config_sha256": "d01a54cbda5090bc"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0,
+          "num": 0,
+          "den": 47
+        },
+        "recall": {
+          "value": 0.0,
+          "num": 0,
+          "den": 47
+        },
+        "f1": 0.0,
+        "ttc_mae": null,
+        "fa_per_hour": 940.0,
+        "miss_per_hour": 940.0,
+        "idf1": 0.0262,
+        "n_emitted": 295,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.3895,
+          "num": 37,
+          "den": 95
+        },
+        "recall": {
+          "value": 0.7872,
+          "num": 37,
+          "den": 47
+        },
+        "f1": 0.5211,
+        "ttc_mae": 0.308,
+        "fa_per_hour": 1160.0,
+        "miss_per_hour": 200.0,
+        "idf1": 0.8524,
+        "n_emitted": 141,
+        "checks_pass": true,
+        "config_sha256": "4dbecff9d3661be1"
+      }
+    },
+    {
+      "density": "dong",
+      "arrival_rate": 1.6,
+      "camera": "cao_18m",
+      "light": "ngay",
+      "noise_px": 1.5,
+      "miss_rate": 0.03,
+      "n_gt": 61,
+      "full": {
+        "precision": {
+          "value": 0.4819,
+          "num": 40,
+          "den": 83
+        },
+        "recall": {
+          "value": 0.6557,
+          "num": 40,
+          "den": 61
+        },
+        "f1": 0.5555,
+        "ttc_mae": 0.2296,
+        "fa_per_hour": 860.0,
+        "miss_per_hour": 420.0,
+        "idf1": 0.9826,
+        "n_emitted": 132,
+        "checks_pass": true,
+        "config_sha256": "5e7621f09db0feb1"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0211,
+          "num": 2,
+          "den": 95
+        },
+        "recall": {
+          "value": 0.0328,
+          "num": 2,
+          "den": 61
+        },
+        "f1": 0.0257,
+        "ttc_mae": 1.286,
+        "fa_per_hour": 1860.0,
+        "miss_per_hour": 1180.0,
+        "idf1": 0.0656,
+        "n_emitted": 368,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.41,
+          "num": 41,
+          "den": 100
+        },
+        "recall": {
+          "value": 0.6721,
+          "num": 41,
+          "den": 61
+        },
+        "f1": 0.5093,
+        "ttc_mae": 0.2296,
+        "fa_per_hour": 1180.0,
+        "miss_per_hour": 400.0,
+        "idf1": 0.9826,
+        "n_emitted": 149,
+        "checks_pass": true,
+        "config_sha256": "c55244272f46c424"
+      }
+    },
+    {
+      "density": "dong",
+      "arrival_rate": 1.6,
+      "camera": "cao_18m",
+      "light": "chang_vang",
+      "noise_px": 3.0,
+      "miss_rate": 0.1,
+      "n_gt": 61,
+      "full": {
+        "precision": {
+          "value": 0.5057,
+          "num": 44,
+          "den": 87
+        },
+        "recall": {
+          "value": 0.7213,
+          "num": 44,
+          "den": 61
+        },
+        "f1": 0.5946,
+        "ttc_mae": 0.2651,
+        "fa_per_hour": 860.0,
+        "miss_per_hour": 340.0,
+        "idf1": 0.9432,
+        "n_emitted": 155,
+        "checks_pass": true,
+        "config_sha256": "5e7621f09db0feb1"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0194,
+          "num": 2,
+          "den": 103
+        },
+        "recall": {
+          "value": 0.0328,
+          "num": 2,
+          "den": 61
+        },
+        "f1": 0.0244,
+        "ttc_mae": 0.933,
+        "fa_per_hour": 2020.0,
+        "miss_per_hour": 1180.0,
+        "idf1": 0.0648,
+        "n_emitted": 515,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.4314,
+          "num": 44,
+          "den": 102
+        },
+        "recall": {
+          "value": 0.7213,
+          "num": 44,
+          "den": 61
+        },
+        "f1": 0.5399,
+        "ttc_mae": 0.2651,
+        "fa_per_hour": 1160.0,
+        "miss_per_hour": 340.0,
+        "idf1": 0.9432,
+        "n_emitted": 177,
+        "checks_pass": true,
+        "config_sha256": "c55244272f46c424"
+      }
+    },
+    {
+      "density": "dong",
+      "arrival_rate": 1.6,
+      "camera": "cao_18m",
+      "light": "dem_mua",
+      "noise_px": 5.0,
+      "miss_rate": 0.25,
+      "n_gt": 61,
+      "full": {
+        "precision": {
+          "value": 0.5059,
+          "num": 43,
+          "den": 85
+        },
+        "recall": {
+          "value": 0.7049,
+          "num": 43,
+          "den": 61
+        },
+        "f1": 0.589,
+        "ttc_mae": 0.2645,
+        "fa_per_hour": 840.0,
+        "miss_per_hour": 360.0,
+        "idf1": 0.8494,
+        "n_emitted": 172,
+        "checks_pass": true,
+        "config_sha256": "5e7621f09db0feb1"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0275,
+          "num": 3,
+          "den": 109
+        },
+        "recall": {
+          "value": 0.0492,
+          "num": 3,
+          "den": 61
+        },
+        "f1": 0.0353,
+        "ttc_mae": 0.6177,
+        "fa_per_hour": 2120.0,
+        "miss_per_hour": 1160.0,
+        "idf1": 0.0609,
+        "n_emitted": 583,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.419,
+          "num": 44,
+          "den": 105
+        },
+        "recall": {
+          "value": 0.7213,
+          "num": 44,
+          "den": 61
+        },
+        "f1": 0.5301,
+        "ttc_mae": 0.2645,
+        "fa_per_hour": 1220.0,
+        "miss_per_hour": 340.0,
+        "idf1": 0.8494,
+        "n_emitted": 197,
+        "checks_pass": true,
+        "config_sha256": "c55244272f46c424"
+      }
+    },
+    {
+      "density": "dong",
+      "arrival_rate": 1.6,
+      "camera": "thap_10m",
+      "light": "ngay",
+      "noise_px": 1.5,
+      "miss_rate": 0.03,
+      "n_gt": 61,
+      "full": {
+        "precision": {
+          "value": 0.5714,
+          "num": 48,
+          "den": 84
+        },
+        "recall": {
+          "value": 0.7869,
+          "num": 48,
+          "den": 61
+        },
+        "f1": 0.6621,
+        "ttc_mae": 0.3444,
+        "fa_per_hour": 720.0,
+        "miss_per_hour": 260.0,
+        "idf1": 0.9821,
+        "n_emitted": 136,
+        "checks_pass": true,
+        "config_sha256": "6deff09c4ebef796"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0312,
+          "num": 2,
+          "den": 64
+        },
+        "recall": {
+          "value": 0.0328,
+          "num": 2,
+          "den": 61
+        },
+        "f1": 0.032,
+        "ttc_mae": 0.5055,
+        "fa_per_hour": 1240.0,
+        "miss_per_hour": 1180.0,
+        "idf1": 0.0395,
+        "n_emitted": 279,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.5104,
+          "num": 49,
+          "den": 96
+        },
+        "recall": {
+          "value": 0.8033,
+          "num": 49,
+          "den": 61
+        },
+        "f1": 0.6242,
+        "ttc_mae": 0.3444,
+        "fa_per_hour": 940.0,
+        "miss_per_hour": 240.0,
+        "idf1": 0.9821,
+        "n_emitted": 149,
+        "checks_pass": true,
+        "config_sha256": "90259ba88e630ebe"
+      }
+    },
+    {
+      "density": "dong",
+      "arrival_rate": 1.6,
+      "camera": "thap_10m",
+      "light": "chang_vang",
+      "noise_px": 3.0,
+      "miss_rate": 0.1,
+      "n_gt": 61,
+      "full": {
+        "precision": {
+          "value": 0.5,
+          "num": 42,
+          "den": 84
+        },
+        "recall": {
+          "value": 0.6885,
+          "num": 42,
+          "den": 61
+        },
+        "f1": 0.5793,
+        "ttc_mae": 0.4092,
+        "fa_per_hour": 840.0,
+        "miss_per_hour": 380.0,
+        "idf1": 0.9425,
+        "n_emitted": 151,
+        "checks_pass": true,
+        "config_sha256": "6deff09c4ebef796"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0141,
+          "num": 1,
+          "den": 71
+        },
+        "recall": {
+          "value": 0.0164,
+          "num": 1,
+          "den": 61
+        },
+        "f1": 0.0152,
+        "ttc_mae": 0.105,
+        "fa_per_hour": 1400.0,
+        "miss_per_hour": 1200.0,
+        "idf1": 0.0387,
+        "n_emitted": 386,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.4135,
+          "num": 43,
+          "den": 104
+        },
+        "recall": {
+          "value": 0.7049,
+          "num": 43,
+          "den": 61
+        },
+        "f1": 0.5212,
+        "ttc_mae": 0.4092,
+        "fa_per_hour": 1220.0,
+        "miss_per_hour": 360.0,
+        "idf1": 0.9425,
+        "n_emitted": 172,
+        "checks_pass": true,
+        "config_sha256": "90259ba88e630ebe"
+      }
+    },
+    {
+      "density": "dong",
+      "arrival_rate": 1.6,
+      "camera": "thap_10m",
+      "light": "dem_mua",
+      "noise_px": 5.0,
+      "miss_rate": 0.25,
+      "n_gt": 61,
+      "full": {
+        "precision": {
+          "value": 0.4667,
+          "num": 42,
+          "den": 90
+        },
+        "recall": {
+          "value": 0.6885,
+          "num": 42,
+          "den": 61
+        },
+        "f1": 0.5563,
+        "ttc_mae": 0.2394,
+        "fa_per_hour": 960.0,
+        "miss_per_hour": 380.0,
+        "idf1": 0.8485,
+        "n_emitted": 159,
+        "checks_pass": true,
+        "config_sha256": "6deff09c4ebef796"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0308,
+          "num": 2,
+          "den": 65
+        },
+        "recall": {
+          "value": 0.0328,
+          "num": 2,
+          "den": 61
+        },
+        "f1": 0.0318,
+        "ttc_mae": 0.381,
+        "fa_per_hour": 1260.0,
+        "miss_per_hour": 1180.0,
+        "idf1": 0.0358,
+        "n_emitted": 420,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.4158,
+          "num": 42,
+          "den": 101
+        },
+        "recall": {
+          "value": 0.6885,
+          "num": 42,
+          "den": 61
+        },
+        "f1": 0.5185,
+        "ttc_mae": 0.2394,
+        "fa_per_hour": 1180.0,
+        "miss_per_hour": 380.0,
+        "idf1": 0.8485,
+        "n_emitted": 175,
+        "checks_pass": true,
+        "config_sha256": "90259ba88e630ebe"
+      }
+    },
+    {
+      "density": "dong",
+      "arrival_rate": 1.6,
+      "camera": "xien_45",
+      "light": "ngay",
+      "noise_px": 1.5,
+      "miss_rate": 0.03,
+      "n_gt": 61,
+      "full": {
+        "precision": {
+          "value": 0.5222,
+          "num": 47,
+          "den": 90
+        },
+        "recall": {
+          "value": 0.7705,
+          "num": 47,
+          "den": 61
+        },
+        "f1": 0.6225,
+        "ttc_mae": 0.3243,
+        "fa_per_hour": 860.0,
+        "miss_per_hour": 280.0,
+        "idf1": 0.9828,
+        "n_emitted": 175,
+        "checks_pass": true,
+        "config_sha256": "d01a54cbda5090bc"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0278,
+          "num": 1,
+          "den": 36
+        },
+        "recall": {
+          "value": 0.0164,
+          "num": 1,
+          "den": 61
+        },
+        "f1": 0.0206,
+        "ttc_mae": 0.022,
+        "fa_per_hour": 700.0,
+        "miss_per_hour": 1200.0,
+        "idf1": 0.0368,
+        "n_emitted": 203,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.4434,
+          "num": 47,
+          "den": 106
+        },
+        "recall": {
+          "value": 0.7705,
+          "num": 47,
+          "den": 61
+        },
+        "f1": 0.5629,
+        "ttc_mae": 0.3243,
+        "fa_per_hour": 1180.0,
+        "miss_per_hour": 280.0,
+        "idf1": 0.9828,
+        "n_emitted": 198,
+        "checks_pass": true,
+        "config_sha256": "4dbecff9d3661be1"
+      }
+    },
+    {
+      "density": "dong",
+      "arrival_rate": 1.6,
+      "camera": "xien_45",
+      "light": "chang_vang",
+      "noise_px": 3.0,
+      "miss_rate": 0.1,
+      "n_gt": 61,
+      "full": {
+        "precision": {
+          "value": 0.5056,
+          "num": 45,
+          "den": 89
+        },
+        "recall": {
+          "value": 0.7377,
+          "num": 45,
+          "den": 61
+        },
+        "f1": 0.6,
+        "ttc_mae": 0.3465,
+        "fa_per_hour": 880.0,
+        "miss_per_hour": 320.0,
+        "idf1": 0.9439,
+        "n_emitted": 181,
+        "checks_pass": true,
+        "config_sha256": "d01a54cbda5090bc"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0286,
+          "num": 1,
+          "den": 35
+        },
+        "recall": {
+          "value": 0.0164,
+          "num": 1,
+          "den": 61
+        },
+        "f1": 0.0208,
+        "ttc_mae": 1.641,
+        "fa_per_hour": 680.0,
+        "miss_per_hour": 1200.0,
+        "idf1": 0.0357,
+        "n_emitted": 282,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.4018,
+          "num": 45,
+          "den": 112
+        },
+        "recall": {
+          "value": 0.7377,
+          "num": 45,
+          "den": 61
+        },
+        "f1": 0.5202,
+        "ttc_mae": 0.3465,
+        "fa_per_hour": 1340.0,
+        "miss_per_hour": 320.0,
+        "idf1": 0.9439,
+        "n_emitted": 220,
+        "checks_pass": true,
+        "config_sha256": "4dbecff9d3661be1"
+      }
+    },
+    {
+      "density": "dong",
+      "arrival_rate": 1.6,
+      "camera": "xien_45",
+      "light": "dem_mua",
+      "noise_px": 5.0,
+      "miss_rate": 0.25,
+      "n_gt": 61,
+      "full": {
+        "precision": {
+          "value": 0.5114,
+          "num": 45,
+          "den": 88
+        },
+        "recall": {
+          "value": 0.7377,
+          "num": 45,
+          "den": 61
+        },
+        "f1": 0.6041,
+        "ttc_mae": 0.2302,
+        "fa_per_hour": 860.0,
+        "miss_per_hour": 320.0,
+        "idf1": 0.8518,
+        "n_emitted": 186,
+        "checks_pass": true,
+        "config_sha256": "d01a54cbda5090bc"
+      },
+      "baseline": {
+        "precision": {
+          "value": 0.0227,
+          "num": 1,
+          "den": 44
+        },
+        "recall": {
+          "value": 0.0164,
+          "num": 1,
+          "den": 61
+        },
+        "f1": 0.019,
+        "ttc_mae": 1.139,
+        "fa_per_hour": 860.0,
+        "miss_per_hour": 1200.0,
+        "idf1": 0.0318,
+        "n_emitted": 346,
+        "checks_pass": true,
+        "config_sha256": "c00e7d2b23bf722c"
+      },
+      "old_pet": {
+        "precision": {
+          "value": 0.4455,
+          "num": 45,
+          "den": 101
+        },
+        "recall": {
+          "value": 0.7377,
+          "num": 45,
+          "den": 61
+        },
+        "f1": 0.5555,
+        "ttc_mae": 0.2302,
+        "fa_per_hour": 1120.0,
+        "miss_per_hour": 320.0,
+        "idf1": 0.8518,
+        "n_emitted": 212,
+        "checks_pass": true,
+        "config_sha256": "4dbecff9d3661be1"
+      }
+    }
+  ],
+  "scenarios": {
+    "thua/cao_18m": {
+      "n_scheduled": 131,
+      "n_spawned": 114,
+      "n_dropped_at_entry": 7,
+      "n_with_trajectory": 114,
+      "n_completed_route": 83,
+      "n_still_on_road_at_end": 23,
+      "n_crashes": 4,
+      "n_vehicles_in_crash": 8,
+      "n_runs_red": 14,
+      "n_turning": 40,
+      "gt_outside_camera_view": 0,
+      "n_gt": 15,
+      "n_gt_collision": 1
+    },
+    "thua/thap_10m": {
+      "n_scheduled": 131,
+      "n_spawned": 114,
+      "n_dropped_at_entry": 7,
+      "n_with_trajectory": 114,
+      "n_completed_route": 83,
+      "n_still_on_road_at_end": 23,
+      "n_crashes": 4,
+      "n_vehicles_in_crash": 8,
+      "n_runs_red": 14,
+      "n_turning": 40,
+      "gt_outside_camera_view": 0,
+      "n_gt": 15,
+      "n_gt_collision": 1
+    },
+    "thua/xien_45": {
+      "n_scheduled": 131,
+      "n_spawned": 114,
+      "n_dropped_at_entry": 7,
+      "n_with_trajectory": 114,
+      "n_completed_route": 83,
+      "n_still_on_road_at_end": 23,
+      "n_crashes": 4,
+      "n_vehicles_in_crash": 8,
+      "n_runs_red": 14,
+      "n_turning": 40,
+      "gt_outside_camera_view": 0,
+      "n_gt": 15,
+      "n_gt_collision": 1
+    },
+    "vua/cao_18m": {
+      "n_scheduled": 221,
+      "n_spawned": 177,
+      "n_dropped_at_entry": 36,
+      "n_with_trajectory": 177,
+      "n_completed_route": 129,
+      "n_still_on_road_at_end": 25,
+      "n_crashes": 12,
+      "n_vehicles_in_crash": 25,
+      "n_runs_red": 28,
+      "n_turning": 63,
+      "gt_outside_camera_view": 0,
+      "n_gt": 47,
+      "n_gt_collision": 5
+    },
+    "vua/thap_10m": {
+      "n_scheduled": 221,
+      "n_spawned": 177,
+      "n_dropped_at_entry": 36,
+      "n_with_trajectory": 177,
+      "n_completed_route": 129,
+      "n_still_on_road_at_end": 25,
+      "n_crashes": 12,
+      "n_vehicles_in_crash": 25,
+      "n_runs_red": 28,
+      "n_turning": 63,
+      "gt_outside_camera_view": 0,
+      "n_gt": 47,
+      "n_gt_collision": 5
+    },
+    "vua/xien_45": {
+      "n_scheduled": 221,
+      "n_spawned": 177,
+      "n_dropped_at_entry": 36,
+      "n_with_trajectory": 177,
+      "n_completed_route": 129,
+      "n_still_on_road_at_end": 25,
+      "n_crashes": 12,
+      "n_vehicles_in_crash": 25,
+      "n_runs_red": 28,
+      "n_turning": 63,
+      "gt_outside_camera_view": 0,
+      "n_gt": 47,
+      "n_gt_collision": 5
+    },
+    "dong/cao_18m": {
+      "n_scheduled": 307,
+      "n_spawned": 231,
+      "n_dropped_at_entry": 52,
+      "n_with_trajectory": 231,
+      "n_completed_route": 146,
+      "n_still_on_road_at_end": 29,
+      "n_crashes": 27,
+      "n_vehicles_in_crash": 56,
+      "n_runs_red": 28,
+      "n_turning": 82,
+      "gt_outside_camera_view": 0,
+      "n_gt": 61,
+      "n_gt_collision": 14
+    },
+    "dong/thap_10m": {
+      "n_scheduled": 307,
+      "n_spawned": 231,
+      "n_dropped_at_entry": 52,
+      "n_with_trajectory": 231,
+      "n_completed_route": 146,
+      "n_still_on_road_at_end": 29,
+      "n_crashes": 27,
+      "n_vehicles_in_crash": 56,
+      "n_runs_red": 28,
+      "n_turning": 82,
+      "gt_outside_camera_view": 0,
+      "n_gt": 61,
+      "n_gt_collision": 14
+    },
+    "dong/xien_45": {
+      "n_scheduled": 307,
+      "n_spawned": 231,
+      "n_dropped_at_entry": 52,
+      "n_with_trajectory": 231,
+      "n_completed_route": 146,
+      "n_still_on_road_at_end": 29,
+      "n_crashes": 27,
+      "n_vehicles_in_crash": 56,
+      "n_runs_red": 28,
+      "n_turning": 82,
+      "gt_outside_camera_view": 0,
+      "n_gt": 61,
+      "n_gt_collision": 14
+    }
+  },
+  "params": {
+    "duration": 180.0,
+    "seed": 7,
+    "densities": {
+      "thua": 0.6,
+      "vua": 1.1,
+      "dong": 1.6
+    },
+    "cameras": [
+      "cao_18m",
+      "thap_10m",
+      "xien_45"
+    ],
+    "lights": {
+      "ngay": [
+        1.5,
+        0.03
+      ],
+      "chang_vang": [
+        3.0,
+        0.1
+      ],
+      "dem_mua": [
+        5.0,
+        0.25
+      ]
+    }
+  },
+  "reproducibility": {
+    "command": "saferoad evaluate-grid --out /tmp/repro_out/evaluation_grid.json",
+    "git_commit": "476ab01",
+    "config_sha256": "5de676d807f38fa5",
+    "config": {
+      "site": {
+        "name": "Giao lộ mô phỏng (benchmark có ground truth)",
+        "short_name": "Synthetic",
+        "camera_height_m": 12.0,
+        "approaches": [
+          "Hướng 1",
+          "Hướng 2",
+          "Hướng 3",
+          "Hướng 4"
+        ],
+        "lanes": 3
+      },
+      "video": {
+        "source": "data/samples/synthetic_intersection.mp4",
+        "start_frame": 0,
+        "max_frames": 0,
+        "stride": 1,
+        "resize_width": 0,
+        "fps_override": 0.0,
+        "write_overlay": true,
+        "overlay_path": "data/outputs/overlay.mp4"
+      },
+      "detection": {
+        "weights": "models/yolo11n.pt",
+        "imgsz": 640,
+        "conf": 0.25,
+        "iou": 0.45,
+        "device": "cpu",
+        "quantize": null,
+        "max_det": 300,
+        "min_box_area": 150.0,
+        "backend": "yolo",
+        "tile_rows": 2,
+        "tile_cols": 3,
+        "tile_overlap": 0.25,
+        "tile_full_frame": true,
+        "tile_merge_iou": 0.55,
+        "replay_noise_px": 1.5,
+        "replay_miss_rate": 0.03,
+        "replay_seed": 17
+      },
+      "tracking": {
+        "track_high_thresh": 0.5,
+        "track_low_thresh": 0.1,
+        "new_track_thresh": 0.55,
+        "match_thresh": 0.8,
+        "track_buffer": 30,
+        "min_hits": 3,
+        "velocity_alpha": 0.35,
+        "min_states_for_velocity": 3,
+        "stationary_speed": 0.0,
+        "stationary_window_s": 2.0
+      },
+      "homography": {
+        "image_points": [
+          [
+            91.2530032408265,
+            748.4688796881617
+          ],
+          [
+            1188.7469967591735,
+            748.4688796881617
+          ],
+          [
+            916.9693809228736,
+            306.5257863904819
+          ],
+          [
+            363.03061907712635,
+            306.5257863904819
+          ]
+        ],
+        "world_points": [
+          [
+            -12.0,
+            16.0
+          ],
+          [
+            12.0,
+            16.0
+          ],
+          [
+            12.0,
+            44.0
+          ],
+          [
+            -12.0,
+            44.0
+          ]
+        ],
+        "fallback_scale": 0.05,
+        "smooth_window": 5
+      },
+      "conflict": {
+        "ttc_threshold": 3.0,
+        "pet_threshold": 1.5,
+        "max_pair_distance": 30.0,
+        "min_rel_speed": 3.0,
+        "proximity_gate": 3.0,
+        "min_abs_speed": 0.8,
+        "dedup_window": 3.0,
+        "horizon": 6.0,
+        "use_measured_pet": true,
+        "pet_lookback_s": 4.0,
+        "pet_max_wait_s": 4.0,
+        "pet_min_angle": 20.0,
+        "ignore_pedestrian_pairs": true,
+        "analysis_region_px": [],
+        "contact_settle_s": 2.0,
+        "episode_grouping": true,
+        "angle_rear_end": 30.0,
+        "angle_crossing_min": 60.0,
+        "angle_crossing_max": 120.0,
+        "angle_head_on": 150.0
+      },
+      "risk": {
+        "w_ttc": 0.52,
+        "w_pet": 0.32,
+        "w_rel_speed": 0.072,
+        "w_type": 0.38,
+        "w_time": 0.14,
+        "bias": -2.69,
+        "grid_size": 2.0,
+        "kernel_radius": 6.0,
+        "decay_tau": 900.0,
+        "top_k_hotspots": 5
+      },
+      "behavior": {
+        "enabled": true,
+        "model_path": "models/behavior_clf.joblib",
+        "harsh_brake": -3.5,
+        "harsh_accel": 3.0,
+        "sharp_turn_rate": 45.0,
+        "window": 15
+      },
+      "privacy": {
+        "enabled": false,
+        "blur_faces": true,
+        "blur_plates": true,
+        "blur_kernel": 31,
+        "face_ratio": 0.28,
+        "plate_band": [
+          0.55,
+          0.95
+        ]
+      },
+      "db_path": "data/outputs/saferoad.db",
+      "output_dir": "data/outputs"
+    },
+    "environment": {
+      "python": "3.13.18",
+      "os": "Linux",
+      "numpy": "2.5.3",
+      "opencv": "5.0.0",
+      "scikit_learn": "1.9.1"
+    }
+  }
+}

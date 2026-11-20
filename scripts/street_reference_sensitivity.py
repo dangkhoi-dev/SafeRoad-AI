@@ -10,7 +10,9 @@ các cấu hình tăng dần, để thấy số cảnh báo đến từ đâu:
   B. A + bỏ cặp hai người đi bộ (đúng quy ước của nhãn chuẩn protocol v2)
   C. B + chỉ xét phần mặt đường cách gốc hiệu chuẩn ≤ 65 m
   D. C + kẹp vận tốc xe đứng yên (xe đỗ / hàng chờ)
-  E. D + chỉ xét lòng đường đã hiệu chuẩn (cấu hình configs/street.yaml)
+  E. D + chỉ xét lòng đường đã hiệu chuẩn
+  F. E + cổng cùng làn: cặp đi gần song song phải lệch ngang < 1,75 m
+     (cấu hình configs/street.yaml)
 
 Kết quả: data/outputs/street_reference_sensitivity.json
 """
@@ -63,8 +65,9 @@ def main() -> int:
     seq, fps = bundle["sequence"], float(bundle.get("fps", 30.0))
     hours = seq.n_frames / fps / 3600.0
 
-    def variant(ped_pairs: bool, region, stationary: bool) -> Config:
+    def variant(ped_pairs: bool, region, stationary: bool, lane_gate: bool = False) -> Config:
         cfg = copy.deepcopy(base)
+        cfg.conflict.same_lane_gate = lane_gate
         cfg.conflict.ignore_pedestrian_pairs = not ped_pairs
         cfg.conflict.analysis_region_px = region
         cfg.tracking.stationary_speed = base.tracking.stationary_speed if stationary else 0.0
@@ -75,8 +78,10 @@ def main() -> int:
         ("B", "+ bỏ cặp hai người đi bộ", variant(False, [], False)),
         ("C", "+ chỉ xét mặt đường ≤ 65 m", variant(False, BAND_65M, False)),
         ("D", "+ kẹp vận tốc xe đứng yên", variant(False, BAND_65M, True)),
-        ("E", "+ chỉ lòng đường đã hiệu chuẩn (cấu hình dùng)",
+        ("E", "+ chỉ lòng đường đã hiệu chuẩn",
          variant(False, base.conflict.analysis_region_px, True)),
+        ("F", "+ cổng cùng làn (cấu hình dùng)",
+         variant(False, base.conflict.analysis_region_px, True, True)),
     ]
     rows = []
     for key, label, cfg in steps:

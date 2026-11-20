@@ -214,43 +214,43 @@
     "reference_contact": {},
     "system_contact": {},
     "reference_funnel": {
-      "episodes_opened": 3,
-      "rejected_proximity_gate": 3
+      "episodes_opened": 2,
+      "rejected_proximity_gate": 2
     },
     "system_statistics": {
       "total": 0
     },
-    "review_candidates_csv": "data/outputs/review_candidates_mvti_pretrained_test.csv",
+    "review_candidates_csv": "data/outputs/reruns/review_candidates_mvti_pretrained_test.csv",
     "n_review_candidates": 0
   },
   "runtime": {
     "n_frames": 741,
     "duration_s": 24.7,
     "fps_source": 30.0,
-    "processing_fps": 14.5,
-    "frame_latency_median_ms": 68.95,
-    "frame_latency_p95_ms": 91.54,
-    "wall_seconds": 56.01,
+    "processing_fps": 15.31,
+    "frame_latency_median_ms": 65.31,
+    "frame_latency_p95_ms": 78.65,
+    "wall_seconds": 49.13,
     "total_events": 0,
     "severe_events": 0,
     "avg_risk_score": 0.0,
     "n_tracks": 12,
     "by_type": {},
     "latency_ms": {
-      "detection": 73.53,
-      "tracking": 0.29,
-      "trajectory": 0.14,
-      "conflict": 0.06
+      "detection": 65.0,
+      "tracking": 0.27,
+      "trajectory": 0.13,
+      "conflict": 0.05
     },
-    "total_latency_ms": 74.01,
+    "total_latency_ms": 65.45,
     "homography_error_m": 2.312938447200457e-15,
     "detector": "YoloDetector",
     "event_funnel": {}
   },
   "reproducibility": {
-    "command": "saferoad evaluate-real --config configs/mvti.yaml --weights models/yolo11n.pt --no-db --no-overlay --start-frame 1700 --seen-before 1500 --out data/outputs/evaluation_mvti_pretrained_test.json",
-    "git_commit": "476ab01-dirty",
-    "config_sha256": "4de5e83aae1a5d39",
+    "command": "saferoad evaluate-real --config configs/mvti.yaml --weights models/yolo11n.pt --no-db --no-overlay --start-frame 1700 --seen-before 1500 --out /tmp/diag/v3/evaluation_mvti_pretrained_test.json",
+    "git_commit": "5249dcc-dirty",
+    "config_sha256": "d0d9ae0d5c6e8f40",
     "config": {
       "site": {
         "name": "Multi-view Traffic Intersection Dataset (camera hạ tầng)",
@@ -272,7 +272,7 @@
         "resize_width": 0,
         "fps_override": 0.0,
         "write_overlay": false,
-        "overlay_path": "data/outputs/overlay_mvti_pretrained_test.mp4"
+        "overlay_path": "/tmp/diag/v3/overlay_mvti_pretrained_test.mp4"
       },
       "detection": {
         "weights": "models/yolo11n.pt",
@@ -317,6 +317,8 @@
         "max_pair_distance": 30.0,
         "min_rel_speed": 3.0,
         "proximity_gate": 3.0,
+        "same_lane_gate": true,
+        "lateral_half_width_m": 1.75,
         "min_abs_speed": 0.8,
         "dedup_window": 3.0,
         "horizon": 6.0,
@@ -364,7 +366,7 @@
           0.95
         ]
       },
-      "db_path": "data/outputs/saferoad_mvti_pretrained_test.db",
+      "db_path": "/tmp/diag/v3/saferoad_mvti_pretrained_test.db",
       "output_dir": "data/outputs"
     },
     "environment": {

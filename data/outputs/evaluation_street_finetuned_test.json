@@ -125,40 +125,39 @@
   "alerts": {
     "metrics_vs_reference": {
       "precision": {
-        "value": 0.5,
-        "num": 1,
-        "den": 2
+        "value": null,
+        "num": 0,
+        "den": 0
       },
       "recall": {
-        "value": 1.0,
-        "num": 1,
-        "den": 1
+        "value": null,
+        "num": 0,
+        "den": 0
       },
-      "f1": 0.6667,
-      "ttc_mae": 1.313,
-      "ttc_mae_n": 1,
-      "time_mae": 0.935,
+      "f1": 0.0,
+      "ttc_mae": null,
+      "ttc_mae_n": 0,
+      "time_mae": null,
       "type_accuracy": {
-        "value": 1.0,
-        "num": 1,
-        "den": 1
+        "value": null,
+        "num": 0,
+        "den": 0
       }
     },
     "reconciliation": {
       "rows": {
-        "episodes_opened": 16,
-        "rejected_proximity_gate": 13,
-        "rejected_too_short": 1,
+        "episodes_opened": 12,
+        "rejected_proximity_gate": 12,
         "merged_into_previous": 0,
-        "emitted": 2,
-        "exported_to_results": 2,
+        "emitted": 0,
+        "exported_to_results": 0,
         "ignored_outside_eval_region": 0,
-        "scored": 2,
+        "scored": 0,
         "scored_unmapped_track_fp": 0,
-        "scored_mapped_fp": 1,
-        "scored_tp": 1,
-        "gt_total": 1,
-        "gt_matched_tp": 1,
+        "scored_mapped_fp": 0,
+        "scored_tp": 0,
+        "gt_total": 0,
+        "gt_matched_tp": 0,
         "gt_missed_fn": 0
       },
       "checks": {
@@ -170,89 +169,59 @@
       },
       "all_checks_pass": true,
       "per_hour": {
-        "false_alarms_per_hour": 44.8,
+        "false_alarms_per_hour": 0.0,
         "misses_per_hour": 0.0,
-        "alerts_per_hour": 89.7,
+        "alerts_per_hour": 0.0,
         "hours": 0.0223
       }
     },
-    "n_reference": 1,
-    "reference_contact": {
-      "near_miss": 1
-    },
-    "system_contact": {
-      "near_miss": 2
-    },
+    "n_reference": 0,
+    "reference_contact": {},
+    "system_contact": {},
     "reference_funnel": {
-      "episodes_opened": 79,
-      "rejected_proximity_gate": 72,
-      "emitted": 2,
-      "rejected_too_short": 2,
+      "episodes_opened": 61,
+      "rejected_proximity_gate": 56,
+      "emitted": 1,
+      "rejected_too_short": 1,
       "rejected_pet_measured_above_threshold": 3
     },
     "system_statistics": {
-      "total": 2,
-      "severe_ttc_lt_1_5": 2,
-      "by_type": {
-        "rear_end": 2
-      },
-      "by_level": {
-        "low": 2
-      },
-      "ttc": {
-        "min": 1.155,
-        "p25": 1.173,
-        "median": 1.19,
-        "p75": 1.208,
-        "max": 1.225
-      },
-      "pet": null,
-      "risk_score": {
-        "min": 13.2,
-        "p25": 13.35,
-        "median": 13.5,
-        "p75": 13.65,
-        "max": 13.8
-      }
+      "total": 0
     },
-    "review_candidates_csv": "/tmp/repro_out/review_candidates_street_finetuned_test.csv",
-    "n_review_candidates": 3
+    "review_candidates_csv": "data/outputs/reruns/review_candidates_street_finetuned_test.csv",
+    "n_review_candidates": 0
   },
   "runtime": {
     "n_frames": 2409,
     "duration_s": 80.3,
     "fps_source": 30.0,
-    "processing_fps": 12.85,
-    "frame_latency_median_ms": 77.81,
-    "frame_latency_p95_ms": 102.47,
-    "wall_seconds": 371.18,
-    "total_events": 2,
-    "severe_events": 2,
-    "avg_risk_score": 13.5,
+    "processing_fps": 13.67,
+    "frame_latency_median_ms": 73.18,
+    "frame_latency_p95_ms": 95.41,
+    "wall_seconds": 276.74,
+    "total_events": 0,
+    "severe_events": 0,
+    "avg_risk_score": 0.0,
     "n_tracks": 212,
-    "by_type": {
-      "rear_end": 2
-    },
+    "by_type": {},
     "latency_ms": {
-      "detection": 74.37,
-      "tracking": 3.93,
-      "trajectory": 3.22,
-      "conflict": 0.4
+      "detection": 67.87,
+      "tracking": 3.46,
+      "trajectory": 2.83,
+      "conflict": 0.31
     },
-    "total_latency_ms": 81.91,
+    "total_latency_ms": 74.47,
     "homography_error_m": 0.2295198291540146,
     "detector": "YoloDetector",
     "event_funnel": {
-      "episodes_opened": 16,
-      "rejected_proximity_gate": 13,
-      "rejected_too_short": 1,
-      "emitted": 2
+      "episodes_opened": 12,
+      "rejected_proximity_gate": 12
     }
   },
   "reproducibility": {
-    "command": "saferoad evaluate-real --config configs/street.yaml --weights models/saferoad_street_yolo11n.pt --start-frame 6600 --no-db --no-overlay --source data/processed/street/street_labeled_0_300s.mp4 --ground-truth data/processed/street/street_groundtruth.pkl --calibration-report data/outputs/calibration_street.json --out /tmp/repro_out/evaluation_street_finetuned_test.json",
-    "git_commit": "476ab01",
-    "config_sha256": "b2b0fdfa005263bc",
+    "command": "saferoad evaluate-real --config configs/street.yaml --weights models/saferoad_street_yolo11n.pt --start-frame 6600 --no-db --no-overlay --source data/processed/street/street_labeled_0_300s.mp4 --ground-truth data/processed/street/street_groundtruth.pkl --calibration-report data/outputs/calibration_street.json --out /tmp/diag/v3/evaluation_street_finetuned_test.json",
+    "git_commit": "5249dcc-dirty",
+    "config_sha256": "b07ba604b03d16ff",
     "config": {
       "site": {
         "name": "Đại lộ nhiều làn - video Kaggle quay từ mái nhà (iPhone 13, 4K→1080p)",
@@ -272,7 +241,7 @@
         "resize_width": 0,
         "fps_override": 0.0,
         "write_overlay": false,
-        "overlay_path": "/tmp/repro_out/overlay_street_finetuned_test.mp4"
+        "overlay_path": "/tmp/diag/v3/overlay_street_finetuned_test.mp4"
       },
       "detection": {
         "weights": "models/saferoad_street_yolo11n.pt",
@@ -447,6 +416,8 @@
         "max_pair_distance": 30.0,
         "min_rel_speed": 3.0,
         "proximity_gate": 3.0,
+        "same_lane_gate": true,
+        "lateral_half_width_m": 1.75,
         "min_abs_speed": 0.8,
         "dedup_window": 3.0,
         "horizon": 6.0,
@@ -511,7 +482,7 @@
           0.95
         ]
       },
-      "db_path": "/tmp/repro_out/saferoad_street_finetuned_test.db",
+      "db_path": "/tmp/diag/v3/saferoad_street_finetuned_test.db",
       "output_dir": "data/outputs"
     },
     "environment": {
